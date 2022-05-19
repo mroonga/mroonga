@@ -51,21 +51,21 @@ fi
 
 need_manual_register=no
 need_manual_restart=no
-need_manual_reregister=no
+need_manual_update=no
 case "${action}" in
   install)
     need_manual_register=yes
+    need_manual_update=yes
     ;;
   update)
-    if [ "${try_auto_prepare}" = "yes" ]; then
-      need_manual_restart=yes
-    fi
-    need_manual_reregister=yes
+    need_manual_restart=yes
+    need_manual_update=yes
     ;;
 esac
 
 install_sql=${data_dir}/mroonga/install.sql
 uninstall_sql=${data_dir}/mroonga/uninstall.sql
+update_sql=${data_dir}/mroonga/update.sql
 
 need_password_expire=no
 if [ "${try_auto_prepare}" = "yes" ]; then
@@ -105,26 +105,12 @@ if [ "${try_auto_prepare}" = "yes" ]; then
       need_manual_register=no
     fi
   else
-    version=$(${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
-      grep mroonga | cut -f 2 | sed -e 's/\.//g')
-    if [ -n "${version}" ]; then
-      current_groonga_version=$(expr $version)
-    else
-      current_groonga_version=0
-    fi
-    version=$(echo ${groonga_required_version} | sed -e 's/\.//g')
-    required_groonga_version=$(expr ${version})
-    if [ ${current_groonga_version} -ge ${required_groonga_version} ]; then
+    if systemctl restart ${service_name}; then
       need_manual_restart=no
-    else
-      if ! systemctl restart ${service_name}; then
-        need_manual_restart=no
-      fi
     fi
-
-    if (cat ${uninstall_sql} ${install_sql}) | ${mysql}; then
-      need_manual_reregister=no
-    fi
+  fi
+  if ${mysql} < ${update_sql}; then
+    need_manual_update=no
   fi
 else
   mysql="mysql -u root"
@@ -135,7 +121,9 @@ if [ "${need_password_expire}" = "yes" ]; then
 fi
 
 if [ "${need_stop}" = "yes" ]; then
-  systemctl stop ${service_name}
+  if systemctl stop ${service_name}; then
+    need_manual_restart=no
+  fi
 fi
 
 if [ "${need_manual_register}" = "yes" ]; then
@@ -144,12 +132,11 @@ if [ "${need_manual_register}" = "yes" ]; then
 fi
 
 if [ "${need_manual_restart}" = "yes" ]; then
-  echo "Run the following command line to reload libgroonga:"
+  echo "Run the following command line to reload Mroonga:"
   echo "  systemctl restart ${service_name}"
 fi
 
-if [ "${need_manual_reregister}" = "yes" ]; then
-  echo "Run the following command lines to re-register Mroonga:"
-  echo "  ${mysql} < ${uninstall_sql}"
-  echo "  ${mysql} < ${install_sql}"
+if [ "${need_manual_update}" = "yes" ]; then
+  echo "Run the following command lines to update Mroonga:"
+  echo "  ${mysql} < ${update}"
 fi

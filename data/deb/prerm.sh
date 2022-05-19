@@ -57,6 +57,7 @@ uninstall_mroonga() {
   fi
 
   need_manual_unregister=yes
+  need_manual_restart=yes
 
   uninstall_sql=/usr/share/mroonga/uninstall.sql
 
@@ -79,8 +80,11 @@ uninstall_mroonga() {
 
   if [ "${try_auto_uninstall}" = "yes" ]; then
     mysql="mysql ${password_options}"
-    if ! ${mysql} < ${uninstall_sql}; then
-      need_manual_unregister=yes
+    if ${mysql} < ${uninstall_sql}; then
+      need_manual_unregister=no
+    fi
+    if systemctl restart mysql; then
+      need_manual_restart=no
     fi
   else
     mysql="mysql -u root"
@@ -93,6 +97,11 @@ uninstall_mroonga() {
   if [ "${need_manual_unregister}" = "yes" ]; then
     echo "Run the following command line to unregister Mroonga:"
     echo "  ${mysql} < ${uninstall_sql}"
+  fi
+
+  if [ "${need_manual_restart}" = "yes" ]; then
+    echo "Run the following command line to unload Mroonga:"
+    echo "  systemctl restart mysql"
   fi
 }
 

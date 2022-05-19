@@ -26,8 +26,8 @@
 /config.sub
 /configure
 /configure.lineno
-/data/deb/postinst.sh
 /data/install.sql
+/data/update.sql
 /depcomp
 /doc/locale/*/*-build-stamp
 /doc/locale/*/LC_MESSAGES/*-build-stamp

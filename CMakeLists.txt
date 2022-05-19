@@ -518,12 +518,12 @@ configure_file(
   NEWLINE_STYLE LF)
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/data/deb/postinst.sh.in"
-  "${PROJECT_BINARY_DIR}/data/deb/postinst.sh"
-  @ONLY)
-configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
   "${PROJECT_BINARY_DIR}/data/install.sql"
+  @ONLY)
+configure_file(
+  "${PROJECT_SOURCE_DIR}/data/update.sql.in"
+  "${PROJECT_BINARY_DIR}/data/update.sql"
   @ONLY)
 
 if(MRN_BUNDLED)
@@ -536,6 +536,7 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/COPYING"
   "${PROJECT_BINARY_DIR}/data/install.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
+  "${PROJECT_SOURCE_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")
 if(MSVC AND CMAKE_VERSION VERSION_GREATER "3.1")
   install(FILES $<TARGET_PDB_FILE:mroonga>

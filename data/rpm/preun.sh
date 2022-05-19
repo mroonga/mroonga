@@ -49,9 +49,11 @@ else
 fi
 
 need_manual_unregister=no
+need_manual_restart=no
 case "${action}" in
   erase)
     need_manual_unregister=yes
+    need_manual_restart=yes
     ;;
   update)
     try_auto_uninstall=no
@@ -92,8 +94,11 @@ if [ "${try_auto_uninstall}" = "yes" ]; then
   fi
 
   mysql="${mysql_command} -u root ${password_option}"
-  if ! ${mysql} < ${uninstall_sql}; then
-    need_manual_unregister=yes
+  if ${mysql} < ${uninstall_sql}; then
+    need_manual_unregister=no
+  fi
+  if systemctl restart ${service_name}; then
+    need_manual_restart=no
   fi
 else
   mysql="mysql -u root"
@@ -104,10 +109,17 @@ if [ "${need_password_expire}" = "yes" ]; then
 fi
 
 if [ "${need_stop}" = "yes" ]; then
-  systemctl stop ${service_name}
+  if systemctl stop ${service_name}; then
+    need_manual_restart=no
+  fi
 fi
 
 if [ "${need_manual_unregister}" = "yes" ]; then
   echo "Run the following command line to unregister Mroonga:"
   echo "  ${mysql} < ${uninstall_sql}"
+fi
+
+if [ "${need_manual_restart}" = "yes" ]; then
+  echo "Run the following command line to unload Mroonga:"
+  echo "  systemctl restart ${service_name}"
 fi

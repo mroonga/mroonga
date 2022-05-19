@@ -61,18 +61,18 @@ install_mroonga() {
 
   need_manual_register=no
   need_manual_restart=no
-  need_manual_reregister=no
+  need_manual_update=no
   if [ "${configure_action}" = "install" ]; then
     need_manual_register=yes
+    need_manual_update=yes
   else
-    if [ "${try_auto_prepare}" = "yes" ]; then
-      need_manual_restart=yes
-    fi
-    need_manual_reregister=yes
+    need_manual_restart=yes
+    need_manual_update=yes
   fi
 
   install_sql=/usr/share/mroonga/install.sql
   uninstall_sql=/usr/share/mroonga/uninstall.sql
+  update_sql=/usr/share/mroonga/update.sql
 
   if [ "${try_auto_prepare}" = "yes" ]; then
     if [ -f /etc/mysql/debian.cnf ]; then
@@ -99,27 +99,12 @@ install_mroonga() {
         need_manual_register=no
       fi
     else
-      current_groonga_version=$( \
-        ${mysql} -e "SHOW VARIABLES LIKE 'mroonga_libgroonga_version'" | \
-          grep mroonga | cut -f 2 | sed -e 's/\.//g')
-      if [ -n "${current_groonga_version}" ]; then
-        current_groonga_version=$(expr ${current_groonga_version})
-      else
-        current_groonga_version=0
-      fi
-      required_groonga_version=$(expr \
-        $(echo @REQUIRED_GROONGA_VERSION@ | sed -e 's/\.//g'))
-      if [ ${current_groonga_version} -ge ${required_groonga_version} ]; then
+      if systemctl restart mysql; then
         need_manual_restart=no
-      else
-        if ! systemctl restart mysql; then
-          need_manual_restart=no
-        fi
       fi
-
-      if (cat ${uninstall_sql} ${install_sql}) | ${mysql}; then
-        need_manual_reregister=no
-      fi
+    fi
+    if ${mysql} < ${update_sql}; then
+      need_manual_update=no
     fi
   else
     mysql="mysql -u root"
@@ -135,14 +120,13 @@ install_mroonga() {
   fi
 
   if [ "${need_manual_restart}" = "yes" ]; then
-    echo "Run the following command line to reload libgroonga:"
+    echo "Run the following command line to reload Mroonga:"
     echo "  systemctl restart mysql"
   fi
 
-  if [ "${need_manual_reregister}" = "yes" ]; then
-    echo "Run the following command lines to re-register Mroonga:"
-    echo "  ${mysql} < ${uninstall_sql}"
-    echo "  ${mysql} < ${install_sql}"
+  if [ "${need_manual_update}" = "yes" ]; then
+    echo "Run the following command lines to update Mroonga:"
+    echo "  ${mysql} < ${update_sql}"
   fi
 }
 
