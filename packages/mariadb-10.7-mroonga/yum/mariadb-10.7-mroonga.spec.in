@@ -1,6 +1,6 @@
 # -*- sh-shell: rpm -*-
 
-%define mariadb_version_default 10.7.3
+%define mariadb_version_default 10.7.4
 %define mariadb_release_default 1
 %if %{rhel} == 7
 %define mariadb_dist_default    el%{rhel}.centos
@@ -24,7 +24,7 @@
 
 Name:		mariadb-10.7-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -129,6 +129,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Tue May 24 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.03-2
+- rebuild against MariaDB 10.7.4
+
 * Thu Apr 28 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.03-1
 - New upstream release.
 
