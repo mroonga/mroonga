@@ -88,6 +88,12 @@ REPO
     ;;
   percona-*)
     service_name=mysqld
+    have_auto_generated_password=yes
+    sudo ${DNF} install -y \
+         https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+    percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
+    old_package=percona-server-${percona_package_version}-mroonga
+    sudo percona-release setup ps${percona_package_version}
     case ${mysql_version} in
       5.7)
         mysql_package_prefix=Percona-Server
@@ -96,14 +102,9 @@ REPO
       *)
         mysql_package_prefix=percona-server
         test_package_name=percona-server-test
+        sudo ${DNF} install -y percona-icu-data-files
         ;;
     esac
-    have_auto_generated_password=yes
-    sudo ${DNF} install -y \
-         https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-    percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=percona-server-${percona_package_version}-mroonga
-    sudo percona-release setup ps${percona_package_version}
     ;;
 esac
 
