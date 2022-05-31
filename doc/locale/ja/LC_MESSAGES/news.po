@@ -21,11 +21,75 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.03 - 2022-05-06"
-msgstr "12.03リリース - 2022-05-06"
+msgid "Release 12.04 - 2022-06-01"
+msgstr "12.04リリース - 2022-06-01"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/reference/server_variables`] Add a new status variable "
+"``Mroonga_memory_map_size``."
+msgstr ""
+"[:doc:`/reference/server_variables`] 新しいサーバー変数 "
+"``Mroonga_memory_map_size`` を追加しました。"
+
+msgid "We can get the total memory map size in bytes of Mroonga as below."
+msgstr "以下のように、Mroongaのメモリーマップサイズの合計を取得できます。"
+
+msgid ""
+"In Windows, If Mroonga uses up physical memory and swap area, Mroonga can't "
+"more mapping memory than that. Therefore, we can control properly memory map "
+"size by monitoring this value even if the environment does have not enough "
+"memory."
+msgstr ""
+"Windowsでは、Mroogaが物理メモリーとスワップ領域を使い果たした場合、それ以上メ"
+"モリーをマップすることができません。そのため、この値を監視することで、メモ"
+"リーが十分でない環境でもメモリーマップサイズを適切にコントロールできます。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 8.0.28-19."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.28-19"
+"をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"MariaDB 10.2.44, 10.3.35, 10.4.25, 10.5.16, 10.6.8, and 10.7.4."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.2.44, "
+"10.3.35、10.4.25、10.5.16、10.6.8、10.7.4をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that Mroonga may update failed. [groonga-dev,04982, groonga-"
+"dev,04987][Reported by Mitsuo Yoshida and OHTSUKA Soushi]"
+msgstr ""
+"Mroongaのアップデートに失敗することがある問題を修正しました。 [groonga-"
+"dev,04982, groonga-dev,04987][Mitsuo YoshidaさんとOHTSUKA Soushiさんの報告]"
+
+msgid ""
+"If this bug occurs, Mroonga is disabled after Mroonga update with such as "
+"\"apt update\". In that case, we install Mroonga manually with the following "
+"procedure."
+msgstr ""
+"この問題が発生した場合、\"apt update\"等でMroongaを更新した後、Mroongaが無効"
+"になります。その場合、以下の手順でMroongaを手動でインストールしてください。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Mitsuo Yoshida"
+msgstr "Mitsuo Yoshidaさん"
+
+msgid "OHTSUKA Soushi"
+msgstr "OHTSUKA Soushiさん"
+
+msgid "Release 12.03 - 2022-05-06"
+msgstr "12.03リリース - 2022-05-06"
 
 msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.37-40."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.37-40をサポートしました。"
@@ -39,9 +103,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.29をサポートし"
 "ました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that Mroonga may fail create the index on MariaDB 10.5.14. "
@@ -69,17 +130,8 @@ msgstr ""
 msgid "This bug had occurred since Mroonga 11.03."
 msgstr "この問題は、 Mroonga 11.03以降で発生していました。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "wate"
 msgstr "wateさん"
-
-msgid "OHTSUKA Soushi"
-msgstr "OHTSUKA Soushiさん"
-
-msgid "Mitsuo Yoshida"
-msgstr "Mitsuo Yoshidaさん"
 
 msgid "Release 12.02 - 2022-03-29"
 msgstr "12.02リリース - 2022-03-29"

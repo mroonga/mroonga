@@ -3,6 +3,53 @@
 News
 ====
 
+.. _release-12-04:
+
+Release 12.04 - 2022-06-01
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/reference/server_variables`] Add a new status variable ``Mroonga_memory_map_size``.
+
+  We can get the total memory map size in bytes of Mroonga as below.
+
+  .. code-block::
+
+     mysql> SHOW STATUS LIKE 'Mroonga_memory_map_size';
+     +-------------------------+----------+
+     | Variable_name           | Value    |
+     +-------------------------+----------+
+     | Mroonga_memory_map_size | 83406848 |
+     +-------------------------+----------+
+     1 row in set (0.00 sec)
+
+  In Windows, If Mroonga uses up physical memory and swap area, Mroonga can't more mapping memory than that.
+  Therefore, we can control properly memory map size by monitoring this value even if the environment does have not enough memory.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-19.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.2.44, 10.3.35, 10.4.25, 10.5.16, 10.6.8, and 10.7.4.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga may update failed. [groonga-dev,04982, groonga-dev,04987][Reported by Mitsuo Yoshida and OHTSUKA Soushi]
+
+  If this bug occurs, Mroonga is disabled after Mroonga update with such as "apt update".
+  In that case, we install Mroonga manually with the following procedure.
+
+  .. code-block::
+
+     % mysql -u root < /usr/share/mroonga/install.sql
+
+Thanks
+^^^^^^
+
+* Mitsuo Yoshida
+* OHTSUKA Soushi
+
 .. _release-12-03:
 
 Release 12.03 - 2022-05-06
