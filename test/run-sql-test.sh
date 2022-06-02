@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# Copyright(C) 2010  Tetsuro IKEDA
-# Copyright(C) 2010-2021  Sutou Kouhei <kou@clear-code.com>
-# Copyright(C) 2011  Kazuhiko
+# Copyright (C) 2010  Tetsuro IKEDA
+# Copyright (C) 2010-2022  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2011  Kazuhiko
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -201,7 +201,7 @@ while [ $# -gt 0 ]; do
   arg="$1"
   shift
   case "$arg" in
-    --manual-gdb|--gdb|--client-gdb|--boot-gdb|--debug|--valgrind)
+    --manual-gdb|--gdb|--client-gdb|--boot-gdb|--debug|--valgrind|--start-and-exit)
       n_processors=1
       mysql_test_run_options="${mysql_test_run_options} ${arg}"
       ;;
