@@ -40,6 +40,7 @@ jobs:
             libmysqlclient-dev \
             libtool \
             python3-pip
+          sudo pip3 install -U pip
       - name: Install Sphinx
         run: |
           sudo pip3 install sphinx
