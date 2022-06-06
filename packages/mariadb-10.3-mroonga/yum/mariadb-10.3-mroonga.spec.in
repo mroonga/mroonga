@@ -26,7 +26,7 @@
 
 Name:		mariadb-10.3-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -131,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Sun Jun 05 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.04-1
+- New upstream release.
+
 * Tue May 24 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.03-2
 - rebuild against MariaDB 10.3.35
 
