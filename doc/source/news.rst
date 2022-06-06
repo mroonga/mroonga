@@ -30,6 +30,8 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-19.
 
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.38-41.
+
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.2.44, 10.3.35, 10.4.25, 10.5.16, 10.6.8, and 10.7.4.
 
 Fixes
