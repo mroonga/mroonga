@@ -206,6 +206,13 @@ sudo ${DNF} erase -y \
   ${package} \
   "${mysql_package_prefix}-*"
 
+# Disable upgrade test for first time packages.
+case ${os}-${package} in
+  *-mariadb-10.8-*) # TODO: Remove this after 12.05 release.
+    exit
+    ;;
+esac
+
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
