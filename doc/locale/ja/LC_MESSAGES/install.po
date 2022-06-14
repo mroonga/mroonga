@@ -191,16 +191,6 @@ msgid ""
 msgstr ""
 "CentOS 7では、Mroonga 10.06からPercona Server 8.0パッケージを利用できます。"
 
-msgid "CentOS 7 (with MariaDB 10.2 package)"
-msgstr "CentOS 7（MariaDB 10.2のパッケージを利用）"
-
-msgid ""
-"You can use MariaDB's MariaDB packages version 10.2 on CentOS 7 since "
-"Mroonga 7.06 release."
-msgstr ""
-"CentOS 7では、Mroonga 7.06からMariaDB提供のMariaDB 10.2パッケージを利用できま"
-"す。"
-
 msgid "CentOS 7 (with MariaDB 10.3 package)"
 msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
 

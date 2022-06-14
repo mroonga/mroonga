@@ -112,37 +112,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
 
-.. _centos-7-mariadb-10-2:
-
-CentOS 7 (with MariaDB 10.2 package)
-------------------------------------
-
-You can use MariaDB's MariaDB packages version 10.2 on CentOS 7 since
-Mroonga 7.06 release.
-
-Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
-
-  [mariadb]
-  name = MariaDB
-  baseurl = http://yum.mariadb.org/10.2/centos7-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
-
-Install::
-
-  % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y MariaDB-server
-  % sudo systemctl start mariadb
-  % sudo yum install -y --enablerepo=epel mariadb-10.2-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
-
-If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
-tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo yum install -y --enablerepo=epel groonga-tokenizer-mecab
-
 .. _centos-7-mariadb-10-3:
 
 CentOS 7 (with MariaDB 10.3 package)
