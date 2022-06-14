@@ -315,6 +315,9 @@ jobs:
           # - os: ubuntu-impish
           #   package-type: apt
           #   package: mysql-8.0
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mysql-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-5.7
