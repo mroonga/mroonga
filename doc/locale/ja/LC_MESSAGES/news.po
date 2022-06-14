@@ -21,11 +21,23 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.04 - 2022-06-01"
-msgstr "12.04リリース - 2022-06-01"
+msgid "Release 12.05 - 2022-06-29"
+msgstr "12.05リリース - 2022-06-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.8.3."
+msgstr "[:doc:`/install/centos`] MariaDB 10.8.3をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Dropped support for MariaDB 10.2."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2のサポートをやめました。"
+
+msgid "Because MariaDB reached EOL."
+msgstr "MariaDB 10.2はEOLになったためです。"
+
+msgid "Release 12.04 - 2022-06-01"
+msgstr "12.04リリース - 2022-06-01"
 
 msgid ""
 "[:doc:`/reference/server_variables`] Add a new status variable "

@@ -3,6 +3,20 @@
 News
 ====
 
+.. _release-12-05:
+
+Release 12.05 - 2022-06-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.8.3.
+
+* [:doc:`/install/centos`] Dropped support for MariaDB 10.2.
+
+  * Because MariaDB reached EOL.
+
 .. _release-12-04:
 
 Release 12.04 - 2022-06-01
