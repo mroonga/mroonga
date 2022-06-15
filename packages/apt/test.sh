@@ -50,6 +50,13 @@ case ${package} in
     test_package=mysql-testsuite
     mysql_test_dir=/usr/lib/mysql-test
     ;;
+  mysql-*)
+    old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
+    mysql_package_prefix=mysql
+    client_dev_package=libmysqlclient-dev
+    test_package=mysql-testsuite
+    mysql_test_dir=/usr/lib/mysql-test
+    ;;
 esac
 
 (echo "Key-Type: RSA"; \
