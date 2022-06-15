@@ -12,11 +12,12 @@ echo "debconf debconf/frontend select Noninteractive" | \
 sudo apt update
 sudo apt install -V -y apparmor lsb-release wget
 
+distribution=$(lsb_release --id --short)
 code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 
 wget \
-  https://packages.groonga.org/debian/groonga-apt-source-latest-${code_name}.deb
+  https://packages.groonga.org/${distribution,}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 sudo apt update
 
