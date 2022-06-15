@@ -12,12 +12,12 @@ echo "debconf debconf/frontend select Noninteractive" | \
 sudo apt update
 sudo apt install -V -y apparmor lsb-release wget
 
-distribution=$(lsb_release --id --short)
+distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
 case ${distribution} in
-  Debian)
+  debian)
     repository=main
     ;;
-  Ubuntu)
+  ubuntu)
     repository=universe
   ;;
 esac
@@ -25,7 +25,7 @@ code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 
 wget \
-  https://packages.groonga.org/${distribution,}/groonga-apt-source-latest-${code_name}.deb
+  https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 sudo apt update
 
@@ -82,7 +82,7 @@ Architectures: amd64 source
 SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
 reprepro includedeb ${code_name} \
-  ${repositories_dir}/${distribution,}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
+  ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
 
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
 deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
