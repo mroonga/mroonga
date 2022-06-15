@@ -109,9 +109,6 @@ jobs:
           # - os: ubuntu-jammy
           #   package-type: apt
           #   package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.2
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.3
@@ -293,9 +290,6 @@ jobs:
           - os: debian-buster
             package-type: apt
             package: mysql-community-8.0
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.2
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.3

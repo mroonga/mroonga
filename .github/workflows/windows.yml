@@ -12,8 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         label:
-          - MariaDB 10.2 32bit
-          - MariaDB 10.2 64bit
           - MariaDB 10.3 32bit
           - MariaDB 10.3 64bit
           - MariaDB 10.4 32bit
@@ -28,16 +26,6 @@ jobs:
           # - MariaDB 10.7 64bit (master/embed)
           # - MariaDB 10.8 64bit (master/embed)
         include:
-          - label: MariaDB 10.2 32bit
-            mariadb-version: "10.2.43"
-            package-platform: "win32"
-            cmake-architecture: "Win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.2 64bit
-            mariadb-version: "10.2.43"
-            package-platform: "winx64"
-            cmake-architecture: "x64"
-            vc-architecture: "x64"
           - label: MariaDB 10.3 32bit
             mariadb-version: "10.3.34"
             package-platform: "win32"
