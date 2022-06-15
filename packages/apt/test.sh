@@ -13,6 +13,14 @@ sudo apt update
 sudo apt install -V -y apparmor lsb-release wget
 
 distribution=$(lsb_release --id --short)
+case ${distribution} in
+  Debian)
+    repository=main
+    ;;
+  Ubuntu)
+    repository=universe
+  ;;
+esac
 code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 
@@ -67,7 +75,7 @@ Architectures: amd64 source
 SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
 reprepro includedeb ${code_name} \
-  ${repositories_dir}/debian/pool/${code_name}/main/*/*/*_{${architecture},all}.deb
+  ${repositories_dir}/${distribution,}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
 
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
 deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
