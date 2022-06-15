@@ -606,5 +606,6 @@ AC_OUTPUT([
   mysql-test/mroonga/storage/information_schema/r/plugins.result
   mysql-test/mroonga/storage/variable/r/version.result
   data/install.sql
+  data/install_plugin.sql
   data/update.sql
 ])

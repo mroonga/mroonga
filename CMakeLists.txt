@@ -522,6 +522,10 @@ configure_file(
   "${PROJECT_BINARY_DIR}/data/install.sql"
   @ONLY)
 configure_file(
+  "${PROJECT_SOURCE_DIR}/data/install_plugin.sql.in"
+  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
+  @ONLY)
+configure_file(
   "${PROJECT_SOURCE_DIR}/data/update.sql.in"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   @ONLY)

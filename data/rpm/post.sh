@@ -63,7 +63,7 @@ case "${action}" in
     ;;
 esac
 
-install_sql=${data_dir}/mroonga/install.sql
+install_sql=${data_dir}/mroonga/install_plugin.sql
 uninstall_sql=${data_dir}/mroonga/uninstall.sql
 update_sql=${data_dir}/mroonga/update.sql
 
