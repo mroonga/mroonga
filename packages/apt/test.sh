@@ -127,25 +127,39 @@ for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
 done
 set -x
 
-sudo \
-  ./mtr \
-  --force \
-  --no-check-testcases \
-  --parallel=${parallel} \
-  --retry=3 \
-  --suite="${test_suite_names}"
-
-case ${package} in
-  mariadb-*)
-    # Test with binary protocol
+case ${distribution} in
+  ubuntu)
     sudo \
       ./mtr \
       --force \
       --no-check-testcases \
       --parallel=${parallel} \
-      --ps-protocol \
+      --retry=3 \
+      --client-bindir="${mysql_test_dir}/bin" \
+      --suite="${test_suite_names}"
+    ;;
+  *)
+    sudo \
+      ./mtr \
+      --force \
+      --no-check-testcases \
+      --parallel=${parallel} \
       --retry=3 \
       --suite="${test_suite_names}"
+
+    case ${package} in
+      mariadb-*)
+        # Test with binary protocol
+        sudo \
+          ./mtr \
+          --force \
+          --no-check-testcases \
+          --parallel=${parallel} \
+          --ps-protocol \
+          --retry=3 \
+          --suite="${test_suite_names}"
+        ;;
+    esac
     ;;
 esac
 
