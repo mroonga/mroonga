@@ -1,2 +1,2 @@
-source ${DATA_DIR}/mroonga/install_plugin.sql
-source ${DATA_DIR}/mroonga/update.sql
+source @DATA_DIR@/mroonga/install_plugin.sql
+source @DATA_DIR@/mroonga/update.sql
