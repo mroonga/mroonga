@@ -539,6 +539,7 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/AUTHORS"
   "${PROJECT_SOURCE_DIR}/COPYING"
   "${PROJECT_BINARY_DIR}/data/install.sql"
+  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")
