@@ -1,2 +1,2 @@
-source '@MRN_DATA_DIR@/mroonga/install_plugin.sql'
-source '@MRN_DATA_DIR@/mroonga/update.sql'
+source install_plugin.sql
+source update.sql
