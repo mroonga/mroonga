@@ -101,7 +101,7 @@ if [ "${try_auto_prepare}" = "yes" ]; then
   mysql="${mysql_command} -u root ${password_option}"
 
   if [ "${action}" = "install" ]; then
-    if ${mysql} < ${install_sql}; then
+    if ${mysql} < ${install_plugin_sql}; then
       need_manual_register=no
     fi
   else
@@ -128,7 +128,7 @@ fi
 
 if [ "${need_manual_register}" = "yes" ]; then
   echo "Run the following command line to register Mroonga:"
-  echo "  ${mysql} < ${install_sql}"
+  echo "  ${mysql} < ${install_plugin_sql}"
 fi
 
 if [ "${need_manual_restart}" = "yes" ]; then
