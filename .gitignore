@@ -27,6 +27,7 @@
 /configure
 /configure.lineno
 /data/install.sql
+/data/install_plugin.sql
 /data/update.sql
 /depcomp
 /doc/locale/*/*-build-stamp
