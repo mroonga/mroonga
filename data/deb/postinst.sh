@@ -70,7 +70,7 @@ install_mroonga() {
     need_manual_update=yes
   fi
 
-  install_sql=/usr/share/mroonga/install.sql
+  install_plugin_sql=/usr/share/mroonga/install_plugin.sql
   uninstall_sql=/usr/share/mroonga/uninstall.sql
   update_sql=/usr/share/mroonga/update.sql
 
