@@ -216,3 +216,9 @@ esac
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
+if sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga; then
+  :
+else
+  exit 1
+fi
+
