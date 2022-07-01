@@ -114,19 +114,34 @@ repositories_dir=/vagrant/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-sudo systemctl start ${service_name}
-mysql="mysql -u root"
-if [ "${have_auto_generated_password}" = "yes" ]; then
-  auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
-  mysql="${mysql} -p${auto_generated_password}"
-  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-fi
-sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
-if [ "${have_auto_generated_password}" = "yes" ] ; then
-  sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
-fi
-sudo systemctl stop ${service_name}
+function mroonga_exist() {
+  have_auto_generated_password=$1
+  exist=false
 
+  sudo systemctl start ${service_name}
+  mysql="mysql -u root"
+  if [ "${have_auto_generated_password}" = "yes" ]; then
+    auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
+    mysql="${mysql} -p${auto_generated_password}"
+    sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+  fi
+  if [ "${have_auto_generated_password}" = "yes" ] ; then
+    sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
+  fi
+
+  if sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga; then
+    sudo systemctl stop ${service_name}
+    return 0
+  else
+    sudo systemctl stop ${service_name}
+    return 1
+  fi
+}
+
+mroonga_exist ${have_auto_generated_password}
+if [ $? -ne 0 ]; then
+  exit 1
+fi
 
 # Run test
 sudo ${DNF} install -y \
@@ -216,9 +231,8 @@ esac
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
-if sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga; then
-  :
-else
+
+mroonga_exist ${have_auto_generated_password}
+if [ $? -ne 0 ]; then
   exit 1
 fi
-
