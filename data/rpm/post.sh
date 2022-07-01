@@ -108,6 +108,9 @@ if [ "${try_auto_prepare}" = "yes" ]; then
     if systemctl restart ${service_name}; then
       need_manual_restart=no
     fi
+    if (cat ${uninstall_sql} ${install_sql}) | ${mysql}; then
+      need_manual_reregister=no
+    fi
   fi
   if ${mysql} < ${update_sql}; then
     need_manual_update=no
