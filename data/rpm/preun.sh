@@ -55,7 +55,7 @@ case "${action}" in
     need_manual_unregister=yes
     need_manual_restart=yes
     ;;
-  update)
+  upgrade)
     try_auto_uninstall=no
     ;;
 esac
