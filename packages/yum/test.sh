@@ -116,7 +116,6 @@ sudo ${DNF} install -y \
 
 function mroonga_exist() {
   have_auto_generated_password=$1
-  exist=false
 
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
@@ -129,7 +128,8 @@ function mroonga_exist() {
     sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
 
-  if sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga; then
+  sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga
+  if [ $? = 0 ]; then
     sudo systemctl stop ${service_name}
     return 0
   else
