@@ -17,13 +17,14 @@ Mroonga 5.09 release.
 Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
-  % sudo yum install -y https://repo.mysql.com/mysql-community-release-el7.rpm
+  % sudo yum install -y https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
   % sudo yum install -y yum-utils
   % sudo yum-config-manager --disable mysql80-community
   % sudo yum-config-manager --enable mysql57-community
   % sudo yum install -y --enablerepo=epel mysql-community-5.7-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+  (% mysql -u root --password="${tmp_password}" --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$tmp_password'")
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
