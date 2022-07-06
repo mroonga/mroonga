@@ -128,7 +128,8 @@ function mroonga_exist() {
     sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
 
-  sudo ${mysql} -e 'SHOW ENGINES' | grep -q Mroonga
+  sudo ${mysql} -e 'SHOW ENGINES'
+  sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
   if [ $? = 0 ]; then
     sudo systemctl stop ${service_name}
     return 0
