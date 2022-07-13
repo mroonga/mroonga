@@ -49,7 +49,8 @@ since Mroonga 11.10 release.
 Install::
 
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.percona.com/release/percona-release-latest.noarch.rpm
+  % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+  % sudo percona-release setup ps80
   % sudo dnf install -y --enablerepo=epel percona-server-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))

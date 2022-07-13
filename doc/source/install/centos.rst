@@ -101,6 +101,7 @@ Install::
 
   % sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
   % sudo yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+  % sudo percona-release setup ps80
   % sudo yum install -y --enablerepo=epel percona-server-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
