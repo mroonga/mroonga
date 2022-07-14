@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -eux
-
 package=$1
 action=$2
 
