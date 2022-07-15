@@ -1,4 +1,0 @@
-Template: mariadb-10.3-mroonga/root-password
-Type: password
-Description: Enter MariaDB's root password:
- Please provide the root password to install/uninstall Mroonga automatially.

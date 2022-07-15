@@ -7,7 +7,6 @@ class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
 
   def apt_targets_default
     [
-      "debian-buster",
       "debian-bullseye",
       "ubuntu-impish",
 # We disable Ubuntu 22.04 temporaliy.

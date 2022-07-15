@@ -247,15 +247,6 @@ msgstr ""
 msgid "bullseye (with the Oracle MySQL 8.0 package)"
 msgstr "bullseye（OracleのMySQL 8.0パッケージを利用）"
 
-msgid "buster (MariaDB)"
-msgstr ""
-
-msgid "buster (with the Oracle MySQL 5.7 package)"
-msgstr "buster（OracleのMySQL 5.7パッケージを利用）"
-
-msgid "buster (with the Oracle MySQL 8.0 package)"
-msgstr "buster（OracleのMySQL 8.0パッケージを利用）"
-
 msgid "Docker"
 msgstr ""
 
