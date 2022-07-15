@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -e
-
-/usr/share/mroonga/deb/prerm.sh mariadb-10.3-mroonga "$@"
-
-#DEBHELPER#

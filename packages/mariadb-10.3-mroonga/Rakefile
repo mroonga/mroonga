@@ -5,10 +5,8 @@ class MariaDB103MroongaPackageTask < MroongaPackageTask
     super("mariadb-10.3")
   end
 
-  def apt_targets_default
-    [
-      "debian-buster",
-    ]
+  def enable_apt?
+    false
   end
 
   def ubuntu_targets_default

@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -e
-
-/usr/share/mroonga/deb/prerm.sh mysql-community-5.7-mroonga "$@"
-
-#DEBHELPER#

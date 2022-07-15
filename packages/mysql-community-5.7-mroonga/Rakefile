@@ -5,10 +5,8 @@ class MySQLCommunity57MroongaPackageTask < MroongaPackageTask
     super("mysql-community-5.7")
   end
 
-  def apt_targets_default
-    [
-      "debian-buster",
-    ]
+  def enable_apt?
+    false
   end
 
   def enable_ubuntu?

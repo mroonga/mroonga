@@ -93,15 +93,6 @@ jobs:
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
-          - os: debian-buster
-            package-type: apt
-            package: mariadb-10.3
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-5.7
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-8.0
           - os: ubuntu-impish
             package-type: apt
             package: mysql-community-8.0
@@ -279,15 +270,6 @@ jobs:
             package-type: apt
             package: mariadb-10.5
           - os: debian-bullseye
-            package-type: apt
-            package: mysql-community-8.0
-          - os: debian-buster
-            package-type: apt
-            package: mariadb-10.3
-          - os: debian-buster
-            package-type: apt
-            package: mysql-community-5.7
-          - os: debian-buster
             package-type: apt
             package: mysql-community-8.0
           - os: almalinux-8
