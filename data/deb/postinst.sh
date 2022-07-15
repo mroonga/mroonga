@@ -84,7 +84,7 @@ install_mroonga() {
       password="${RET}"
       db_set ${package}/root-password ""
       if [ -z "${password}" ]; then
-        password_options="-u root --skip-password"
+        password_options="-u root"
       else
         password_options="-u root -p$(printf %q "${password}")"
       fi
