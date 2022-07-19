@@ -3,6 +3,22 @@
 News
 ====
 
+.. _release-12-05:
+
+Release 12.05 - 2022-07-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-20.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.8.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Dropped support for MariaDB 10.2.
+
+* [:doc:`/install/debian`] Dropped support for Debian 10 (buster).
+
 .. _release-12-04:
 
 Release 12.04 - 2022-06-01
