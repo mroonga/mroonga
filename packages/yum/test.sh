@@ -112,7 +112,6 @@ esac
 # Install
 function mroonga_exist() {
   have_auto_generated_password=$1
-  is_mroonga_exist=false
 
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
@@ -123,20 +122,11 @@ function mroonga_exist() {
   fi
 
   sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
-  if [ $? = 0 ]; then
-    is_mroonga_exist=true
-  fi
 
   if [ "${have_auto_generated_password}" = "yes" ] ; then
     sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
   fi
   sudo systemctl stop ${service_name}
-
-  if "$is_mroonga_exist" ; then
-    return 0
-  else
-    return 1
-  fi
 }
 
 repositories_dir=/vagrant/packages/${package}/yum/repositories
@@ -144,9 +134,6 @@ sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
 mroonga_exist ${have_auto_generated_password}
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
 # Run test
 sudo ${DNF} install -y \
@@ -238,6 +225,3 @@ sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
 mroonga_exist ${have_auto_generated_password}
-if [ $? -ne 0 ]; then
-  exit 1
-fi
