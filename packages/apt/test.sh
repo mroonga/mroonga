@@ -74,17 +74,7 @@ APT_SOURCES
 sudo apt update
 sudo apt install -V -y ${package}
 
-case ${package} in
-  mariadb-*)
-    auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
-    mysql="sudo mysql -p${auto_generated_password}"
-    ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-  ;;
-  mysql-community-*)
-    mysql="sudo mysql -u root"
-  ;;
-esac
-${mysql} -e "SHOW ENGINES" | grep Mroonga
+sudo mysql -e "SHOW ENGINES" | grep Mroonga
 
 sudo apt install -V -y \
   gdb \
@@ -156,5 +146,5 @@ if [ -n "${old_package}" ]; then
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
   sudo apt upgrade -V -y
-  ${mysql} -e "SHOW ENGINES" | grep Mroonga
+  sudo mysql -e "SHOW ENGINES" | grep Mroonga
 fi
