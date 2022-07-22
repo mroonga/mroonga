@@ -76,9 +76,6 @@ sudo apt install -V -y ${package}
 
 mysql="mysql -u root"
 sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
-if [ $? -ne 0 ]; then
-  exit 1
-fi
 
 sudo apt install -V -y \
   gdb \
@@ -151,7 +148,4 @@ if [ -n "${old_package}" ]; then
   sudo apt update
   sudo apt upgrade -V -y
   sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
-  if [ $? -ne 0 ]; then
-    exit 1
-  fi
 fi
