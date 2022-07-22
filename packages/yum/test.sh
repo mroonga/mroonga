@@ -121,7 +121,7 @@ function mroonga_is_registered() {
     sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
   fi
 
-  sudo ${mysql} -e 'SHOW ENGINES' | grep Mroonga
+  sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
 
   if [ "${have_auto_generated_password}" = "yes" ] ; then
     sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
