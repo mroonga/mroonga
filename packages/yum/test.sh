@@ -111,7 +111,7 @@ esac
 
 # Install
 function mroonga_exist() {
-  have_auto_generated_password=$1
+  local have_auto_generated_password=$1
 
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
