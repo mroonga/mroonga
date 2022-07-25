@@ -23,6 +23,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :box => "bento/ubuntu-21.10",
     },
     {
+      :id => "ubuntu-jammy",
+      :box => "bento/ubuntu-22.04",
+    },
+    {
       :id => "debian-bullseye",
       :box => "bento/debian-11",
     },
