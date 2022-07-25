@@ -14,24 +14,35 @@ So we build both MySQL and Mroonga for debugging in development.
 How to build MySQL for debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As you can see in `MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`_, you can build MySQL for debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options.
+As you can see in `MySQL :: 2.9.4 Installing MySQL Using a Standard Source Distribution`_, you can build MySQL for debugging by passing ``-DWITH_DEBUG=yes`` option in CMAKE options.
 
 The procedure from download to build is the following. ::
 
   % mkdir -p ~/work/
   % cd ~/work/
-  % wget http://ftp.jaist.ac.jp/pub/mysql/Downloads/MySQL-5.5/mysql-5.5.13.tar.gz
-  % tar xvzf mysql-5.5.13.tar.gz
-  % cd mysql-5.5.13
-  % cmake . -DCMAKE_INSTALL_PREFIX=/tmp/local -DWITH_DEBUG=yes
+  % wget https://github.com/mysql/mysql-server/archive/refs/tags/mysql-8.0.29.tar.gz
+  % tar xvzf mysql-8.0.29.tar.gz
+  % mkdir mysql-server-mysql-8.0.29-build
+  % cd mysql-server-mysql-8.0.29-build
+  % cmake ../mysql-server-mysql-8.0.29 \
+      -DCMAKE_INSTALL_PREFIX=/tmp/local \
+      -DWITH_DEBUG=yes \
+      -DDOWNLOAD_BOOST=yes \
+      -DWITH_BOOST=../boost 
   % make
 
-.. _`MySQL :: MySQL 5.5 Reference Manual :: 2.9.2 Installing MySQL from a Standard Source Distribution`: http://dev.mysql.com/doc/refman/5.5/en/installing-source-distribution.html
+.. _`MySQL :: 2.9.4 Installing MySQL Using a Standard Source Distribution`: https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
 
 How tom build Mroonga for debugging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can build Mroonga for debugging by passing ``--with-debug`` in configure options.
+
+.. note::
+
+  In order to build Mroonga, you need to install required tools and libraries beforehand.
+
+  See :doc:`/install/others` for the details of dependencies.
 
 The procedure from cloning repository to build is the following. ::
 
@@ -39,7 +50,13 @@ The procedure from cloning repository to build is the following. ::
   % git clone git@github.com:mroonga/mroonga.git
   % cd mroonga
   % ./autogen.sh
-  % ./configure CFLAGS="-g3 -O0" CXXFLAGS="-g3 -O0" --with-debug --prefix=/tmp/local --with-mysql-source=$HOME/work/mysql-5.5.13 --with-mysql-config=$HOME/work/mysql-5.5.13/scripts/mysql_config
+  % ./configure CFLAGS="-g3 -O0" \
+                CXXFLAGS="-g3 -O0" \
+                --with-debug \
+                --prefix=/tmp/local \
+                --with-mysql-source=$HOME/work/mysql-server-mysql-8.0.29 \
+                --with-mysql-config=$HOME/work/mysql-server-mysql-8.0.29-build/scripts/mysql_config \
+                --with-mysql-build=$HOME/work/mysql-server-mysql-8.0.29-build
   % make
 
 When you successfully build both, please invoke tests like the following.
