@@ -74,6 +74,8 @@ APT_SOURCES
 sudo apt update
 sudo apt install -V -y ${package}
 
+sudo mysql -e "SHOW ENGINES" | grep Mroonga
+
 sudo apt install -V -y \
   gdb \
   ${client_dev_package} \
@@ -144,4 +146,5 @@ if [ -n "${old_package}" ]; then
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
   sudo apt upgrade -V -y
+  sudo mysql -e "SHOW ENGINES" | grep Mroonga
 fi

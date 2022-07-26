@@ -95,8 +95,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?.?.? \
    $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga_official.so
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mroonga-doc/
 sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
-  $RPM_BUILD_ROOT%{_datadir}/mroonga/install.sql \
-  $RPM_BUILD_ROOT%{_datadir}/mroonga/uninstall.sql
+  $RPM_BUILD_ROOT%{_datadir}/mroonga/*.sql
 
 %clean
 rm -rf $RPM_BUILD_ROOT
