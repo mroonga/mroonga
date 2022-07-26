@@ -111,8 +111,6 @@ esac
 
 # Install
 function mroonga_is_registered() {
-  have_auto_generated_password=$1
-
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
   if [ "${have_auto_generated_password}" = "yes" ]; then
@@ -133,7 +131,7 @@ repositories_dir=/vagrant/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-mroonga_is_registered ${have_auto_generated_password}
+mroonga_is_registered
 
 # Run test
 sudo ${DNF} install -y \
@@ -224,4 +222,4 @@ sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-mroonga_is_registered ${have_auto_generated_password}
+mroonga_is_registered
