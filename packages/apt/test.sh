@@ -16,6 +16,13 @@ code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
 
+if [ "${distribution}" = "ubuntu" ]; then 
+  sudo apt-get install -y -V software-properties-common lsb-release
+  sudo add-apt-repository -y universe
+  sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
+  sudo add-apt-repository -y ppa:groonga/ppa
+fi
+
 wget \
   https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
@@ -66,12 +73,21 @@ Components: main
 Architectures: amd64 source
 SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
-ls -R ${repositories_dir}
+
+case ${distribution} in
+  debian)
+    repository_component="main"
+    ;;
+  ubuntu)
+    repository_component="universe"
+    ;;
+esac
+
 reprepro includedeb ${code_name} \
-  ${repositories_dir}/${distribution}/pool/${code_name}/main/*/*/*_{${architecture},all}.deb
+  ${repositories_dir}/${distribution}/pool/${code_name}/${repository_component}/*/*/*_{${architecture},all}.deb
 
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
-deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
+deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} ${repository_component}
 APT_SOURCES
 sudo apt update
 sudo apt install -V -y ${package}
@@ -141,12 +157,6 @@ if [ -n "${old_package}" ]; then
     ${package} \
     "${mysql_package_prefix}-*"
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
-  if [ "${distribution}" = "ubuntu" ]; then 
-    sudo apt-get install -y -V software-properties-common lsb-release
-    sudo add-apt-repository -y universe
-    sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
-    sudo add-apt-repository -y ppa:groonga/ppa
-  fi
   sudo apt update
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
