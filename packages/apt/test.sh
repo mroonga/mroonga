@@ -30,13 +30,21 @@ sudo apt update
 
 case ${package} in
   mariadb-*)
-    old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
+    case ${distribution} in
+      debian)
+        old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
+        ;;
+      ubuntu)
+        old_package="mariadb-server-mroonga"
+        ;;
+    esac
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
+    #Currently Debian only
     old_package=
     wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
     sudo \
@@ -44,6 +52,14 @@ case ${package} in
           MYSQL_SERVER_VERSION=mysql-${mysql_version} \
         apt install -y ./mysql-apt-config_*_all.deb
     sudo apt update
+    mysql_package_prefix=mysql
+    client_dev_package=libmysqlclient-dev
+    test_package=mysql-testsuite
+    mysql_test_dir=/usr/lib/mysql-test
+    ;;
+  mysql-*)
+    #Currently Ubuntu only
+    old_package="mysql-server-mroonga"
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
     test_package=mysql-testsuite
