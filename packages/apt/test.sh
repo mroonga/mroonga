@@ -152,6 +152,7 @@ sudo \
   --no-check-testcases \
   --parallel=${parallel} \
   --retry=3 \
+  --client-bindir="${mysql_test_dir}/bin" \
   --suite="${test_suite_names}"
 
 case ${package} in
@@ -164,6 +165,7 @@ case ${package} in
       --parallel=${parallel} \
       --ps-protocol \
       --retry=3 \
+      --client-bindir="${mysql_test_dir}/bin" \
       --suite="${test_suite_names}"
     ;;
 esac
