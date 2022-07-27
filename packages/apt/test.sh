@@ -16,16 +16,19 @@ code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 distribution=$(lsb_release --short --id | tr 'A-Z' 'a-z')
 
-if [ "${distribution}" = "ubuntu" ]; then 
-  sudo apt-get install -y -V software-properties-common lsb-release
-  sudo add-apt-repository -y universe
-  sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
-  sudo add-apt-repository -y ppa:groonga/ppa
-fi
-
-wget \
-  https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
-sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
+case ${distribution} in
+  debian)
+    wget \
+      https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
+    sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
+    ;;
+  ubuntu)
+    sudo apt-get install -y -V software-properties-common lsb-release
+    sudo add-apt-repository -y universe
+    sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
+    sudo add-apt-repository -y ppa:groonga/ppa
+    ;;
+esac
 sudo apt update
 
 case ${package} in
