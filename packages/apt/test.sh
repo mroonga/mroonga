@@ -62,7 +62,6 @@ case ${package} in
     ;;
   mysql-*)
     #Currently Ubuntu only
-    sudo apt-get install -y -V mysql-testsuite
     old_package="mysql-server-mroonga"
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
