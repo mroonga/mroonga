@@ -66,6 +66,7 @@ Components: main
 Architectures: amd64 source
 SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
+ls -R ${repositories_dir}
 reprepro includedeb ${code_name} \
   ${repositories_dir}/${distribution}/pool/${code_name}/main/*/*/*_{${architecture},all}.deb
 
