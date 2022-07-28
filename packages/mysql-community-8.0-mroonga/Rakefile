@@ -8,7 +8,6 @@ class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
   def apt_targets_default
     [
       "debian-bullseye",
-      "ubuntu-impish",
 # We disable Ubuntu 22.04 temporaliy.
 # MySQL 8.0 doesn't provide packages for Ubuntu 22.04 yet
 #      "ubuntu-jammy",
