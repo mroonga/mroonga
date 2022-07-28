@@ -11,6 +11,10 @@ Release 12.05 - 2022-07-29
 Improvements
 ^^^^^^^^^^^^
 
+* [:doc:`/install/centos`] Added support for MySQL 5.7.39.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.39.
+
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-20.
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.8.
