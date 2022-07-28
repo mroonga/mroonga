@@ -10,6 +10,7 @@ echo "debconf debconf/frontend select Noninteractive" | \
   sudo debconf-set-selections
 
 sudo apt update
+sudo apt purge -V -y grub-pc
 sudo apt install -V -y apparmor lsb-release wget
 
 distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
@@ -156,8 +157,6 @@ esac
 
 # Upgrade
 if [ -n "${old_package}" ]; then
-  sudo apt purge -V -y \
-    grub-pc
   sudo apt purge -V -y \
     ${package} \
     "${mysql_package_prefix}-*"
