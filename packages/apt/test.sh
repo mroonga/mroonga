@@ -127,39 +127,30 @@ for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
 done
 set -x
 
-case ${distribution} in
-  ubuntu)
-    sudo \
-      ./mtr \
-      --force \
-      --no-check-testcases \
-      --parallel=${parallel} \
-      --retry=3 \
-      --client-bindir="${mysql_test_dir}/bin" \
-      --suite="${test_suite_names}"
+case ${package} in
+  mysql-8.*)
+    ( \
+      echo "/usr/lib/mysql-test/var/ r,"; \
+      echo "/usr/lib/mysql-test/var/** rwk,"; \
+    ) | sudo tee --append /etc/apparmor.d/local/usr.sbin.mysqld
+    sudo systemctl restart apparmor
     ;;
-  *)
-    sudo \
-      ./mtr \
-      --force \
-      --no-check-testcases \
-      --parallel=${parallel} \
-      --retry=3 \
-      --suite="${test_suite_names}"
+esac
 
-    case ${package} in
-      mariadb-*)
-        # Test with binary protocol
-        sudo \
-          ./mtr \
-          --force \
-          --no-check-testcases \
-          --parallel=${parallel} \
-          --ps-protocol \
-          --retry=3 \
-          --suite="${test_suite_names}"
-        ;;
-    esac
+mtr_args=()
+mtr_args+=(--force)
+mtr_args+=(--no-check-testcases)
+mtr_args+=(--parallel=${parallel})
+mtr_args+=(--retry=3)
+mtr_args+=(--suite="${test_suite_names}")
+if -d "${mysql_test_dir}/bin" ; then
+  mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
+fi
+sudo ./mtr "${mtr_args[@]}"
+case ${package} in
+  mariadb-*)
+    # Test with binary protocol
+    sudo ./mtr "${mtr_args[@]}" --ps-protocol
     ;;
 esac
 
