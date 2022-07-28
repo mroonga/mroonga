@@ -75,6 +75,7 @@ sudo gpg \
 
 sudo apt install -V -y reprepro
 repositories_dir=/vagrant/packages/${package}/apt/repositories
+pushd /tmp/
 mkdir -p conf/
 cat <<DISTRIBUTIONS > conf/distributions
 Codename: ${code_name}
@@ -84,10 +85,11 @@ SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
 reprepro includedeb ${code_name} \
   ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
-
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
 deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
 APT_SOURCES
+popd
+
 sudo apt update
 sudo apt install -V -y ${package}
 
