@@ -23,6 +23,7 @@ RUN \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
+    libcurl-devel \
     libtool \
     make \
     pkgconfig \
