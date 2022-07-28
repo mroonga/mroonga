@@ -9,6 +9,8 @@ mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 echo "debconf debconf/frontend select Noninteractive" | \
   sudo debconf-set-selections
 
+sudo sed -i'' -e 's/in\.archive/archive/g' /etc/apt/sources.list
+
 sudo apt update
 sudo apt purge -V -y grub-pc
 sudo apt install -V -y apparmor lsb-release wget
