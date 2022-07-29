@@ -9,14 +9,26 @@ mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 echo "debconf debconf/frontend select Noninteractive" | \
   sudo debconf-set-selections
 
+sudo sed -i'' -e 's/in\.archive/archive/g' /etc/apt/sources.list
+
 sudo apt update
+sudo apt purge -V -y grub-pc
 sudo apt install -V -y apparmor lsb-release wget
 
+distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
+case ${distribution} in
+  debian)
+    repository=main
+    ;;
+  ubuntu)
+    repository=universe
+  ;;
+esac
 code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
 
 wget \
-  https://packages.groonga.org/debian/groonga-apt-source-latest-${code_name}.deb
+  https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 sudo apt update
 
@@ -41,6 +53,17 @@ case ${package} in
     test_package=mysql-testsuite
     mysql_test_dir=/usr/lib/mysql-test
     ;;
+  mysql-*)
+    old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
+    # TODO: Remove this after we release a new version.
+    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+      old_package=
+    fi
+    mysql_package_prefix=mysql
+    client_dev_package=libmysqlclient-dev
+    test_package=mysql-testsuite
+    mysql_test_dir=/usr/lib/mysql-test
+    ;;
 esac
 
 (echo "Key-Type: RSA"; \
@@ -58,6 +81,7 @@ sudo gpg \
 
 sudo apt install -V -y reprepro
 repositories_dir=/vagrant/packages/${package}/apt/repositories
+pushd /tmp/
 mkdir -p conf/
 cat <<DISTRIBUTIONS > conf/distributions
 Codename: ${code_name}
@@ -66,11 +90,12 @@ Architectures: amd64 source
 SignWith: ${GPG_KEY_ID}
 DISTRIBUTIONS
 reprepro includedeb ${code_name} \
-  ${repositories_dir}/debian/pool/${code_name}/main/*/*/*_{${architecture},all}.deb
-
+  ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
 deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
 APT_SOURCES
+popd
+
 sudo apt update
 sudo apt install -V -y ${package}
 
@@ -111,32 +136,35 @@ for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
 done
 set -x
 
-sudo \
-  ./mtr \
-  --force \
-  --no-check-testcases \
-  --parallel=${parallel} \
-  --retry=3 \
-  --suite="${test_suite_names}"
+case ${package} in
+  mysql-8.*)
+    ( \
+      echo "/usr/lib/mysql-test/var/ r,"; \
+      echo "/usr/lib/mysql-test/var/** rwk,"; \
+    ) | sudo tee --append /etc/apparmor.d/local/usr.sbin.mysqld
+    sudo systemctl restart apparmor
+    ;;
+esac
 
+mtr_args=()
+mtr_args+=(--force)
+mtr_args+=(--no-check-testcases)
+mtr_args+=(--parallel=${parallel})
+mtr_args+=(--retry=3)
+mtr_args+=(--suite="${test_suite_names}")
+if [ -d "${mysql_test_dir}/bin" ]; then
+  mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
+fi
+sudo ./mtr "${mtr_args[@]}"
 case ${package} in
   mariadb-*)
     # Test with binary protocol
-    sudo \
-      ./mtr \
-      --force \
-      --no-check-testcases \
-      --parallel=${parallel} \
-      --ps-protocol \
-      --retry=3 \
-      --suite="${test_suite_names}"
+    sudo ./mtr "${mtr_args[@]}" --ps-protocol
     ;;
 esac
 
 # Upgrade
 if [ -n "${old_package}" ]; then
-  sudo apt purge -V -y \
-    grub-pc
   sudo apt purge -V -y \
     ${package} \
     "${mysql_package_prefix}-*"

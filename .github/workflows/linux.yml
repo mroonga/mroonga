@@ -334,9 +334,9 @@ jobs:
             package: mariadb-10.8
 
           # MySQL 8.0
-          # TODO
-          # - os: ubuntu-jammy
-          #   package: mysql-8.0
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mysql-8.0
 
           # MySQL community 5.7
           - os: centos-7
