@@ -168,6 +168,7 @@ if [ -n "${old_package}" ]; then
   sudo apt purge -V -y \
     ${package} \
     "${mysql_package_prefix}-*"
+  sudo rm -rf /var/lib/mysql
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   sudo apt update
   sudo apt install -V -y ${old_package}

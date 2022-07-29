@@ -210,6 +210,7 @@ fi
 sudo ${DNF} erase -y \
   ${package} \
   "${mysql_package_prefix}-*"
+sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${package} in
