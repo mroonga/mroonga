@@ -55,6 +55,10 @@ case ${package} in
     ;;
   mysql-*)
     old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
+    # TODO: Remove this after we release a new version.
+    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+      old_package=
+    fi
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
     test_package=mysql-testsuite
@@ -148,7 +152,7 @@ mtr_args+=(--no-check-testcases)
 mtr_args+=(--parallel=${parallel})
 mtr_args+=(--retry=3)
 mtr_args+=(--suite="${test_suite_names}")
-if -d "${mysql_test_dir}/bin" ; then
+if [ -d "${mysql_test_dir}/bin" ]; then
   mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
 fi
 sudo ./mtr "${mtr_args[@]}"
