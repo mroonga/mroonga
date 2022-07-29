@@ -335,6 +335,7 @@ jobs:
 
           # MySQL 8.0
           - os: ubuntu-jammy
+            package-type: apt
             package: mysql-8.0
 
           # MySQL community 5.7
