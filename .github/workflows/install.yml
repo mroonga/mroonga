@@ -19,10 +19,6 @@ jobs:
             package: mariadb
           - os: ubuntu-focal
             package: mysql
-          - os: ubuntu-hirsute
-            package: mysql
-          - os: ubuntu-impish
-            package: mysql
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
