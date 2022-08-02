@@ -78,7 +78,7 @@ Currently we are assuming the following development environments.
 * `MySQL <http://www.mysql.com/>`_
 * `Groonga <http://groonga.org/>`_
 * `Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
-* `Sphinx <http://sphinx-doc.org/>`_ (for documents)
+* `Sphinx <https://www.sphinx-doc.org/en/master/>`_ (for documents)
 
 Contents of the source tree
 ---------------------------
