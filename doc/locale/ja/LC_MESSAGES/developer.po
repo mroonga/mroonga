@@ -407,7 +407,7 @@ msgid ""
 "reStructuredText format."
 msgstr ""
 "reStructuredText形式については、 `reStructuredText (reST) <https://www."
-"sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_  を参照してくだ"
+"sphinx-doc.org/ja/master/usage/restructuredtext/>`_  を参照してくだ"
 "さい。"
 
 msgid "Confirm generated document"
