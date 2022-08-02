@@ -23,6 +23,26 @@ Improvements
 
 * [:doc:`/install/debian`] Dropped support for Debian 10 (buster).
 
+* Changed to not require to run update.sql for registering Mroonga to MySQL.[GitHub #509][Reported by Jérome Perrin]
+  
+  Mroonga has required to run both install.sql and update.sql to register to MySQL since Mroonga 12.04.
+
+  .. code-block::
+
+     % mysql -u root < /usr/share/mroonga/install.sql
+     % mysql -u root < /usr/share/mroonga/update.sql
+
+  This improvement has changed Mroonga to only require to run install.sql to register to MySQL as before than Mroonga 12.04.
+
+  .. code-block::
+
+    % mysql -u root < /usr/share/mroonga/install.sql
+
+Thanks
+^^^^^^
+
+* Jérome Perrin
+
 .. _release-12-04:
 
 Release 12.04 - 2022-06-01
