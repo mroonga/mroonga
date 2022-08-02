@@ -419,7 +419,7 @@ msgstr "以下のコマンドでHTMLファイルを生成することができ�
 msgid ""
 "You can confirm generated HTML document in web browser, after generating "
 "HTML files."
-msgstr "生成されたHTMLドキュメントをwebブラウザで確認することができます。"
+msgstr "生成されたHTMLドキュメントをWebブラウザで確認することができます。"
 
 msgid "Here we show an example of using Firefox. ::"
 msgstr "以下はFirefoxで確認する例です。"
