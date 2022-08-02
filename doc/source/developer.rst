@@ -179,7 +179,7 @@ Adding a document
 
 Write a document in reStructuredText format, and save the document with .rst extension in "doc/source" directory.
 
-See `reStructuredText (reST) <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ about how to write a document in reStructuredText format.
+See `reStructuredText (reST) <https://www.sphinx-doc.org/en/master/usage/restructuredtext/>`_ about how to write a document in reStructuredText format.
 
 Confirm generated document
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
