@@ -422,7 +422,7 @@ msgid ""
 msgstr "生成されたHTMLドキュメントをwebブラウザで確認することができます。"
 
 msgid "Here we show an example of using Firefox. ::"
-msgstr "以下はFireFoxで確認する例です。"
+msgstr "以下はFirefoxで確認する例です。"
 
 msgid "TODO: Translate."
 msgstr ""
