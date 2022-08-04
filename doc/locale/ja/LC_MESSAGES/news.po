@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-08-02 19:13+0900\n"
+"PO-Revision-Date: 2022-08-04 11:15+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.05 - 2022-07-29"
-msgstr "12.05リリース - 2022-07-29"
+msgid "Release 12.06 - 2022-08-04"
+msgstr "12.06リリース - 2022-08-04"
 
 msgid "Improvements"
 msgstr "改良"
@@ -210,3 +210,11 @@ msgstr "MySQL 8.0以降でラッパーモードのサポートをやめました
 
 msgid "Added support for disabling a back trace by the server variable."
 msgstr "サ"
+
+msgid ""
+"We can disable a back trace by \"SET GLOBAL mroonga_enable_back_trace = "
+"false;\"."
+msgstr ""
+
+msgid "Added support for ``float32`` weight vector."
+msgstr ""
