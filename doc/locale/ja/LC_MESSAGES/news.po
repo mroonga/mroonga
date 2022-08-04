@@ -7260,10 +7260,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#~ msgid "Release 12.05 - 2022-07-29"
-#~ msgstr "12.05リリース - 2022-07-29"
-
-#, fuzzy
-#~ msgid "aaa"
-#~ msgstr "河田さん"
