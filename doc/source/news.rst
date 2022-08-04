@@ -5,7 +5,7 @@ News
 
 .. _release-12-06:
 
-Release 12.05 - 2022-07-29
+Release 12.06 - 2022-08-04
 --------------------------
 
 Improvements
