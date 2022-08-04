@@ -20,15 +20,14 @@ The procedure from download to build is the following. ::
 
   % mkdir -p ~/work/
   % cd ~/work/
-  % wget https://github.com/mysql/mysql-server/archive/refs/tags/mysql-8.0.29.tar.gz
-  % tar xvzf mysql-8.0.29.tar.gz
-  % mkdir mysql-server-mysql-8.0.29-build
-  % cd mysql-server-mysql-8.0.29-build
-  % cmake ../mysql-server-mysql-8.0.29 \
+  % wget https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-8.0.29.tar.gz
+  % tar xvzf mysql-boost-8.0.29.tar.gz
+  % mkdir mysql-8.0.29-build
+  % cd mysql-8.0.29-build
+  % cmake ../mysql-8.0.29 \
       -DCMAKE_INSTALL_PREFIX=/tmp/local \
       -DWITH_DEBUG=yes \
-      -DDOWNLOAD_BOOST=yes \
-      -DWITH_BOOST=../boost 
+      -DWITH_BOOST=../mysql-8.0.29/boost
   % make
 
 .. _`MySQL :: 2.9.4 Installing MySQL Using a Standard Source Distribution`: https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html
@@ -50,13 +49,11 @@ The procedure from cloning repository to build is the following. ::
   % git clone git@github.com:mroonga/mroonga.git
   % cd mroonga
   % ./autogen.sh
-  % ./configure CFLAGS="-g3 -O0" \
-                CXXFLAGS="-g3 -O0" \
-                --with-debug \
+  % ./configure --with-debug \
                 --prefix=/tmp/local \
-                --with-mysql-source=$HOME/work/mysql-server-mysql-8.0.29 \
-                --with-mysql-config=$HOME/work/mysql-server-mysql-8.0.29-build/scripts/mysql_config \
-                --with-mysql-build=$HOME/work/mysql-server-mysql-8.0.29-build
+                --with-mysql-source=$HOME/work/mysql-8.0.29 \
+                --with-mysql-config=$HOME/work/mysql-8.0.29-build/scripts/mysql_config \
+                --with-mysql-build=$HOME/work/mysql-8.0.29-build
   % make
 
 When you successfully build both, please invoke tests like the following.
