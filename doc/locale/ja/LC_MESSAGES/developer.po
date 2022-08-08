@@ -413,7 +413,7 @@ msgid "Confirm generated document"
 msgstr "生成されたドキュメントの確認"
 
 msgid "You can generate HTML files by the following command. ::"
-msgstr "以下のコマンドでHTMLファイルを生成することができます。"
+msgstr "以下のコマンドでHTMLファイルを生成することができます。 ::"
 
 msgid ""
 "You can confirm generated HTML document in web browser, after generating "
