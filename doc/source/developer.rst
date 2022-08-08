@@ -78,7 +78,7 @@ Currently we are assuming the following development environments.
 * `MySQL <http://www.mysql.com/>`_
 * `Groonga <http://groonga.org/>`_
 * `Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
-* `Sphinx <http://sphinx-doc.org/>`_ (for documents)
+* `Sphinx <https://www.sphinx-doc.org/en/master/>`_ (for documents)
 
 Contents of the source tree
 ---------------------------
@@ -179,7 +179,7 @@ Adding a document
 
 Write a document in reStructuredText format, and save the document with .rst extension in "doc/source" directory.
 
-See reStructuredText (reST) `concepts and syntax <http://sphinx-doc.org/latest/rest.html>`_ about how to write a document in reStructuredText format.
+See `reStructuredText (reST) <https://www.sphinx-doc.org/en/master/usage/restructuredtext/>`_ about how to write a document in reStructuredText format.
 
 Confirm generated document
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
