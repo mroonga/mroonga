@@ -39,9 +39,9 @@ You can build Mroonga for debugging by passing ``--with-debug`` in configure opt
 
 .. note::
 
-  In order to build Mroonga, you need to install required tools and libraries beforehand.
+   In order to build Mroonga, you need to install required tools and libraries beforehand.
 
-  See :doc:`/install/others` for the details of dependencies.
+   See :doc:`/install/others` for the details of dependencies.
 
 The procedure from cloning repository to build is the following. ::
 
