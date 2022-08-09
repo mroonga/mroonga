@@ -13,7 +13,7 @@ Improvements
 
 * [:doc:`/install/centos`] Added support for MySQL 5.7.39.
 
-* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.39.
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.30.
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-20.
 

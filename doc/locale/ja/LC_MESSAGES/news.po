@@ -32,9 +32,9 @@ msgstr "[:doc:`/install/centos`] MySQL 5.7.39をサポートしました。"
 
 msgid ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL "
-"8.0.39."
+"8.0.30."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.39をサポートし"
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.30をサポートし"
 "ました。"
 
 msgid ""
