@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2010  Tetsuro IKEDA
+  Copyright(C) 2010-2013  Kentoku SHIBA
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,11 @@
 #include <mrn_current_thread.hpp>
 
 #include <sql_table.h>
+#ifdef MRN_HAVE_UDF_METADATA
+#  include <mysql/components/my_service.h>
+#  include <mysql/components/services/udf_metadata.h>
+#  include <mysql/service_plugin_registry.h>
+#endif
 
 MRN_BEGIN_DECLS
 
@@ -46,9 +51,9 @@ struct CommandInfo
 };
 
 MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
-                                     char *message)
+                                      char *message)
 {
-  CommandInfo *info = NULL;
+  CommandInfo *info = nullptr;
 
   init->ptr = NULL;
   if (args->arg_count == 0) {
@@ -113,14 +118,48 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
   init->maybe_null = 1;
   init->const_item = 0;
 
-  info = (CommandInfo *)mrn_my_malloc(sizeof(CommandInfo),
-                                      MYF(MY_WME | MY_ZEROFILL));
+  info = static_cast<CommandInfo *>(mrn_my_malloc(sizeof(CommandInfo),
+                                                  MYF(MY_WME | MY_ZEROFILL)));
   if (!info) {
     strcpy(message, "mroonga_command(): out of memory");
     goto error;
   }
 
   info->ctx = mrn_context_pool->pull();
+#ifdef MRN_HAVE_UDF_METADATA
+  {
+    const char *charset = nullptr;
+    grn_encoding encoding = GRN_CTX_GET_ENCODING(info->ctx);
+    if (encoding == GRN_ENC_DEFAULT) {
+      encoding = grn_get_default_encoding();
+    }
+    switch (GRN_CTX_GET_ENCODING(info->ctx)) {
+    case GRN_ENC_EUC_JP:
+      charset = "eucjpms";
+      break;
+    case GRN_ENC_UTF8:
+      charset = "utf8mb4";
+      break;
+    case GRN_ENC_SJIS:
+      charset = "cp932";
+      break;
+    case GRN_ENC_LATIN1:
+      charset = "latin1";
+      break;
+    case GRN_ENC_KOI8R:
+      charset = "koi8r";
+      break;
+    default:
+      break;
+    }
+    if (charset) {
+      auto *value = const_cast<char *>(charset);
+      my_service<SERVICE_TYPE(mysql_udf_metadata)>
+        service("mysql_udf_metadata", mysql_plugin_registry_acquire());
+      service->result_set(init, "charset", static_cast<void *>(value));
+    }
+  }
+#endif
   {
     const char *current_db_path = MRN_THD_DB_PATH(current_thd);
     const char *action;
@@ -157,7 +196,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
   GRN_TEXT_INIT(&(info->command), 0);
   GRN_TEXT_INIT(&(info->result), 0);
 
-  init->ptr = (char *)info;
+  init->ptr = reinterpret_cast<char *>(info);
 
   return false;
 

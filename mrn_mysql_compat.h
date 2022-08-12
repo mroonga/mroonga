@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -1047,4 +1047,8 @@ typedef uint mrn_srid;
 #  define MRN_LIST_SIZE(list) ((list)->size())
 #else
 #  define MRN_LIST_SIZE(list) ((list)->elements)
+#endif
+
+#if (MYSQL_VERSION_ID >= 80000 && !defined(MRN_MARIADB_P))
+#  define MRN_HAVE_UDF_METADATA
 #endif
