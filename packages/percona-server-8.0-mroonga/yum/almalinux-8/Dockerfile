@@ -45,6 +45,7 @@ RUN \
     # Mroonga dependencies.
     ccache \
     ${SCL} \
+    ${SCL}-annobin-plugin-gcc \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
