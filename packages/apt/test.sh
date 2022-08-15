@@ -41,7 +41,7 @@ case ${package} in
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
-    old_package=
+    old_package=${package}
     wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
     sudo \
       env DEBIAN_FRONTEND=noninteractive \
