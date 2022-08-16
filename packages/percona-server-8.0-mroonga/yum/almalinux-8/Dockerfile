@@ -3,6 +3,9 @@ FROM ${FROM}
 
 ARG DEBUG
 
+ENV \
+  SCL=gcc-toolset-11
+
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   dnf update -y ${quiet} && \
@@ -41,7 +44,8 @@ RUN \
     time \
     # Mroonga dependencies.
     ccache \
-    gcc-toolset-10 \
+    ${SCL} \
+    ${SCL}-annobin-plugin-gcc \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \

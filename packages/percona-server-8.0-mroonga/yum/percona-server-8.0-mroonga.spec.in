@@ -155,7 +155,7 @@ Documentation for Mroonga
 * Wed Aug 03 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.06-1
 - New upstream release.
 
-* Wed Jun 12 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.04-2
+* Sun Jun 12 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.04-2
 - build against Percona Server 8.0.28-20.1.
 
 * Sun Jun 05 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.04-1
