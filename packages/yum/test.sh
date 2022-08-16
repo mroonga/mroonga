@@ -28,10 +28,24 @@ case ${os} in
         ;;
     esac
     ;;
+  linux) # Oracle Linux
+    major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
+    DNF="dnf --enablerepo=ol8_codeready_builder"
+    sudo dnf module -y disable mariadb
+    sudo dnf module -y disable mysql
+    ;;
 esac
 
-sudo ${DNF} install -y \
-  https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
+case ${os} in
+  linux) # Oracle Linux
+    sudo ${DNF} install -y \
+         https://packages.groonga.org/almalinux/${major_version}/groonga-release-latest.noarch.rpm
+    ;;
+  *)
+    sudo ${DNF} install -y \
+         https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
+    ;;
+esac
 
 ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
