@@ -53,7 +53,7 @@ struct CommandInfo
 MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                                       char *message)
 {
-  CommandInfo *info = nullptr;
+  CommandInfo *info = NULL;
 
   init->ptr = NULL;
   if (args->arg_count == 0) {
