@@ -174,7 +174,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = http://yum.mariadb.org/10.6/centos8-amd64
+  baseurl = https://yum.mariadb.org/10.6/rhel8-amd64
   gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck=1
 
