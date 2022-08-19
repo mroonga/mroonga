@@ -51,10 +51,18 @@ case ${package} in
       service_name=mariadb
       ha_mroonga_so=ha_mroonga_official.so
       test_package_name=MariaDB-test
+      case ${mysql_version} in
+        10.6|10.7|10.8)
+          baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
+          ;;
+        *)
+          baseurl=https://yum.mariadb.org/${mysql_version}/centos${major_version}-amd64
+          ;;
+      esac
       sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
-baseurl = http://yum.mariadb.org/${mysql_version}/centos${major_version}-amd64
+baseurl = ${baseurl}
 gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO
