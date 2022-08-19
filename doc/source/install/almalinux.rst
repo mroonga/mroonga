@@ -23,10 +23,10 @@ Mroonga 11.10 release.
 
 Install::
 
+  % sudo dnf -y module disable mysql
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
   % sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el8.rpm
-  % sudo dnf install -y groonga-libs
-  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel mysql-community-8.0-mroonga
+  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,powertools mysql-community-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
