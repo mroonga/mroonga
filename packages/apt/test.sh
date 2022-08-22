@@ -47,7 +47,6 @@ case ${package} in
       env DEBIAN_FRONTEND=noninteractive \
           MYSQL_SERVER_VERSION=mysql-${mysql_version} \
         apt install -y ./mysql-apt-config_*_all.deb
-    pwd
     sudo apt update
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
@@ -170,7 +169,6 @@ if [ -n "${old_package}" ]; then
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   case ${package} in
     mysql-community-8.*)
-      pwd
       sudo \
         env DEBIAN_FRONTEND=noninteractive \
             MYSQL_SERVER_VERSION=mysql-${mysql_version} \
