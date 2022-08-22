@@ -166,6 +166,14 @@ if [ -n "${old_package}" ]; then
     "${mysql_package_prefix}-*"
   sudo rm -rf /var/lib/mysql
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
+  case ${package} in
+    mysql-community-8.*)
+      sudo \
+        env DEBIAN_FRONTEND=noninteractive \
+            MYSQL_SERVER_VERSION=mysql-${mysql_version} \
+          apt install -y ./mysql-apt-config_*_all.deb
+      ;;
+  esac
   sudo apt update
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
