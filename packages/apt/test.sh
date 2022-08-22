@@ -162,6 +162,7 @@ esac
 
 # Upgrade
 if [ -n "${old_package}" ]; then
+  cd
   sudo apt purge -V -y \
     ${package} \
     "${mysql_package_prefix}-*"
@@ -173,7 +174,7 @@ if [ -n "${old_package}" ]; then
       sudo \
         env DEBIAN_FRONTEND=noninteractive \
             MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-          apt install -y ../mysql-apt-config_*_all.deb
+          apt install -y ./mysql-apt-config_*_all.deb
       ;;
   esac
   sudo apt update
