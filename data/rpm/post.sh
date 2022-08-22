@@ -63,7 +63,7 @@ case "${action}" in
     ;;
 esac
 
-install_plugin_sql=${data_dir}/mroonga/install_plugin.sql
+install_sql=${data_dir}/mroonga/install.sql
 uninstall_sql=${data_dir}/mroonga/uninstall.sql
 update_sql=${data_dir}/mroonga/update.sql
 
@@ -101,16 +101,16 @@ if [ "${try_auto_prepare}" = "yes" ]; then
   mysql="${mysql_command} -u root ${password_option}"
 
   if [ "${action}" = "install" ]; then
-    if ${mysql} < ${install_plugin_sql}; then
+    if ${mysql} < ${install_sql}; then
       need_manual_register=no
     fi
   else
     if systemctl restart ${service_name}; then
       need_manual_restart=no
     fi
-  fi
-  if ${mysql} < ${update_sql}; then
-    need_manual_update=no
+    if ${mysql} < ${update_sql}; then
+      need_manual_update=no
+    fi
   fi
 else
   mysql="mysql -u root"
@@ -128,7 +128,7 @@ fi
 
 if [ "${need_manual_register}" = "yes" ]; then
   echo "Run the following command line to register Mroonga:"
-  echo "  ${mysql} < ${install_plugin_sql}"
+  echo "  ${mysql} < ${install_sql}"
 fi
 
 if [ "${need_manual_restart}" = "yes" ]; then
