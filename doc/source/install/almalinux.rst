@@ -36,7 +36,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf -y module enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf -y module disable mysql
 
 .. _almalinux-8-percona-8-0:
 
