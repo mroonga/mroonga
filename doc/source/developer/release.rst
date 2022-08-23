@@ -228,7 +228,7 @@ We update the below files.
 
 We can confirm contents of blog on Web browser by using Jekyll.::
 
-  % jekyll serve --watch
+  % jekyll serve
 
 We access http://localhost:4000 on our web browser for confirming contents.
 
