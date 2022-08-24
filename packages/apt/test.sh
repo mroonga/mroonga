@@ -55,8 +55,9 @@ case ${package} in
     ;;
   mysql-*)
     old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
-    if [ "${distribution}" = "ubuntu" ]; then
-      old_package=${package}
+    # TODO: Remove this after we release a package for ubuntu-jammy on pckages.groonga.org.
+    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+      old_package=
     fi
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
