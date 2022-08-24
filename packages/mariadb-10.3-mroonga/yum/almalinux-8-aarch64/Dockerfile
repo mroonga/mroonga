@@ -1,5 +1,4 @@
-ARG FROM=--platform=linux/arm/v8 arm64v8/almalinux:8
-FROM ${FROM}
+FROM --platform=linux/arm/v8 arm64v8/almalinux:8
 
 ARG DEBUG
 
