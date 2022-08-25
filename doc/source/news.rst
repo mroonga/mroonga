@@ -3,6 +3,28 @@
 News
 ====
 
+.. _release-12-07:
+
+Release 12.07 - 2022-08-30
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.35.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga returns results with a wrong character code.
+
+* [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8.[Reported by handmound]
+
+Thanks
+^^^^^^
+
+* handmound
+
 .. _release-12-06:
 
 Release 12.06 - 2022-08-04

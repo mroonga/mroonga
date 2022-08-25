@@ -8,7 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-04 11:39+0900\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2022-08-25 10:15+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +22,41 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.06 - 2022-08-04"
-msgstr "12.06リリース - 2022-08-04"
+msgid "Release 12.07 - 2022-08-30"
+msgstr "12.07リリース - 2022-08-30"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"MariaDB 10.3.35."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.35をサポート"
+"しました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a bug that Mroonga returns results with a wrong character code."
+msgstr "誤った文字コードで結果を返すことがある問題を修正しました。"
+
+# 0c5a19df6fea4b5a917430142484fafc
+msgid ""
+"[:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8."
+"[Reported by handmound]"
+msgstr ""
+"[:doc:`/install/almalinux`] AlmaLinux 8 のインストール手順を修正しました。 "
+"[handmoundさんが報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "handmound"
+msgstr ""
+
+msgid "Release 12.06 - 2022-08-04"
+msgstr "12.06リリース - 2022-08-04"
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.39."
 msgstr "[:doc:`/install/centos`] MySQL 5.7.39をサポートしました。"
@@ -82,9 +113,6 @@ msgstr ""
 "この改善では、Mroonga 12.04 より前と同じように、install.sqlを実行するだけで良"
 "いように変更しています。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Jérome Perrin"
 msgstr "Jérome Perrin さん"
 
@@ -131,9 +159,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.2.44, "
 "10.3.35、10.4.25、10.5.16、10.6.8、10.7.4をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that Mroonga may update failed. [groonga-dev,04982, groonga-"
