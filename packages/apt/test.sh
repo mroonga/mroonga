@@ -107,7 +107,7 @@ sudo apt install -V -y \
   ${test_package} \
   patch
 
-cd ${mysql_test_dir}
+pushd ${mysql_test_dir}
 sudo rm -rf plugin/mroonga
 sudo mkdir -p plugin
 sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
@@ -162,10 +162,10 @@ case ${package} in
     sudo ./mtr "${mtr_args[@]}" --ps-protocol
     ;;
 esac
+popd
 
 # Upgrade
 if [ -n "${old_package}" ]; then
-  cd
   sudo apt purge -V -y \
     ${package} \
     "${mysql_package_prefix}-*"
