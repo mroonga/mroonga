@@ -47,13 +47,13 @@ msgid ""
 "[Reported by handmound]"
 msgstr ""
 "[:doc:`/install/almalinux`] AlmaLinux 8 のインストール手順を修正しました。 "
-"[handmoundさんが報告]"
+"[handmoundさんの報告]"
 
 msgid "Thanks"
 msgstr "感謝"
 
 msgid "handmound"
-msgstr ""
+msgstr "handmound さん"
 
 msgid "Release 12.06 - 2022-08-04"
 msgstr "12.06リリース - 2022-08-04"
