@@ -529,7 +529,7 @@ configure_file(
 if(MRN_BUNDLED)
   set(MRN_DATA_DIR "${INSTALL_MYSQLSHAREDIR}/${PROJECT_NAME}")
 else()
-  set(MRN_DATA_DIR "share/${PROJECT_NAME}")
+  set(MRN_DATA_DIR "/usr/share/${PROJECT_NAME}")
 endif()
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
