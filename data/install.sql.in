@@ -1,2 +1,3 @@
-source @MRN_FULL_DATA_DIR@/install_plugin.sql
+INSTALL PLUGIN mroonga SONAME 'ha_mroonga@MRN_PLUGIN_SUFFIX@';
+
 source @MRN_FULL_DATA_DIR@/update.sql

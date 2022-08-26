@@ -4,7 +4,6 @@ SUBDIRS =					\
 
 sqldir = $(pkgdatadir)
 dist_sql_DATA =					\
-	install_plugin.sql			\
 	uninstall.sql				\
 	update.sql
 EXTRA_DIST =					\

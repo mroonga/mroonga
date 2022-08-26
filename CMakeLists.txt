@@ -542,10 +542,6 @@ configure_file(
   "${PROJECT_BINARY_DIR}/data/install.sql"
   @ONLY)
 configure_file(
-  "${PROJECT_SOURCE_DIR}/data/install_plugin.sql.in"
-  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
-  @ONLY)
-configure_file(
   "${PROJECT_SOURCE_DIR}/data/update.sql.in"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   @ONLY)
@@ -554,7 +550,6 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/AUTHORS"
   "${PROJECT_SOURCE_DIR}/COPYING"
   "${PROJECT_BINARY_DIR}/data/install.sql"
-  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")
