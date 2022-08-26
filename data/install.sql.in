@@ -1,2 +1,2 @@
-source @MRN_DATA_DIR@/install_plugin.sql
-source @MRN_DATA_DIR@/update.sql
+source @MRN_FULL_DATA_DIR@/install_plugin.sql
+source @MRN_FULL_DATA_DIR@/update.sql
