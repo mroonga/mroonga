@@ -8,6 +8,8 @@ dist_sql_DATA =					\
 	update.sql
 EXTRA_DIST =					\
 	install.sql.in
+CLEANFILES =					\
+	install.sql
 sql_DATA =					\
 	install.sql
 
