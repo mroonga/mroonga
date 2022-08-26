@@ -14,4 +14,7 @@ sql_DATA =					\
 	install.sql
 
 install.sql: install.sql.in
-	sed -e 's|@MRN_FULL_DATA_DIR[@]|$(sqldir)|g' $< > $@
+	sed \
+	  -e 's|@MRN_FULL_DATA_DIR[@]|$(sqldir)|g' \
+	  -e 's|@MRN_PLUGIN_SUFFIX[@]|$(MRN_PLUGIN_SUFFIX)|g' \
+	  $< > $@
