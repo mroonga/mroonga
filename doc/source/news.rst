@@ -11,7 +11,7 @@ Release 12.07 - 2022-08-30
 Improvements
 ^^^^^^^^^^^^
 
-* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.35.
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.36.
 
 Fixes
 ^^^^^

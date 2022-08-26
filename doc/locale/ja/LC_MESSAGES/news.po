@@ -30,9 +30,9 @@ msgstr "改良"
 
 msgid ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
-"MariaDB 10.3.35."
+"MariaDB 10.3.36."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.35をサポート"
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.36をサポート"
 "しました。"
 
 msgid "Fixes"
