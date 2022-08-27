@@ -41,7 +41,7 @@ case ${package} in
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
-    old_package=
+    old_package=${package}
     wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
     sudo \
       env DEBIAN_FRONTEND=noninteractive \
@@ -55,7 +55,7 @@ case ${package} in
     ;;
   mysql-*)
     old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
-    # TODO: Remove this after we release a new version.
+    # TODO: Remove this after we release a package for ubuntu-jammy on pckages.groonga.org.
     if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
       old_package=
     fi
@@ -107,7 +107,7 @@ sudo apt install -V -y \
   ${test_package} \
   patch
 
-cd ${mysql_test_dir}
+pushd ${mysql_test_dir}
 sudo rm -rf plugin/mroonga
 sudo mkdir -p plugin
 sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
@@ -162,6 +162,7 @@ case ${package} in
     sudo ./mtr "${mtr_args[@]}" --ps-protocol
     ;;
 esac
+popd
 
 # Upgrade
 if [ -n "${old_package}" ]; then
@@ -170,6 +171,14 @@ if [ -n "${old_package}" ]; then
     "${mysql_package_prefix}-*"
   sudo rm -rf /var/lib/mysql
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
+  case ${package} in
+    mysql-community-8.*)
+      sudo \
+        env DEBIAN_FRONTEND=noninteractive \
+            MYSQL_SERVER_VERSION=mysql-${mysql_version} \
+          apt install -y ./mysql-apt-config_*_all.deb
+      ;;
+  esac
   sudo apt update
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/

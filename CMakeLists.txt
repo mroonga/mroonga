@@ -526,18 +526,20 @@ configure_file(
   "${MRN_TEST_SUITE_DIR}/storage/variable/r/version.result"
   NEWLINE_STYLE LF)
 
+include(GNUInstallDirs)
 if(MRN_BUNDLED)
   set(MRN_DATA_DIR "${INSTALL_MYSQLSHAREDIR}/${PROJECT_NAME}")
 else()
-  set(MRN_DATA_DIR "share/${PROJECT_NAME}")
+  set(MRN_DATA_DIR "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}")
+endif()
+if(WIN32 OR IS_ABSOLUTE "${MRN_DATA_DIR}")
+  set(MRN_FULL_DATA_DIR "${MRN_DATA_DIR}")
+else()
+  set(MRN_FULL_DATA_DIR "${CMAKE_INSTALL_PREFIX}/${MRN_DATA_DIR}")
 endif()
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/install.sql.in"
   "${PROJECT_BINARY_DIR}/data/install.sql"
-  @ONLY)
-configure_file(
-  "${PROJECT_SOURCE_DIR}/data/install_plugin.sql.in"
-  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
   @ONLY)
 configure_file(
   "${PROJECT_SOURCE_DIR}/data/update.sql.in"
@@ -548,7 +550,6 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/AUTHORS"
   "${PROJECT_SOURCE_DIR}/COPYING"
   "${PROJECT_BINARY_DIR}/data/install.sql"
-  "${PROJECT_BINARY_DIR}/data/install_plugin.sql"
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")

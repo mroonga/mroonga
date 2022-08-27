@@ -70,7 +70,7 @@ install_mroonga() {
     need_manual_update=yes
   fi
 
-  install_plugin_sql=/usr/share/mroonga/install_plugin.sql
+  install_sql=/usr/share/mroonga/install.sql
   uninstall_sql=/usr/share/mroonga/uninstall.sql
   update_sql=/usr/share/mroonga/update.sql
 
@@ -95,16 +95,17 @@ install_mroonga() {
     mysql="mysql ${password_options}"
 
     if [ "${configure_action}" = "install" ]; then
-      if ${mysql} < ${install_plugin_sql}; then
+      if ${mysql} < ${install_sql}; then
         need_manual_register=no
+        need_manual_update=no
       fi
     else
       if systemctl restart mysql; then
         need_manual_restart=no
       fi
-    fi
-    if ${mysql} < ${update_sql}; then
-      need_manual_update=no
+      if ${mysql} < ${update_sql}; then
+        need_manual_update=no
+      fi
     fi
   else
     mysql="mysql -u root"
@@ -116,7 +117,7 @@ install_mroonga() {
 
   if [ "${need_manual_register}" = "yes" ]; then
     echo "Run the following command line to register Mroonga:"
-    echo "  ${mysql} < ${install_plugin_sql}"
+    echo "  ${mysql} < ${install_sql}"
   fi
 
   if [ "${need_manual_restart}" = "yes" ]; then
