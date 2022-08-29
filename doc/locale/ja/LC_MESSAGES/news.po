@@ -39,7 +39,7 @@ msgid ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
 "Percona Server 5.7.39-42."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.38-41"
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.39-42"
 "をサポートしました。"
 
 msgid "Fixes"
