@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-08-25 10:15+0900\n"
+"PO-Revision-Date: 2022-08-29 12:12+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -38,8 +38,22 @@ msgstr ""
 msgid "Fixes"
 msgstr "修正"
 
+msgid ""
+"Fixed a bug to fail to install or upgrade Mroonga.[GitHub #525][Reported by "
+"Tomohiro KATO][Patched by Jérome Perrin]"
+msgstr ""
+"インストールおよびアップグレードに失敗する問題を修正しました。[GitHub #525]"
+"[Tomohiro KATOさんの報告][Jérome Perrinさんがパッチ提供]"
+
+msgid ""
+"The cause was install.sql was broken. This bug had occurred since Mroonga "
+"12.06."
+msgstr ""
+"install.sqlが壊れていたことが原因です。この問題は、 Mroonga 12.06以降で発生し"
+"ていました。"
+
 msgid "Fixed a bug that Mroonga returns results with a wrong character code."
-msgstr "誤った文字コードで結果を返すことがある問題を修正しました。"
+msgstr "誤った文字コードで結果を返す問題を修正しました。"
 
 # 0c5a19df6fea4b5a917430142484fafc
 msgid ""
@@ -53,7 +67,13 @@ msgid "Thanks"
 msgstr "感謝"
 
 msgid "handmound"
-msgstr "handmound さん"
+msgstr "handmoundさん"
+
+msgid "Jérome Perrin"
+msgstr "Jérome Perrinさん"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
 
 msgid "Release 12.06 - 2022-08-04"
 msgstr "12.06リリース - 2022-08-04"
@@ -112,9 +132,6 @@ msgid ""
 msgstr ""
 "この改善では、Mroonga 12.04 より前と同じように、install.sqlを実行するだけで良"
 "いように変更しています。"
-
-msgid "Jérome Perrin"
-msgstr "Jérome Perrin さん"
 
 msgid "Release 12.04 - 2022-06-01"
 msgstr "12.04リリース - 2022-06-01"
@@ -567,9 +584,6 @@ msgstr "santalexさん"
 
 msgid "Josep Sanz"
 msgstr "Josep Sanzさん"
-
-msgid "Tomohiro KATO"
-msgstr "かとうさん"
 
 msgid "Katsuhito Watanabe"
 msgstr "Katsuhito Watanabeさん"

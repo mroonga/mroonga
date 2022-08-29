@@ -16,6 +16,10 @@ Improvements
 Fixes
 ^^^^^
 
+* Fixed a bug to fail to install or upgrade Mroonga.[GitHub #525][Reported by Tomohiro KATO][Patched by Jérome Perrin]
+  
+  The cause was install.sql was broken. This bug had occurred since Mroonga 12.06.
+
 * Fixed a bug that Mroonga returns results with a wrong character code.
 
 * [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8.[Reported by handmound]
@@ -24,6 +28,8 @@ Thanks
 ^^^^^^
 
 * handmound
+* Jérome Perrin
+* Tomohiro KATO
 
 .. _release-12-06:
 
