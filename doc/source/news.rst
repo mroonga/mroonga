@@ -3,6 +3,38 @@
 News
 ====
 
+.. _release-12-07:
+
+Release 12.07 - 2022-08-30
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.36, 10.4.26, 10.5.17, 10.6.9, 10.7.5 and 10.8.4.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.39-42.
+
+Fixes
+^^^^^
+
+* Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub #525][Reported by Tomohiro KATO][Patched by Jérome Perrin]
+  
+  The cause was install.sql was broken. This bug had occurred since Mroonga 12.06.
+
+* Fixed a bug that ``mroonga_command()`` returns results with hex dump for MySQL 8.0 and above.
+
+  ``mroonga_command()`` returns results with a correct character code form this version.
+
+* [:doc:`/install/almalinux`] Fixed an installation document for Mroonga on AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]
+
+Thanks
+^^^^^^
+
+* handmound
+* Jérome Perrin
+* Tomohiro KATO
+
 .. _release-12-06:
 
 Release 12.06 - 2022-08-04

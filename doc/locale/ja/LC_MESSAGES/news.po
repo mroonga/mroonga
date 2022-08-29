@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: groonga storage engine 1.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2022-08-04 11:39+0900\n"
+"PO-Revision-Date: 2022-08-29 16:39+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -21,11 +21,78 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.06 - 2022-08-04"
-msgstr "12.06リリース - 2022-08-04"
+msgid "Release 12.07 - 2022-08-30"
+msgstr "12.07リリース - 2022-08-30"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"MariaDB 10.3.36, 10.4.26, 10.5.17, 10.6.9, 10.7.5 and 10.8.4."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.36、"
+"10.4.26、10.5.17、10.6.9、10.7.5、10.8.4をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 5.7.39-42."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.39-42"
+"をサポートしました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub "
+"#525][Reported by Tomohiro KATO][Patched by Jérome Perrin]"
+msgstr ""
+"install.sqlを使用したインストールおよびアップグレードに失敗する問題を修正しま"
+"した。[GitHub #525][Tomohiro KATOさんの報告][Jérome Perrinさんがパッチ提供]"
+
+msgid ""
+"The cause was install.sql was broken. This bug had occurred since Mroonga "
+"12.06."
+msgstr ""
+"install.sqlが壊れていたことが原因です。この問題は、 Mroonga 12.06以降で発生し"
+"ていました。"
+
+msgid ""
+"Fixed a bug that ``mroonga_command()`` returns results with hex dump for "
+"MySQL 8.0 and above."
+msgstr ""
+"MySQL 8.0 以上を使用しているとき、``mroonga_command()`` が16進数ダンプで結果"
+"を返す問題を修正しました。"
+
+msgid ""
+"``mroonga_command()`` returns results with a correct character code form "
+"this version."
+msgstr ""
+"このバージョンから、``mroonga_command()`` が正しい文字コードで結果を返すよう"
+"になります。"
+
+msgid ""
+"[:doc:`/install/almalinux`] Fixed an installation document for Mroonga on "
+"AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]"
+msgstr ""
+"[:doc:`/install/almalinux`] AlmaLinux 8 向けMroongaのインストール手順を修正し"
+"ました。[Gitter/ja:62fe4ca5b16e8236e3ef225c][handmoundさんの報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "handmound"
+msgstr "handmoundさん"
+
+msgid "Jérome Perrin"
+msgstr "Jérome Perrinさん"
+
+msgid "Tomohiro KATO"
+msgstr "かとうさん"
+
+msgid "Release 12.06 - 2022-08-04"
+msgstr "12.06リリース - 2022-08-04"
 
 msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.39."
 msgstr "[:doc:`/install/centos`] MySQL 5.7.39をサポートしました。"
@@ -82,12 +149,6 @@ msgstr ""
 "この改善では、Mroonga 12.04 より前と同じように、install.sqlを実行するだけで良"
 "いように変更しています。"
 
-msgid "Thanks"
-msgstr "感謝"
-
-msgid "Jérome Perrin"
-msgstr "Jérome Perrin さん"
-
 msgid "Release 12.04 - 2022-06-01"
 msgstr "12.04リリース - 2022-06-01"
 
@@ -131,9 +192,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.2.44, "
 "10.3.35、10.4.25、10.5.16、10.6.8、10.7.4をサポートしました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug that Mroonga may update failed. [groonga-dev,04982, groonga-"
@@ -542,9 +600,6 @@ msgstr "santalexさん"
 
 msgid "Josep Sanz"
 msgstr "Josep Sanzさん"
-
-msgid "Tomohiro KATO"
-msgstr "かとうさん"
 
 msgid "Katsuhito Watanabe"
 msgstr "Katsuhito Watanabeさん"
