@@ -22,7 +22,8 @@ Fixes
 
 * Fixed a bug that Mroonga returns results with a wrong character code.
 
-* [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8.[Reported by handmound]
+* [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c
+][Reported by handmound]
 
 Thanks
 ^^^^^^
