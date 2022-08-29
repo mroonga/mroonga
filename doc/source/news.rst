@@ -26,7 +26,7 @@ Fixes
 
   ``mroonga_command()`` returns results with a correct character code form this version.
 
-* [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]
+* [:doc:`/install/almalinux`] Fixed an installation document for Mroonga on AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]
 
 Thanks
 ^^^^^^
