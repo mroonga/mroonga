@@ -74,7 +74,7 @@ msgstr ""
 "になります。"
 
 msgid ""
-"[:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8. "
+"[:doc:`/install/almalinux`] Fixed an installation document for Mroonga on AlmaLinux 8. "
 "[Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]"
 msgstr ""
 "[:doc:`/install/almalinux`] AlmaLinux 8 向けMroongaのインストール手順を修正しました。"
