@@ -22,7 +22,9 @@ Fixes
   
   The cause was install.sql was broken. This bug had occurred since Mroonga 12.06.
 
-* Fixed a bug that Mroonga returns results with a wrong character code.
+* Fixed a bug that ``mroonga_command()`` returns results with hex dump for MySQL 8.0 and above.
+
+  ``mroonga_command()`` returns results with a correct character code form this version.
 
 * [:doc:`/install/almalinux`] Fixed an instllation document for AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]
 
