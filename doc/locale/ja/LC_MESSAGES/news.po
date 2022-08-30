@@ -7335,6 +7335,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#~ msgid "So we do not recommend to use this version."
-#~ msgstr "そのため、このバージョンの使用は推奨しません。"
