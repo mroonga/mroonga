@@ -28,7 +28,7 @@ Fixes
 
 * Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub #525][Reported by Tomohiro KATO][Patched by Jérome Perrin]
   
-  The cause was install.sql was broken. This bug had occurred since Mroonga 12.06.
+  Broken install.sql caused this bug. This bug had occurred since Mroonga 12.06.
 
 * Fixed a bug that ``mroonga_command()`` returns results with hex dump for MySQL 8.0 and above.
 

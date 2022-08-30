@@ -69,7 +69,7 @@ msgstr ""
 "した。[GitHub #525][Tomohiro KATOさんの報告][Jérome Perrinさんがパッチ提供]"
 
 msgid ""
-"The cause was install.sql was broken. This bug had occurred since Mroonga "
+"Broken install.sql caused this bug. This bug had occurred since Mroonga "
 "12.06."
 msgstr ""
 "install.sqlが壊れていたことが原因です。この問題は、 Mroonga 12.06以降で発生し"
