@@ -5,8 +5,8 @@ class MariaDB103MroongaPackageTask < MroongaPackageTask
     super("mariadb-10.3")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    []
   end
 
   def ubuntu_targets_default
