@@ -19,9 +19,9 @@ Improvements
 
   .. note::
      
-     `MySQL 8.0.29 <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ used by Percona Server 8.0.29 has a critical issue.
+     MySQL 8.0.29 used by Percona Server 8.0.29 has a critical issue. So we do not recommend to use this version.
      
-     So we do not recommend to use this version.
+     See `MySQL 8.0.29 Release Notes <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ for details about the issue.
 
 Fixes
 ^^^^^
