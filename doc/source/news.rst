@@ -15,12 +15,20 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.39-42.
 
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.29-21.
+
+  .. note::
+     
+     MySQL 8.0.29 used by Percona Server 8.0.29 has a critical issue. So we do not recommend to use this version.
+     
+     See `MySQL 8.0.29 Release Notes <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ for details about the issue.
+
 Fixes
 ^^^^^
 
 * Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub #525][Reported by Tomohiro KATO][Patched by Jérome Perrin]
   
-  The cause was install.sql was broken. This bug had occurred since Mroonga 12.06.
+  Broken install.sql caused this bug. This bug had occurred since Mroonga 12.06.
 
 * Fixed a bug that ``mroonga_command()`` returns results with hex dump for MySQL 8.0 and above.
 

@@ -41,6 +41,27 @@ msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.39-42"
 "をサポートしました。"
 
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 8.0.29-21."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.29-21"
+"をサポートしました。"
+
+msgid ""
+"MySQL 8.0.29 used by Percona Server 8.0.29 has a critical issue. So we do "
+"not recommend to use this version."
+msgstr ""
+"Percona Server 8.0.29で使用しているMySQL 8.0.29には重大な問題があります。"
+"そのため、このバージョンの使用は推奨しません。"
+
+msgid ""
+"See `MySQL 8.0.29 Release Notes <https://dev.mysql.com/doc/relnotes/"
+"mysql/8.0/en/news-8-0-29.html>`_ for details about the issue."
+msgstr "問題に関する詳細は、 `MySQL 8.0.29 リリースノート <https://dev"
+".mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ を参照してください。"
+
+
 msgid "Fixes"
 msgstr "修正"
 
@@ -52,7 +73,7 @@ msgstr ""
 "した。[GitHub #525][Tomohiro KATOさんの報告][Jérome Perrinさんがパッチ提供]"
 
 msgid ""
-"The cause was install.sql was broken. This bug had occurred since Mroonga "
+"Broken install.sql caused this bug. This bug had occurred since Mroonga "
 "12.06."
 msgstr ""
 "install.sqlが壊れていたことが原因です。この問題は、 Mroonga 12.06以降で発生し"
