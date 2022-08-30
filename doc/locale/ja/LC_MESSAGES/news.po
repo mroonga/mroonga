@@ -41,6 +41,23 @@ msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.39-42"
 "をサポートしました。"
 
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"Percona Server 8.0.29-21."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.29-21"
+"をサポートしました。"
+
+msgid ""
+"`MySQL 8.0.29 <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29."
+"html>`_ used by Percona Server 8.0.29 has a critical issue."
+msgstr ""
+"Percona Server 8.0.29で使用している `MySQL 8.0.29 <https://dev.mysql.com/doc/"
+"relnotes/mysql/8.0/en/news-8-0-29.html>`_ には重大な問題があります。"
+
+msgid "So we do not recommend to use this version."
+msgstr "そのため、このバージョンの使用は推奨しません。"
+
 msgid "Fixes"
 msgstr "修正"
 

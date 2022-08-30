@@ -15,6 +15,14 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.39-42.
 
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.29-21.
+
+  .. note::
+     
+     `MySQL 8.0.29 <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ used by Percona Server 8.0.29 has a critical issue.
+     
+     So we do not recommend to use this version.
+
 Fixes
 ^^^^^
 
