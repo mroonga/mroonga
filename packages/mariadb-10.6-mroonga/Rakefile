@@ -5,12 +5,14 @@ class MariaDB106MroongaPackageTask < MroongaPackageTask
     super("mariadb-10.6")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    []
   end
 
-  def enable_ubuntu?
-    false
+  def ubuntu_targets_default
+    [
+      ["jammy", "22.04"],
+    ]
   end
 
   def yum_targets_default
