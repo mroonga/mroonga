@@ -1,6 +1,7 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,12 +48,17 @@ typedef struct st_mrn_highlight_html_info
     grn_obj *table;
     grn_obj *default_column;
   } query_mode;
+  struct {
+    bool used;
+    std::string open_tag;
+    std::string close_tag;
+  } specify_tag;
 } mrn_highlight_html_info;
 
 static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
-                                          UDF_ARGS *args,
-                                          char *message,
-                                          grn_obj **keywords)
+                                           UDF_ARGS *args,
+                                           char *message,
+                                           grn_obj **keywords)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
@@ -295,6 +301,23 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
+  info->specify_tag = false;
+  info->specify_tag.open_tag = nullptr;
+  info->specify_tag.close_tag = nullptr;
+  if (args->arg_count == 4) {
+    const std::string_view open_tag(args->attributes[2], args->attribute_lengths[2]);
+    const std::string_view close_tag(args->attributes[3], args->attribute_lengths[3]);
+
+    if (open_tag == "open_tag" && close_tag == "close_tag") {
+      info->specify_tag.used = true;
+      info->specify_tag.open_tag = std::string(args->arg[2]);
+      info->specify_tag.open_tag.pop.back();
+      info->specify_tag.open_tag.push.back(" class=\"keyword\">");
+
+      info->specify_tag.close_tag = std::string(args->arg[3]);
+    }
+  }
+
   {
     bool all_keywords_are_constant = true;
     for (unsigned int i = 1; i < args->arg_count; ++i) {
@@ -332,15 +355,28 @@ static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
-                           grn_obj *output)
+                           grn_obj *output,
+                           const char *specify_open_tag = nullptr,
+                           const char *specify_close_tag = nullptr)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
   {
-    const char *open_tag = "<span class=\"keyword\">";
-    size_t open_tag_length = strlen(open_tag);
-    const char *close_tag = "</span>";
-    size_t close_tag_length = strlen(close_tag);
+    const char *open_tag;
+    size_t open_tag_length;
+    const char *close_tag;
+    size_t close_tag_length;
+    if (specify_open_tag == nullptr || specify_close_tag == nullptr) {
+      open_tag = "<span class=\"keyword\">";
+      open_tag_length = strlen(open_tag);
+      close_tag = "</span>";
+      close_tag_length = strlen(close_tag);
+    } else {
+      open_tag = specify_open_tag;
+      close_tag = specify_close_tag;
+    }
+    open_tag_length = strlen(open_tag);
+    close_tag_length = strlen(close_tag);
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -415,12 +451,24 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (!highlight_html(ctx,
-                      reinterpret_cast<grn_pat *>(keywords),
-                      args->args[0],
-                      args->lengths[0],
-                      &(info->result))) {
-    goto error;
+  if (info->specify_tag.open_tag == nullptr || info->specify_tag.close_tag == nullptr) {
+    if (!highlight_html(ctx,
+                        reinterpret_cast<grn_pat *>(keywords),
+                        args->args[0],
+                        args->lengths[0],
+                        &(info->result))) {
+      goto error;
+    }
+  } else {
+    if (!highlight_html(ctx,
+                        reinterpret_cast<grn_pat *>(keywords),
+                        args->args[0],
+                        args->lengths[0],
+                        &(info->result),
+                        info->specify_tag.open_tag.c_str(),
+                        info->specify_tag.close_tag.c_str())) {
+      goto error;
+    }
   }
 
   if (!info->keywords) {
