@@ -301,9 +301,7 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
-  info->specify_tag = false;
-  info->specify_tag.open_tag = nullptr;
-  info->specify_tag.close_tag = nullptr;
+  info->specify_tag.used = false;
   if (args->arg_count == 4) {
     const std::string_view open_tag(args->attributes[2], args->attribute_lengths[2]);
     const std::string_view close_tag(args->attributes[3], args->attribute_lengths[3]);
@@ -451,7 +449,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->specify_tag.open_tag == nullptr || info->specify_tag.close_tag == nullptr) {
+  if (info->specify_tag.open_tag.empty() || info->specify_tag.close_tag.empty()) {
     if (!highlight_html(ctx,
                         reinterpret_cast<grn_pat *>(keywords),
                         args->args[0],
