@@ -308,9 +308,9 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
     if (open_tag == "open_tag" && close_tag == "close_tag") {
       info->specify_tag.used = true;
-      info->specify_tag.open_tag.pop.back();
-      info->specify_tag.open_tag.push.back(" class=\"keyword\">");
       info->specify_tag.open_tag = std::string(args->args[2]);
+      info->specify_tag.open_tag.pop_back();
+      info->specify_tag.open_tag.append(" class=\"keyword\">");
 
       info->specify_tag.close_tag = std::string(args->args[3]);
     }
