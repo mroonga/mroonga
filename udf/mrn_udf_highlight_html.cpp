@@ -42,6 +42,7 @@ typedef struct st_mrn_highlight_html_info
   bool use_shared_db;
   grn_obj *keywords;
   grn_obj result;
+  std::string input_type;
   struct {
     bool used;
     grn_obj *table;
@@ -295,6 +296,12 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
+  if (args->arg_count == 3 &&
+      args->attribute_lengths[2] == strlen("input_type") &&
+      strncmp(args->attributes[2], "input_type", strlen("input_type")) == 0) {
+    info->input_type = args->args[2];
+  }
+
   {
     bool all_keywords_are_constant = true;
     for (unsigned int i = 1; i < args->arg_count; ++i) {
@@ -328,10 +335,24 @@ error:
   DBUG_RETURN(true);
 }
 
+static void highlight_html_put_text(grn_ctx *ctx,
+                                       grn_obj *buf,
+                                       const char *str,
+                                       size_t len,
+                                       std::string input_type)
+{
+  if (input_type == "1") {
+    GRN_TEXT_PUT(ctx, buf, str, len);
+  } else {
+    grn_text_escape_xml(ctx, buf, str, len);
+  }
+}
+
 static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
+                           std::string input_type,
                            grn_obj *output)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -356,26 +377,29 @@ static bool highlight_html(grn_ctx *ctx,
                                 hits, MAX_N_HITS, &rest);
       for (int i = 0; i < n_hits; i++) {
         if ((hits[i].offset - previous) > 0) {
-          grn_text_escape_xml(ctx,
-                              output,
-                              target + previous,
-                              hits[i].offset - previous);
+          highlight_html_put_text(ctx,
+                                  output,
+                                  target + previous,
+                                  hits[i].offset - previous,
+                                  input_type);
         }
         GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
-        grn_text_escape_xml(ctx,
-                            output,
-                            target + hits[i].offset,
-                            hits[i].length);
+        highlight_html_put_text(ctx,
+                                output,
+                                target + hits[i].offset,
+                                hits[i].length,
+                                input_type);
         GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         previous = hits[i].offset + hits[i].length;
       }
 
       chunk_length = rest - target;
       if ((chunk_length - previous) > 0) {
-        grn_text_escape_xml(ctx,
-                            output,
-                            target + previous,
-                            target_length - previous);
+        highlight_html_put_text(ctx,
+                                output,
+                                target + previous,
+                                target_length - previous,
+                                input_type);
       }
       target_length -= chunk_length;
       target = rest;
@@ -415,12 +439,56 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (!highlight_html(ctx,
-                      reinterpret_cast<grn_pat *>(keywords),
-                      args->args[0],
-                      args->lengths[0],
-                      &(info->result))) {
-    goto error;
+  if (info->input_type == "1") {
+    const char *start_offset = args->args[0];
+    const char *end_offset = args->args[0] + args->lengths[0];
+    const char *offset = args->args[0];
+    bool is_in_tag = false;
+
+    while (offset < end_offset) {
+      offset++;
+      if (*offset == '<') {
+        is_in_tag = true;
+        if (!highlight_html(ctx,
+                        reinterpret_cast<grn_pat *>(keywords),
+                        start_offset,
+                        offset - start_offset,
+                        info->input_type,
+                        &(info->result))) {
+          goto error;
+        }
+        start_offset = offset;
+      } else if (*offset == '>') {
+        is_in_tag = false;
+        offset++;
+        GRN_TEXT_PUT(ctx, &(info->result), start_offset, offset - start_offset);
+        start_offset = offset;
+      }
+    }
+
+    if(start_offset < end_offset) {
+      if (is_in_tag) {
+        GRN_TEXT_PUT(ctx, &(info->result), start_offset, end_offset - start_offset);
+      } else {
+        if (!highlight_html(ctx,
+                        reinterpret_cast<grn_pat *>(keywords),
+                        start_offset,
+                        end_offset - start_offset,
+                        info->input_type,
+                        &(info->result))) {
+          goto error;
+        }
+      }
+    }
+  } else {
+    if (!highlight_html(ctx,
+                        reinterpret_cast<grn_pat *>(keywords),
+                        args->args[0],
+                        args->lengths[0],
+                        info->input_type,
+                        &(info->result))) {
+      goto error;
+    }
   }
 
   if (!info->keywords) {
