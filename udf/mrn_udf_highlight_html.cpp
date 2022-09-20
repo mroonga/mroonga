@@ -35,6 +35,11 @@ extern mrn::ContextPool *mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
+enum target_type {
+  TEXT = 0,
+  HTML = 1
+};
+
 typedef struct st_mrn_highlight_html_info
 {
   grn_ctx *ctx;
@@ -42,7 +47,7 @@ typedef struct st_mrn_highlight_html_info
   bool use_shared_db;
   grn_obj *keywords;
   grn_obj result;
-  std::string input_type;
+  enum target_type target_type;
   struct {
     bool used;
     grn_obj *table;
@@ -296,10 +301,11 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
-  if (args->arg_count == 3 &&
-      args->attribute_lengths[2] == strlen("input_type") &&
-      strncmp(args->attributes[2], "input_type", strlen("input_type")) == 0) {
-    info->input_type = args->args[2];
+  info->target_type = TEXT;
+
+  if (args->attribute_lengths[0] == strlen("html") &&
+      strncmp(args->attributes[0], "html", strlen("html")) == 0) {
+    info->target_type = HTML;
   }
 
   {
@@ -339,12 +345,13 @@ static void highlight_html_put_text(grn_ctx *ctx,
                                        grn_obj *buf,
                                        const char *str,
                                        size_t len,
-                                       std::string input_type)
+                                       bool need_escape)
 {
-  if (input_type == "1") {
-    GRN_TEXT_PUT(ctx, buf, str, len);
-  } else {
+  if (need_escape) {
     grn_text_escape_xml(ctx, buf, str, len);
+
+  } else {
+    GRN_TEXT_PUT(ctx, buf, str, len);
   }
 }
 
@@ -352,7 +359,7 @@ static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
-                           std::string input_type,
+                           bool need_escape,
                            grn_obj *output)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -381,14 +388,14 @@ static bool highlight_html(grn_ctx *ctx,
                                   output,
                                   target + previous,
                                   hits[i].offset - previous,
-                                  input_type);
+                                  need_escape);
         }
         GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
         highlight_html_put_text(ctx,
                                 output,
                                 target + hits[i].offset,
                                 hits[i].length,
-                                input_type);
+                                need_escape);
         GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         previous = hits[i].offset + hits[i].length;
       }
@@ -399,7 +406,7 @@ static bool highlight_html(grn_ctx *ctx,
                                 output,
                                 target + previous,
                                 target_length - previous,
-                                input_type);
+                                need_escape);
       }
       target_length -= chunk_length;
       target = rest;
@@ -439,7 +446,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->input_type == "1") {
+  if (info->target_type == HTML) {
     const char *previous_position = args->args[0];
     const char *end_position = args->args[0] + args->lengths[0];
     const char *current_position = args->args[0];
@@ -453,7 +460,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                         reinterpret_cast<grn_pat *>(keywords),
                         previous_position,
                         current_position - previous_position,
-                        info->input_type,
+                        false,
                         &(info->result))) {
           goto error;
         }
@@ -474,7 +481,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                         reinterpret_cast<grn_pat *>(keywords),
                         previous_position,
                         end_position - previous_position,
-                        info->input_type,
+                        false,
                         &(info->result))) {
           goto error;
         }
@@ -485,7 +492,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                         reinterpret_cast<grn_pat *>(keywords),
                         args->args[0],
                         args->lengths[0],
-                        info->input_type,
+                        true,
                         &(info->result))) {
       goto error;
     }

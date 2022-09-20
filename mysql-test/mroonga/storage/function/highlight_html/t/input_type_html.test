@@ -18,8 +18,8 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
-SELECT mroonga_highlight_html('<span class="Groonga">Mroonga &amp; Groonga.</span>',
-                              'Groonga', '1' AS input_type) AS highlighted;
+SELECT mroonga_highlight_html('<span class="Groonga">Mroonga &amp; Groonga.</span>' AS html,
+                              'Groonga') AS highlighted;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
