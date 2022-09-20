@@ -1,4 +1,4 @@
-/* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
+/* -*- c-basic-current_position: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
 
@@ -440,40 +440,40 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   GRN_BULK_REWIND(&(info->result));
 
   if (info->input_type == "1") {
-    const char *start_offset = args->args[0];
-    const char *end_offset = args->args[0] + args->lengths[0];
-    const char *offset = args->args[0];
+    const char *previous_position = args->args[0];
+    const char *end_position = args->args[0] + args->lengths[0];
+    const char *current_position = args->args[0];
     bool is_in_tag = false;
 
-    while (offset < end_offset) {
-      offset++;
-      if (*offset == '<') {
+    while (current_position < end_position) {
+      current_position++;
+      if (*current_position == '<') {
         is_in_tag = true;
         if (!highlight_html(ctx,
                         reinterpret_cast<grn_pat *>(keywords),
-                        start_offset,
-                        offset - start_offset,
+                        previous_position,
+                        current_position - previous_position,
                         info->input_type,
                         &(info->result))) {
           goto error;
         }
-        start_offset = offset;
-      } else if (*offset == '>') {
+        previous_position = current_position;
+      } else if (*current_position == '>') {
         is_in_tag = false;
-        offset++;
-        GRN_TEXT_PUT(ctx, &(info->result), start_offset, offset - start_offset);
-        start_offset = offset;
+        current_position++;
+        GRN_TEXT_PUT(ctx, &(info->result), previous_position, current_position - previous_position);
+        previous_position = current_position;
       }
     }
 
-    if(start_offset < end_offset) {
+    if(previous_position < end_position) {
       if (is_in_tag) {
-        GRN_TEXT_PUT(ctx, &(info->result), start_offset, end_offset - start_offset);
+        GRN_TEXT_PUT(ctx, &(info->result), previous_position, end_position - previous_position);
       } else {
         if (!highlight_html(ctx,
                         reinterpret_cast<grn_pat *>(keywords),
-                        start_offset,
-                        end_offset - start_offset,
+                        previous_position,
+                        end_position - previous_position,
                         info->input_type,
                         &(info->result))) {
           goto error;
