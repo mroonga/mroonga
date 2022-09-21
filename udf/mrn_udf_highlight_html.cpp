@@ -349,7 +349,6 @@ static void highlight_html_put_text(grn_ctx *ctx,
 {
   if (need_escape) {
     grn_text_escape_xml(ctx, buf, str, len);
-
   } else {
     GRN_TEXT_PUT(ctx, buf, str, len);
   }
@@ -457,32 +456,38 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
       if (*current_position == '<') {
         is_in_tag = true;
         if (!highlight_html(ctx,
-                        reinterpret_cast<grn_pat *>(keywords),
-                        previous_position,
-                        current_position - previous_position,
-                        false,
-                        &(info->result))) {
+                            reinterpret_cast<grn_pat *>(keywords),
+                            previous_position,
+                            current_position - previous_position,
+                            false,
+                            &(info->result))) {
           goto error;
         }
         previous_position = current_position;
       } else if (*current_position == '>') {
         is_in_tag = false;
         current_position++;
-        GRN_TEXT_PUT(ctx, &(info->result), previous_position, current_position - previous_position);
+        GRN_TEXT_PUT(ctx,
+                     &(info->result),
+                     previous_position,
+                     current_position - previous_position);
         previous_position = current_position;
       }
     }
 
     if(previous_position < end_position) {
       if (is_in_tag) {
-        GRN_TEXT_PUT(ctx, &(info->result), previous_position, end_position - previous_position);
+        GRN_TEXT_PUT(ctx,
+                     &(info->result),
+                     previous_position,
+                     end_position - previous_position);
       } else {
         if (!highlight_html(ctx,
-                        reinterpret_cast<grn_pat *>(keywords),
-                        previous_position,
-                        end_position - previous_position,
-                        false,
-                        &(info->result))) {
+                            reinterpret_cast<grn_pat *>(keywords),
+                            previous_position,
+                            end_position - previous_position,
+                            false,
+                            &(info->result))) {
           goto error;
         }
       }
