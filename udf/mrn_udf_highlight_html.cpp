@@ -1,4 +1,4 @@
-/* -*- c-basic-current_position: 2; indent-tabs-mode: nil -*- */
+/* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
   Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
 
