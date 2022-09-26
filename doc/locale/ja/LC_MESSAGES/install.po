@@ -316,6 +316,19 @@ msgstr ""
 "詳細は `mroonga/homebrew-mroonga on GitHub <https://github.com/mroonga/"
 "homebrew-mroonga>`_ を見てください。"
 
+msgid "Oracle Linux"
+msgstr ""
+
+msgid "Oracle Linux 8 (with the Oracle MySQL 8.0 package)"
+msgstr "Oracle Linux 8（OracleのMySQL 8.0パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on Oracle Linux 8 since "
+"Mroonga 12.08 release."
+msgstr ""
+"Oracle Linux 8では、Mroonga 12.08からOracleのMySQL 8.0パッケージを利用できま"
+"す。"
+
 msgid "Others"
 msgstr "その他"
 
