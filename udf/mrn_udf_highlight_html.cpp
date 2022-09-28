@@ -35,9 +35,9 @@ extern mrn::ContextPool *mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
-enum class target_type {
+enum target_type {
   TEXT = 0,
-  HTML
+  HTML = 1
 };
 
 typedef struct st_mrn_highlight_html_info
@@ -47,7 +47,7 @@ typedef struct st_mrn_highlight_html_info
   bool use_shared_db;
   grn_obj *keywords;
   grn_obj result;
-  target_type target_type;
+  enum target_type target_type;
   struct {
     bool used;
     grn_obj *table;
@@ -301,11 +301,11 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
-  info->target_type = target_type::TEXT;
+  info->target_type = TEXT;
 
   if (args->attribute_lengths[0] == strlen("html") &&
       strncmp(args->attributes[0], "html", strlen("html")) == 0) {
-    info->target_type = target_type::HTML;
+    info->target_type = HTML;
   }
 
   {
@@ -445,7 +445,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->target_type == target_type::HTML) {
+  if (info->target_type == HTML) {
     const char *previous_position = args->args[0];
     const char *end_position = args->args[0] + args->lengths[0];
     const char *current_position = args->args[0];
