@@ -1,4 +1,4 @@
-SELECT mroonga_highlight_html('<span class="Groonga">Mroonga &amp; Groonga.</span>' AS html,
-'Groonga') AS highlighted;
+SELECT mroonga_highlight_html('<span class="XampY">Mroonga &amp; XampY Groonga</span>' AS html,
+'amp') AS highlighted;
 highlighted
-<span class="Groonga">Mroonga &amp; <span class="keyword">Groonga</span>.</span>
+<span class="XampY">Mroonga &amp; X<span class="keyword">amp</span>Y Groonga</span>
