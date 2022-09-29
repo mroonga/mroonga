@@ -452,7 +452,14 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
     bool in_tag = false;
 
     while (current_position < end_position) {
-      current_position++;
+      int char_length = grn_charlen(ctx, current_position, end_position);
+
+      if (char_length == 0) {
+        goto error;
+      }
+      
+      current_position += char_length;
+
       if (*current_position == '<') {
         in_tag = true;
         if (!highlight_html(ctx,
