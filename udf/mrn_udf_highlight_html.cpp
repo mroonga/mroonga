@@ -450,16 +450,9 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
     const char *end_position = args->args[0] + args->lengths[0];
     const char *current_position = args->args[0];
     bool in_tag = false;
+    int char_length;
 
     while (current_position < end_position) {
-      int char_length = grn_charlen(ctx, current_position, end_position);
-
-      if (char_length == 0) {
-        goto error;
-      }
-      
-      current_position += char_length;
-
       if (*current_position == '<') {
         in_tag = true;
         if (!highlight_html(ctx,
@@ -480,6 +473,12 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                      current_position - previous_position);
         previous_position = current_position;
       }
+
+      char_length = grn_charlen(ctx, current_position, end_position);
+      if (char_length == 0) {
+        break;
+      }
+      current_position += char_length;
     }
 
     if (previous_position < end_position) {
