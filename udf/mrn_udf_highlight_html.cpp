@@ -35,9 +35,9 @@ extern mrn::ContextPool *mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
-enum target_type {
-  TEXT = 0,
-  HTML = 1
+enum MrnTargetType {
+  MRN_TARGET_TYPE_TEXT = 0,
+  MRN_TARGET_TYPE_HTML = 1
 };
 
 typedef struct st_mrn_highlight_html_info
@@ -47,7 +47,7 @@ typedef struct st_mrn_highlight_html_info
   bool use_shared_db;
   grn_obj *keywords;
   grn_obj result;
-  enum target_type target_type;
+  MrnTargetType target_type;
   struct {
     bool used;
     grn_obj *table;
@@ -301,11 +301,11 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
-  info->target_type = TEXT;
+  info->target_type = MRN_TARGET_TYPE_TEXT;
 
   if (args->attribute_lengths[0] == strlen("html") &&
       strncmp(args->attributes[0], "html", strlen("html")) == 0) {
-    info->target_type = HTML;
+    info->target_type = MRN_TARGET_TYPE_HTML;
   }
 
   {
@@ -342,10 +342,10 @@ error:
 }
 
 static void highlight_html_put_text(grn_ctx *ctx,
-                                       grn_obj *buf,
-                                       const char *str,
-                                       size_t len,
-                                       bool need_escape)
+                                    grn_obj *buf,
+                                    const char *str,
+                                    size_t len,
+                                    bool need_escape)
 {
   if (need_escape) {
     grn_text_escape_xml(ctx, buf, str, len);
@@ -445,16 +445,16 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->target_type == HTML) {
+  if (info->target_type == MRN_TARGET_TYPE_HTML) {
     const char *previous_position = args->args[0];
     const char *end_position = args->args[0] + args->lengths[0];
     const char *current_position = args->args[0];
-    bool is_in_tag = false;
+    bool in_tag = false;
 
     while (current_position < end_position) {
       current_position++;
       if (*current_position == '<') {
-        is_in_tag = true;
+        in_tag = true;
         if (!highlight_html(ctx,
                             reinterpret_cast<grn_pat *>(keywords),
                             previous_position,
@@ -465,7 +465,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
         }
         previous_position = current_position;
       } else if (*current_position == '>') {
-        is_in_tag = false;
+        in_tag = false;
         current_position++;
         GRN_TEXT_PUT(ctx,
                      &(info->result),
@@ -475,8 +475,8 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
       }
     }
 
-    if(previous_position < end_position) {
-      if (is_in_tag) {
+    if (previous_position < end_position) {
+      if (in_tag) {
         GRN_TEXT_PUT(ctx,
                      &(info->result),
                      previous_position,
