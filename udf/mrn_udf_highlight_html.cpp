@@ -341,6 +341,32 @@ error:
   DBUG_RETURN(true);
 }
 
+static bool highlight_html_check_in_character_entity_reference(grn_ctx *ctx,
+                                                               const char *str,
+                                                               size_t len,
+                                                               bool current_status)
+{
+  const char *current_position = str;
+  const char *end_position = str + len;
+  int char_length;
+
+  while (current_position < end_position) {
+    if (*current_position == '&') {
+      current_status = true;
+    }
+    else if (*current_position == ';') {
+      current_status = false;
+    }
+
+    char_length = grn_charlen(ctx, current_position, end_position);
+    if (char_length == 0) {
+      break;
+    }
+    current_position += char_length;
+  }
+  return current_status;
+}
+
 static void highlight_html_put_text(grn_ctx *ctx,
                                     grn_obj *buf,
                                     const char *str,
@@ -368,6 +394,7 @@ static bool highlight_html(grn_ctx *ctx,
     size_t open_tag_length = strlen(open_tag);
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
+    bool in_character_entity_reference = false;
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -389,13 +416,24 @@ static bool highlight_html(grn_ctx *ctx,
                                   hits[i].offset - previous,
                                   need_escape);
         }
-        GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
+        if (!need_escape) {
+          in_character_entity_reference = 
+            highlight_html_check_in_character_entity_reference(ctx,
+                                                               target + previous,
+                                                               hits[i].offset - previous,
+                                                               in_character_entity_reference);
+        }
+        if (!in_character_entity_reference) {
+          GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
+        }
         highlight_html_put_text(ctx,
                                 output,
                                 target + hits[i].offset,
                                 hits[i].length,
                                 need_escape);
-        GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
+        if (!in_character_entity_reference) {                        
+          GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
+        }
         previous = hits[i].offset + hits[i].length;
       }
 
