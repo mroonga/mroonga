@@ -209,8 +209,8 @@ error:
 }
 
 MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
-                                            UDF_ARGS *args,
-                                            char *message)
+                                             UDF_ARGS *args,
+                                             char *message)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
