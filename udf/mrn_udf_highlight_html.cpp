@@ -351,16 +351,18 @@ static bool highlight_html_check_in_character_entity_reference(grn_ctx *ctx,
   int char_length;
 
   while (current_position < end_position) {
-    if (*current_position == '&') {
-      current_status = true;
-    }
-    else if (*current_position == ';') {
-      current_status = false;
-    }
-
     char_length = grn_charlen(ctx, current_position, end_position);
     if (char_length == 0) {
       break;
+    }
+
+    if (char_length == 1) {
+      if (*current_position == '&') {
+        current_status = true;
+      }
+      else if (*current_position == ';') {
+        current_status = false;
+      }
     }
     current_position += char_length;
   }
@@ -491,30 +493,32 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
     int char_length;
 
     while (current_position < end_position) {
-      if (*current_position == '<') {
-        in_tag = true;
-        if (!highlight_html(ctx,
-                            reinterpret_cast<grn_pat *>(keywords),
-                            previous_position,
-                            current_position - previous_position,
-                            false,
-                            &(info->result))) {
-          goto error;
-        }
-        previous_position = current_position;
-      } else if (*current_position == '>') {
-        in_tag = false;
-        current_position++;
-        GRN_TEXT_PUT(ctx,
-                     &(info->result),
-                     previous_position,
-                     current_position - previous_position);
-        previous_position = current_position;
-      }
-
       char_length = grn_charlen(ctx, current_position, end_position);
       if (char_length == 0) {
         break;
+      }
+
+      if (char_length == 1) {
+        if (*current_position == '<') {
+          in_tag = true;
+          if (!highlight_html(ctx,
+                              reinterpret_cast<grn_pat *>(keywords),
+                              previous_position,
+                              current_position - previous_position,
+                              false,
+                              &(info->result))) {
+            goto error;
+          }
+          previous_position = current_position;
+        } else if (*current_position == '>') {
+          in_tag = false;
+          current_position++;
+          GRN_TEXT_PUT(ctx,
+                      &(info->result),
+                      previous_position,
+                      current_position - previous_position);
+          previous_position = current_position;
+        }
       }
       current_position += char_length;
     }
