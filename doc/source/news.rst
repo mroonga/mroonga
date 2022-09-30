@@ -3,6 +3,15 @@
 News
 ====
 
+.. _release-12-08:
+
+Release 12.08 - 2022-10-03
+--------------------------
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.6.10, 10.7.6 and 10.8.5.
+
+* [:doc:`/install/oracle-linux`] Added support for MySQL 8.0.30.
+
 .. _release-12-07:
 
 Release 12.07 - 2022-08-30
