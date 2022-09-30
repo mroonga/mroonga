@@ -341,10 +341,10 @@ error:
   DBUG_RETURN(true);
 }
 
-static bool highlight_html_check_in_character_entity_reference(grn_ctx *ctx,
-                                                               const char *str,
-                                                               size_t len,
-                                                               bool current_status)
+static bool highlight_html_check_in_char_ref(grn_ctx *ctx,
+                                             const char *str,
+                                             size_t len,
+                                             bool current_status)
 {
   const char *current_position = str;
   const char *end_position = str + len;
@@ -420,10 +420,10 @@ static bool highlight_html(grn_ctx *ctx,
         }
         if (!need_escape) {
           in_character_entity_reference = 
-            highlight_html_check_in_character_entity_reference(ctx,
-                                                               target + previous,
-                                                               hits[i].offset - previous,
-                                                               in_character_entity_reference);
+            highlight_html_check_in_char_ref(ctx,
+                                             target + previous,
+                                             hits[i].offset - previous,
+                                             in_character_entity_reference);
         }
         if (!in_character_entity_reference) {
           GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
