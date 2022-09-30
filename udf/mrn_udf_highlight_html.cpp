@@ -363,8 +363,8 @@ static bool highlight_html(grn_ctx *ctx,
                            const char *target,
                            size_t target_length,
                            grn_obj *output,
-                           const char *specify_open_tag = nullptr,
-                           const char *specify_close_tag = nullptr)
+                           const char *specify_open_tag = NULL,
+                           const char *specify_close_tag = NULL)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
@@ -373,7 +373,7 @@ static bool highlight_html(grn_ctx *ctx,
     size_t open_tag_length;
     const char *close_tag;
     size_t close_tag_length;
-    if (specify_open_tag == nullptr || specify_close_tag == nullptr) {
+    if (specify_open_tag == NULL || specify_close_tag == NULL) {
       open_tag = "<span class=\"keyword\">";
       open_tag_length = strlen(open_tag);
       close_tag = "</span>";
