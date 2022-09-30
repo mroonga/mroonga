@@ -31,6 +31,8 @@
 #include <mrn_query_parser.hpp>
 #include <mrn_current_thread.hpp>
 
+#include <string>
+
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
 
