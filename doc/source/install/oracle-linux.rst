@@ -7,7 +7,7 @@ AlmaLinux. You can install them by ``dnf``.
 .. _oracle-linux-8-oracle-8-0:
 
 Oracle Linux 8 (with the Oracle MySQL 8.0 package)
--------------------------------------------------
+--------------------------------------------------
 
 You can use Oracle's MySQL packages version 8.0 on Oracle Linux 8 since
 Mroonga 12.08 release.
