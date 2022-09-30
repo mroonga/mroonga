@@ -305,17 +305,24 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   info->specify_tag.used = false;
 
-  for (unsigned int i=0; i < args->arg_count; i++) {
+  for (unsigned int i = 0; i < args->arg_count; i++) {
     const std::string attribute(args->attributes[i]);
     if (attribute == "open_tag") {
-      const std::string close_tag(args->attributes[i+1]);
-      if (close_tag == "close_tag") {
-        info->specify_tag.used = true;
-        info->specify_tag.open_tag = std::string(args->args[i]);
-        info->specify_tag.open_tag.erase(info->specify_tag.open_tag.size() - 1);
-        info->specify_tag.open_tag.append(" class=\"keyword\">");
+      if (i + 1 < args->arg_count) {
+        const std::string close_tag(args->attributes[i+1]);
+        if (close_tag == "close_tag") {
+          info->specify_tag.used = true;
+          info->specify_tag.open_tag = std::string(args->args[i]);
+          info->specify_tag.open_tag.erase(info->specify_tag.open_tag.size() - 1);
+          info->specify_tag.open_tag.append(" class=\"keyword\">");
 
-        info->specify_tag.close_tag = std::string(args->args[i+1]);
+          info->specify_tag.close_tag = std::string(args->args[i+1]);
+        } else {
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                  "mroonga_highlight_html(): invalid alias name %s: expected value is \"close_tag\".",
+                  close_tag.c_str());
+          goto error;
+        }
       } else {
         sprintf(message,
                 "mroonga_highlight_html(): invalid alias name %s: expected value is \"close_tag\"",
