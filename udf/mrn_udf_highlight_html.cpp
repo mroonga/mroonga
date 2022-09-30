@@ -324,10 +324,9 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
           goto error;
         }
       } else {
-        sprintf(message,
-                "mroonga_highlight_html(): invalid alias name %s: expected value is \"close_tag\"",
-                std::string(close_tag).c_str());
-        goto error;
+          snprintf(message, MYSQL_ERRMSG_SIZE,
+                  "mroonga_highlight_html(): missing a \"close_tag\". This is required argument.");
+          goto error;
       }
     }
   }
