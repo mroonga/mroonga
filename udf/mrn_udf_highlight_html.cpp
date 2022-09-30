@@ -304,17 +304,24 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
 
   info->specify_tag.used = false;
-  if (args->arg_count == 4) {
-    const std::string_view open_tag(args->attributes[2], args->attribute_lengths[2]);
-    const std::string_view close_tag(args->attributes[3], args->attribute_lengths[3]);
+  for (unsigned int i=0; i < args->arg_count; i++) {
+    const std::string_view attribute(args->attributes[i], args->attribute_lengths[i]);
+    if (attribute == "open_tag") {
+      const std::string open_tag(attribute);
+      const std::string_view close_tag(args->attributes[i+1], args->attribute_lengths[i+1]);
+      if (close_tag == "close_tag") {
+        info->specify_tag.used = true;
+        info->specify_tag.open_tag = std::string(args->args[2]);
+        info->specify_tag.open_tag.pop_back();
+        info->specify_tag.open_tag.append(" class=\"keyword\">");
 
-    if (open_tag == "open_tag" && close_tag == "close_tag") {
-      info->specify_tag.used = true;
-      info->specify_tag.open_tag = std::string(args->args[2]);
-      info->specify_tag.open_tag.pop_back();
-      info->specify_tag.open_tag.append(" class=\"keyword\">");
-
-      info->specify_tag.close_tag = std::string(args->args[3]);
+        info->specify_tag.close_tag = std::string(args->args[3]);
+      } else {
+        sprintf(message,
+                "mroonga_highlight_html(): invalid alias name %s: expected value is \"close_tag\"",
+                std::string(close_tag).c_str());
+        goto error;
+      }
     }
   }
 
