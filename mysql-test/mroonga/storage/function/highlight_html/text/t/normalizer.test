@@ -14,12 +14,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../../include/mroonga/not_embedded.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
                               'mroonga') AS highlighted;
 
---source ../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

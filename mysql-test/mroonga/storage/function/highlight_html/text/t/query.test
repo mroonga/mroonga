@@ -14,9 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../../include/mroonga/not_embedded.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/load_mroonga_functions.inc
 
 SET NAMES utf8mb4;
 
@@ -27,5 +27,5 @@ SELECT mroonga_highlight_html('Mroongaには2つの動作モードがありま�
 もう1つが「ラッパーモード」で、MyISAMやInnoDBといった他のストレージエンジンに 全文検索機能だけ を追加するモードです。このモードではトランザクションなど他のストレージエンジンがサポートしている機能に加えてGroongaの高速な全文検索機能を利用することができます。一方、Groongaの参照ロックフリーな特性は活かすことができません。また、更新処理は他のストレージエンジンがボトルネックになることが多いでしょう。',
                               'ロック 更新 -ボトルネック' AS query) AS highlighted;
 
---source ../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
