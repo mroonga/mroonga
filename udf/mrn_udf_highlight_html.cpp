@@ -397,7 +397,7 @@ static bool highlight_html(grn_ctx *ctx,
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
     bool in_char_ref = false;
-    bool skip_if_in_char_ref = target_type == MRN_TARGET_TYPE_HTML;
+    bool skip_tagging_in_char_ref = target_type == MRN_TARGET_TYPE_HTML;
     bool need_escape = target_type == MRN_TARGET_TYPE_TEXT;
 
     while (target_length > 0) {
@@ -420,7 +420,7 @@ static bool highlight_html(grn_ctx *ctx,
                                   hits[i].offset - previous,
                                   need_escape);
         }
-        if (skip_if_in_char_ref) {
+        if (skip_tagging_in_char_ref) {
           in_char_ref = 
             highlight_html_check_in_char_ref(ctx,
                                              target + previous,
@@ -428,7 +428,7 @@ static bool highlight_html(grn_ctx *ctx,
                                              in_char_ref);
 
         }
-        if (!skip_if_in_char_ref || !in_char_ref) {                        
+        if (!skip_tagging_in_char_ref || !in_char_ref) {                        
           GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
         }
         highlight_html_put_text(ctx,
@@ -436,7 +436,7 @@ static bool highlight_html(grn_ctx *ctx,
                                 target + hits[i].offset,
                                 hits[i].length,
                                 need_escape);
-        if (!skip_if_in_char_ref || !in_char_ref) {                        
+        if (!skip_tagging_in_char_ref || !in_char_ref) {                        
           GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         }
         previous = hits[i].offset + hits[i].length;
