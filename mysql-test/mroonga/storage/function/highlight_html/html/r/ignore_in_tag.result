@@ -1,0 +1,4 @@
+SELECT mroonga_highlight_html('<span class="fast">Mroonga and Groonga are fast!</span>' AS html,
+'fast') AS highlighted;
+highlighted
+<span class="fast">Mroonga and Groonga are <span class="keyword">fast</span>!</span>
