@@ -386,7 +386,7 @@ static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
-                           bool need_escape,
+                           MrnTargetType target_type,
                            grn_obj *output)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -396,7 +396,9 @@ static bool highlight_html(grn_ctx *ctx,
     size_t open_tag_length = strlen(open_tag);
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
-    bool in_character_entity_reference = false;
+    bool in_char_ref = false;
+    bool skip_if_in_char_ref = target_type == MRN_TARGET_TYPE_HTML;
+    bool need_escape = target_type == MRN_TARGET_TYPE_TEXT;
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -418,14 +420,15 @@ static bool highlight_html(grn_ctx *ctx,
                                   hits[i].offset - previous,
                                   need_escape);
         }
-        if (!need_escape) {
-          in_character_entity_reference = 
+        if (skip_if_in_char_ref) {
+          in_char_ref = 
             highlight_html_check_in_char_ref(ctx,
                                              target + previous,
                                              hits[i].offset - previous,
-                                             in_character_entity_reference);
+                                             in_char_ref);
+
         }
-        if (!in_character_entity_reference) {
+        if (!skip_if_in_char_ref || !in_char_ref) {                        
           GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
         }
         highlight_html_put_text(ctx,
@@ -433,7 +436,7 @@ static bool highlight_html(grn_ctx *ctx,
                                 target + hits[i].offset,
                                 hits[i].length,
                                 need_escape);
-        if (!in_character_entity_reference) {                        
+        if (!skip_if_in_char_ref || !in_char_ref) {                        
           GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         }
         previous = hits[i].offset + hits[i].length;
@@ -505,7 +508,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                               reinterpret_cast<grn_pat *>(keywords),
                               previous_position,
                               current_position - previous_position,
-                              false,
+                              info->target_type,
                               &(info->result))) {
             goto error;
           }
@@ -534,7 +537,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                             reinterpret_cast<grn_pat *>(keywords),
                             previous_position,
                             end_position - previous_position,
-                            false,
+                            info->target_type,
                             &(info->result))) {
           goto error;
         }
@@ -545,7 +548,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                         reinterpret_cast<grn_pat *>(keywords),
                         args->args[0],
                         args->lengths[0],
-                        true,
+                        info->target_type,
                         &(info->result))) {
       goto error;
     }
