@@ -359,8 +359,7 @@ static bool highlight_html_check_in_char_ref(grn_ctx *ctx,
     if (char_length == 1) {
       if (*current_position == '&') {
         current_status = true;
-      }
-      else if (*current_position == ';') {
+      } else if (*current_position == ';') {
         current_status = false;
       }
     }
