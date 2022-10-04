@@ -21,6 +21,19 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
+msgid "Release 12.08 - 2022-10-03"
+msgstr "12.08リリース - 2022-10-03"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
+"MariaDB 10.6.10, 10.7.6 and 10.8.5."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.6.10, 10.7.6, "
+"10.8.5をサポートしました。"
+
+msgid "[:doc:`/install/oracle-linux`] Added support for MySQL 8.0.30."
+msgstr "[:doc:`/install/oracle-linux`] MySQL 8.0.30をサポートしました。"
+
 msgid "Release 12.07 - 2022-08-30"
 msgstr "12.07リリース - 2022-08-30"
 
