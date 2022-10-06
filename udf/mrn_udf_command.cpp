@@ -129,7 +129,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
 
   info->ctx = mrn_context_pool->pull();
   {
-    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, false);
+    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, true);
     if (slot_data) {
       slot_data->associated_grn_ctxs.push_back(info->ctx);
     }

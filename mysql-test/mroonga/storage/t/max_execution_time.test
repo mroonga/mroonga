@@ -19,7 +19,7 @@
 --source ../../include/mroonga/have_mysql.inc
 --source ../../include/mroonga/not_embedded.inc
 --source ../../include/mroonga/have_mroonga.inc
-# --source ../../include/mroonga/have_groonga_12_0_9_or_later.inc
+--source ../../include/mroonga/have_groonga_12_0_9_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
