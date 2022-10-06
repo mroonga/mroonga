@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <vector>
+#include <list>
 
 #include "mrn_mysql.h"
 
