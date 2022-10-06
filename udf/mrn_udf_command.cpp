@@ -21,13 +21,15 @@
 
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
-#include <mrn_path_mapper.hpp>
-#include <mrn_windows.hpp>
-#include <mrn_macro.hpp>
-#include <mrn_database_manager.hpp>
+
 #include <mrn_context_pool.hpp>
-#include <mrn_variables.hpp>
 #include <mrn_current_thread.hpp>
+#include <mrn_database_manager.hpp>
+#include <mrn_macro.hpp>
+#include <mrn_path_mapper.hpp>
+#include <mrn_table.hpp>
+#include <mrn_variables.hpp>
+#include <mrn_windows.hpp>
 
 #include <sql_table.h>
 #ifdef MRN_HAVE_UDF_METADATA
@@ -126,6 +128,12 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
   }
 
   info->ctx = mrn_context_pool->pull();
+  {
+    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, false);
+    if (slot_data) {
+      slot_data->associated_grn_ctxs.push_back(info->ctx);
+    }
+  }
 #ifdef MRN_HAVE_UDF_METADATA
   {
     const char *charset = nullptr;
@@ -286,8 +294,8 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
                GRN_TEXT_VALUE(&(info->command)),
                GRN_TEXT_LEN(&(info->command)),
                0);
-  if (ctx->rc) {
-    my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
+  if (ctx->rc != GRN_SUCCESS) {
+    MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_WRITE);
     goto error;
   }
 
@@ -296,8 +304,8 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
     char *buffer;
     unsigned int buffer_length;
     grn_ctx_recv(ctx, &buffer, &buffer_length, &flags);
-    if (ctx->rc) {
-      my_message(ER_ERROR_ON_READ, ctx->errbuf, MYF(0));
+    if (ctx->rc != GRN_SUCCESS) {
+      MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_READ);
       goto error;
     }
     if (buffer_length > 0) {
@@ -317,6 +325,10 @@ MRN_API void mroonga_command_deinit(UDF_INIT *init)
 {
   CommandInfo *info = (CommandInfo *)init->ptr;
   if (info) {
+    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, false);
+    if (slot_data) {
+      slot_data->remove_associated_grn_ctx(info->ctx);
+    }
     GRN_OBJ_FIN(info->ctx, &(info->result));
     GRN_OBJ_FIN(info->ctx, &(info->command));
     if (!info->use_shared_db) {

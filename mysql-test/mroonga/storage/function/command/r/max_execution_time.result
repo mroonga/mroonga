@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries(
+title TEXT
+) DEFAULT CHARSET=utf8mb4;
+SELECT /*+ MAX_EXECUTION_TIME(1) */
+mroonga_command('sleep', 'second', '1');
+ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
+DROP TABLE diaries;

@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries(
+title TEXT
+) DEFAULT CHARSET=utf8mb4;
+SET STATEMENT max_statement_time = 0.001 FOR
+SELECT mroonga_command('sleep', 'second', '1');
+ERROR 70100: Query execution was interrupted (max_statement_time exceeded)
+DROP TABLE diaries;

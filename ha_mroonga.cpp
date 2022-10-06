@@ -315,7 +315,12 @@ static mysql_mutex_t *mrn_LOCK_open;
 #endif
 
 #ifdef MRN_MARIADB_P
+#  define MRN_HANDLERTON_HAVE_KILL_QUERY
 #  define MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
+#else
+#  if MYSQL_VERSION_ID >= 50700
+#    define MRN_HANDLERTON_HAVE_KILL_CONNECTION
+#  endif
 #endif
 
 Rpl_filter *mrn_binlog_filter;
@@ -1539,6 +1544,40 @@ static int mrn_hton_close_connection(handlerton *hton, THD *thd)
   DBUG_RETURN(0);
 }
 
+#ifdef MRN_HANDLERTON_HAVE_KILL_QUERY
+static void mrn_hton_kill_query(handlerton *hton,
+                                THD *thd,
+                                enum thd_kill_levels level)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  auto slot_data = mrn_get_slot_data(thd, false);
+  if (slot_data) {
+    for (auto ctx : slot_data->associated_grn_ctxs) {
+      if (ctx->rc == GRN_SUCCESS) {
+        ctx->rc = GRN_CANCEL;
+      }
+    }
+  }
+  DBUG_VOID_RETURN;
+}
+#endif
+
+#ifdef MRN_HANDLERTON_HAVE_KILL_CONNECTION
+static void mrn_hton_kill_connection(handlerton *hton, THD *thd)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  auto slot_data = mrn_get_slot_data(thd, false);
+  if (slot_data) {
+    for (auto ctx : slot_data->associated_grn_ctxs) {
+      if (ctx->rc == GRN_SUCCESS) {
+        ctx->rc = GRN_CANCEL;
+      }
+    }
+  }
+  DBUG_VOID_RETURN;
+}
+#endif
+
 #ifdef MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
 static bool mrn_flush_logs(handlerton *hton, bool binlog_group_flush)
 #else
@@ -2247,6 +2286,12 @@ static int mrn_init(void *p)
 #endif
   hton->drop_database = mrn_hton_drop_database;
   hton->close_connection = mrn_hton_close_connection;
+#ifdef MRN_HANDLERTON_HAVE_KILL_QUERY
+  hton->kill_query = mrn_hton_kill_query;
+#endif
+#ifdef MRN_HANDLERTON_HAVE_KILL_CONNECTION
+  hton->kill_connection = mrn_hton_kill_connection;
+#endif
   hton->flush_logs = mrn_flush_logs;
 #ifdef MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
   hton->alter_table_flags = mrn_hton_alter_table_flags;
@@ -3123,6 +3168,10 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   grn_ctx_init(ctx, 0);
   mrn_change_encoding(ctx, system_charset_info);
   grn_ctx_use(ctx, mrn_db);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), true);
+  if (slot_data) {
+    slot_data->add_associated_grn_ctx(ctx);
+  }
   GRN_WGS84_GEO_POINT_INIT(&top_left_point, 0);
   GRN_WGS84_GEO_POINT_INIT(&bottom_right_point, 0);
   GRN_WGS84_GEO_POINT_INIT(&source_point, 0);
@@ -3161,6 +3210,10 @@ ha_mroonga::~ha_mroonga()
   grn_obj_unlink(ctx, &encoded_key_buffer);
   grn_obj_unlink(ctx, &old_value_buffer);
   grn_obj_unlink(ctx, &new_value_buffer);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), false);
+  if (slot_data) {
+    slot_data->remove_associated_grn_ctx(ctx);
+  }
   grn_ctx_fin(ctx);
   DBUG_VOID_RETURN;
 }

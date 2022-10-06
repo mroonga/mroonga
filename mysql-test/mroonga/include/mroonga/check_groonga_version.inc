@@ -52,4 +52,8 @@ let $groonga_version_12_0_2_or_later =
   `SELECT (($groonga_version_major * 100) +
            ($groonga_version_minor * 10) +
            ($groonga_version_micro)) >= 1202;`;
+let $groonga_version_12_0_9_or_later =
+  `SELECT (($groonga_version_major * 100) +
+           ($groonga_version_minor * 10) +
+           ($groonga_version_micro)) >= 1209;`;
 --enable_query_log

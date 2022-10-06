@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <vector>
 
 #include "mrn_mysql.h"
 
@@ -103,7 +104,8 @@ namespace mrn {
         alter_create_info(NULL),
         disable_keys_create_info(NULL),
         alter_connect_string(NULL),
-        alter_comment(NULL) {
+        alter_comment(NULL),
+        associated_grn_ctxs() {
     }
 
     ~SlotData() {
@@ -134,6 +136,21 @@ namespace mrn {
       }
     }
 
+    void add_associated_grn_ctx(grn_ctx *ctx) {
+      associated_grn_ctxs.push_back(ctx);
+    }
+
+    void remove_associated_grn_ctx(grn_ctx *ctx) {
+      for (std::vector<grn_ctx *>::iterator it = associated_grn_ctxs.begin();
+           it != associated_grn_ctxs.end();
+           ++it) {
+        if (*it == ctx) {
+          associated_grn_ctxs.erase(it);
+          break;
+        }
+      }
+    }
+
     grn_id last_insert_record_id;
 #ifdef MRN_ENABLE_WRAPPER_MODE
     st_mrn_wrap_hton *first_wrap_hton;
@@ -142,6 +159,7 @@ namespace mrn {
     HA_CREATE_INFO *disable_keys_create_info;
     char *alter_connect_string;
     char *alter_comment;
+    std::vector<grn_ctx *> associated_grn_ctxs;
   };
 };
 
