@@ -55,7 +55,7 @@ MRN_API longlong mroonga_last_insert_grn_id(UDF_INIT *init,
                                             char *error)
 {
   THD *thd = current_thd;
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
+  mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
   if (slot_data == NULL) {
     return 0;
   }

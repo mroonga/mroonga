@@ -20,9 +20,6 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include "mrn_mysql.h"
 
@@ -96,16 +93,56 @@ struct st_mrn_wrap_hton
 };
 #endif
 
-struct st_mrn_slot_data
-{
-  grn_id last_insert_record_id;
+namespace mrn {
+  struct SlotData {
+    SlotData()
+      : last_insert_record_id(GRN_ID_NIL),
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  st_mrn_wrap_hton *first_wrap_hton;
+        first_wrap_hton(NULL),
 #endif
-  HA_CREATE_INFO *alter_create_info;
-  HA_CREATE_INFO *disable_keys_create_info;
-  char *alter_connect_string;
-  char *alter_comment;
+        alter_create_info(NULL),
+        disable_keys_create_info(NULL),
+        alter_connect_string(NULL),
+        alter_comment(NULL) {
+    }
+
+    ~SlotData() {
+      clear();
+    }
+
+    void clear() {
+#ifdef MRN_ENABLE_WRAPPER_MODE
+      if (first_wrap_hton) {
+        st_mrn_wrap_hton *wrap_hton = first_wrap_hton;
+        while (wrap_hton) {
+          st_mrn_wrap_hton *tmp_wrap_hton = wrap_hton->next;
+          free(wrap_hton);
+          wrap_hton = tmp_wrap_hton;
+        }
+        first_wrap_hton = NULL;
+      }
+#endif
+      alter_create_info = NULL;
+      disable_keys_create_info = NULL;
+      if (alter_connect_string) {
+        my_free(alter_connect_string);
+        alter_connect_string = NULL;
+      }
+      if (alter_comment) {
+        my_free(alter_comment);
+        alter_comment = NULL;
+      }
+    }
+
+    grn_id last_insert_record_id;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+    st_mrn_wrap_hton *first_wrap_hton;
+#endif
+    HA_CREATE_INFO *alter_create_info;
+    HA_CREATE_INFO *disable_keys_create_info;
+    char *alter_connect_string;
+    char *alter_comment;
+  };
 };
 
 #define MRN_SET_WRAP_ALTER_KEY(file, ha_alter_info) \
@@ -183,9 +220,4 @@ void mrn_free_tmp_table_share(TABLE_SHARE *table_share);
 KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 #endif
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
-st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create);
-void mrn_clear_slot_data(THD *thd);
-
-#ifdef __cplusplus
-}
-#endif
+mrn::SlotData *mrn_get_slot_data(THD *thd, bool can_create);

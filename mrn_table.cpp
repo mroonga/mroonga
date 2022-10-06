@@ -89,10 +89,6 @@
 extern mrn_table_def_cache_type *mrn_table_def_cache;
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef HAVE_PSI_INTERFACE
 #  ifdef WIN32
 #    ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
@@ -1129,14 +1125,13 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
   DBUG_VOID_RETURN;
 }
 
-st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
+mrn::SlotData *mrn_get_slot_data(THD *thd, bool can_create)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_slot_data *slot_data =
-    static_cast<st_mrn_slot_data *>(thd_get_ha_data(thd, mrn_hton_ptr));
+  mrn::SlotData *slot_data =
+    static_cast<mrn::SlotData *>(thd_get_ha_data(thd, mrn_hton_ptr));
   if (!slot_data && can_create) {
-    slot_data =
-      static_cast<st_mrn_slot_data *>(malloc(sizeof(st_mrn_slot_data)));
+    slot_data = new mrn::SlotData();
     slot_data->last_insert_record_id = GRN_ID_NIL;
 #ifdef MRN_ENABLE_WRAPPER_MODE
     slot_data->first_wrap_hton = NULL;
@@ -1145,7 +1140,6 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
     slot_data->disable_keys_create_info = NULL;
     slot_data->alter_connect_string = NULL;
     slot_data->alter_comment = NULL;
-    mrn_thd_set_ha_data(thd, mrn_hton_ptr, slot_data);
     {
       mrn::Lock lock(&mrn_allocated_thds_mutex);
       if (grn_hash_add(&mrn_ctx,
@@ -1154,46 +1148,11 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
                        sizeof(thd),
                        NULL,
                        NULL) == GRN_ID_NIL) {
-        free(slot_data);
+        delete slot_data;
         DBUG_RETURN(NULL);
       }
     }
+    mrn_thd_set_ha_data(thd, mrn_hton_ptr, slot_data);
   }
   DBUG_RETURN(slot_data);
 }
-
-void mrn_clear_slot_data(THD *thd)
-{
-  MRN_DBUG_ENTER_FUNCTION();
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
-  if (slot_data) {
-#ifdef MRN_ENABLE_WRAPPER_MODE
-    if (slot_data->first_wrap_hton) {
-      st_mrn_wrap_hton *tmp_wrap_hton;
-      st_mrn_wrap_hton *wrap_hton = slot_data->first_wrap_hton;
-      while (wrap_hton)
-      {
-        tmp_wrap_hton = wrap_hton->next;
-        free(wrap_hton);
-        wrap_hton = tmp_wrap_hton;
-      }
-      slot_data->first_wrap_hton = NULL;
-    }
-#endif
-    slot_data->alter_create_info = NULL;
-    slot_data->disable_keys_create_info = NULL;
-    if (slot_data->alter_connect_string) {
-      my_free(slot_data->alter_connect_string);
-      slot_data->alter_connect_string = NULL;
-    }
-    if (slot_data->alter_comment) {
-      my_free(slot_data->alter_comment);
-      slot_data->alter_comment = NULL;
-    }
-  }
-  DBUG_VOID_RETURN;
-}
-
-#ifdef __cplusplus
-}
-#endif

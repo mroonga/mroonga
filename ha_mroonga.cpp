@@ -1525,10 +1525,9 @@ static void mrn_hton_drop_database(handlerton *hton, char *path)
 static int mrn_hton_close_connection(handlerton *hton, THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  void *p = thd_get_ha_data(thd, mrn_hton_ptr);
-  if (p) {
-    mrn_clear_slot_data(thd);
-    free(p);
+  mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
+  if (slot_data) {
+    delete slot_data;
 #ifdef MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
     mrn_thd_set_ha_data(thd, mrn_hton_ptr, NULL);
 #endif
@@ -2488,10 +2487,11 @@ static int mrn_deinit(void *p)
       grn_memcpy(&allocated_thd,
                  allocated_thd_address,
                  sizeof(allocated_thd));
-      mrn_clear_slot_data(allocated_thd);
-      void *slot_ptr = mrn_get_slot_data(allocated_thd, false);
-      if (slot_ptr) free(slot_ptr);
-      mrn_thd_set_ha_data(allocated_thd, mrn_hton_ptr, NULL);
+      mrn::SlotData *slot_data = mrn_get_slot_data(allocated_thd, false);
+      if (slot_data) {
+        delete slot_data;
+        mrn_thd_set_ha_data(allocated_thd, mrn_hton_ptr, NULL);
+      }
     } GRN_HASH_EACH_END(ctx, cursor);
   }
 
@@ -3648,7 +3648,7 @@ int ha_mroonga::create_share_for_create() const
     }
     if (thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE ||
         thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX) {
-      st_mrn_slot_data *slot_data = mrn_get_slot_data(thd, false);
+      mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
       if (slot_data && slot_data->alter_create_info) {
         create_info = slot_data->alter_create_info;
         if (slot_data->alter_connect_string) {
@@ -5042,7 +5042,7 @@ int ha_mroonga::create(const char *name,
   if (!(tmp_share = mrn_get_share(name, table, &error)))
     DBUG_RETURN(error);
 
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), false);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), false);
   if (slot_data && slot_data->disable_keys_create_info == info) {
     tmp_share->disable_keys = true;
   }
@@ -6050,7 +6050,7 @@ int ha_mroonga::delete_table(const char *name
   mrn::PathMapper mapper(name);
   handlerton *wrap_handlerton = NULL;
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), false);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), false);
   if (slot_data && slot_data->first_wrap_hton)
   {
     st_mrn_wrap_hton *wrap_hton, *tmp_wrap_hton;
@@ -7314,14 +7314,18 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
     goto err;
   }
 
-  // for UDF last_insert_grn_id()
-  st_mrn_slot_data *slot_data;
-  slot_data = mrn_get_slot_data(thd, true);
-  if (slot_data == NULL) {
-    error = HA_ERR_OUT_OF_MEM;
+  {
+    // for UDF last_insert_grn_id()
+    mrn::SlotData *slot_data = mrn_get_slot_data(thd, true);
+    if (slot_data) {
+      slot_data->last_insert_record_id = record_id;
+    } else {
+      error = HA_ERR_OUT_OF_MEM;
+    }
+  }
+  if (error != 0) {
     goto err;
   }
-  slot_data->last_insert_record_id = record_id;
 
   grn_db_touch(ctx, grn_ctx_db(ctx));
 
@@ -10426,7 +10430,7 @@ void ha_mroonga::clear_indexes()
 int ha_mroonga::add_wrap_hton(const char *path, handlerton *wrap_handlerton)
 {
   MRN_DBUG_ENTER_METHOD();
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), true);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), true);
   if (!slot_data)
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   st_mrn_wrap_hton *wrap_hton =
@@ -13795,7 +13799,10 @@ int ha_mroonga::reset()
   replacing_ = false;
   written_by_row_based_binlog = 0;
   mrn_lock_type = F_UNLCK;
-  mrn_clear_slot_data(thd);
+  mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
+  if (slot_data) {
+    slot_data->clear();
+  }
   current_ft_item = NULL;
   DBUG_RETURN(error);
 }
@@ -15125,7 +15132,7 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
 #ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #endif
-  st_mrn_slot_data *slot_data = mrn_get_slot_data(ha_thd(), true);
+  mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), true);
   if (slot_data) {
     slot_data->alter_create_info = create_info;
     if (slot_data->alter_connect_string) {
