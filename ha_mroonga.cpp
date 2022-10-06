@@ -314,6 +314,10 @@ static mysql_mutex_t *mrn_LOCK_open;
 #  define MRN_HANDLERTON_HAVE_STATE
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
+#endif
+
 Rpl_filter *mrn_binlog_filter;
 Time_zone *mrn_my_tz_UTC;
 #ifdef MRN_HAVE_TABLE_DEF_CACHE
@@ -2045,7 +2049,7 @@ static int mrn_set_geometry(grn_ctx *ctx,
 }
 #endif
 
-#ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
+#ifdef MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
 static mrn_alter_table_flags
 mrn_hton_alter_table_flags(mrn_alter_table_flags flags)
 {
@@ -2245,7 +2249,7 @@ static int mrn_init(void *p)
   hton->drop_database = mrn_hton_drop_database;
   hton->close_connection = mrn_hton_close_connection;
   hton->flush_logs = mrn_flush_logs;
-#ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
+#ifdef MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
   hton->alter_table_flags = mrn_hton_alter_table_flags;
 #endif
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS

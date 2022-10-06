@@ -185,10 +185,6 @@ extern "C" {
 #  define MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
 #endif
 
-#ifdef MRN_MARIADB_P
-#  define MRN_HAVE_HTON_ALTER_TABLE_FLAGS
-#endif
-
 /* Note that MariaDB 10.2.2 and older MariaDB 10.2 series are not supported since 8.07 */
 #ifdef MRN_MARIADB_P
 #  if (MYSQL_VERSION_ID >= 100037 && MYSQL_VERSION_ID < 100100) || \
