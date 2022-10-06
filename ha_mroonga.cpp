@@ -1515,7 +1515,7 @@ static void mrn_hton_drop_database(handlerton *hton, char *path)
 }
 
 #if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
-#  define MRN_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
+#  define MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
 #endif
 
 static int mrn_hton_close_connection(handlerton *hton, THD *thd)
@@ -1525,7 +1525,7 @@ static int mrn_hton_close_connection(handlerton *hton, THD *thd)
   if (p) {
     mrn_clear_slot_data(thd);
     free(p);
-#ifdef MRN_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
+#ifdef MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
     mrn_thd_set_ha_data(thd, mrn_hton_ptr, NULL);
 #endif
     {
