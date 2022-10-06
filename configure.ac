@@ -246,6 +246,9 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     ;;
   10.3)
     MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
+    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
+             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
+             [CHECK_CXXFLAG([-std=gnu++11])])
     ;;
   10.*)
     m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
