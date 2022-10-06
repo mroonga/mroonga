@@ -365,10 +365,6 @@ static PSI_file_info mrn_all_file_keys[] = {
 static const char *INDEX_COLUMN_NAME = "index";
 static const char *MRN_PLUGIN_AUTHOR = "The Mroonga project";
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifdef HAVE_PSI_INTERFACE
 #  ifdef WIN32
 #    ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
@@ -19099,10 +19095,6 @@ mrn_bool ha_mroonga::register_query_cache_table(THD *thd,
   }
 #  endif
   DBUG_RETURN(res);
-}
-#endif
-
-#ifdef __cplusplus
 }
 #endif
 
