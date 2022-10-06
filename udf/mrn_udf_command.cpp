@@ -38,8 +38,6 @@
 #  include <mysql/service_plugin_registry.h>
 #endif
 
-MRN_BEGIN_DECLS
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
 
@@ -51,6 +49,8 @@ struct CommandInfo
   grn_obj command;
   grn_obj result;
 };
+
+MRN_BEGIN_DECLS
 
 MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                                       char *message)

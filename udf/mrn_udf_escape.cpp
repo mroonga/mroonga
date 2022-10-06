@@ -25,8 +25,6 @@
 #include <mrn_variables.hpp>
 #include <mrn_context_pool.hpp>
 
-MRN_BEGIN_DECLS
-
 extern mrn::ContextPool *mrn_context_pool;
 
 struct EscapeInfo
@@ -36,6 +34,8 @@ struct EscapeInfo
   grn_obj target_characters;
   grn_obj escaped_value;
 };
+
+MRN_BEGIN_DECLS
 
 MRN_API mrn_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
                                     char *message)

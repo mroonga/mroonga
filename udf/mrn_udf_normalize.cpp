@@ -29,12 +29,12 @@
 #include <mrn_variables.hpp>
 #include <mrn_current_thread.hpp>
 
-MRN_BEGIN_DECLS
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
 
 #define DEFAULT_NORMALIZER_NAME "NormalizerAuto"
+
+MRN_BEGIN_DECLS
 
 struct st_mrn_normalize_info
 {

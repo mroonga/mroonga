@@ -30,10 +30,10 @@
 #include <mrn_query_parser.hpp>
 #include <mrn_current_thread.hpp>
 
-MRN_BEGIN_DECLS
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
+
+MRN_BEGIN_DECLS
 
 typedef struct st_mrn_highlight_html_info
 {

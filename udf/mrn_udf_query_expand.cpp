@@ -28,10 +28,10 @@
 #include <mrn_current_thread.hpp>
 #include <mrn_query_parser.hpp>
 
-MRN_BEGIN_DECLS
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
+
+MRN_BEGIN_DECLS
 
 namespace mrn {
   struct QueryExpandInfo {

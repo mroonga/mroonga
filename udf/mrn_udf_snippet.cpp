@@ -31,8 +31,6 @@
 #include <mrn_variables.hpp>
 #include <mrn_current_thread.hpp>
 
-MRN_BEGIN_DECLS
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
 
@@ -126,6 +124,8 @@ error:
   }
   return true;
 }
+
+MRN_BEGIN_DECLS
 
 MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *message)
 {
