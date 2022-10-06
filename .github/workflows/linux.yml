@@ -206,7 +206,7 @@ jobs:
       - name: Cache ccache
         uses: actions/cache@v2
         with:
-          path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/build/${{ matrix.package }}-mroonga/ccache
+          path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/build/${{ matrix.os }}/ccache
           key: package-${{ matrix.os }}-${{ matrix.package }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
           restore-keys: package-${{ matrix.os }}-${{ matrix.package }}-ccache-
       - name: Build with Docker
