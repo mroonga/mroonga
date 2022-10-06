@@ -141,14 +141,7 @@ namespace mrn {
     }
 
     void remove_associated_grn_ctx(grn_ctx *ctx) {
-      for (std::vector<grn_ctx *>::iterator it = associated_grn_ctxs.begin();
-           it != associated_grn_ctxs.end();
-           ++it) {
-        if (*it == ctx) {
-          associated_grn_ctxs.erase(it);
-          break;
-        }
-      }
+      associated_grn_ctxs.remove(ctx);
     }
 
     grn_id last_insert_record_id;
@@ -159,7 +152,7 @@ namespace mrn {
     HA_CREATE_INFO *disable_keys_create_info;
     char *alter_connect_string;
     char *alter_comment;
-    std::vector<grn_ctx *> associated_grn_ctxs;
+    std::list<grn_ctx *> associated_grn_ctxs;
   };
 };
 
