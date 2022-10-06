@@ -1495,19 +1495,19 @@ struct st_mysql_plugin i_s_mrn_stats =
 };
 /* End of mroonga information schema implementations */
 
-static handler *mrn_handler_create(handlerton *hton,
-                                   TABLE_SHARE *share,
+static handler *mrn_hton_handler_create(handlerton *hton,
+                                        TABLE_SHARE *share,
 #ifdef MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
-                                   bool partitioned,
+                                        bool partitioned,
 #endif
-                                   MEM_ROOT *root)
+                                        MEM_ROOT *root)
 {
   MRN_DBUG_ENTER_FUNCTION();
   handler *new_handler = new (root) ha_mroonga(hton, share);
   DBUG_RETURN(new_handler);
 }
 
-static void mrn_drop_database(handlerton *hton, char *path)
+static void mrn_hton_drop_database(handlerton *hton, char *path)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn_db_manager->drop(path);
@@ -1518,7 +1518,7 @@ static void mrn_drop_database(handlerton *hton, char *path)
 #  define MRN_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
 #endif
 
-static int mrn_close_connection(handlerton *hton, THD *thd)
+static int mrn_hton_close_connection(handlerton *hton, THD *thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
   void *p = thd_get_ha_data(thd, mrn_hton_ptr);
@@ -2229,7 +2229,7 @@ static int mrn_init(void *p)
 #ifdef MRN_HANDLERTON_HAVE_STATE
   hton->state = SHOW_OPTION_YES;
 #endif
-  hton->create = mrn_handler_create;
+  hton->create = mrn_hton_handler_create;
   hton->flags = HTON_NO_FLAGS;
 #ifndef MRN_SUPPORT_PARTITION
   hton->flags |= HTON_NO_PARTITION;
@@ -2242,8 +2242,8 @@ static int mrn_init(void *p)
 #ifdef HTON_SUPPORTS_FOREIGN_KEYS
   hton->flags |= HTON_SUPPORTS_FOREIGN_KEYS;
 #endif
-  hton->drop_database = mrn_drop_database;
-  hton->close_connection = mrn_close_connection;
+  hton->drop_database = mrn_hton_drop_database;
+  hton->close_connection = mrn_hton_close_connection;
   hton->flush_logs = mrn_flush_logs;
 #ifdef MRN_HAVE_HTON_ALTER_TABLE_FLAGS
   hton->alter_table_flags = mrn_hton_alter_table_flags;
