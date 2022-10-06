@@ -1134,7 +1134,7 @@ st_mrn_slot_data *mrn_get_slot_data(THD *thd, bool can_create)
   MRN_DBUG_ENTER_FUNCTION();
   st_mrn_slot_data *slot_data =
     static_cast<st_mrn_slot_data *>(thd_get_ha_data(thd, mrn_hton_ptr));
-  if (slot_data == NULL) {
+  if (!slot_data && can_create) {
     slot_data =
       static_cast<st_mrn_slot_data *>(malloc(sizeof(st_mrn_slot_data)));
     slot_data->last_insert_record_id = GRN_ID_NIL;
