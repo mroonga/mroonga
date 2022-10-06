@@ -1546,9 +1546,12 @@ static void mrn_hton_kill_query(handlerton *hton,
                                 enum thd_kill_levels level)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  auto slot_data = mrn_get_slot_data(thd, false);
+  mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
   if (slot_data) {
-    for (auto ctx : slot_data->associated_grn_ctxs) {
+    for (std::vector<grn_ctx *>::iterator it = slot_data->associated_grn_ctxs.begin();
+         it != slot_data->associated_grn_ctxs.end();
+         ++it) {
+      grn_ctx *ctx = *it;
       if (ctx->rc == GRN_SUCCESS) {
         ctx->rc = GRN_CANCEL;
       }
