@@ -112,6 +112,20 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ccache
+          key: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
+          restore-keys: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-
+      - name: Prepare ccache
+        run: |
+          choco install ccache
+          ccache --show-stats --verbose
+          Write-Output "CMAKE_C_COMPILER_LAUNCHER=ccache" | `
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "CMAKE_CXX_COMPILER_LAUNCHER=ccache" | `
+            Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Set information
         id: info
         run: |
@@ -208,7 +222,8 @@ jobs:
         run: |
           cd ..\build
           $Env:CMAKE_BUILD_PARALLEL_LEVEL = $Env:NUMBER_OF_PROCESSORS
-          cmake --build . --config RelWithDebInfo --target package
+          cmake --build . --config RelWithDebInfo --target package --verbose
+          ccache --show-stats --verbose
       - name: Install
         run: |
           cd ..\build
