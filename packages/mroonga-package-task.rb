@@ -202,6 +202,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     true
   end
 
+  def docker_image(os, architecture)
+    "ghcr.io/mroonga/package-#{super}"
+  end
+
   def built_package_url(target_namespace, target)
     url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
     url << "#{@package}-#{target}.tar.gz"

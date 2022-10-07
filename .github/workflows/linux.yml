@@ -212,6 +212,7 @@ jobs:
       - name: Build with Docker
         run: |
           cd packages/${{ matrix.package }}-mroonga
+          rake docker:pull || :
           exit_status=0
           for i in {1..3}; do
             set +e
@@ -222,6 +223,7 @@ jobs:
               break
             fi
           done
+          rake docker:push || :
           exit ${exit_status}
         env:
           APT_TARGETS: ${{ matrix.os }}
