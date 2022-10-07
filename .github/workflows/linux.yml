@@ -203,6 +203,12 @@ jobs:
           esac
         env:
           GROONGA_REPOSITORY: ../../groonga
+      - name: Login to GitHub Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache ccache
         uses: actions/cache@v2
         with:
