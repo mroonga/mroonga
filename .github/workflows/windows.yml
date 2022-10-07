@@ -102,7 +102,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: |
-            AppData\Roaming\ccache
+            AppData/Roaming/ccache
           key: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
           restore-keys: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-
       - name: Prepare ccache
