@@ -151,6 +151,7 @@ jobs:
           }
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
+          Copy-Item ..\mroonga\build\msvc_ccache.cmake cmake\build_configurations\
       - name: Prepare Groonga
         run: |
           cd ..\source
@@ -200,6 +201,7 @@ jobs:
           cd ..\build
           cmake ..\source ^
             -G "Ninja" ^
+            -DBUILD_CONFIG=msvc_ccache ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
