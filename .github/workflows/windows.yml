@@ -192,7 +192,7 @@ jobs:
               groonga-normalizer-mysql-* `
               extra\groonga-normalizer-mysql
           }
-      - name: Run CMake
+      - name: Create package
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
@@ -204,10 +204,7 @@ jobs:
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
-      - name: Create package
-        run: |
-          cd ..\build
-          $Env:CMAKE_BUILD_PARALLEL_LEVEL = $Env:NUMBER_OF_PROCESSORS
+          set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake --build . --config RelWithDebInfo --target package --verbose
           ccache --show-stats --verbose
       - name: Install
