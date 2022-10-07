@@ -3,6 +3,13 @@ SET NAMES utf8mb4;
 CREATE TABLE diaries(
 title TEXT
 ) DEFAULT CHARSET=utf8mb4;
-SELECT /*+ MAX_EXECUTION_TIME(1) */ title, sleep(1) FROM diaries;
+INSERT INTO diaries VALUES ('Hello');
+SELECT /*+ MAX_EXECUTION_TIME(1) */ sleep(1), title FROM diaries;
 ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
+SELECT sleep(1), title FROM diaries;
+sleep(1)	title
+0	Hello
+SELECT /*+ MAX_EXECUTION_TIME(10000) */ sleep(1), title FROM diaries;
+sleep(1)	title
+0	Hello
 DROP TABLE diaries;

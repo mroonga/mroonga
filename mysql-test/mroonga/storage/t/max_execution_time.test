@@ -19,7 +19,6 @@
 --source ../../include/mroonga/have_mysql.inc
 --source ../../include/mroonga/not_embedded.inc
 --source ../../include/mroonga/have_mroonga.inc
---source ../../include/mroonga/have_groonga_12_0_9_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -30,8 +29,12 @@ CREATE TABLE diaries(
   title TEXT
 ) DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO diaries VALUES ('Hello');
+
 --error ER_QUERY_TIMEOUT
-SELECT /*+ MAX_EXECUTION_TIME(1) */ title, sleep(1) FROM diaries;
+SELECT /*+ MAX_EXECUTION_TIME(1) */ sleep(1), title FROM diaries;
+SELECT sleep(1), title FROM diaries;
+SELECT /*+ MAX_EXECUTION_TIME(10000) */ sleep(1), title FROM diaries;
 
 DROP TABLE diaries;
 

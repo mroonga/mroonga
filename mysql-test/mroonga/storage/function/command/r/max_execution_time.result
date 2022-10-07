@@ -1,3 +1,10 @@
 SELECT /*+ MAX_EXECUTION_TIME(1) */
 mroonga_command('sleep', 'second', '1');
 ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
+SELECT mroonga_command('sleep', 'second', '1');
+mroonga_command('sleep', 'second', '1')
+true
+SELECT /*+ MAX_EXECUTION_TIME(10000) */
+mroonga_command('sleep', 'second', '1');
+mroonga_command('sleep', 'second', '1')
+true

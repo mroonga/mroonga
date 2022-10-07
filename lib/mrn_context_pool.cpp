@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2020 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2015-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -82,6 +82,8 @@ namespace mrn {
       {
         mrn::Lock lock(mutex_);
         pool_.push_back(ctx);
+        ctx->rc = GRN_SUCCESS;
+        ctx->errbuf[0] = '\0';
         grn_ctx_use(ctx, NULL);
       }
 

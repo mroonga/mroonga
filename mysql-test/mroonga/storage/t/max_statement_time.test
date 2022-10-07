@@ -19,7 +19,6 @@
 --source ../../include/mroonga/have_mariadb.inc
 --source ../../include/mroonga/not_embedded.inc
 --source ../../include/mroonga/have_mroonga.inc
---source ../../include/mroonga/have_groonga_12_0_9_or_later.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -30,9 +29,14 @@ CREATE TABLE diaries(
   title TEXT
 ) DEFAULT CHARSET=utf8mb4;
 
+INSERT INTO diaries VALUES ('Hello');
+
 --error ER_STATEMENT_TIMEOUT
 SET STATEMENT max_statement_time = 0.001 FOR
-  SELECT title, sleep(1) FROM diaries;
+  SELECT sleep(1), title FROM diaries;
+SELECT sleep(1), title FROM diaries;
+SET STATEMENT max_statement_time = 10 FOR
+  SELECT sleep(1), title FROM diaries;
 
 DROP TABLE diaries;
 

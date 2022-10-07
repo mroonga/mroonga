@@ -25,6 +25,9 @@
 --error ER_STATEMENT_TIMEOUT
 SET STATEMENT max_statement_time = 0.001 FOR
   SELECT mroonga_command('sleep', 'second', '1');
+SELECT mroonga_command('sleep', 'second', '1');
+SET STATEMENT max_statement_time = 10 FOR
+  SELECT mroonga_command('sleep', 'second', '1');
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

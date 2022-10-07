@@ -13767,6 +13767,9 @@ int ha_mroonga::generic_reset()
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
 
+  ctx->rc = GRN_SUCCESS;
+  ctx->errbuf[0] = '\0';
+
   if (thd_sql_command(ha_thd()) != SQLCOM_SELECT) {
     DBUG_RETURN(error);
   }
