@@ -22,7 +22,10 @@ case ${distribution} in
     ;;
   ubuntu)
     repository=universe
-  ;;
+    sudo apt -y install software-properties-common
+    sudo add-apt-repository -y universe
+    sudo add-apt-repository -y ppa:groonga/ppa
+    ;;
 esac
 code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
