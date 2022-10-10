@@ -22,7 +22,10 @@ case ${distribution} in
     ;;
   ubuntu)
     repository=universe
-  ;;
+    sudo apt -y install software-properties-common
+    sudo add-apt-repository -y universe
+    sudo add-apt-repository -y ppa:groonga/ppa
+    ;;
 esac
 code_name=$(lsb_release --codename --short)
 architecture=$(dpkg --print-architecture)
@@ -35,6 +38,10 @@ sudo apt update
 case ${package} in
   mariadb-*)
     old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
+    # TODO: Remove this after we release a package for ubuntu-jammy on pckages.groonga.org.
+    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+      old_package=
+    fi
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test

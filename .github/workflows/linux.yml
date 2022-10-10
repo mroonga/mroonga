@@ -124,6 +124,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mariadb-10.6
 
           # MariaDB 10.7
           - os: almalinux-8
@@ -323,6 +326,9 @@ jobs:
             package: mariadb-10.6
           - os: centos-7
             package-type: yum
+            package: mariadb-10.6
+          - os: ubuntu-jammy
+            package-type: apt
             package: mariadb-10.6
 
           # MariaDB 10.7
