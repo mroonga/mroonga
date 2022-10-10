@@ -15,11 +15,14 @@ RUN \
   apt install -y -V ${quiet} \
     ca-certificates \
     lsb-release \
+    software-properties-common \
     wget && \
   wget https://packages.groonga.org/$(lsb_release --id --short | tr 'A-Z' 'a-z')/groonga-apt-source-latest-$(lsb_release --codename --short).deb && \
   apt install -y -V ${quiet} \
     ./*.deb && \
   rm *.deb && \
+  add-apt-repository -y universe && \
+  add-apt-repository -y ppa:groonga/ppa && \
   apt update ${quiet} && \
   apt build-dep -y mariadb-server-10.6 && \
   apt install -y -V ${quiet} \
