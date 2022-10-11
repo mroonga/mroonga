@@ -35,9 +35,9 @@ extern mrn::ContextPool *mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
-enum MrnTargetType {
-  MRN_TARGET_TYPE_TEXT = 0,
-  MRN_TARGET_TYPE_HTML = 1
+enum class MrnTargetType {
+  TEXT = 0,
+  HTML = 1
 };
 
 typedef struct st_mrn_highlight_html_info
@@ -301,11 +301,11 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
-  info->target_type = MRN_TARGET_TYPE_TEXT;
+  info->target_type = MrnTargetType::TEXT;
 
   if (args->attribute_lengths[0] == strlen("html") &&
       strncmp(args->attributes[0], "html", strlen("html")) == 0) {
-    info->target_type = MRN_TARGET_TYPE_HTML;
+    info->target_type = MrnTargetType::HTML;
   }
 
   {
@@ -396,8 +396,8 @@ static bool highlight_html(grn_ctx *ctx,
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
     bool in_char_ref = false;
-    bool skip_tagging_in_char_ref = target_type == MRN_TARGET_TYPE_HTML;
-    bool need_escape = target_type == MRN_TARGET_TYPE_TEXT;
+    bool skip_tagging_in_char_ref = target_type == MrnTargetType::HTML;
+    bool need_escape = target_type == MrnTargetType::TEXT;
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -487,7 +487,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->target_type == MRN_TARGET_TYPE_HTML) {
+  if (info->target_type == MrnTargetType::HTML) {
     const char *previous_position = args->args[0];
     const char *end_position = args->args[0] + args->lengths[0];
     const char *current_position = args->args[0];
