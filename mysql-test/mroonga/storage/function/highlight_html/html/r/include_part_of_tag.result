@@ -1,4 +1,4 @@
 SELECT mroonga_highlight_html('<span>Mroonga<b>Groonga</b>Rroonga</span>' AS html,
-                              '>Groonga</b') AS highlighted;
+'>Groonga</b') AS highlighted;
 highlighted
 <span>Mroonga<b>Groonga</b>Rroonga</span>
