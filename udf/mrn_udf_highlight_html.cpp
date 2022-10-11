@@ -341,10 +341,11 @@ error:
   DBUG_RETURN(true);
 }
 
-static bool highlight_html_check_in_char_ref(grn_ctx *ctx,
-                                             const char *str,
-                                             size_t len,
-                                             bool current_status)
+static bool highlight_html_check_in_char_ref_or_tag(grn_ctx *ctx,
+                                                    const char *str,
+                                                    size_t len,
+                                                    bool *in_char_ref,
+                                                    bool *in_tag)
 {
   const char *current_position = str;
   const char *end_position = str + len;
@@ -357,15 +358,23 @@ static bool highlight_html_check_in_char_ref(grn_ctx *ctx,
     }
 
     if (char_length == 1) {
-      if (*current_position == '&') {
-        current_status = true;
-      } else if (*current_position == ';') {
-        current_status = false;
+      switch (*current_position) {
+      case '&':
+        *in_char_ref = true;
+        break;
+      case ';':
+        *in_char_ref = false;
+        break;
+      case '<':
+        *in_tag = true;
+        break;
+      case '>': 
+        *in_tag = false;
+        break;
       }
     }
     current_position += char_length;
   }
-  return current_status;
 }
 
 static void highlight_html_put_text(grn_ctx *ctx,
@@ -395,9 +404,11 @@ static bool highlight_html(grn_ctx *ctx,
     size_t open_tag_length = strlen(open_tag);
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
-    bool in_char_ref = false;
-    bool skip_tagging_in_char_ref = target_type == MrnTargetType::HTML;
     bool need_escape = target_type == MrnTargetType::TEXT;
+    bool skip_tagging_if_need = target_type == MrnTargetType::HTML;
+    bool skip_tagging = false;
+    bool in_char_ref = false;
+    bool in_tag = false;
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -419,15 +430,15 @@ static bool highlight_html(grn_ctx *ctx,
                                   hits[i].offset - previous,
                                   need_escape);
         }
-        if (skip_tagging_in_char_ref) {
-          in_char_ref = 
-            highlight_html_check_in_char_ref(ctx,
+        if (skip_tagging_if_need) {
+            highlight_html_check_in_char_ref_or_tag(ctx,
                                              target + previous,
                                              hits[i].offset - previous,
-                                             in_char_ref);
-
+                                             &in_char_ref,
+                                             &in_tag);
+            skip_tagging = in_char_ref || in_tag;
         }
-        if (!skip_tagging_in_char_ref || !in_char_ref) {                        
+        if (!skip_tagging) {                        
           GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
         }
         highlight_html_put_text(ctx,
@@ -435,7 +446,7 @@ static bool highlight_html(grn_ctx *ctx,
                                 target + hits[i].offset,
                                 hits[i].length,
                                 need_escape);
-        if (!skip_tagging_in_char_ref || !in_char_ref) {                        
+        if (!skip_tagging) {                        
           GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
         }
         previous = hits[i].offset + hits[i].length;
@@ -487,70 +498,13 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->target_type == MrnTargetType::HTML) {
-    const char *previous_position = args->args[0];
-    const char *end_position = args->args[0] + args->lengths[0];
-    const char *current_position = args->args[0];
-    bool in_tag = false;
-    int char_length;
-
-    while (current_position < end_position) {
-      char_length = grn_charlen(ctx, current_position, end_position);
-      if (char_length == 0) {
-        break;
-      }
-
-      if (char_length == 1) {
-        if (*current_position == '<') {
-          in_tag = true;
-          if (!highlight_html(ctx,
-                              reinterpret_cast<grn_pat *>(keywords),
-                              previous_position,
-                              current_position - previous_position,
-                              info->target_type,
-                              &(info->result))) {
-            goto error;
-          }
-          previous_position = current_position;
-        } else if (*current_position == '>') {
-          in_tag = false;
-          current_position++;
-          GRN_TEXT_PUT(ctx,
-                      &(info->result),
-                      previous_position,
-                      current_position - previous_position);
-          previous_position = current_position;
-        }
-      }
-      current_position += char_length;
-    }
-
-    if (previous_position < end_position) {
-      if (in_tag) {
-        GRN_TEXT_PUT(ctx,
-                     &(info->result),
-                     previous_position,
-                     end_position - previous_position);
-      } else {
-        if (!highlight_html(ctx,
-                            reinterpret_cast<grn_pat *>(keywords),
-                            previous_position,
-                            end_position - previous_position,
-                            info->target_type,
-                            &(info->result))) {
-          goto error;
-        }
-      }
-    }
-  } else {
-    if (!highlight_html(ctx,
-                        reinterpret_cast<grn_pat *>(keywords),
-                        args->args[0],
-                        args->lengths[0],
-                        info->target_type,
-                        &(info->result))) {
-      goto error;
-    }
+  if (!highlight_html(ctx,
+                      reinterpret_cast<grn_pat *>(keywords),
+                      args->args[0],
+                      args->lengths[0],
+                      info->target_type,
+                      &(info->result))) {
+    goto error;
   }
 
   if (!info->keywords) {
