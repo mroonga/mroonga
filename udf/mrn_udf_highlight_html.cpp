@@ -341,7 +341,7 @@ error:
   DBUG_RETURN(true);
 }
 
-static bool highlight_html_check_in_char_ref_or_tag(grn_ctx *ctx,
+static void highlight_html_check_in_char_ref_or_tag(grn_ctx *ctx,
                                                     const char *str,
                                                     size_t len,
                                                     bool *in_char_ref,
