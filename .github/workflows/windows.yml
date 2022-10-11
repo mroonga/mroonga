@@ -20,8 +20,8 @@ jobs:
           - MariaDB 10.5 64bit
           - MariaDB 10.6 32bit
           - MariaDB 10.6 64bit
-          # - MariaDB 10.7 32bit
-          # - MariaDB 10.7 64bit
+          - MariaDB 10.7 32bit
+          - MariaDB 10.7 64bit
           # - MariaDB 10.7 64bit (master)
           # - MariaDB 10.7 64bit (master/embed)
           # - MariaDB 10.8 64bit (master/embed)
@@ -58,14 +58,14 @@ jobs:
             mariadb-version: "10.6.7"
             package-platform: "winx64"
             vc-architecture: "x64"
-          # - label: MariaDB 10.7 32bit
-          #   mariadb-version: "10.7.3"
-          #   package-platform: "win32"
-          #   vc-architecture: "x64_x86"
-          # - label: MariaDB 10.7 64bit
-          #   mariadb-version: "10.7.3"
-          #   package-platform: "winx64"
-          #   vc-architecture: "x64"
+          - label: MariaDB 10.7 32bit
+            mariadb-version: "10.7.6"
+            package-platform: "win32"
+            vc-architecture: "x64_x86"
+          - label: MariaDB 10.7 64bit
+            mariadb-version: "10.7.6"
+            package-platform: "winx64"
+            vc-architecture: "x64"
           # - label: MariaDB 10.7 64bit (master)
           #   mariadb-version: "10.7.3"
           #   package-platform: "winx64"
