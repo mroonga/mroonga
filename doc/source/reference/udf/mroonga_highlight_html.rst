@@ -71,17 +71,21 @@ There is one required parameter.
 
 The column name of string or string value to be highlighted.
 
-If you specify ``text`` with ``AS html`` as ``text AS html``, Mroonga regards ``text`` is HTML.
-You must specify ``AS html`` when you want to highlight a HTML text.
+If you specify ``text`` with ``AS html`` like ``text AS html``, Mroonga regards ``text`` as HTML.
+You must specify ``AS html`` when you want to highlight a HTML document.
 
 When ``AS html`` is specified, Mroonga ignores keywords inside of HTML tags and dones't escape special characters 
 in HTML such as ``<``, ``>`` in ``text``.
 
-Here is a example to highlight a HTML text without ``AS html``.
+Here is a sample to highlight a HTML document without ``AS html``.
 
 .. code-block:: sql
 
    SELECT mroonga_highlight_html('<span>In the span tag</span>', 'span') AS highlighted;
+
+Here is the result of the sample.
+
+.. code-block:: text
 
    +---------------------------------------------------------------------------------------------------------------------------------+
    | highlighted                                                                                                                     |
@@ -89,14 +93,18 @@ Here is a example to highlight a HTML text without ``AS html``.
    | &lt;<span class="keyword">span</span>&gt;In the <span class="keyword">span</span> tag&lt;/<span class="keyword">span</span>&gt; |
    +---------------------------------------------------------------------------------------------------------------------------------+
 
-In this example, ``<`` and ``>`` are escaped, and ``span`` in the ``<span>`` is highlighted.
+In this sample, ``<`` and ``>`` are escaped, and ``span`` in the ``<span>`` is highlighted.
 The result is not a correct HTML. 
 
-Here is a example to highlight the same HTML text with ``AS html``.
+Here is a sample to highlight the same HTML document with ``AS html``.
 
 .. code-block:: sql
 
    SELECT mroonga_highlight_html('<span>In the span tag</span>' AS html, 'span') AS highlighted;
+
+Here is the result of the sample.
+
+.. code-block:: text
 
    +-----------------------------------------------------------+
    | highlighted                                               |
@@ -104,7 +112,7 @@ Here is a example to highlight the same HTML text with ``AS html``.
    | <span>In the <span class="keyword">span</span> tag</span> |
    +-----------------------------------------------------------+
 
-Contrary to the previous example, ``<`` and ``>`` are not escaped, and ``span`` in the ``<span>`` is not highlighted.
+Contrary to the previous sample, ``<`` and ``>`` are not escaped, and ``span`` in the ``<span>`` is not highlighted.
 The result is a correct HTML.
 
 Optional parameters
