@@ -74,12 +74,12 @@ The column name of string or string value to be highlighted.
 If you specify ``text`` with ``AS html`` as ``text AS html``, Mroonga regards ``text`` is HTML.
 You must specify ``AS html`` when you want to highlight a HTML text.
 
-When ``AS html`` is specified, Mroonga ignores keywords inside of HTML tags and don't escape special characters 
+When ``AS html`` is specified, Mroonga ignores keywords inside of HTML tags and dones't escape special characters 
 in HTML such as ``<``, ``>`` in ``text``.
 
 Here is a example to highlight a HTML text without ``AS html``.
 
-.. code-block::
+.. code-block:: sql
 
    SELECT mroonga_highlight_html('<span>In the span tag</span>', 'span') AS highlighted;
 
@@ -94,9 +94,9 @@ The result is not a correct HTML.
 
 Here is a example to highlight the same HTML text with ``AS html``.
 
-.. code-block::
+.. code-block:: sql
 
-   SELECT mroonga_highlight_html('<span>In the span tag</span> AS html', 'span') AS highlighted; AS html
+   SELECT mroonga_highlight_html('<span>In the span tag</span>' AS html, 'span') AS highlighted;
 
    +-----------------------------------------------------------+
    | highlighted                                               |
