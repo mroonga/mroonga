@@ -2225,6 +2225,48 @@ msgstr ""
 msgid "The column name of string or string value to be highlighted."
 msgstr "ハイライトされるカラム名もしくは文字列が必要です。"
 
+msgid ""
+"If you specify ``text`` with ``AS html`` like ``text AS html``, Mroonga "
+"regards ``text`` is HTML. You must specify ``AS html`` when you want to "
+"highlight a HTML document."
+msgstr ""
+"``text AS html`` のように、 ``text`` を ``AS html`` とともに指定した場合は、 "
+"Mroongaは``text`` をHTMLとみなします。HTMLドキュメントをハイライトしたい場合"
+"は、 ``AS html`` を指定する必要があります。"
+
+msgid ""
+"When ``AS html`` is specified, Mroonga ignores keywords inside of HTML tags "
+"and dones't escape special characters in HTML such as ``<``, ``>`` in "
+"``text``."
+msgstr ""
+"``AS html`` を指定すると、 MroongaはHTMLのタグの内部にあるキーワードを無視"
+"し、``text`` に含まれるHTMLの特殊文字 ``<`` や ``>`` をエスケープしません。"
+
+msgid "Here is a sample to highlight a HTML document without ``AS html``."
+msgstr "以下は ``AS html`` なしでHTMLドキュメントをハイライトする例です。"
+
+msgid "Here is the result of the sample."
+msgstr "以下はこの例の実行結果です。"
+
+msgid ""
+"In this sample, ``<`` and ``>`` are escaped, and ``span`` in the ``<span>`` "
+"is highlighted. The result is not a correct HTML document."
+msgstr ""
+"この例では、 ``<`` と ``>`` がエスケープされ、 ``<span>`` の中の ``span``がハ"
+"イライトされています。この結果は正しいHTMLドキュメントではありません。"
+
+msgid "Here is a sample to highlight the same HTML document with ``AS html``."
+msgstr "以下は ``AS html`` ありでHTMLドキュメントをハイライトする例です。"
+
+msgid ""
+"Contrary to the previous sample, ``<`` and ``>`` are not escaped, and "
+"``span`` in the ``<span>`` is not highlighted. The result is a correct HTML "
+"document."
+msgstr ""
+"一つ前の実行例と比較して、 ``<`` と ``>`` がエスケープされておらず、"
+"``<span>`` の中の ``span`` もハイライトされていません。この結果は正しいHTMLド"
+"キュメントになっています。"
+
 msgid "There are some optional parameters."
 msgstr "いくつか省略可能な引数があります。"
 
