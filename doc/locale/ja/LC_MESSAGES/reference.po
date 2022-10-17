@@ -2252,7 +2252,7 @@ msgid ""
 "following::"
 msgstr ""
 "クエリーを使ってキーワードを抽出するには、以下のように ``AS query`` を指定する"
-"必要があります。"
+"必要があります。::"
 
 msgid "``keyword``"
 msgstr ""
