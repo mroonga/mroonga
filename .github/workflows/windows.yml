@@ -206,8 +206,9 @@ jobs:
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
           mkdir ..\build
-          cd ..\build
-          cmake ..\source ^
+          cmake ^
+            -S ..\source ^
+            -B ..\build ^
             -G "Ninja" ^
             -DBUILD_CONFIG=msvc_ccache ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
@@ -215,7 +216,7 @@ jobs:
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-          cmake --build . --config RelWithDebInfo --target package
+          cmake --build ..\build --config RelWithDebInfo --target package
           ccache --show-stats --verbose
       - name: Install
         run: |
