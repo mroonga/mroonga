@@ -52,8 +52,8 @@ typedef struct st_mrn_highlight_html_info
   } query_mode;
   struct {
     bool used;
-    std::string open_tag = nullptr;
-    std::string close_tag = nullptr;
+    std::string open_tag;
+    std::string close_tag;
   } specify_tag;
 } mrn_highlight_html_info;
 
