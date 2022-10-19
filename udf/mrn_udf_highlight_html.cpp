@@ -305,14 +305,14 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   info->specify_tag.used = false;
   for (unsigned int i = 0; i < args->arg_count; i++) {
-    const std::string attribute(args->attributes[i], args->attributes[i] + args->attribute_lengths[i]);
+    const std::string attribute(args->attributes[i]);
     if (attribute == "open_tag") {
       info->specify_tag.used = true;
-      const std::string open_tag(args->args[i], args->args[i] + args->lengths[i]);
+      const std::string open_tag(args->args[i]);
       info->specify_tag.open_tag = open_tag;
     } else if (attribute == "close_tag") {
       info->specify_tag.used = true;
-      const std::string close_tag(args->args[i], args->args[i] + args->lengths[i]);
+      const std::string close_tag(args->args[i]);
       info->specify_tag.close_tag = close_tag;
     }
   }
