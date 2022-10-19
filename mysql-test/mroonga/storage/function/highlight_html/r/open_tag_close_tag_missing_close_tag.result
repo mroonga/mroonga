@@ -1,4 +1,4 @@
 SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
 'groonga',
-'<mark>' AS open_tag, '</mark>' AS invalid) AS highlighted;
+'<mark>' AS open_tag) AS highlighted;
 ERROR HY000: Can't initialize function 'mroonga_highlight_html'; mroonga_highlight_html(): missing the required "close_tag" argument.

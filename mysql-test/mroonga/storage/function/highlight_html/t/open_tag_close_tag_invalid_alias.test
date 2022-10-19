@@ -18,6 +18,7 @@
 --source ../../../../include/mroonga/have_mroonga.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
+--error ER_CANT_INITIALIZE_UDF
 SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
                               'groonga',
                               '<mark>' AS open_tag, '</mark>' AS invalid) AS highlighted;
