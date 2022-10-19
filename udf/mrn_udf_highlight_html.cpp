@@ -367,27 +367,14 @@ static bool highlight_html(grn_ctx *ctx,
                            const char *target,
                            size_t target_length,
                            grn_obj *output,
-                           const char *specify_open_tag = NULL,
-                           const char *specify_close_tag = NULL)
+                           const char *open_tag,
+                           const char *close_tag)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
   {
-    const char *open_tag;
-    size_t open_tag_length;
-    const char *close_tag;
-    size_t close_tag_length;
-    if (specify_open_tag == NULL || specify_close_tag == NULL) {
-      open_tag = "<span class=\"keyword\">";
-      open_tag_length = strlen(open_tag);
-      close_tag = "</span>";
-      close_tag_length = strlen(close_tag);
-    } else {
-      open_tag = specify_open_tag;
-      close_tag = specify_close_tag;
-    }
-    open_tag_length = strlen(open_tag);
-    close_tag_length = strlen(close_tag);
+    size_t open_tag_length = strlen(open_tag);
+    size_t close_tag_length = strlen(close_tag);
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -462,24 +449,25 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  if (info->specify_tag.open_tag.empty() || info->specify_tag.close_tag.empty()) {
-    if (!highlight_html(ctx,
-                        reinterpret_cast<grn_pat *>(keywords),
-                        args->args[0],
-                        args->lengths[0],
-                        &(info->result))) {
-      goto error;
-    }
+  const char *open_tag;
+  const char *close_tag;
+
+  if (info->specify_tag.used) {
+    open_tag = info->specify_tag.open_tag.c_str();
+    close_tag = info->specify_tag.close_tag.c_str();
   } else {
-    if (!highlight_html(ctx,
-                        reinterpret_cast<grn_pat *>(keywords),
-                        args->args[0],
-                        args->lengths[0],
-                        &(info->result),
-                        info->specify_tag.open_tag.c_str(),
-                        info->specify_tag.close_tag.c_str())) {
-      goto error;
-    }
+    open_tag = "<span class=\"keyword\">";
+    close_tag = "</span>";
+  }
+
+  if (!highlight_html(ctx,
+                      reinterpret_cast<grn_pat *>(keywords),
+                      args->args[0],
+                      args->lengths[0],
+                      &(info->result),
+                      open_tag,
+                      close_tag)) {
+    goto error;
   }
 
   if (!info->keywords) {
