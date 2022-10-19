@@ -52,8 +52,8 @@ typedef struct st_mrn_highlight_html_info
   } query_mode;
   struct {
     bool used;
-    std::string open_tag;
-    std::string close_tag;
+    std::string open_tag = nullptr;
+    std::string close_tag = nullptr;
   } specify_tag;
 } mrn_highlight_html_info;
 
@@ -304,31 +304,29 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
 
   info->specify_tag.used = false;
-
   for (unsigned int i = 0; i < args->arg_count; i++) {
-    const std::string attribute(args->attributes[i]);
+    const std::string attribute(args->attributes[i], args->attributes[i] + args->attribute_lengths[i]);
     if (attribute == "open_tag") {
-      if (i + 1 < args->arg_count) {
-        const std::string close_tag(args->attributes[i+1]);
-        if (close_tag == "close_tag") {
-          info->specify_tag.used = true;
-          info->specify_tag.open_tag = std::string(args->args[i]);
-          info->specify_tag.open_tag.erase(info->specify_tag.open_tag.size() - 1);
-          info->specify_tag.open_tag.append(" class=\"keyword\">");
-
-          info->specify_tag.close_tag = std::string(args->args[i+1]);
-        } else {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
-                  "mroonga_highlight_html(): invalid alias name %s: expected value is \"close_tag\".",
-                  close_tag.c_str());
-          goto error;
-        }
-      } else {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
-                  "mroonga_highlight_html(): missing a \"close_tag\". This is required argument.");
-          goto error;
-      }
+      info->specify_tag.used = true;
+      const std::string open_tag(args->args[i], args->args[i] + args->lengths[i]);
+      info->specify_tag.open_tag = open_tag;
+    } else if (attribute == "close_tag") {
+      info->specify_tag.used = true;
+      const std::string close_tag(args->args[i], args->args[i] + args->lengths[i]);
+      info->specify_tag.close_tag = close_tag;
     }
+  }
+
+  if (info->specify_tag.used) {
+    if (info->specify_tag.open_tag.empty()) {
+      snprintf(message, MYSQL_ERRMSG_SIZE,
+       "mroonga_highlight_html(): missing the required \"open_tag\" argument.");
+      goto error;
+    } else if (info->specify_tag.close_tag.empty()) {
+      snprintf(message, MYSQL_ERRMSG_SIZE,
+       "mroonga_highlight_html(): missing the required \"close_tag\" argument.");
+      goto error;
+    } 
   }
 
   {
