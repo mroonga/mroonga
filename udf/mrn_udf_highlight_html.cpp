@@ -31,8 +31,6 @@
 #include <mrn_query_parser.hpp>
 #include <mrn_current_thread.hpp>
 
-#include <string>
-
 extern mrn::DatabaseManager *mrn_db_manager;
 extern mrn::ContextPool *mrn_context_pool;
 
@@ -52,8 +50,8 @@ typedef struct st_mrn_highlight_html_info
   } query_mode;
   struct {
     bool used;
-    std::string open_tag;
-    std::string close_tag;
+    const char *open_tag;
+    const char *close_tag;
   } specify_tag;
 } mrn_highlight_html_info;
 
@@ -305,24 +303,25 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   info->specify_tag.used = false;
   for (unsigned int i = 0; i < args->arg_count; i++) {
-    const std::string attribute(args->attributes[i]);
-    if (attribute == "open_tag") {
+    const char *attribute = args->attributes[i];
+    unsigned long attribute_length = args->attribute_lengths[i];
+    if (attribute_length == strlen("open_tag") &&
+        strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
       info->specify_tag.used = true;
-      const std::string open_tag(args->args[i]);
-      info->specify_tag.open_tag = open_tag;
-    } else if (attribute == "close_tag") {
+      info->specify_tag.open_tag = args->args[i];
+    } else if (attribute_length == strlen("close_tag") &&
+               strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
       info->specify_tag.used = true;
-      const std::string close_tag(args->args[i]);
-      info->specify_tag.close_tag = close_tag;
+      info->specify_tag.close_tag = args->args[i];
     }
   }
 
   if (info->specify_tag.used) {
-    if (info->specify_tag.open_tag.empty()) {
+    if (info->specify_tag.open_tag == nullptr) {
       snprintf(message, MYSQL_ERRMSG_SIZE,
        "mroonga_highlight_html(): missing the required \"open_tag\" argument.");
       goto error;
-    } else if (info->specify_tag.close_tag.empty()) {
+    } else if (info->specify_tag.close_tag == nullptr) {
       snprintf(message, MYSQL_ERRMSG_SIZE,
        "mroonga_highlight_html(): missing the required \"close_tag\" argument.");
       goto error;
@@ -453,8 +452,8 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   const char *close_tag;
 
   if (info->specify_tag.used) {
-    open_tag = info->specify_tag.open_tag.c_str();
-    close_tag = info->specify_tag.close_tag.c_str();
+    open_tag = info->specify_tag.open_tag;
+    close_tag = info->specify_tag.close_tag;
   } else {
     open_tag = "<span class=\"keyword\">";
     close_tag = "</span>";
