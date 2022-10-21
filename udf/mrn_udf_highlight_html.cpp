@@ -47,6 +47,8 @@ typedef struct st_mrn_highlight_html_info
     bool used;
     grn_obj *table;
     grn_obj *default_column;
+    const char* query;
+    unsigned long query_length;
   } query_mode;
   struct {
     bool used;
@@ -302,19 +304,19 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
 
   info->query_mode.used = false;
-
-  if (args->arg_count == 2 &&
-      args->attribute_lengths[1] == strlen("query") &&
-      strncmp(args->attributes[1], "query", strlen("query")) == 0) {
-    info->query_mode.used = true;
-    info->query_mode.table = NULL;
-    info->query_mode.default_column = NULL;
-  }
-
   info->specify_tag.used = false;
+
   for (unsigned int i = 0; i < args->arg_count; i++) {
     const char *attribute = args->attributes[i];
     unsigned long attribute_length = args->attribute_lengths[i];
+    if (args->attribute_lengths[i] == strlen("query") &&
+        strncmp(args->attributes[i], "query", strlen("query")) == 0) {
+      info->query_mode.used = true;
+      info->query_mode.table = NULL;
+      info->query_mode.default_column = NULL;
+      info->query_mode.query = args->args[i];
+      info->query_mode.query_length = args->lengths[i];
+    }
     if (attribute_length == strlen("open_tag") &&
         strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
       info->specify_tag.used = true;
