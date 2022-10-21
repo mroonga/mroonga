@@ -174,6 +174,16 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       if (!args->args[i]) {
         continue;
       }
+      const char *attribute = args->attributes[i];
+      unsigned long attribute_length = args->attribute_lengths[i];
+      if (attribute_length == strlen("open_tag") &&
+          strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
+          continue;
+      }
+      if (attribute_length == strlen("close_tag") &&
+          strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
+        continue;
+      }
       grn_table_add(ctx,
                     *keywords,
                     args->args[i],
