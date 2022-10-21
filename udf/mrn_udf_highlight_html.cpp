@@ -180,7 +180,7 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       unsigned long attribute_length = args->attribute_lengths[i];
       if (attribute_length == strlen("open_tag") &&
           strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
-          continue;
+        continue;
       }
       if (attribute_length == strlen("close_tag") &&
           strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
