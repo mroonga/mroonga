@@ -1,0 +1,4 @@
+SELECT mroonga_highlight_html('open_tag and close_tag should not be highlighted',
+'Groonga', 'open_tag' AS open_tag, 'close_tag' AS close_tag) AS highlighted;
+highlighted
+open_tag and close_tag should not be highlighted
