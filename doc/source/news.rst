@@ -30,6 +30,20 @@ Improvements
 
   From this version, Mroonga can abort Groonga queries in the specified time and the execution timeout parameter works correctly.
 
+  Here is a sample for MySQL.
+
+  .. code-block::sql
+
+     SELECT /*+ MAX_EXECUTION_TIME(1) */ mroonga_command('sleep', 'second', '1');
+     -- ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
+  
+  Here is a sample for MariaDB.
+
+  .. code-block::sql
+
+     SET STATEMENT max_statement_time = 0.001 FOR SELECT mroonga_command('sleep', 'second', '1');
+     -- ERROR 70100: Query execution was interrupted (max_statement_time exceeded)
+
 Thanks
 ^^^^^^
 
