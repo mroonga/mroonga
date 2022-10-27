@@ -23,7 +23,7 @@ Improvements
   
   MySQL/MariaDB can abort a query if the execution timeout parameter is specified and a execution time exceeds 
   a time specified with the parameter.
-  The execution timeout parameter is ``max_execution_time`` in MySQL and ``max_statement_time`` in MariaDB.
+  The execution timeout parameter is ``MAX_EXECUTION_TIME`` in MySQL and ``max_statement_time`` in MariaDB.
 
   However, Mroonga did not abort executing Groonga queries and MySQL/MariaDB waited until the Groonga queries finished.
   So sometimes MySQL/MariaDB did not abort the query even if the specified time was exceeded.
