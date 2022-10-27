@@ -216,7 +216,7 @@ jobs:
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-          cmake --build ..\build --config RelWithDebInfo --target package
+          cmake --build ..\build --config RelWithDebInfo --target package --verbose
           ccache --show-stats --verbose
       - name: Install
         run: |
