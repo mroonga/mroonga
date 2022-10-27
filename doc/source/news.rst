@@ -8,6 +8,9 @@ News
 Release 12.09 - 2022-10-28
 --------------------------
 
+Improvements
+^^^^^^^^^^^^
+
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.9.3.
 
 * [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy).
