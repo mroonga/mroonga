@@ -13,7 +13,26 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.9.3.
 
+* [:doc:`/install/centos`] Added support for MySQL 5.7.40.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.31.
+
 * [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy).
+
+* Added support for aborting query with timeout.[GitHub #344][Reported by Kazuhiko]
+  
+  MySQL uses ``max_execution_time`` and MariaDB uses ``max_statement_time`` for aborting query with timeout.
+
+  MySQL/MariaDB can abort a query if an aborting query parameter is specified and exceeding a certain time specified with it.
+  However, Mroonga did not abort executing Groonga queries so MySQL/MariaDB waited until the Groonga queries finished 
+  even if exceeding the certain time.
+
+  From this version, Mroonga can abort Groonga queries in specified time with the aborting query parameter.
+
+Thanks
+^^^^^^
+
+* Kazuhiko
 
 .. _release-12-08:
 
