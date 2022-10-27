@@ -19,15 +19,16 @@ Improvements
 
 * [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy).
 
-* Added support for aborting query with timeout.[GitHub #344][Reported by Kazuhiko]
+* Added support for execution timeout parameter.[GitHub #344][Reported by Kazuhiko]
   
-  MySQL uses ``max_execution_time`` and MariaDB uses ``max_statement_time`` for aborting query with timeout.
+  MySQL/MariaDB can abort a query if the execution timeout parameter is specified and a execution time exceeds 
+  a time specified with the parameter.
+  The execution timeout parameter is ``max_execution_time`` in MySQL and ``max_statement_time`` in MariaDB.
 
-  MySQL/MariaDB can abort a query if an aborting query parameter is specified and exceeding a certain time specified with it.
-  However, Mroonga did not abort executing Groonga queries so MySQL/MariaDB waited until the Groonga queries finished 
-  even if exceeding the certain time.
+  However, Mroonga did not abort executing Groonga queries and MySQL/MariaDB waited until the Groonga queries finished.
+  So sometimes MySQL/MariaDB did not abort the query even if the specified time was exceeded.
 
-  From this version, Mroonga can abort Groonga queries in specified time with the aborting query parameter.
+  From this version, Mroonga can abort Groonga queries in the specified time and the execution timeout parameter works correctly.
 
 Thanks
 ^^^^^^
