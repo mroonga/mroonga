@@ -16,8 +16,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---skip We don't know why but MAX_EXECUTION_TIME doesn't work with Mroonga...
-
 --source ../../include/mroonga/have_mysql.inc
 --source ../../include/mroonga/not_embedded.inc
 --source ../../include/mroonga/have_mroonga.inc
@@ -34,9 +32,9 @@ CREATE TABLE diaries(
 INSERT INTO diaries VALUES ('Hello');
 
 --error ER_QUERY_TIMEOUT
-SELECT /*+ MAX_EXECUTION_TIME(1) */ sleep(1), title FROM diaries;
-SELECT sleep(1), title FROM diaries;
-SELECT /*+ MAX_EXECUTION_TIME(10000) */ sleep(1), title FROM diaries;
+SELECT /*+ MAX_EXECUTION_TIME(1) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+SELECT title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+SELECT /*+ MAX_EXECUTION_TIME(10000) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
 
 DROP TABLE diaries;
 

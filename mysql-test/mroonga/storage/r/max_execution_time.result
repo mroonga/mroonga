@@ -4,12 +4,12 @@ CREATE TABLE diaries(
 title TEXT
 ) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries VALUES ('Hello');
-SELECT /*+ MAX_EXECUTION_TIME(1) */ sleep(1), title FROM diaries;
+SELECT /*+ MAX_EXECUTION_TIME(1) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
 ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
-SELECT sleep(1), title FROM diaries;
-sleep(1)	title
-0	Hello
-SELECT /*+ MAX_EXECUTION_TIME(10000) */ sleep(1), title FROM diaries;
-sleep(1)	title
-0	Hello
+SELECT title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+title
+Hello
+SELECT /*+ MAX_EXECUTION_TIME(10000) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+title
+Hello
 DROP TABLE diaries;
