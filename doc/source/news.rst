@@ -21,12 +21,13 @@ Improvements
 
 * Added support for execution timeout parameter.[GitHub #344][Reported by Kazuhiko]
   
-  MySQL/MariaDB can abort a query if the execution timeout parameter is specified and a execution time exceeds 
+  MySQL/MariaDB can abort queries if the execution timeout parameter is specified and a execution time exceeds 
   a time specified with the parameter.
   The execution timeout parameter is ``MAX_EXECUTION_TIME`` in MySQL and ``max_statement_time`` in MariaDB.
 
-  However, Mroonga did not abort executing Groonga queries and MySQL/MariaDB waited until the Groonga queries finished.
-  So sometimes MySQL/MariaDB did not abort the query even if the specified time was exceeded.
+  However, Mroonga did not abort executing Groonga queries even after MySQL/MariaDB abort the queries and return results.
+  So if the Groonga queries match too many results, it could continue to consume memory and CPU resources 
+  even after MySQL/MariaDB abort the queries.
 
   From this version, Mroonga can abort Groonga queries in the specified time and the execution timeout parameter works correctly.
 
