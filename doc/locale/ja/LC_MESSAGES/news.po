@@ -91,10 +91,10 @@ msgstr ""
 "た。"
 
 msgid "Here is a sample for MySQL."
-msgstr ""
+msgstr "以下はMySQLの場合の例です。"
 
 msgid "Here is a sample for MariaDB."
-msgstr ""
+msgstr "以下はMariaDBの場合の例です。"
 
 msgid "Thanks"
 msgstr "感謝"
