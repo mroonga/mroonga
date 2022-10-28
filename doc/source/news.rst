@@ -3,6 +3,74 @@
 News
 ====
 
+.. _release-12-09:
+
+Release 12.09 - 2022-10-28
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.9.3.
+
+* [:doc:`/install/centos`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.40.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.31.
+
+* [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy Jellyfish).
+
+* Added support for execution timeout parameter.[GitHub #344][Reported by Kazuhiko]
+
+  MySQL/MariaDB can abort queries if the execution timeout parameter is specified and a execution time exceeds a time specified with the parameter.
+  The execution timeout parameter is ``MAX_EXECUTION_TIME`` in MySQL and ``max_statement_time`` in MariaDB.
+
+  However, Mroonga did not abort executing queries even after MySQL/MariaDB abort the queries and return results.
+  So if the Groonga queries match too many results, it could continue to consume memory and CPU resources even after MySQL/MariaDB abort the queries.
+
+  From this version, Mroonga can abort queries in the specified time and the execution timeout parameter works correctly. So Mroonga don't continue to consume memory and CPU resources after MySQL/MariaDB abort the queries.
+
+  The following how to use this feature.
+
+  Here is a sample for MySQL.
+
+  .. code-block:: sql
+
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SELECT /*+ MAX_EXECUTION_TIME(1) */ title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
+  Here is a sample for MariaDB.
+
+  .. code-block:: sql
+
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SET STATEMENT max_statement_time = 0.001 FOR
+     SELECT title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
+  This feature can use in ``mroonga_command()`` also.
+
+Thanks
+^^^^^^
+
+* Kazuhiko
+
 .. _release-12-08:
 
 Release 12.08 - 2022-10-03
