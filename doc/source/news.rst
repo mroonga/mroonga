@@ -13,9 +13,9 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.9.3.
 
-* [:doc:`/install/centos`] Added support for MySQL 5.7.40.
+* [:doc:`/install/centos`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.40.
 
-* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`] Added support for MySQL 8.0.31.
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.31.
 
 * [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy).
 
