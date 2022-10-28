@@ -30,6 +30,7 @@ Improvements
   even after MySQL/MariaDB abort the queries.
 
   From this version, Mroonga can abort Groonga queries in the specified time and the execution timeout parameter works correctly.
+  So Mroonga don't continue to consume memory and CPU resources after MySQL/MariaDB abort the queries.
 
   Here is a sample for MySQL.
 
