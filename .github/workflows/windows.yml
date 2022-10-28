@@ -200,6 +200,7 @@ jobs:
             Move-Item `
               groonga-normalizer-mysql-* `
               extra\groonga-normalizer-mysql
+            Get-ChildItem extra -Depth 1
           }
       - name: Create package
         shell: cmd
@@ -215,6 +216,7 @@ jobs:
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
+            --trace-expand
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake --build ..\build --config RelWithDebInfo --target package --verbose
           ccache --show-stats --verbose
