@@ -17,7 +17,7 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.31.
 
-* [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy).
+* [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy Jellyfish).
 
 * Added support for execution timeout parameter.[GitHub #344][Reported by Kazuhiko]
   
