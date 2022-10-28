@@ -29,20 +29,42 @@ Improvements
 
   From this version, Mroonga can abort queries in the specified time and the execution timeout parameter works correctly. So Mroonga don't continue to consume memory and CPU resources after MySQL/MariaDB abort the queries.
 
+  The following how to use this feature.
 
   Here is a sample for MySQL.
 
   .. code-block:: sql
 
-     SELECT /*+ MAX_EXECUTION_TIME(1) */ mroonga_command('sleep', 'second', '1');
-     -- ERROR HY000: Query execution was interrupted, maximum statement execution time exceeded
-  
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SELECT /*+ MAX_EXECUTION_TIME(1) */ title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
   Here is a sample for MariaDB.
 
   .. code-block:: sql
 
-     SET STATEMENT max_statement_time = 0.001 FOR SELECT mroonga_command('sleep', 'second', '1');
-     -- ERROR 70100: Query execution was interrupted (max_statement_time exceeded)
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SET STATEMENT max_statement_time = 0.001 FOR
+     SELECT title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
+  This feature can use in ``mroonga_command()`` also.
 
 Thanks
 ^^^^^^
