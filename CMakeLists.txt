@@ -150,9 +150,9 @@ if(MRN_GROONGA_BUNDLED)
 
   if(${MYSQL_VERSION} VERSION_LESS "10.7")
   else()
-   set(GRN_WITH_LZ4 "yes")
-   set(LIBLZ4_FOUND TRUE)
-   set(LIBLZ4_LIBS "" CACHE STRING "" FORCE)
+    # TODO: Add support for compression plugin-ed LZ4. Define
+    # MYSQL_DYNAMIC_PLUGIN?
+    set(GRN_WITH_LZ4 "no")
   endif()
 
   add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
