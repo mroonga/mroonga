@@ -66,6 +66,14 @@ Improvements
 
   This feature can use in ``mroonga_command()`` also.
 
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
+
+  This bug had existed since Mroonga 12.02.
+  Therefore, We can't groonga-normalizer-mysql from Mroonga 12.02 for Windows to Mroonga 12.08 for Windows.
+
 Thanks
 ^^^^^^
 

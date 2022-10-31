@@ -104,6 +104,23 @@ msgstr "以下はMariaDBの場合の例です。"
 msgid "This feature can use in ``mroonga_command()`` also."
 msgstr "この機能は、 ``mroonga_command()`` でも使えます。"
 
+msgid "Fixes"
+msgstr "修正"
+
+msgid ""
+"Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-"
+"mysql."
+msgstr ""
+"Windows版のMroongaに groonga-normalizer-mysql をバンドルしていなかった問題を"
+"修正しました。"
+
+msgid ""
+"This bug had existed since Mroonga 12.02. Therefore, We can't groonga-"
+"normalizer-mysql from Mroonga 12.02 for Windows to Mroonga 12.08 for Windows."
+msgstr ""
+"このバグは、 Mroonga 12.02から存在していました。したがって、Windows版の"
+"Mroonga 12.02 から 12.08 では groonga-normalizer-mysql を使えません。"
+
 msgid "Thanks"
 msgstr "感謝"
 
@@ -160,9 +177,6 @@ msgid ""
 msgstr ""
 "問題に関する詳細は、 `MySQL 8.0.29 リリースノート <https://dev.mysql.com/doc/"
 "relnotes/mysql/8.0/en/news-8-0-29.html>`_ を参照してください。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid ""
 "Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub "
