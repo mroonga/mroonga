@@ -1,3 +1,9 @@
+mysql-community-8.0-mroonga (12.09-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Mon, 31 Oct 2022 15:00:00 -0000
+
 mysql-community-8.0-mroonga (12.08-2) unstable; urgency=low
 
   * Rebuilt against MySQL 8.0.31.

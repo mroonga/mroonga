@@ -128,6 +128,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
-* Wed Oct 19 2023 Takashi Hashida <hashida@clear-code.com> - 12.09-1
+* Mon Oct 31 2022 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.09-1
 - New upstream release.
 
+* Wed Oct 19 2022 Takashi Hashida <hashida@clear-code.com> - 12.09-1
+- New upstream release.
