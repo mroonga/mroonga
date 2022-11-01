@@ -12,7 +12,9 @@ class MariaDB106MroongaPackageTask < MroongaPackageTask
   end
 
   def ubuntu_targets_default
-    ["jammy", "22.04"]
+    [
+      ["jammy", "22.04"],
+    ]
   end
 
   def yum_targets_default
