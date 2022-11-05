@@ -162,6 +162,16 @@ msgstr ""
 "AlmaLinux 8では、Mroonga 12.06からMariaDB提供のMariaDB 10.8パッケージを利用で"
 "きます。"
 
+msgid "AlmaLinux 8 (with MariaDB 10.9 package)"
+msgstr "AlmaLinux 8（MariaDB 10.9のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.9 on AlmaLinux 8 since "
+"Mroonga 12.09 release."
+msgstr ""
+"AlmaLinux 8では、Mroonga 12.09からMariaDB提供のMariaDB 10.9パッケージを利用で"
+"きます。"
+
 msgid "CentOS"
 msgstr ""
 
@@ -249,6 +259,36 @@ msgid ""
 "Mroonga 11.09 release."
 msgstr ""
 "CentOS 7では、Mroonga 11.09からMariaDB提供のMariaDB 10.6パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.7 package)"
+msgstr "CentOS 7（MariaDB 10.7のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.7 on CentOS 7 since "
+"Mroonga 12.02 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.02からMariaDB提供のMariaDB 10.7パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.8 package)"
+msgstr "CentOS 7（MariaDB 10.8のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.8 on CentOS 7 since "
+"Mroonga 12.06 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.06からMariaDB提供のMariaDB 10.8パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.9 package)"
+msgstr "CentOS 7（MariaDB 10.9のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.9 on CentOS 7 since "
+"Mroonga 12.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.09からMariaDB提供のMariaDB 10.9パッケージを利用でき"
 "ます。"
 
 msgid "Debian GNU/Linux"
