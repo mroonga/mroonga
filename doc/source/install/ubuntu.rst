@@ -16,17 +16,18 @@ Here are supported Ubuntu versions:
 
   * 18.04 Bionic Beaver
   * 20.04 Focal Fossa
-  * 21.10 Impish Indri
+  * 22.04 Jammy Jellyfish
 
 Here are Ubuntu versions that supports MySQL:
 
   * 18.04 Bionic Beaver
   * 20.04 Focal Fossa
-  * 21.10 Impish Indri
+  * 22.04 Jammy Jellyfish
 
 Here are Ubuntu versions that supports MariaDB:
 
   * 20.04 Focal Fossa
+  * 22.04 Jammy Jellyfish
 
 Enable the universe repository and the security update repository to
 install Mroonga::

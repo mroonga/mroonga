@@ -763,7 +763,7 @@ msgstr ""
 msgid "20.04 Focal Fossa"
 msgstr ""
 
-msgid "21.10 Impish Indri"
+msgid "22.04 Jammy Jellyfish"
 msgstr ""
 
 msgid "Here are Ubuntu versions that supports MySQL:"
