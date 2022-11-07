@@ -29,12 +29,17 @@ CREATE TABLE diaries(
   title TEXT
 ) DEFAULT CHARSET=utf8mb4;
 
+# Adding multiple lines in order to work MAX_EXECUTION_TIME(1) in MYSQL 5.7.
 INSERT INTO diaries VALUES ('Hello');
+INSERT INTO diaries VALUES ('World');
 
+# sleep(1) in SELECT is for working MAX_EXECUTION_TIME(1) in MYSQL 5.7.
+# sleep(1) in WHERE is for working MAX_EXECUTION_TIME(1) in MYSQL 8.0.
+# "OR title IS NOT NULL" is for getting records of diaries. The result of sleep(1) is false.
 --error ER_QUERY_TIMEOUT
-SELECT /*+ MAX_EXECUTION_TIME(1) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
-SELECT title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
-SELECT /*+ MAX_EXECUTION_TIME(10000) */ title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+SELECT /*+ MAX_EXECUTION_TIME(1) */ sleep(1), title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+SELECT sleep(1), title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
+SELECT /*+ MAX_EXECUTION_TIME(10000) */ sleep(1), title FROM diaries WHERE sleep(1) OR title IS NOT NULL;
 
 DROP TABLE diaries;
 
