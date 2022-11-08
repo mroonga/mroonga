@@ -682,9 +682,12 @@ typedef uint mrn_srid;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if (MYSQL_VERSION_ID >= 100203)
+#  if (MYSQL_VERSION_ID >= 100203) && (MYSQL_VERSION_ID < 100337)
 #    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
        (table->update_virtual_field(field))
+#  elif (MYSQL_VERSION_ID >= 100337)
+#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+       (table->update_virtual_field(field, false))
 #  else
 #    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
        (field->vcol_info->expr_item->save_in_field(field, 0))
