@@ -128,7 +128,7 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
                                   info->query_mode.default_column,
                                   0,
                                   NULL);
-    grn_rc rc = query_parser.parse(args->args[1], args->lengths[1]);
+    grn_rc rc = query_parser.parse(info->query_mode.query, info->query_mode.query_length);
     if (rc != GRN_SUCCESS) {
       if (message) {
         snprintf(message, MYSQL_ERRMSG_SIZE,
