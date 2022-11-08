@@ -50,11 +50,8 @@ typedef struct st_mrn_highlight_html_info
     const char* query;
     unsigned long query_length;
   } query_mode;
-  struct {
-    bool used;
-    const char *open_tag;
-    const char *close_tag;
-  } specify_tag;
+  const char *open_tag;
+  const char *close_tag;
 } mrn_highlight_html_info;
 
 static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
@@ -304,7 +301,6 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
 
   info->query_mode.used = false;
-  info->specify_tag.used = false;
 
   for (unsigned int i = 0; i < args->arg_count; i++) {
     const char *attribute = args->attributes[i];
@@ -316,28 +312,18 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
       info->query_mode.default_column = NULL;
       info->query_mode.query = args->args[i];
       info->query_mode.query_length = args->lengths[i];
-    }
-    if (attribute_length == strlen("open_tag") &&
-        strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
-      info->specify_tag.used = true;
-      info->specify_tag.open_tag = args->args[i];
+    } else if (attribute_length == strlen("open_tag") &&
+               strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
+      info->open_tag = args->args[i];
     } else if (attribute_length == strlen("close_tag") &&
                strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
-      info->specify_tag.used = true;
-      info->specify_tag.close_tag = args->args[i];
+      info->close_tag = args->args[i];
     }
   }
 
-  if (info->specify_tag.used) {
-    if (info->specify_tag.open_tag == nullptr) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-       "mroonga_highlight_html(): missing the required \"open_tag\" argument.");
-      goto error;
-    } else if (info->specify_tag.close_tag == nullptr) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-       "mroonga_highlight_html(): missing the required \"close_tag\" argument.");
-      goto error;
-    } 
+  if (info->open_tag == nullptr || info->close_tag == nullptr) {
+    info->open_tag = "<span class=\"keyword\">";
+    info->close_tag = "</span>";
   }
 
   {
@@ -460,24 +446,13 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   *is_null = 0;
   GRN_BULK_REWIND(&(info->result));
 
-  const char *open_tag;
-  const char *close_tag;
-
-  if (info->specify_tag.used) {
-    open_tag = info->specify_tag.open_tag;
-    close_tag = info->specify_tag.close_tag;
-  } else {
-    open_tag = "<span class=\"keyword\">";
-    close_tag = "</span>";
-  }
-
   if (!highlight_html(ctx,
                       reinterpret_cast<grn_pat *>(keywords),
                       args->args[0],
                       args->lengths[0],
                       &(info->result),
-                      open_tag,
-                      close_tag)) {
+                      info->open_tag,
+                      info->close_tag)) {
     goto error;
   }
 

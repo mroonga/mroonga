@@ -1,4 +1,5 @@
 SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
 'groonga',
 '</mark>' AS close_tag) AS highlighted;
-ERROR HY000: Can't initialize function 'mroonga_highlight_html'; mroonga_highlight_html(): missing the required "open_tag" argument.
+highlighted
+Mroonga is the <span class="keyword">Groonga</span> based storage engine.
