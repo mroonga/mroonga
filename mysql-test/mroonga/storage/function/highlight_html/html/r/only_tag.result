@@ -1,0 +1,3 @@
+SELECT mroonga_highlight_html('<div />' AS html, 'div') AS highlighted;
+highlighted
+<div />

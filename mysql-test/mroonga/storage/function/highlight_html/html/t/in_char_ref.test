@@ -1,4 +1,4 @@
-# Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+# Copyright(C) 2022 Takashi Hashida <hashida@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,12 +14,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/not_embedded.inc
---source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/load_mroonga_functions.inc
+--source ../../../../../include/mroonga/not_embedded.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/load_mroonga_functions.inc
 
-SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
-                              'mroonga') AS highlighted;
+SELECT mroonga_highlight_html('<span class="XampY">Mroonga &amp; XampY Groonga</span>' AS html,
+                              'amp') AS highlighted;
 
---source ../../../../include/mroonga/unload_mroonga_functions.inc
---source ../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc

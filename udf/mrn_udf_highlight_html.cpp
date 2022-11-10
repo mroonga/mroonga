@@ -35,6 +35,11 @@ extern mrn::ContextPool *mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
+enum class MrnTargetType {
+  TEXT = 0,
+  HTML = 1
+};
+
 typedef struct st_mrn_highlight_html_info
 {
   grn_ctx *ctx;
@@ -42,6 +47,7 @@ typedef struct st_mrn_highlight_html_info
   bool use_shared_db;
   grn_obj *keywords;
   grn_obj result;
+  MrnTargetType target_type;
   struct {
     bool used;
     grn_obj *table;
@@ -295,6 +301,13 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     info->query_mode.default_column = NULL;
   }
 
+  info->target_type = MrnTargetType::TEXT;
+
+  if (args->attribute_lengths[0] == strlen("html") &&
+      strncmp(args->attributes[0], "html", strlen("html")) == 0) {
+    info->target_type = MrnTargetType::HTML;
+  }
+
   {
     bool all_keywords_are_constant = true;
     for (unsigned int i = 1; i < args->arg_count; ++i) {
@@ -328,10 +341,60 @@ error:
   DBUG_RETURN(true);
 }
 
+static void highlight_html_check_in_char_ref_or_tag(grn_ctx *ctx,
+                                                    const char *str,
+                                                    size_t len,
+                                                    bool *in_char_ref,
+                                                    bool *in_tag)
+{
+  const char *current_position = str;
+  const char *end_position = str + len;
+  int char_length;
+
+  while (current_position < end_position) {
+    char_length = grn_charlen(ctx, current_position, end_position);
+    if (char_length == 0) {
+      break;
+    }
+
+    if (char_length == 1) {
+      switch (*current_position) {
+      case '&':
+        *in_char_ref = true;
+        break;
+      case ';':
+        *in_char_ref = false;
+        break;
+      case '<':
+        *in_tag = true;
+        break;
+      case '>': 
+        *in_tag = false;
+        break;
+      }
+    }
+    current_position += char_length;
+  }
+}
+
+static void highlight_html_put_text(grn_ctx *ctx,
+                                    grn_obj *buf,
+                                    const char *str,
+                                    size_t len,
+                                    bool need_escape)
+{
+  if (need_escape) {
+    grn_text_escape_xml(ctx, buf, str, len);
+  } else {
+    GRN_TEXT_PUT(ctx, buf, str, len);
+  }
+}
+
 static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
+                           MrnTargetType target_type,
                            grn_obj *output)
 {
   MRN_DBUG_ENTER_FUNCTION();
@@ -341,6 +404,11 @@ static bool highlight_html(grn_ctx *ctx,
     size_t open_tag_length = strlen(open_tag);
     const char *close_tag = "</span>";
     size_t close_tag_length = strlen(close_tag);
+    bool need_escape = target_type == MrnTargetType::TEXT;
+    bool skip_tagging_if_need = target_type == MrnTargetType::HTML;
+    bool skip_tagging = false;
+    bool in_char_ref = false;
+    bool in_tag = false;
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -356,26 +424,41 @@ static bool highlight_html(grn_ctx *ctx,
                                 hits, MAX_N_HITS, &rest);
       for (int i = 0; i < n_hits; i++) {
         if ((hits[i].offset - previous) > 0) {
-          grn_text_escape_xml(ctx,
-                              output,
-                              target + previous,
-                              hits[i].offset - previous);
+          highlight_html_put_text(ctx,
+                                  output,
+                                  target + previous,
+                                  hits[i].offset - previous,
+                                  need_escape);
         }
-        GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
-        grn_text_escape_xml(ctx,
-                            output,
-                            target + hits[i].offset,
-                            hits[i].length);
-        GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
+        if (skip_tagging_if_need) {
+            highlight_html_check_in_char_ref_or_tag(ctx,
+                                             target + previous,
+                                             hits[i].offset - previous,
+                                             &in_char_ref,
+                                             &in_tag);
+            skip_tagging = in_char_ref || in_tag;
+        }
+        if (!skip_tagging) {                        
+          GRN_TEXT_PUT(ctx, output, open_tag, open_tag_length);
+        }
+        highlight_html_put_text(ctx,
+                                output,
+                                target + hits[i].offset,
+                                hits[i].length,
+                                need_escape);
+        if (!skip_tagging) {                        
+          GRN_TEXT_PUT(ctx, output, close_tag, close_tag_length);
+        }
         previous = hits[i].offset + hits[i].length;
       }
 
       chunk_length = rest - target;
       if ((chunk_length - previous) > 0) {
-        grn_text_escape_xml(ctx,
-                            output,
-                            target + previous,
-                            target_length - previous);
+        highlight_html_put_text(ctx,
+                                output,
+                                target + previous,
+                                target_length - previous,
+                                need_escape);
       }
       target_length -= chunk_length;
       target = rest;
@@ -419,6 +502,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                       reinterpret_cast<grn_pat *>(keywords),
                       args->args[0],
                       args->lengths[0],
+                      info->target_type,
                       &(info->result))) {
     goto error;
   }
