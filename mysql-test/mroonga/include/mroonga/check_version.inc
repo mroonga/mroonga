@@ -16,8 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --disable_query_log
-let $version_major =
-  `SELECT CAST(SUBSTRING_INDEX(@@global.version, '.', 1) AS UNSIGNED);`;
+let $version_major = `SELECT CAST(SUBSTRING_INDEX(@@global.version, '.', 1) AS UNSIGNED);`;
 let $version_minor =
   `SELECT CAST(SUBSTRING_INDEX(
      SUBSTRING_INDEX(@@global.version, '.', 2),
@@ -59,29 +58,50 @@ let $version_10_5_or_later = `SELECT $version_major_minor >= 10.5`;
 let $version_10_3_37_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100337;`;
+           ($version_micro)) >= 100337 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100400;`;
 let $version_10_4_27_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100427;`;
+           ($version_micro)) >= 100427 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100500;`;
 let $version_10_5_18_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100518;`;
+           ($version_micro)) >= 100518 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100600;`;
 let $version_10_6_11_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100611;`;
+           ($version_micro)) >= 100611 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100700;`;
 let $version_10_7_7_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100707;`;
+           ($version_micro)) >= 100707 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100800;`;
 let $version_10_8_6_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100806;`;
+           ($version_micro)) >= 100806 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 100800;`;
 let $version_10_9_4_or_later =
   `SELECT (($version_major * 100) +
            ($version_minor * 10) +
-           ($version_micro)) >= 100904;`;
+           ($version_micro)) >= 100904 &&
+          (($version_major * 100) +
+           ($version_minor * 10) +
+           ($version_micro)) < 101000;`;
 --enable_query_log
