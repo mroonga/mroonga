@@ -1,4 +1,3 @@
-# Copyright(C) 2014 Naoya Murakami <naoya@createfield.com>
 # Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -15,14 +14,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+
 --source ../../../../include/mroonga/not_embedded.inc
---source ../../../../include/mroonga/skip_mariadb_10_3_37_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_4_27_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_5_18_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_6_11_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_7_7_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_8_6_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_9_4_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_3_37_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_4_27_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_5_18_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_6_11_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_7_7_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_8_6_or_later.inc
+--source ../../../../include/mroonga/have_mariadb_10_9_4_or_later.inc
+--source ../../../../include/mroonga/have_innodb.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
@@ -30,18 +31,14 @@ DROP TABLE IF EXISTS diaries;
 --enable_warnings
 
 CREATE TABLE diaries (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  body VARCHAR(140)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
---replace_regex /int\([0-9]+\)/int/
-SHOW CREATE TABLE diaries;
+  title varchar(256) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=big5;
 
-ALTER TABLE diaries ADD title VARCHAR(40) FIRST;
---replace_regex /int\([0-9]+\)/int/
-SHOW CREATE TABLE diaries;
+INSERT INTO diaries VALUES ('');
 
-INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");
-SELECT * FROM diaries;
+--error 9502
+ALTER TABLE diaries ENGINE=Mroonga;
+SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;
 
