@@ -17,9 +17,9 @@ Syntax
 
 ``mroonga_highlight_html()`` has required parameter and optional parameter::
 
-  mroonga_highlight_html(text, query AS query)
+  mroonga_highlight_html(text [AS html], query AS query)
 
-  mroonga_highlight_html(text, keyword1, ..., keywordN)
+  mroonga_highlight_html(text [AS html], keyword1, ..., keywordN)
 
 ``AS query`` is very important. You must specify it to extract keywords from query.
 
@@ -70,6 +70,50 @@ There is one required parameter.
 """"""""
 
 The column name of string or string value to be highlighted.
+
+If you specify ``text`` with ``AS html`` like ``text AS html``, Mroonga regards ``text`` as HTML.
+You must specify ``AS html`` when you want to highlight a HTML document.
+
+When ``AS html`` is specified, Mroonga ignores keywords inside of HTML tags and dones't escape special characters 
+in HTML such as ``<``, ``>`` in ``text``.
+
+Here is a sample to highlight a HTML document without ``AS html``.
+
+.. code-block:: sql
+
+   SELECT mroonga_highlight_html('<span>In the span tag</span>', 'span') AS highlighted;
+
+Here is the result of the sample.
+
+.. code-block:: text
+
+   +---------------------------------------------------------------------------------------------------------------------------------+
+   | highlighted                                                                                                                     |
+   +---------------------------------------------------------------------------------------------------------------------------------+
+   | &lt;<span class="keyword">span</span>&gt;In the <span class="keyword">span</span> tag&lt;/<span class="keyword">span</span>&gt; |
+   +---------------------------------------------------------------------------------------------------------------------------------+
+
+In this sample, ``<`` and ``>`` are escaped, and ``span`` in the ``<span>`` is highlighted.
+The result is not a correct HTML. 
+
+Here is a sample to highlight the same HTML document with ``AS html``.
+
+.. code-block:: sql
+
+   SELECT mroonga_highlight_html('<span>In the span tag</span>' AS html, 'span') AS highlighted;
+
+Here is the result of the sample.
+
+.. code-block:: text
+
+   +-----------------------------------------------------------+
+   | highlighted                                               |
+   +-----------------------------------------------------------+
+   | <span>In the <span class="keyword">span</span> tag</span> |
+   +-----------------------------------------------------------+
+
+Contrary to the previous sample, ``<`` and ``>`` are not escaped, and ``span`` in the ``<span>`` is not highlighted.
+The result is a correct HTML.
 
 Optional parameters
 ^^^^^^^^^^^^^^^^^^^
