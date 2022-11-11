@@ -1,4 +1,3 @@
-# Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
 # Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -15,13 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../include/mroonga/skip_mariadb_10_3_37_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_4_27_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_5_18_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_6_11_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_7_7_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_8_6_or_later.inc
---source ../../../../include/mroonga/skip_mariadb_10_9_4_or_later.inc
+--source ../../../../include/mroonga/skip_mysql_5_7.inc
+--source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
@@ -46,36 +40,18 @@ CREATE TABLE items (
              "gold",
              "yellow",
              "chartreuse",
-             "lawn green",
-
-             "green",
-             "spring green",
-             "medium spring green",
-             "cyan",
-             "deep sky blue",
-             "blue",
-             "medium blue",
-             "dark violet",
-
-             "dark magenta",
-             "magenta",
-             "dark red",
-             "brown",
-             "firebrick",
-             "indian red",
-             "light coral",
-             "salmon"),
+             "lawn green"),
   INDEX (colors)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE items;
 
-INSERT INTO items VALUES ("t-shart", "black,white");
-INSERT INTO items VALUES ("hat", "white,dark violet");
-INSERT INTO items VALUES ("parka", "green,brown,red");
+INSERT INTO items VALUES ("t-shart", "black,gray");
+INSERT INTO items VALUES ("hat", "white,dark gray");
+INSERT INTO items VALUES ("parka", "chartreuse,orange");
 
 SELECT * FROM items;
 
-SELECT * FROM items WHERE colors = "white,dark violet";
+SELECT * FROM items WHERE colors = "dark gray,white";
 
 DROP TABLE items;
 

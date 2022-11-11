@@ -46,5 +46,4 @@ INSERT INTO diaries (content) VALUES ("Tommorow will be shiny day!");
 SHOW TABLES FROM performance_schema LIKE 'threads';
 
 DROP TABLE diaries;
-
 --source ../../include/mroonga/have_mroonga_deinit.inc
