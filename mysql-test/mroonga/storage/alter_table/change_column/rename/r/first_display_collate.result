@@ -1,0 +1,28 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+id VARCHAR(10) PRIMARY KEY,
+title VARCHAR(40),
+body VARCHAR(140)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+SHOW CREATE TABLE diaries;
+Table	Create Table
+diaries	CREATE TABLE `diaries` (
+  `id` varchar(10) NOT NULL,
+  `title` varchar(40) DEFAULT NULL,
+  `body` varchar(140) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+ALTER TABLE diaries CHANGE body description VARCHAR(140) FIRST;
+SHOW CREATE TABLE diaries;
+Table	Create Table
+diaries	CREATE TABLE `diaries` (
+  `description` varchar(140) DEFAULT NULL,
+  `id` varchar(10) NOT NULL,
+  `title` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+INSERT INTO diaries (id, title, description) values ("id", "groonga (1)", "starting groonga.");
+SELECT * FROM diaries;
+description	id	title
+starting groonga.	id	groonga (1)
+DROP TABLE diaries;
