@@ -21,7 +21,7 @@ Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `description` varchar(140) DEFAULT NULL,
   `internal_id` varchar(10) NOT NULL,
-  `subject` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subject` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`internal_id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (subject, description, internal_id)
