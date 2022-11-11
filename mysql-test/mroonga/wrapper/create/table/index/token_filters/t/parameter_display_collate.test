@@ -1,5 +1,4 @@
-# Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
-# Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright(C) 2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,36 +14,34 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+--source ../../../../../../include/mroonga/skip_mysql_5_7.inc
 --source ../../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_3_37_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_4_27_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_5_18_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_6_11_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_7_7_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_8_6_or_later.inc
---source ../../../../../../include/mroonga/skip_mariadb_10_9_4_or_later.inc
 --source ../../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../../include/mroonga/have_innodb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_groonga_plugin_register.inc
+--source ../../../../../../include/mroonga/load_mroonga_functions.inc
 
---disable_warnings
-DROP TABLE IF EXISTS memos;
---enable_warnings
+--disable_query_log
+DROP DATABASE test;
+CREATE DATABASE test;
+USE test;
+--enable_query_log
+
+SELECT mroonga_command("plugin_register token_filters/stop_word");
 
 SET NAMES utf8mb4;
 
 CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
-  content TEXT NOT NULL,
-  FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
+  content VARCHAR(64) NOT NULL,
+  FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
 ) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 SHOW CREATE TABLE memos;
 
-INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");
-
-SELECT * FROM memos
-  WHERE MATCH (content) AGAINST ("+カロリー" IN BOOLEAN MODE);
+SELECT mroonga_command("dump --dump_plugins no");
 
 DROP TABLE memos;
 
+--source ../../../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../../../include/mroonga/have_mroonga_deinit.inc
