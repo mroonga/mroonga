@@ -19,6 +19,6 @@
 
 if ($mariadb) {
   if ($version_10_9_4_or_later) {
-    --skip This test is for MariaDB version 10.9.4 or later
+    --skip This test is not for MariaDB version 10.9.4 or later
   }
 }
