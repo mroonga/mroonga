@@ -1,6 +1,4 @@
-# Copyright(C) 2014 Naoya Murakami <naoya@createfield.com>
-# Copyright(C) 2020 Sutou Kouhei <kou@clear-code.com>
-# Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright(C) 2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,15 +14,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/skip_mariadb_10_3_37_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_4_27_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_5_18_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_6_11_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_7_7_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_8_6_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_9_4_or_later.inc
---source ../../../../../include/mroonga/not_embedded.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/not_embedded.inc
+--source ../../../../include/mroonga/skip_mysql_5_7.inc
+--source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
@@ -37,12 +30,15 @@ CREATE TABLE diaries (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE diaries;
 
-ALTER TABLE diaries CHANGE body description VARCHAR(140);
+INSERT INTO diaries (id, title, body) values ("1", "groonga (1)", "starting groonga.");
+SELECT * FROM diaries;
+
+ALTER TABLE diaries MODIFY body VARCHAR(140) AFTER id;
 SHOW CREATE TABLE diaries;
 
-INSERT INTO diaries (id, title, description) values ("id", "groonga (1)", "starting groonga.");
+INSERT INTO diaries (id, title, body) values ("2", "groonga (2)", "started groonga.");
 SELECT * FROM diaries;
 
 DROP TABLE diaries;
 
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

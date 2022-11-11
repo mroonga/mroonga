@@ -1,5 +1,3 @@
-# Copyright(C) 2014 Naoya Murakami <naoya@createfield.com>
-# Copyright(C) 2020 Sutou Kouhei <kou@clear-code.com>
 # Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -16,33 +14,28 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/skip_mariadb_10_3_37_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_4_27_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_5_18_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_6_11_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_7_7_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_8_6_or_later.inc
---source ../../../../../include/mroonga/skip_mariadb_10_9_4_or_later.inc
+--source ../../../../../include/mroonga/skip_mysql_5_7.inc
+--source ../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 --source ../../../../../include/mroonga/not_embedded.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
-DROP TABLE IF EXISTS diaries;
+DROP TABLE IF EXISTS memos;
 --enable_warnings
 
-CREATE TABLE diaries (
-  id VARCHAR(10) PRIMARY KEY,
-  title VARCHAR(40),
-  body VARCHAR(140)
+CREATE TABLE memos (
+  content varchar(32)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-SHOW CREATE TABLE diaries;
 
-ALTER TABLE diaries CHANGE body description VARCHAR(140);
-SHOW CREATE TABLE diaries;
+INSERT INTO memos (content) values ("Starting Groonga...");
+INSERT INTO memos (content) values ("Started Groonga.");
+INSERT INTO memos (content) values ("Starting Mroonga...");
 
-INSERT INTO diaries (id, title, description) values ("id", "groonga (1)", "starting groonga.");
-SELECT * FROM diaries;
+ALTER TABLE memos ADD FULLTEXT INDEX content_index (content);
+SHOW CREATE TABLE memos;
 
-DROP TABLE diaries;
+SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");
+
+DROP TABLE memos;
 
 --source ../../../../../include/mroonga/have_mroonga_deinit.inc
