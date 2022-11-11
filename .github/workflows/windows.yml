@@ -227,7 +227,6 @@ jobs:
             mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip `
             .
           cd mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}
-          Remove-Item mysql-test -Recurse -Force
           netsh advfirewall firewall add rule `
             name="mariadb" `
             dir=in `
