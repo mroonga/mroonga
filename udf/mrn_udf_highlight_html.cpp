@@ -331,7 +331,7 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
   if (!info->close_tag) {
     info->close_tag = "</span>";
-    info->close_tag_length = strlen("</span>");
+    info->close_tag_length = strlen(info->close_tag);
   }
 
   {
