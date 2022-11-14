@@ -1,0 +1,4 @@
+SELECT mroonga_highlight_html('Groonga should be highlighted but [ and ] should not be highlighted',
+'Groonga', '[' AS open_tag, ']' AS close_tag) AS highlighted;
+highlighted
+[Groonga] should be highlighted but [ and ] should not be highlighted
