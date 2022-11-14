@@ -96,7 +96,7 @@ let $version_10_8_6_or_later =
            ($version_micro)) >= 100806 &&
           (($version_major * 10000) +
            ($version_minor * 100) +
-           ($version_micro)) < 100800;`;
+           ($version_micro)) < 100900;`;
 let $version_10_9_4_or_later =
   `SELECT (($version_major * 10000) +
            ($version_minor * 100) +
