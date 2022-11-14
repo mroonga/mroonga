@@ -51,7 +51,9 @@ typedef struct st_mrn_highlight_html_info
     unsigned long query_length;
   } query_mode;
   const char *open_tag;
+  unsigned long open_tag_length;
   const char *close_tag;
+  unsigned long close_tag_length;
 } mrn_highlight_html_info;
 
 static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
@@ -173,8 +175,8 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       if (!args->args[i]) {
         continue;
       }
-      const char *attribute = args->attributes[i];
-      unsigned long attribute_length = args->attribute_lengths[i];
+      auto *attribute = args->attributes[i];
+      auto attribute_length = args->attribute_lengths[i];
       if (attribute_length == strlen("open_tag") &&
           strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
         continue;
@@ -302,9 +304,9 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   info->query_mode.used = false;
 
-  for (unsigned int i = 0; i < args->arg_count; i++) {
-    const char *attribute = args->attributes[i];
-    unsigned long attribute_length = args->attribute_lengths[i];
+  for (unsigned int i = 1; i < args->arg_count; i++) {
+    auto *attribute = args->attributes[i];
+    auto attribute_length = args->attribute_lengths[i];
     if (args->attribute_lengths[i] == strlen("query") &&
         strncmp(args->attributes[i], "query", strlen("query")) == 0) {
       info->query_mode.used = true;
@@ -315,15 +317,21 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     } else if (attribute_length == strlen("open_tag") &&
                strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
       info->open_tag = args->args[i];
+      info->open_tag_length = args->lengths[i];
     } else if (attribute_length == strlen("close_tag") &&
                strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
       info->close_tag = args->args[i];
+      info->close_tag_length = args->lengths[i];
     }
   }
 
-  if (info->open_tag == nullptr || info->close_tag == nullptr) {
+  if (!info->open_tag) {
     info->open_tag = "<span class=\"keyword\">";
+    info->open_tag_length = strlen("<span class=\"keyword\">");
+  }
+  if (!info->close_tag) {
     info->close_tag = "</span>";
+    info->close_tag_length = strlen("</span>");
   }
 
   {
@@ -363,15 +371,16 @@ static bool highlight_html(grn_ctx *ctx,
                            grn_pat *keywords,
                            const char *target,
                            size_t target_length,
-                           grn_obj *output,
-                           const char *open_tag,
-                           const char *close_tag)
+                           mrn_highlight_html_info *info)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
   {
-    size_t open_tag_length = strlen(open_tag);
-    size_t close_tag_length = strlen(close_tag);
+    const char *open_tag = info->open_tag;
+    size_t open_tag_length = info->open_tag_length;
+    const char *close_tag = info->close_tag;
+    size_t close_tag_length = info->close_tag_length;
+    grn_obj *output = &(info->result);
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
@@ -450,9 +459,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
                       reinterpret_cast<grn_pat *>(keywords),
                       args->args[0],
                       args->lengths[0],
-                      &(info->result),
-                      info->open_tag,
-                      info->close_tag)) {
+                      info)) {
     goto error;
   }
 

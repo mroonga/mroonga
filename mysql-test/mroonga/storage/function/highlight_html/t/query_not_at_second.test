@@ -1,4 +1,4 @@
-# Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright(C) 2022 Takashi Hashida <hashida@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,8 +19,7 @@
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
 SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.',
-                              'groonga',
-                              '<span class="my_keyword">' AS open_tag) AS highlighted;
+                              '<mark>' AS open_tag, '</mark>' AS close_tag, 'Mroonga OR Groonga' AS query) AS highlighted;
 
 --source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
