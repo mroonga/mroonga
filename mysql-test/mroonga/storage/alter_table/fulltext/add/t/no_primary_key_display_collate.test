@@ -14,9 +14,11 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+--source ../../../../../include/mroonga/not_embedded.inc
 --source ../../../../../include/mroonga/skip_mysql_5_7.inc
 --source ../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
---source ../../../../../include/mroonga/not_embedded.inc
+--source ../../../../include/mroonga/skip_mariadb_10_5_17_or_earlier.inc
+--source ../../../../include/mroonga/skip_mariadb_10_6_10_or_earlier.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings

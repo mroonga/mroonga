@@ -104,4 +104,19 @@ let $version_10_9_4_or_later =
           (($version_major * 10000) +
            ($version_minor * 100) +
            ($version_micro)) < 101000;`;
+
+let $version_10_5_17_or_earlier =
+  `SELECT (($version_major * 10000) +
+           ($version_minor * 100) +
+           ($version_micro)) <= 100517 &&
+          (($version_major * 10000) +
+           ($version_minor * 100) +
+           ($version_micro)) >= 100500;`;
+let $version_10_6_10_or_earlier =
+  `SELECT (($version_major * 10000) +
+           ($version_minor * 100) +
+           ($version_micro)) <= 100610 &&
+          (($version_major * 10000) +
+           ($version_minor * 100) +
+           ($version_micro)) >= 100600;`;
 --enable_query_log
