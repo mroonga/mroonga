@@ -327,7 +327,7 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   if (!info->open_tag) {
     info->open_tag = "<span class=\"keyword\">";
-    info->open_tag_length = strlen("<span class=\"keyword\">");
+    info->open_tag_length = strlen(info->open_tag);
   }
   if (!info->close_tag) {
     info->close_tag = "</span>";
