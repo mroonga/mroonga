@@ -26,10 +26,12 @@ CREATE TABLE diaries (
   body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 --replace_regex /int\([0-9]+\)/int/
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 ALTER TABLE diaries ADD title VARCHAR(40) FIRST;
 --replace_regex /int\([0-9]+\)/int/
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title, body) values ("groonga (1)", "starting groonga.");

@@ -28,6 +28,7 @@ CREATE TABLE memos (
   content TEXT NOT NULL,
   FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
 ) DEFAULT CHARSET=utf8mb4;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");

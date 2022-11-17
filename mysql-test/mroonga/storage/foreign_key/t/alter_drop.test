@@ -37,6 +37,7 @@ CREATE TABLE articles (
 ALTER TABLE articles DROP FOREIGN KEY comment;
 
 --replace_regex /int\([0-9]+\)/int/ /`test`\.//
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE articles;
 
 SELECT * FROM information_schema.referential_constraints;

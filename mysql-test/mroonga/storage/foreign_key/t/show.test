@@ -31,6 +31,7 @@ CREATE TABLE refer (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --replace_result "(11)" "" " COLLATE=utf8mb4_general_ci" "" "`test`." ""
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE refer;
 
 DROP TABLE refer;

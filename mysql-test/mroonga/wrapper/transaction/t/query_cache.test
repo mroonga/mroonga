@@ -29,6 +29,7 @@ DROP TABLE IF EXISTS simple_table;
 CREATE TABLE simple_table (
   id INT PRIMARY KEY
 ) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET=UTF8MB4;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE simple_table;
 
 INSERT INTO simple_table (id) VALUES (1),(2);

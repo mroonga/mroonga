@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
   temperature DECIMAL(6, 3)
 ) ENGINE InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (temperature) VALUES (21.281);
@@ -37,6 +38,7 @@ INSERT INTO diaries (temperature) VALUES (14.213);
 INSERT INTO diaries (temperature) VALUES (17.821);
 SELECT * FROM diaries;
 
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;

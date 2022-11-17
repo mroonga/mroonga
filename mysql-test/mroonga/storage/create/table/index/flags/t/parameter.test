@@ -31,6 +31,7 @@ CREATE TABLE memos (
   content VARCHAR(64) NOT NULL,
   FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
 ) DEFAULT CHARSET=utf8mb4;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 SELECT mroonga_command("dump --dump_plugins no --dump_schema no");

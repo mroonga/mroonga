@@ -34,6 +34,7 @@ CREATE TABLE memos (
   content VARCHAR(64) NOT NULL,
   FULLTEXT INDEX (content) TOKEN_FILTERS='TokenFilterStopWord,TokenFilterStopWord'
 ) DEFAULT CHARSET=utf8mb4;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 SELECT mroonga_command("dump --dump_plugins no");

@@ -25,6 +25,7 @@ CREATE TABLE bugs (
   tag VARCHAR(64) COMMENT 'It must consist of only alphabet and number.'
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;

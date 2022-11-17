@@ -26,6 +26,7 @@ CREATE TABLE timestamps (
   id INT PRIMARY KEY AUTO_INCREMENT,
   create_dt DATE
 ) DEFAULT CHARSET UTF8MB4;
+--replace_regex / COLLATE=utf8mb4_general_ci//
 SHOW CREATE TABLE timestamps;
 
 INSERT INTO timestamps (create_dt) VALUES ("2012-00-01");

@@ -30,6 +30,7 @@ CREATE TABLE diaries (
 ) DEFAULT CHARSET=UTF8MB4 COMMENT='ENGINE "MyISAM"';
 # For MariaDB 10.2.3
 -- replace_result current_timestamp() CURRENT_TIMESTAMP
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (date, title, content)

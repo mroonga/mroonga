@@ -26,12 +26,14 @@ CREATE TABLE diaries (
   id varchar(10) NOT NULL,
   INDEX (id)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (id) values ('1');
 SELECT * FROM diaries;
 
 ALTER TABLE diaries MODIFY id double NOT NULL;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (id) values (2.0);

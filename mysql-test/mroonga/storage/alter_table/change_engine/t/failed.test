@@ -30,6 +30,8 @@ INSERT INTO diaries VALUES ('');
 
 --error 9502
 ALTER TABLE diaries ENGINE=Mroonga;
+
+--replace_regex / COLLATE=big5_chinese_ci//
 SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;

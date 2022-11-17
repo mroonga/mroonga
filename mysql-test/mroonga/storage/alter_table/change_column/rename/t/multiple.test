@@ -26,12 +26,14 @@ CREATE TABLE diaries (
   title VARCHAR(40),
   body VARCHAR(140)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 ALTER TABLE diaries
   CHANGE body description VARCHAR(140) FIRST,
   CHANGE title subject VARCHAR(40) AFTER internal_id,
   CHANGE id internal_id VARCHAR(10);
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (subject, description, internal_id)

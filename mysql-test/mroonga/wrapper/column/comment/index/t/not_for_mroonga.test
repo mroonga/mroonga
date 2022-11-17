@@ -30,6 +30,7 @@ CREATE TABLE bugs (
 ) DEFAULT CHARSET=utf8mb4
   COMMENT='engine "InnoDB"';
 
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;
