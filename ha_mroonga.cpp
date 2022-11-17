@@ -1372,8 +1372,8 @@ static void mrn_enable_back_trace_update(THD *thd,
                                          const void *save)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  const bool new_value = *static_cast<const bool *>(save);
-  bool *old_value_ptr = static_cast<bool *>(var_ptr);
+  auto new_value = *static_cast<const mrn_bool *>(save);
+  auto old_value_ptr = static_cast<mrn_bool *>(var_ptr);
 
   *old_value_ptr = new_value;
 
