@@ -782,6 +782,7 @@ static mrn_bool mrn_libgroonga_embedded = true;
 static mrn_bool mrn_libgroonga_embedded = false;
 #endif
 static mrn_bool mrn_enable_back_trace = true;
+static mrn_bool mrn_enable_reference_count = false;
 
 static mrn::variables::ActionOnError mrn_action_on_fulltext_query_error_default =
   mrn::variables::ACTION_ON_ERROR_ERROR_AND_LOG;
@@ -1392,6 +1393,32 @@ static MYSQL_SYSVAR_BOOL(enable_back_trace,
                          mrn_enable_back_trace_update,
                          true);
 
+static void mrn_enable_reference_count_update(THD *thd,
+                                              mrn_sys_var *var,
+                                              void *var_ptr,
+                                              const void *save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const mrn_bool new_value = *static_cast<const mrn_bool *>(save);
+  mrn_bool *old_value_ptr = static_cast<mrn_bool *>(var_ptr);
+
+  *old_value_ptr = new_value;
+
+#if GRN_VERSION_OR_LATER(12, 1, 0)
+  grn_set_reference_count_enable(new_value);
+#endif
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_BOOL(enable_reference_count,
+                         mrn_enable_reference_count,
+                         PLUGIN_VAR_RQCMDARG,
+                         "Whether reference count feature is enabled or not",
+                         NULL,
+                         mrn_enable_reference_count_update,
+                         false);
+
 static mrn_sys_var *mrn_system_variables[] =
 {
   MYSQL_SYSVAR(log_level),
@@ -1418,6 +1445,7 @@ static mrn_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(enable_operations_recording),
   MYSQL_SYSVAR(condition_push_down_type),
   MYSQL_SYSVAR(enable_back_trace),
+  MYSQL_SYSVAR(enable_reference_count),
   NULL
 };
 
@@ -2348,6 +2376,9 @@ static int mrn_init(void *p)
 
 #if GRN_VERSION_OR_LATER(12, 0, 1)
   grn_set_back_trace_enable(mrn_enable_back_trace);
+#endif
+#if GRN_VERSION_OR_LATER(12, 1, 0)
+  grn_set_reference_count_enable(mrn_enable_reference_count);
 #endif
 
   grn_default_logger_set_path(mrn_log_file_path);
