@@ -35,7 +35,6 @@ CREATE TABLE articles (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --replace_regex /int\([0-9]+\)/int/ /`test`\.//
---replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE articles;
 
 --replace_regex /RESTRICT/NO ACTION/
