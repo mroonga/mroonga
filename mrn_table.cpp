@@ -1128,6 +1128,9 @@ void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info)
 mrn::SlotData *mrn_get_slot_data(THD *thd, bool can_create)
 {
   MRN_DBUG_ENTER_FUNCTION();
+  if (!thd) {
+    DBUG_RETURN(nullptr);
+  }
   mrn::SlotData *slot_data =
     static_cast<mrn::SlotData *>(thd_get_ha_data(thd, mrn_hton_ptr));
   if (!slot_data && can_create) {
