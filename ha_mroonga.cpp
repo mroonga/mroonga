@@ -1231,7 +1231,7 @@ static mrn_bool grn_check_zlib_support()
   GRN_BOOL_INIT(&grn_support_p, 0);
   grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_ZLIB, &grn_support_p);
   is_zlib_support = (GRN_BOOL_VALUE(&grn_support_p));
-  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+  GRN_OBJ_FIN(&mrn_ctx, &grn_support_p);
 
   return is_zlib_support;
 }
@@ -1251,7 +1251,7 @@ static mrn_bool grn_check_lz4_support()
   GRN_BOOL_INIT(&grn_support_p, 0);
   grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_LZ4, &grn_support_p);
   is_lz4_support = (GRN_BOOL_VALUE(&grn_support_p));
-  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+  GRN_OBJ_FIN(&mrn_ctx, &grn_support_p);
 
   return is_lz4_support;
 }
@@ -1271,7 +1271,7 @@ static mrn_bool grn_check_zstd_support()
   GRN_BOOL_INIT(&grn_support_p, 0);
   grn_obj_get_info(&mrn_ctx, NULL, GRN_INFO_SUPPORT_ZSTD, &grn_support_p);
   is_zstd_support = (GRN_BOOL_VALUE(&grn_support_p));
-  grn_obj_unlink(&mrn_ctx, &grn_support_p);
+  GRN_OBJ_FIN(&mrn_ctx, &grn_support_p);
 
   return is_zstd_support;
 }
