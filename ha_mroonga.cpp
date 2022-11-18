@@ -5758,14 +5758,14 @@ void ha_mroonga::storage_close_columns(void)
 {
   int n_columns = table->s->fields;
   for (int i = 0; i < n_columns; i++) {
-    grn_obj *column = grn_columns[i];
-    if (column) {
-      grn_obj_unlink(ctx, column);
-    }
-
     grn_column_cache *column_cache = grn_column_caches[i];
     if (column_cache) {
       grn_column_cache_close(ctx, column_cache);
+    }
+
+    grn_obj *column = grn_columns[i];
+    if (column) {
+      grn_obj_unlink(ctx, column);
     }
 
     grn_obj *range = grn_column_ranges[i];
