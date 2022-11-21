@@ -8,7 +8,7 @@ Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   KEY `id` (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (id) values ('1');
 SELECT * FROM diaries;
 id
@@ -19,7 +19,7 @@ Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` double NOT NULL,
   KEY `id` (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (id) values (2.0);
 SELECT * FROM diaries;
 id

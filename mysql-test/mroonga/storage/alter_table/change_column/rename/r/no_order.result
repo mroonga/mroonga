@@ -11,7 +11,7 @@ diaries	CREATE TABLE `diaries` (
   `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 ALTER TABLE diaries CHANGE body description VARCHAR(140);
 SHOW CREATE TABLE diaries;
 Table	Create Table
@@ -20,7 +20,7 @@ diaries	CREATE TABLE `diaries` (
   `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (id, title, description) values ("id", "groonga (1)", "starting groonga.");
 SELECT * FROM diaries;
 id	title	description
