@@ -25,7 +25,7 @@ CREATE TABLE diaries (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(40)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
---replace_regex /int\([0-9]+\)/int/
+--replace_regex /int\([0-9]+\)/int/ / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (title) VALUES ("survey");
@@ -44,7 +44,7 @@ INSERT INTO diaries (title, body, published, created_at)
        VALUES ("groonga (2)", "started groonga.", FALSE, "2014-2-9 12:19:00");
 SELECT * FROM diaries;
 
---replace_regex /int\([0-9]+\)/int/
+--replace_regex /int\([0-9]+\)/int/ / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;

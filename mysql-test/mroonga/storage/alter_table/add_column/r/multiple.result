@@ -7,9 +7,9 @@ SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (title) VALUES ("survey");
 SELECT * FROM diaries;
 id	title
@@ -34,11 +34,11 @@ started groonga.	3	0	groonga (2)	2014-02-09 12:19:00
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(140) DEFAULT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   `published` tinyint DEFAULT NULL,
-  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(40) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4
 DROP TABLE diaries;

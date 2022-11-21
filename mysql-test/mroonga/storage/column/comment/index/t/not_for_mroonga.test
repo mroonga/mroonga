@@ -26,7 +26,7 @@ CREATE TABLE bugs (
   INDEX (id) COMMENT 'ID search is required.'
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---replace_regex / COLLATE=utf8mb4_unicode_ci//
+--replace_regex / COLLATE=| utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;
