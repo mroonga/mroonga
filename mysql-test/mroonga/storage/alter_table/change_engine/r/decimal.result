@@ -6,7 +6,7 @@ SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `temperature` decimal(6,3) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 INSERT INTO diaries (temperature) VALUES (21.281);
 SELECT * FROM diaries;
 temperature
@@ -26,5 +26,5 @@ SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
   `temperature` decimal(6,3) DEFAULT NULL
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
 DROP TABLE diaries;
