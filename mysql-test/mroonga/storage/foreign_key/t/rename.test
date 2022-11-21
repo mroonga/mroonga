@@ -39,7 +39,7 @@ CREATE TABLE articles (
 RENAME TABLE comments TO comments2;
 RENAME TABLE articles TO articles2;
 
---replace_regex /int\([0-9]+\)/int/ /`test`\.// / COLLATE=| utf8mb4_unicode_ci//
+--replace_regex /int\([0-9]+\)/int/ /`test`\.// / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE articles2;
 
 --replace_regex /RESTRICT/NO ACTION/

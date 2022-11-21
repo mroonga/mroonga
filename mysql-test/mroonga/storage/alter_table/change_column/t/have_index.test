@@ -28,7 +28,7 @@ CREATE TABLE bugs (
 
 ALTER TABLE bugs CHANGE COLUMN title title VARCHAR(64);
 
---replace_regex / COLLATE=| utf8mb4_unicode_ci//
+--replace_regex / COLLATE=utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;
