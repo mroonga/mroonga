@@ -23,7 +23,13 @@
 drop table if exists t1, t2, t3;
 --enable_warnings
 
-create table t1 (c1 int primary key, c2 int) COMMENT = 'engine "innodb"';
+create table t1 (
+  c1 int primary key,
+  c2 int
+) DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci
+  COMMENT = 'engine "innodb"';
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 show create table t1;
 insert into t1 values (1, 100);
 insert into t1 values (2, 101);

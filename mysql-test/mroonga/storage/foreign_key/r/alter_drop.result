@@ -13,7 +13,7 @@ ALTER TABLE articles DROP FOREIGN KEY comment;
 SHOW CREATE TABLE articles;
 Table	Create Table
 articles	CREATE TABLE `articles` (
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text NOT NULL,
   `comment` int unsigned DEFAULT NULL,
   KEY `comment` (`comment`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci

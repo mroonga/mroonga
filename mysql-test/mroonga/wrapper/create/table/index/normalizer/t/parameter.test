@@ -29,7 +29,8 @@ CREATE TABLE memos (
   id INT NOT NULL PRIMARY KEY,
   content TEXT NOT NULL,
   FULLTEXT INDEX (content) NORMALIZER='NormalizerAuto'
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 INSERT INTO memos VALUES (1, "1日の消費㌍は約2000㌔㌍");

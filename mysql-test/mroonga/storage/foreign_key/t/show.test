@@ -28,9 +28,9 @@ CREATE TABLE refer (
   id int PRIMARY KEY AUTO_INCREMENT,
   id_referred int NOT NULL,
   CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---replace_result "(11)" "" " COLLATE=utf8mb4_general_ci" "" "`test`." ""
+--replace_regex /int\([0-9]+\)/int/ /`test`\.// / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE refer;
 
 DROP TABLE refer;

@@ -6,7 +6,7 @@ INDEX (id) COMMENT 'ID search is required.'
 SHOW CREATE TABLE bugs;
 Table	Create Table
 bugs	CREATE TABLE `bugs` (
-  `id` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` varchar(10) DEFAULT NULL,
   KEY `id` (`id`) COMMENT 'ID search is required.'
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 DROP TABLE bugs;

@@ -36,7 +36,7 @@ CREATE TABLE articles (
 ALTER TABLE articles ADD
   CONSTRAINT comment FOREIGN KEY (comment) REFERENCES comments (comment);
 
---replace_regex /int\([0-9]+\)/int/ /`test`\.//
+--replace_regex /int\([0-9]+\)/int/ /`test`\.// / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE articles;
 
 --replace_regex /RESTRICT/NO ACTION/

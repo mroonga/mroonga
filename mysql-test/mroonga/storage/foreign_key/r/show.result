@@ -6,7 +6,7 @@ CREATE TABLE refer (
 id int PRIMARY KEY AUTO_INCREMENT,
 id_referred int NOT NULL,
 CONSTRAINT id_referred FOREIGN KEY (id_referred) REFERENCES referred (id)
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SHOW CREATE TABLE refer;
 Table	Create Table
 refer	CREATE TABLE `refer` (
@@ -15,6 +15,6 @@ refer	CREATE TABLE `refer` (
   PRIMARY KEY (`id`),
   KEY `id_referred` (`id_referred`),
   CONSTRAINT `id_referred` FOREIGN KEY (`id_referred`) REFERENCES `referred` (`id`)
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 DROP TABLE refer;
 DROP TABLE referred;

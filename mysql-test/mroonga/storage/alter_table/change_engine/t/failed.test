@@ -24,12 +24,13 @@ DROP TABLE IF EXISTS diaries;
 
 CREATE TABLE diaries (
   title varchar(256) DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=big5;
+) ENGINE=InnoDB DEFAULT CHARSET=big5 COLLATE=big5_chinese_ci;
 
 INSERT INTO diaries VALUES ('');
 
 --error 9502
 ALTER TABLE diaries ENGINE=Mroonga;
+--replace_regex / COLLATE=?big5_chinese_ci//
 SHOW CREATE TABLE diaries;
 
 DROP TABLE diaries;

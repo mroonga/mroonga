@@ -26,6 +26,7 @@ CREATE TABLE bugs (
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   COMMENT='Free style normal comment';
 
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 DROP TABLE bugs;

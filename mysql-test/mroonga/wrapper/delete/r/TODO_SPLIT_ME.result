@@ -1,12 +1,17 @@
 drop table if exists t1, t2, t3;
-create table t1 (c1 int primary key, c2 int) COMMENT 'engine = "innodb"';
+create table t1 (
+c1 int primary key,
+c2 int
+) DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci
+COMMENT 'engine = "innodb"';
 show create table t1;
 Table	Create Table
 t1	CREATE TABLE `t1` (
   `c1` int(11) NOT NULL,
   `c2` int(11) DEFAULT NULL,
   PRIMARY KEY (`c1`)
-) ENGINE=Mroonga DEFAULT CHARSET=latin1 COMMENT='engine = "innodb"'
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='engine = "innodb"'
 insert into t1 values (1, 100);
 insert into t1 values (2, 101);
 insert into t1 values (3, 102);

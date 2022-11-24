@@ -27,9 +27,10 @@ CREATE TABLE diaries (
   title VARCHAR(100) NOT NULL,
   content TEXT NOT NULL,
   UNIQUE INDEX (date, title)
-) DEFAULT CHARSET=UTF8MB4 COMMENT='ENGINE "MyISAM"';
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='ENGINE "MyISAM"';
 # For MariaDB 10.2.3
--- replace_result current_timestamp() CURRENT_TIMESTAMP
+--replace_result current_timestamp() CURRENT_TIMESTAMP
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE diaries;
 
 INSERT INTO diaries (date, title, content)

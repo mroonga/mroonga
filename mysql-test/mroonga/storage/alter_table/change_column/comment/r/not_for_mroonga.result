@@ -10,8 +10,8 @@ tag VARCHAR(64) COMMENT 'It must consist of only alphabet and number.';
 SHOW CREATE TABLE bugs;
 Table	Create Table
 bugs	CREATE TABLE `bugs` (
-  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tag` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'It must consist of only alphabet and number.',
+  `id` varchar(10) NOT NULL,
+  `tag` varchar(64) DEFAULT NULL COMMENT 'It must consist of only alphabet and number.',
   PRIMARY KEY (`id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 DROP TABLE bugs;

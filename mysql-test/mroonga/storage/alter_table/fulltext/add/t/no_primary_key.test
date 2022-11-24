@@ -30,6 +30,7 @@ INSERT INTO memos (content) values ("Started Groonga.");
 INSERT INTO memos (content) values ("Starting Mroonga...");
 
 ALTER TABLE memos ADD FULLTEXT INDEX content_index (content);
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 SELECT * FROM memos WHERE MATCH(content) AGAINST("groonga");

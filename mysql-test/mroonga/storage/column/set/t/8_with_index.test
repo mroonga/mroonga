@@ -32,6 +32,7 @@ CREATE TABLE items (
              "white"),
   INDEX (colors)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE items;
 
 INSERT INTO items VALUES ("t-shart", "black,gray");

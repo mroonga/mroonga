@@ -7,9 +7,9 @@ body VARCHAR(140)
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` varchar(10) NOT NULL,
+  `title` varchar(40) DEFAULT NULL,
+  `body` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (id, title, body) values ("1", "groonga (1)", "starting groonga.");
@@ -20,9 +20,9 @@ ALTER TABLE diaries MODIFY title VARCHAR(100);
 SHOW CREATE TABLE diaries;
 Table	Create Table
 diaries	CREATE TABLE `diaries` (
-  `id` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body` varchar(140) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` varchar(10) NOT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `body` varchar(140) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 INSERT INTO diaries (id, title, body) values ("2", "groonga (2)", "started groonga.");

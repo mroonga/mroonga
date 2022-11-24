@@ -32,7 +32,8 @@ CREATE TABLE tags (
 CREATE TABLE bugs (
   id INT UNSIGNED PRIMARY KEY,
   tag VARCHAR(64) GROONGA_TYPE='tags'
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE bugs;
 
 SELECT mroonga_command("dump --dump_plugins no");

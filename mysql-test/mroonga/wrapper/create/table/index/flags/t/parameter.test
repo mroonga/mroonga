@@ -32,7 +32,8 @@ SET NAMES utf8mb4;
 CREATE TABLE memos (
   content VARCHAR(64) NOT NULL PRIMARY KEY,
   FULLTEXT INDEX (content) FLAGS='WITH_POSITION|WITH_WEIGHT'
-) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--replace_regex / COLLATE utf8mb4_unicode_ci//
 SHOW CREATE TABLE memos;
 
 SELECT mroonga_command("dump --dump_plugins no --dump_schema no");

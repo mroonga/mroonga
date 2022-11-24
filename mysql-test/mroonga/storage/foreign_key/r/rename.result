@@ -16,7 +16,7 @@ RENAME TABLE articles TO articles2;
 SHOW CREATE TABLE articles2;
 Table	Create Table
 articles2	CREATE TABLE `articles2` (
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text NOT NULL,
   `comment` int unsigned DEFAULT NULL,
   KEY `comment` (`comment`),
   CONSTRAINT `comment` FOREIGN KEY (`comment`) REFERENCES `comments2` (`comment`)
