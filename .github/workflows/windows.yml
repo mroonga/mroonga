@@ -213,11 +213,13 @@ jobs:
             -B ..\build ^
             -G "Ninja" ^
             -DBUILD_CONFIG=msvc_ccache ^
+            -DCMAKE_INSTALL_PREFIX=..\install ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
+          cmake --build ..\build --config RelWithDebInfo --target install --verbose
           cmake --build ..\build --config RelWithDebInfo --target package --verbose
           ccache --show-stats --verbose
       - name: Install
@@ -282,3 +284,16 @@ jobs:
           asset_path: ${{ steps.info.outputs.artifact-name }}.zip
           asset_name: ${{ steps.info.outputs.artifact-name }}.zip
           asset_content_type: application/zip
+
+      - name: Install dependencies for test
+        run: |
+          choco install -y strawberryperl
+      - name: Test
+        run: |
+          cd ..\install\mysql-test
+          perl mysql-test-run.pl `
+            --force `
+            --no-check-testcases `
+            --parallel=${Env:NUMBER_OF_PROCESSORS} `
+            --retry=3 `
+            --suite=mroonga/storage
