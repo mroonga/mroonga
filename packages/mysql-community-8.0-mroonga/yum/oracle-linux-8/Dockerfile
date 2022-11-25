@@ -15,8 +15,8 @@ RUN \
     'dnf-command(download)' \
     https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
     https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm && \
-  dnf builddep --enablerepo=mysql80-server-minimal-source,ol8_codeready_builder -y ${quiet} mysql-community-minimal && \
-  dnf download --enablerepo=mysql80-server-minimal-source -y ${quiet} --source mysql-community-minimal && \
+  dnf builddep --enablerepo=mysql80-community-minimal-source,ol8_codeready_builder -y ${quiet} mysql-community-minimal && \
+  dnf download --enablerepo=mysql80-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
   dnf install --enablerepo=ol8_codeready_builder -y ${quiet} \
     ${SCL} \
     ${SCL}-annobin-plugin-gcc \
