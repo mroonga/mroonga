@@ -182,7 +182,7 @@ sudo \
   --no-check-testcases \
   --parallel=${parallel} \
   --retry=3 \
-  --suite="mroonga/**/*"
+  --suite="plugin/mroonga/**/*"
 
 case ${package} in
   mariadb-*)
@@ -195,7 +195,7 @@ case ${package} in
       --parallel=${parallel} \
       --ps-protocol \
       --retry=3 \
-      --suite="${test_suite_names}"
+      --suite="plugin/mroonga/**/*"
     ;;
 esac
 

@@ -148,7 +148,7 @@ mtr_args+=(--force)
 mtr_args+=(--no-check-testcases)
 mtr_args+=(--parallel=${parallel})
 mtr_args+=(--retry=3)
-mtr_args+=(--suite="mroonga/**/*")
+mtr_args+=(--suite="plugin/mroonga/**/*")
 if [ -d "${mysql_test_dir}/bin" ]; then
   mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
 fi
