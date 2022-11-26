@@ -152,7 +152,7 @@ if(MRN_GROONGA_BUNDLED)
   else()
     # TODO: Add support for compression plugin-ed LZ4. Define
     # MYSQL_DYNAMIC_PLUGIN?
-    set(GRN_WITH_LZ4 "no")
+    set(GRN_WITH_LZ4 "no" CACHE STRING "Support data compression by LZ4." FORCE)
   endif()
 
   add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
