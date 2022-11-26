@@ -203,11 +203,10 @@ jobs:
               groonga-normalizer-mysql-* `
               extra\groonga-normalizer-mysql
           }
-      - name: Create package
+      - name: Run CMake
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }}
-          mkdir ..\build
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
           cmake ^
             -S ..\source ^
             -B ..\build ^
@@ -217,12 +216,30 @@ jobs:
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
-            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF
-          set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
-          cmake --build ..\build --config RelWithDebInfo --target install --verbose
-          cmake --build ..\build --config RelWithDebInfo --target package --verbose
-          ccache --show-stats --verbose
+            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF || exit /B
       - name: Install
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
+          set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS% || exit /B
+          cmake ^
+            --build ..\build ^
+            --config RelWithDebInfo ^
+            --target install ^
+            --verbose || exit /B
+          ccache --show-stats --verbose
+      - name: Create package
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
+          set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS% || exit /B
+          cmake ^
+            --build ..\build ^
+            --config RelWithDebInfo ^
+            --target package ^
+            --verbose || exit /B
+          ccache --show-stats --verbose
+      - name: Enable Mroonga in package
         run: |
           cd ..\build
           Expand-Archive `
