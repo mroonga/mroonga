@@ -69,6 +69,29 @@ namespace mrn {
     DBUG_RETURN(result.is_crashed);
   }
 
+  bool DatabaseRepairer::is_crashed(const char *db_path) {
+    MRN_DBUG_ENTER_METHOD();
+
+    CheckResult result;
+
+    grn_ctx ctx;
+    grn_rc rc = grn_ctx_init(&ctx, 0);
+    if (rc == GRN_SUCCESS) {
+      each_database_body(db_path,
+                         &ctx,
+                         &DatabaseRepairer::check_body,
+                         &result);
+      grn_ctx_fin(&ctx);
+    } else {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "[mroonga][database][repairer][is-crashed] "
+              "failed to initialize grn_ctx: %d: %s",
+              rc, grn_rc_to_string(rc));
+    }
+
+    DBUG_RETURN(result.is_crashed);
+  }
+
   bool DatabaseRepairer::is_corrupt(void) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -78,11 +101,57 @@ namespace mrn {
     DBUG_RETURN(result.is_corrupt);
   }
 
+  bool DatabaseRepairer::is_corrupt(const char *db_path) {
+    MRN_DBUG_ENTER_METHOD();
+
+    CheckResult result;
+
+    grn_ctx ctx;
+    grn_rc rc = grn_ctx_init(&ctx, 0);
+    if (rc == GRN_SUCCESS) {
+      each_database_body(db_path,
+                         &ctx,
+                         &DatabaseRepairer::check_body,
+                         &result);
+      grn_ctx_fin(&ctx);
+    } else {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "[mroonga][database][repairer][is-corrupt] "
+              "failed to initialize grn_ctx: %d: %s",
+              rc, grn_rc_to_string(rc));
+    }
+
+    DBUG_RETURN(result.is_corrupt);
+  }
+
   bool DatabaseRepairer::repair(void) {
     MRN_DBUG_ENTER_METHOD();
 
     bool succeeded = true;
     each_database(&DatabaseRepairer::repair_body, &succeeded);
+
+    DBUG_RETURN(succeeded);
+  }
+
+  bool DatabaseRepairer::repair(const char *db_path) {
+    MRN_DBUG_ENTER_METHOD();
+
+    bool succeeded = true;
+
+    grn_ctx ctx;
+    grn_rc rc = grn_ctx_init(&ctx, 0);
+    if (rc == GRN_SUCCESS) {
+      each_database_body(db_path,
+                         &ctx,
+                         &DatabaseRepairer::repair_body,
+                         &succeeded);
+      grn_ctx_fin(&ctx);
+    } else {
+      GRN_LOG(ctx_, GRN_LOG_WARNING,
+              "[mroonga][database][repairer][repair] "
+              "failed to initialize grn_ctx: %d: %s",
+              rc, grn_rc_to_string(rc));
+    }
 
     DBUG_RETURN(succeeded);
   }
@@ -104,7 +173,10 @@ namespace mrn {
     grn_rc rc = grn_ctx_init(&ctx, 0);
     if (rc == GRN_SUCCESS) {
       do {
-        each_database_body(data.cFileName, &ctx, each_body_func, user_data);
+        char db_path[MRN_MAX_PATH_SIZE];
+        snprintf(db_path, MRN_MAX_PATH_SIZE,
+                 "%s%c%s", base_directory_, FN_LIBCHAR, data.cFileName);
+        each_database_body(db_path, &ctx, each_body_func, user_data);
       } while (FindNextFile(finder, &data) != 0);
       grn_ctx_fin(&ctx);
     } else {
@@ -124,6 +196,9 @@ namespace mrn {
     grn_rc rc = grn_ctx_init(&ctx, 0);
     if (rc == GRN_SUCCESS) {
       while (struct dirent *entry = readdir(dir)) {
+        char db_path[MRN_MAX_PATH_SIZE];
+        snprintf(db_path, MRN_MAX_PATH_SIZE,
+                 "%s%c%s", base_directory_, FN_LIBCHAR, entry->d_name);
         each_database_body(entry->d_name, &ctx, each_body_func, user_data);
       }
       grn_ctx_fin(&ctx);
@@ -139,30 +214,22 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void DatabaseRepairer::each_database_body(const char *base_path,
+  void DatabaseRepairer::each_database_body(const char *db_path,
                                             grn_ctx *ctx,
                                             EachBodyFunc each_body_func,
                                             void *user_data) {
     MRN_DBUG_ENTER_METHOD();
 
-    if (path_prefix_length_ > 0 &&
-        strncmp(base_path, path_prefix_, path_prefix_length_) != 0) {
-      DBUG_VOID_RETURN;
-    }
-
-    size_t path_length = strlen(base_path);
+    size_t path_length = strlen(db_path);
     if (path_length <= mrn_db_file_suffix_length_) {
       DBUG_VOID_RETURN;
     }
 
-    if (strncmp(base_path + (path_length - mrn_db_file_suffix_length_),
+    if (strncmp(db_path + (path_length - mrn_db_file_suffix_length_),
                 MRN_DB_FILE_SUFFIX, mrn_db_file_suffix_length_) != 0) {
       DBUG_VOID_RETURN;
     }
 
-    char db_path[MRN_MAX_PATH_SIZE];
-    snprintf(db_path, MRN_MAX_PATH_SIZE,
-             "%s%c%s", base_directory_, FN_LIBCHAR, base_path);
     grn_obj *db = grn_db_open(ctx, db_path);
     if (!db) {
       DBUG_VOID_RETURN;

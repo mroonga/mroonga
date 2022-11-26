@@ -15601,7 +15601,8 @@ bool ha_mroonga::storage_is_crashed() const
 {
   MRN_DBUG_ENTER_METHOD();
   mrn::DatabaseRepairer repairer(ctx, ha_thd());
-  bool crashed = repairer.is_crashed();
+  mrn::PathMapper mapper(table_share->normalized_path.str);
+  bool crashed = repairer.is_crashed(mapper.db_path());
   DBUG_RETURN(crashed);
 }
 
@@ -16044,7 +16045,8 @@ int ha_mroonga::storage_check(THD* thd, HA_CHECK_OPT* check_opt)
 {
   MRN_DBUG_ENTER_METHOD();
   mrn::DatabaseRepairer repairer(ctx, thd);
-  if (repairer.is_corrupt()) {
+  mrn::PathMapper mapper(table_share->normalized_path.str);
+  if (repairer.is_corrupt(mapper.db_path())) {
     DBUG_RETURN(HA_ADMIN_CORRUPT);
   } else {
     DBUG_RETURN(HA_ADMIN_OK);
@@ -16361,7 +16363,8 @@ bool ha_mroonga::storage_check_and_repair(THD *thd)
   MRN_DBUG_ENTER_METHOD();
   bool is_error = false;
   mrn::DatabaseRepairer repairer(ctx, thd);
-  is_error = !repairer.repair();
+  mrn::PathMapper mapper(table_share->normalized_path.str);
+  is_error = !repairer.repair(mapper.db_path());
   DBUG_RETURN(is_error);
 }
 

@@ -28,8 +28,11 @@ namespace mrn {
     DatabaseRepairer(grn_ctx *ctx, THD *thd);
     ~DatabaseRepairer(void);
     bool is_crashed(void);
+    bool is_crashed(const char *db_path);
     bool is_corrupt(void);
+    bool is_corrupt(const char *db_path);
     bool repair(void);
+    bool repair(const char *db_path);
 
   private:
     grn_ctx *ctx_;
@@ -47,7 +50,7 @@ namespace mrn {
                                                    void *user_data);
 
     void each_database(EachBodyFunc each_body_func, void *user_data);
-    void each_database_body(const char *base_path,
+    void each_database_body(const char *db_path,
                             grn_ctx *ctx,
                             EachBodyFunc each_body_func,
                             void *user_data);
