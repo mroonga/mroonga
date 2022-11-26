@@ -10586,11 +10586,7 @@ void ha_mroonga::remove_grn_obj_force(const char *name)
     grn_obj *db = grn_ctx_db(ctx);
     grn_id id = grn_table_get(ctx, db, name, strlen(name));
     if (id) {
-      char path[MRN_MAX_PATH_SIZE];
-      grn_obj_delete_by_id(ctx, db, id, GRN_TRUE);
-      if (grn_obj_path_by_id(ctx, db, id, path) == GRN_SUCCESS) {
-        remove_related_files(path);
-      }
+      grn_obj_remove_force(ctx, name, strlen(name));
     }
   }
 
