@@ -174,16 +174,6 @@ case ${package} in
     ;;
 esac
 
-test_suite_names=""
-set +x
-for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
-  if [ -n "${test_suite_names}" ]; then
-    test_suite_names="${test_suite_names},"
-  fi
-  test_suite_names="${test_suite_names}${test_suite_name}"
-done
-set -x
-
 sudo \
   ./mtr \
   --force \
@@ -192,7 +182,7 @@ sudo \
   --no-check-testcases \
   --parallel=${parallel} \
   --retry=3 \
-  --suite="${test_suite_names}"
+  --suite="mroonga/**/*"
 
 case ${package} in
   mariadb-*)

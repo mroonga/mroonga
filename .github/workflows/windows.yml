@@ -311,4 +311,4 @@ jobs:
             --no-check-testcases `
             --parallel=${Env:NUMBER_OF_PROCESSORS} `
             --retry=3 `
-            --suite=mroonga/storage
+            --suite=mroonga/**/*

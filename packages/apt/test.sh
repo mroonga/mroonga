@@ -133,16 +133,6 @@ case ${package} in
     ;;
 esac
 
-test_suite_names=""
-set +x
-for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
-  if [ -n "${test_suite_names}" ]; then
-    test_suite_names="${test_suite_names},"
-  fi
-  test_suite_names="${test_suite_names}${test_suite_name}"
-done
-set -x
-
 case ${package} in
   mysql-8.*)
     ( \
@@ -158,7 +148,7 @@ mtr_args+=(--force)
 mtr_args+=(--no-check-testcases)
 mtr_args+=(--parallel=${parallel})
 mtr_args+=(--retry=3)
-mtr_args+=(--suite="${test_suite_names}")
+mtr_args+=(--suite="mroonga/**/*")
 if [ -d "${mysql_test_dir}/bin" ]; then
   mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
 fi
