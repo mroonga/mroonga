@@ -10548,7 +10548,7 @@ void ha_mroonga::remove_related_files(const char *base_path)
         continue;
       }
       if (strncmp(data.cFileName, base_path, base_path_length) == 0) {
-        unlink(data.cFileName);
+        DeleteFile(data.cFileName);
       }
     } while (FindNextFile(finder, &data) != 0);
     FindClose(finder);
