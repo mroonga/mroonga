@@ -285,9 +285,6 @@ jobs:
           asset_name: ${{ steps.info.outputs.artifact-name }}.zip
           asset_content_type: application/zip
 
-      - name: Install dependencies for test
-        run: |
-          choco install -y strawberryperl
       - name: Test
         run: |
           cd ..\install\mysql-test
