@@ -4,11 +4,12 @@ require "pathname"
 require "pp"
 require "zlib"
 
-groonga_repository = ENV["GROONGA_REPOSITORY"]
-if groonga_repository.nil?
-  raise "Specify GROONGA_REPOSITORY environment variable"
-end
-require "#{groonga_repository}/packages/packages-groonga-org-package-task"
+# groonga_repository = ENV["GROONGA_REPOSITORY"]
+# if groonga_repository.nil?
+#   raise "Specify GROONGA_REPOSITORY environment variable"
+# end
+# require "#{groonga_repository}/packages/packages-groonga-org-package-task"
+require "/home/kou/work/c/groonga/packages/packages-groonga-org-package-task"
 
 class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def initialize(mysql_package)

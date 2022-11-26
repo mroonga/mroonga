@@ -14,12 +14,12 @@ jobs:
     name: Source
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           path: cutter
           repository: clear-code/cutter
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: mroonga.github.com
           repository: mroonga/mroonga.github.com
@@ -65,7 +65,7 @@ jobs:
           make dist
 
       # Artifact
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: source
           path: mroonga-*.tar.gz
@@ -191,8 +191,8 @@ jobs:
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           path: groonga
           repository: groonga/groonga
@@ -200,7 +200,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
         with:
           name: source
       - name: Update version
@@ -223,7 +223,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache ccache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/build/${{ matrix.os }}/ccache
           key: package-${{ matrix.os }}-${{ matrix.package }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
@@ -252,7 +252,7 @@ jobs:
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
           path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
@@ -402,8 +402,8 @@ jobs:
             package: percona-server-8.0
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
       - name: Run VM

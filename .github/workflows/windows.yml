@@ -102,7 +102,7 @@ jobs:
         run: |
           Set-TimeZone -Id "Tokyo Standard Time"
       - uses: actions/setup-ruby@v1
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
       - uses: actions/cache@v3
@@ -136,7 +136,7 @@ jobs:
           Write-Output "artifact-name=${ARTIFACT_NAME}" | `
             Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
       - name: Cache MariaDB archive
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: download/
           key: download-mariadb-${{ matrix.mariadb-version }}
@@ -270,7 +270,7 @@ jobs:
           Compress-Archive `
             -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }} `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.info.outputs.artifact-name }}
           path: ${{ steps.info.outputs.artifact-name }}.zip
