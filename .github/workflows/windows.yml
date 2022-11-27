@@ -20,75 +20,82 @@ jobs:
           - MariaDB 10.5 64bit
           - MariaDB 10.6 32bit
           - MariaDB 10.6 64bit
-          # - MariaDB 10.7 32bit
-          # - MariaDB 10.7 64bit
-          - MariaDB 10.7 64bit (master)
-          # - MariaDB 10.8 64bit (master/embed)
-          # - MariaDB 10.9 64bit (master)
-          # - MariaDB 10.9 64bit (master/embed)
+          - MariaDB 10.7 32bit
+          - MariaDB 10.7 64bit
+          - MariaDB 10.8 32bit
+          - MariaDB 10.9 64bit
+          - MariaDB 10.9 32bit
+          - MariaDB 10.9 64bit
+          - MariaDB 10.9 64bit (master)
+          - MariaDB 10.9 64bit (master/embed)
         include:
           - label: MariaDB 10.3 32bit
-            mariadb-version: "10.3.34"
+            mariadb-version: "10.3.37"
             package-platform: "win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.3 64bit
-            mariadb-version: "10.3.34"
+            mariadb-version: "10.3.37"
             package-platform: "winx64"
             vc-architecture: "x64"
           - label: MariaDB 10.4 32bit
-            mariadb-version: "10.4.24"
+            mariadb-version: "10.4.27"
             package-platform: "win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.4 64bit
-            mariadb-version: "10.4.24"
+            mariadb-version: "10.4.27"
             package-platform: "winx64"
             vc-architecture: "x64"
           - label: MariaDB 10.5 32bit
-            mariadb-version: "10.5.15"
+            mariadb-version: "10.5.18"
             package-platform: "win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.5 64bit
-            mariadb-version: "10.5.15"
+            mariadb-version: "10.5.18"
             package-platform: "winx64"
             vc-architecture: "x64"
           - label: MariaDB 10.6 32bit
-            mariadb-version: "10.6.7"
+            mariadb-version: "10.6.11"
             package-platform: "win32"
             vc-architecture: "x64_x86"
           - label: MariaDB 10.6 64bit
-            mariadb-version: "10.6.7"
+            mariadb-version: "10.6.11"
             package-platform: "winx64"
             vc-architecture: "x64"
-          # - label: MariaDB 10.7 32bit
-          #   mariadb-version: "10.7.6"
-          #   package-platform: "win32"
-          #   vc-architecture: "x64_x86"
-          # - label: MariaDB 10.7 64bit
-          #   mariadb-version: "10.7.6"
-          #   package-platform: "winx64"
-          #   vc-architecture: "x64"
-          - label: MariaDB 10.7 64bit (master)
-            mariadb-version: "10.7.6"
+          - label: MariaDB 10.7 32bit
+            mariadb-version: "10.7.7"
+            package-platform: "win32"
+            vc-architecture: "x64_x86"
+          - label: MariaDB 10.7 64bit
+            mariadb-version: "10.7.7"
+            package-platform: "winx64"
+            vc-architecture: "x64"
+          - label: MariaDB 10.8 32bit
+            mariadb-version: "10.8.6"
+            package-platform: "win32"
+            vc-architecture: "x64_x86"
+          - label: MariaDB 10.8 64bit
+            mariadb-version: "10.8.6"
+            package-platform: "winx64"
+            vc-architecture: "x64"
+          - label: MariaDB 10.9 32bit
+            mariadb-version: "10.9.4"
+            package-platform: "win32"
+            vc-architecture: "x64_x86"
+          - label: MariaDB 10.9 64bit
+            mariadb-version: "10.9.4"
+            package-platform: "winx64"
+            vc-architecture: "x64"
+          - label: MariaDB 10.9 64bit (master)
+            mariadb-version: "10.9.4"
             package-platform: "winx64"
             vc-architecture: "x64"
             use-master: "yes"
-          # - label: MariaDB 10.8 64bit (master/embed)
-          #   mariadb-version: "10.8.2"
-          #   package-platform: "winx64"
-          #   vc-architecture: "x64"
-          #   use-master: "yes"
-          #   embed: "ON"
-          # - label: MariaDB 10.9 64bit (master)
-          #   mariadb-version: "10.9.3"
-          #   package-platform: "winx64"
-          #   vc-architecture: "x64"
-          #   use-master: "yes"
-          # - label: MariaDB 10.9 64bit (master/embed)
-          #   mariadb-version: "10.9.3"
-          #   package-platform: "winx64"
-          #   vc-architecture: "x64"
-          #   use-master: "yes"
-          #   embed: "ON"
+          - label: MariaDB 10.9 64bit (master/embed)
+            mariadb-version: "10.9.4"
+            package-platform: "winx64"
+            vc-architecture: "x64"
+            use-master: "yes"
+            embed: "ON"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
