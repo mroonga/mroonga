@@ -43,9 +43,9 @@ jobs:
             mariadb-version: "10.9.4"
             use-master: "yes"
             embed: "ON"
-      env:
-        PACKAGE_PLATFORM: "winx64"
-        VC_ARCHITECTURE: "x64"
+    env:
+      PACKAGE_PLATFORM: "winx64"
+      VC_ARCHITECTURE: "x64"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
