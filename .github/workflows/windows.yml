@@ -12,90 +12,40 @@ jobs:
       fail-fast: false
       matrix:
         label:
-          - MariaDB 10.3 32bit
-          - MariaDB 10.3 64bit
-          - MariaDB 10.4 32bit
-          - MariaDB 10.4 64bit
-          - MariaDB 10.5 32bit
-          - MariaDB 10.5 64bit
-          - MariaDB 10.6 32bit
-          - MariaDB 10.6 64bit
-          - MariaDB 10.7 32bit
-          - MariaDB 10.7 64bit
-          - MariaDB 10.8 32bit
-          - MariaDB 10.8 64bit
-          - MariaDB 10.9 32bit
-          - MariaDB 10.9 64bit
-          - MariaDB 10.9 64bit (master)
-          - MariaDB 10.9 64bit (master/embed)
+          - MariaDB 10.3
+          - MariaDB 10.4
+          - MariaDB 10.5
+          - MariaDB 10.6
+          - MariaDB 10.7
+          - MariaDB 10.8
+          - MariaDB 10.9
+          - MariaDB 10.9 (master)
+          - MariaDB 10.9 (master/embed)
         include:
-          - label: MariaDB 10.3 32bit
+          - label: MariaDB 10.3
             mariadb-version: "10.3.37"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.3 64bit
-            mariadb-version: "10.3.37"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.4 32bit
+          - label: MariaDB 10.4
             mariadb-version: "10.4.27"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.4 64bit
-            mariadb-version: "10.4.27"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.5 32bit
+          - label: MariaDB 10.5
             mariadb-version: "10.5.18"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.5 64bit
-            mariadb-version: "10.5.18"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.6 32bit
+          - label: MariaDB 10.6
             mariadb-version: "10.6.11"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.6 64bit
-            mariadb-version: "10.6.11"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.7 32bit
+          - label: MariaDB 10.7
             mariadb-version: "10.7.7"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.7 64bit
-            mariadb-version: "10.7.7"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.8 32bit
+          - label: MariaDB 10.8
             mariadb-version: "10.8.6"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.8 64bit
-            mariadb-version: "10.8.6"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.9 32bit
+          - label: MariaDB 10.9
             mariadb-version: "10.9.4"
-            package-platform: "win32"
-            vc-architecture: "x64_x86"
-          - label: MariaDB 10.9 64bit
+          - label: MariaDB 10.9 (master)
             mariadb-version: "10.9.4"
-            package-platform: "winx64"
-            vc-architecture: "x64"
-          - label: MariaDB 10.9 64bit (master)
-            mariadb-version: "10.9.4"
-            package-platform: "winx64"
-            vc-architecture: "x64"
             use-master: "yes"
-          - label: MariaDB 10.9 64bit (master/embed)
+          - label: MariaDB 10.9 (master/embed)
             mariadb-version: "10.9.4"
-            package-platform: "winx64"
-            vc-architecture: "x64"
             use-master: "yes"
             embed: "ON"
+      env:
+        PACKAGE_PLATFORM: "winx64"
+        VC_ARCHITECTURE: "x64"
     runs-on: windows-2019
     steps:
       - name: Disable crash dialog
@@ -116,8 +66,8 @@ jobs:
         with:
           path: |
             ~\AppData\Roaming\ccache
-          key: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
-          restore-keys: source-${{ matrix.mariadb-version }}-${{ matrix.vc-architecture }}-ccache-
+          key: source-${{ matrix.mariadb-version }}-${{ env.VC_ARCHITECTURE }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
+          restore-keys: source-${{ matrix.mariadb-version }}-${{ env.VC_ARCHITECTURE }}-ccache-
       - name: Prepare ccache
         run: |
           choco install ccache
@@ -137,7 +87,7 @@ jobs:
           if ("${{ matrix.embed }}" -eq "ON") {
             $ARTIFACT_NAME += "-embed"
           }
-          $ARTIFACT_NAME += "-${{ matrix.package-platform }}"
+          $ARTIFACT_NAME += "-${Env:PACKAGE_PLATFORM}"
           Write-Output "mroonga-version=${MROONGA_VERSION}" | `
             Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           Write-Output "artifact-name=${ARTIFACT_NAME}" | `
@@ -213,7 +163,7 @@ jobs:
       - name: Run CMake
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           cmake ^
             -S ..\source ^
             -B ..\build ^
@@ -228,7 +178,7 @@ jobs:
       - name: Install
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
             --build ..\build ^
@@ -239,7 +189,7 @@ jobs:
       - name: Create package
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vc-architecture }} || exit /B
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
             --build ..\build ^
@@ -265,7 +215,7 @@ jobs:
             profile=any
           ..\..\source\storage\mroonga\packages\windows\install-mroonga.ps1 `
             -mariadbVersion ${{ matrix.mariadb-version }} `
-            -platform ${{ matrix.package-platform }}
+            -platform ${Env:PACKAGE_PLATFORM}
           cd ..
           Move-Item `
             mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}} `
@@ -275,7 +225,7 @@ jobs:
       - name: Compress the artifact
         run: |
           Compress-Archive `
-            -Path mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform }} `
+            -Path mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
       - uses: actions/upload-artifact@v3
         with:
