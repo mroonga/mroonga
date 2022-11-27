@@ -201,9 +201,9 @@ jobs:
         run: |
           cd ..\build
           Expand-Archive `
-            mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}.zip `
+            mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}.zip `
             .
-          cd mariadb-${{ matrix.mariadb-version }}-${{ matrix.package-platform}}
+          cd mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}
           Remove-Item mysql-test -Recurse -Force
           netsh advfirewall firewall add rule `
             name="mariadb" `
