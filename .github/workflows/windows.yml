@@ -23,7 +23,7 @@ jobs:
           - MariaDB 10.7 32bit
           - MariaDB 10.7 64bit
           - MariaDB 10.8 32bit
-          - MariaDB 10.9 64bit
+          - MariaDB 10.8 64bit
           - MariaDB 10.9 32bit
           - MariaDB 10.9 64bit
           - MariaDB 10.9 64bit (master)
