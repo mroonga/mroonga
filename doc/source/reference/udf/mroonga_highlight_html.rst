@@ -17,11 +17,13 @@ Syntax
 
 ``mroonga_highlight_html()`` has required parameter and optional parameter::
 
-  mroonga_highlight_html(text, query AS query)
+  mroonga_highlight_html(text, query AS query [, open_tag AS open_tag, close_tag AS close_tag])
 
-  mroonga_highlight_html(text, keyword1, ..., keywordN)
+  mroonga_highlight_html(text, keyword1, ..., keywordN [, open_tag AS open_tag, close_tag AS close_tag])
 
 ``AS query`` is very important. You must specify it to extract keywords from query.
+
+``open_tag`` and ``close_tag`` are optional. You can specify a tag for highlighting.
 
 Usage
 -----
@@ -91,6 +93,46 @@ following::
 """""""""""
 
 Specify 0 or more keywords to be highlighted.
+
+``open_tag``
+""""""""""""
+
+Specify an open tag for highlighting.
+
+You must specify ``AS open_tag`` to specify this parameter like the following.
+
+.. code-block:: SQL
+   
+   SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga', 
+                                 '<span class="my-class">' AS open_tag) AS highlighted;
+  
+   -- +----------------------------------------------------------------------------+
+   -- | highlighted                                                                |
+   -- +----------------------------------------------------------------------------+
+   -- | Mroonga is the <span class="my-class">Groonga</span> based storage engine. |
+   -- +----------------------------------------------------------------------------+
+
+The default value is ``<span class="keyword">``.
+
+``close_tag``
+"""""""""""""
+
+Specify a close tag for highlighting.
+
+You must specify ``AS close_tag`` to specify this parameter like the following.
+
+.. code-block:: SQL
+   
+   SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga', 
+                                 '<mark>' AS open_tag, '</mark>' AS close_tag) AS highlighted;
+   
+   -- +-----------------------------------------------------------+
+   -- | highlighted                                               |
+   -- +-----------------------------------------------------------+
+   -- | Mroonga is the <mark>Groonga</mark> based storage engine. |
+   -- +-----------------------------------------------------------+
+
+The default value is ``</span>``.
 
 Return value
 ------------
