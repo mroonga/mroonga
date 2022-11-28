@@ -16,6 +16,12 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.30-22.
 
+* [:doc:`/install/windows`] Added support for MariaDB 10.7, 10.8, 10.9.
+
+* [:doc:`/install/windows`] Dropped support for 32bit versions.
+
+  Because recent MariaDB can't built for 32bit Windows, and the official packages for 32bit don't exist.
+
 * [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``.[GitHub #537][Reported by ishitaka]
 
   We can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
