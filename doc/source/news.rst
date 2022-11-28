@@ -91,7 +91,7 @@ Fixes
 
 * Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
 
-  12.09 にて groonga-normalizer-mysql を含める(bundle)ように修正したとアナウンスしましたが、修正されていませんでした。
+  Mroonga 12.09 にて groonga-normalizer-mysql を含める(bundle)ように修正したとアナウンスしましたが、修正されていませんでした。
 
 Thanks
 ^^^^^^
