@@ -16,7 +16,7 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.30-22.
 
-* [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``.
+* [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``.[GitHub #537][Reported by ishitaka]
 
   We can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
 
@@ -35,10 +35,26 @@ Improvements
 
 * Added support for reference count mode
 
-  参照カウントモードが有効な場合、使用していないGroongaのオブジェクトをすぐに開放します。
-  メモリーの使用量を一定量に保つことができますが、パフォーマンスが悪化します。
+  この機能によりメモリー使用量を一定量に保つことができますが、パフォーマンスが悪化します。
 
-  Mroongaが大量のメモリーを消費しており、システムに悪影響が出ている場合に指定することを推奨します。
+  参照カウントモードは MySQLの `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>` とともに使用します。
+  参照カウントモードが有効な場合、Mroongaは使用していないGroongaのオブジェクトをすぐに解放します。
+  MySQLは ``table_open_cache`` で指定した個数のテーブルをキャッシュしておくことができます。キャッシュされているテーブルはまだ使用中なので、Groongaのオブジェクトも解放されません。 
+  ``table_open_cache`` で指定した個数よりも多いテーブルが開かれたとき、使用頻度が低いテーブルが閉じられます。参照カウントモードが有効なとき、そのタイミングでGroongaのオブジェクトも閉じられます。
+
+  ステータス変数の `Open_tables <https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Open_tables>` の値とメモリー使用量を見ながら
+  ``table_open_cache`` の値を調整することで、メモリー使用量とパフォーマンスのバランスを調整する必要があります。
+
+  ``Open_tables`` の確認方法は以下の通りです。
+
+  .. code-block:: sql
+
+     SHOW GLOBAL STATUS LIKE 'Open_tables';
+     -- +---------------+-------+
+     -- | Variable_name | Value |
+     -- +---------------+-------+
+     -- | Open_tables   | 643   |
+     -- +---------------+-------+
 
   参照カウントモードを有効にするには、my.cnfに以下の値を設定します。
 
@@ -58,6 +74,7 @@ Thanks
 
 * Josep Sanz
 * Tomohiro KATO
+* ishitaka
 
 .. _release-12-09:
 
