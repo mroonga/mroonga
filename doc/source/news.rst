@@ -20,6 +20,9 @@ Improvements
 
   We can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
 
+  今までは固定で ``<span class="keyword">...</span>`` というタグを使用しており、 ``class`` の変更や、別のタグが指定できず不便でした。
+  今回からタグを指定できるようになったので、 ``<mark>...</mark>`` などのハイライト用のタグも使えるようになって便利になりました。
+
   .. code-block:: sql
 
      SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga',
@@ -36,9 +39,9 @@ Improvements
 * Added support for reference count mode.
 
   この機能によりメモリー使用量を一定量に保つことができますが、パフォーマンスが悪化します。
-
+  そのため、メモリー不足の場合には、この機能を使用する前に、メモリーを増強することを検討してください。
+  
   参照カウントモードは MySQLの `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>` とともに使用します。
-  参照カウントモードが有効な場合、Mroongaは使用していないGroongaのオブジェクトをすぐに解放します。
   MySQLは ``table_open_cache`` で指定した個数のテーブルをキャッシュしておくことができます。キャッシュされているテーブルはまだ使用中なので、Groongaのオブジェクトも解放されません。 
   ``table_open_cache`` で指定した個数よりも多いテーブルが開かれたとき、使用頻度が低いテーブルが閉じられます。参照カウントモードが有効なとき、そのタイミングでGroongaのオブジェクトも閉じられます。
 
@@ -56,11 +59,26 @@ Improvements
      -- | Open_tables   | 643   |
      -- +---------------+-------+
 
+  通常は ``Open_tables`` より ``table_open_cache`` を大きくして常に使っているすべてテーブルをキャッシュします。
+  しかし、メモリーに余裕がない環境では一部の使用頻度の低いテーブルをキャッシュから落として解放することでメモリー使用量を削減します。
+  使用頻度の低いテーブルをキャッシュから落とすには ``Open_tables`` より ``table_open_cache`` を小さくします。
+  少し小さくすると少しだけキャッシュから落ちます。その分メモリー使用量は減りますが、テーブルの開き直しが必要になるためパフォーマンスは悪化します。
+  ``table_open_cache`` を小さくするほどその度合いは大きくなるので、小さくするのはメモリー使用量が許容範囲内に収まる程度までにしておきます。
+
   参照カウントモードを有効にするには、my.cnfに以下の値を設定します。
 
   .. code-block::
 
      loose-mroonga-enable-reference-count = ON
+
+  .. note::
+  
+     MySQL起動後に変数で指定しても参照カウントモードは有効になりません。
+     my.cnfで指定してください。
+
+     .. code-block:: sql
+
+       SET GLOBAL mroonga_enable_reference_count = ON
 
 Fixes
 ^^^^^
