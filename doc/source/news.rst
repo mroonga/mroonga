@@ -33,7 +33,7 @@ Improvements
 
   Please refer to :doc:`/reference/udf/mroonga_highlight_html` for details.
 
-* Added support for reference count mode
+* Added support for reference count mode.
 
   この機能によりメモリー使用量を一定量に保つことができますが、パフォーマンスが悪化します。
 
