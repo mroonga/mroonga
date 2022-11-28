@@ -3,6 +3,62 @@
 News
 ====
 
+.. _release-12-10:
+
+Release 12.10 - 2022-11-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.37, 10.4.27, 10.5.18, 
+  10.6.11, 10.7.7, 10.8.6, 10.9.4.[GitHub #564][Reported by Josep Sanz][Patched by Tomohiro KATO]
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.30-22.
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``.
+
+  We can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
+
+  .. code-block:: sql
+
+     SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga',
+                                   '<mark>' AS open_tag, '</mark>' AS close_tag) AS highlighted;
+     
+     -- +-----------------------------------------------------------+
+     -- | highlighted                                               |
+     -- +-----------------------------------------------------------+
+     -- | Mroonga is the <mark>Groonga</mark> based storage engine. |
+     -- +-----------------------------------------------------------+
+
+  Please refer to :doc:`/reference/udf/mroonga_highlight_html` for details.
+
+* Added support for reference count mode
+
+  参照カウントモードが有効な場合、使用していないGroongaのオブジェクトをすぐに開放します。
+  メモリーの使用量を一定量に保つことができますが、パフォーマンスが悪化します。
+
+  Mroongaが大量のメモリーを消費しており、システムに悪影響が出ている場合に指定することを推奨します。
+
+  参照カウントモードを有効にするには、my.cnfに以下の値を設定します。
+
+  .. code-block::
+
+     loose-mroonga-enable-reference-count = ON
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
+
+  12.09 にて groonga-normalizer-mysql 修正したとアナウンスしましたが、修正されていませんでした。
+
+Thanks
+^^^^^^
+
+* Josep Sanz
+* Tomohiro KATO
+
 .. _release-12-09:
 
 Release 12.09 - 2022-10-28
