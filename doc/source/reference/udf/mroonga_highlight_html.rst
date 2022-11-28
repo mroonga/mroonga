@@ -17,9 +17,15 @@ Syntax
 
 ``mroonga_highlight_html()`` has required parameter and optional parameter::
 
-  mroonga_highlight_html(text, query AS query [, open_tag AS open_tag, close_tag AS close_tag])
-
-  mroonga_highlight_html(text, keyword1, ..., keywordN [, open_tag AS open_tag, close_tag AS close_tag])
+  mroonga_highlight_html(text, query AS query)
+  mroonga_highlight_html(text, query AS query, open_tag AS open_tag)
+  mroonga_highlight_html(text, query AS query, close_tag AS close_tag)
+  mroonga_highlight_html(text, query AS query, open_tag AS open_tag, close_tag AS close_tag)
+  
+  mroonga_highlight_html(text, keyword1, ..., keywordN)
+  mroonga_highlight_html(text, keyword1, ..., keywordN, open_tag AS open_tag)
+  mroonga_highlight_html(text, keyword1, ..., keywordN, open_tag AS close_tag)
+  mroonga_highlight_html(text, keyword1, ..., keywordN, open_tag AS open_tag, close_tag AS close_tag)
 
 ``AS query`` is very important. You must specify it to extract keywords from query.
 
