@@ -48,6 +48,7 @@ namespace mrn {
     if (db_) {
       grn_hash_close(ctx_, broken_table_names_);
       broken_table_names_ = NULL;
+      grn_ctx_use(ctx_, db_);
       grn_obj_close(ctx_, db_);
       db_ = NULL;
       grn_cache_close(ctx_, cache_);
