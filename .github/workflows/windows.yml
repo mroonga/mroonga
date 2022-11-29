@@ -267,3 +267,14 @@ jobs:
             --parallel=${Env:NUMBER_OF_PROCESSORS} `
             --retry=3 `
             --suite=mroonga/**/*
+
+      - name: "Test: reference count"
+        run: |
+          cd ..\install\mysql-test
+          perl mysql-test-run.pl `
+            --force `
+            --mysqld=--loose-plugin-mroonga-enable-reference-count=ON `
+            --no-check-testcases `
+            --parallel=${Env:NUMBER_OF_PROCESSORS} `
+            --retry=3 `
+            --suite=mroonga/**/*
