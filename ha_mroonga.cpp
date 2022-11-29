@@ -16156,7 +16156,6 @@ int ha_mroonga::wrapper_fill_indexes(THD *thd, KEY *key_info,
             grn_rc rc;
             rc = grn_column_index_update(ctx, index_column, record_id, l + 1,
                                          NULL, &new_value_buffer);
-            grn_obj_unlink(ctx, index_column);
             if (rc) {
               error = ER_ERROR_ON_WRITE;
               my_message(error, ctx->errbuf, MYF(0));
