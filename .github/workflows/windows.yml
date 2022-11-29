@@ -21,6 +21,7 @@ jobs:
           - MariaDB 10.9
           - MariaDB 10.9 (master)
           - MariaDB 10.9 (master/embed)
+          - MariaDB 10.9 (master/reference-count)
         include:
           - label: MariaDB 10.3
             mariadb-version: "10.3.37"
@@ -36,6 +37,9 @@ jobs:
             mariadb-version: "10.8.6"
           - label: MariaDB 10.9
             mariadb-version: "10.9.4"
+          - label: MariaDB 10.9(reference-count)
+            mariadb-version: "10.9.4"
+            enable-reference-count: "yes"
           - label: MariaDB 10.9 (master)
             mariadb-version: "10.9.4"
             use-master: "yes"
@@ -43,6 +47,10 @@ jobs:
             mariadb-version: "10.9.4"
             use-master: "yes"
             embed: "ON"
+          - label: MariaDB 10.9 (master/reference-count)
+            mariadb-version: "10.9.4"
+            use-master: "yes"
+            enable-reference-count: "yes"
     env:
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
@@ -260,6 +268,13 @@ jobs:
 
       - name: Test
         run: |
+          if ("${{ matrix.enable-reference-count }}" -eq "yes") {
+            pwd
+            ls
+            ls "C:\Program Files\${{ matrix.label }}\"
+            Write-Output "loose-mroonga-enable-reference-count = ON" | `
+            Add-Content "C:\Program Files\${{ matrix.label }}\my.ini"
+          }
           cd ..\install\mysql-test
           perl mysql-test-run.pl `
             --force `
