@@ -77,9 +77,9 @@ Improvements
   Normally, all of tables in use are cached by setting ``table_open_cache`` larger than ``Open_tables``.
   However, if there is limited memory, memory usage would be decreased by releasing memory for tables with low usage dropping from the cache.
   In order to releasing tables with low usage from the cache, ``table_open_cache`` should be set smaller than ``Open_tables``.
-  The smaller `Open Tables` setting , the more tables dropping from the cache.
+  The smaller ``Open Tables`` setting , the more tables dropping from the cache.
   As cache is released, memory usage decrease, yet performance become worse due to reopen tables.
-  The smaller `table_open_cache`, the more necessary to reopen tables. `table_open_cache` should set as much value as only to reaching memory tolerance.
+  The smaller ``table_open_cache``, the more necessary to reopen tables. ``table_open_cache`` should set as much value as only to reaching memory tolerance.
 
   In order to enable reference count mode, we need to specify values in my.cnf as follows;
 
