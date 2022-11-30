@@ -20,14 +20,14 @@ Improvements
 
 * [:doc:`/install/windows`] Dropped support for 32bit versions.
 
-  Because recent MariaDB can't built for 32bit Windows, and the official packages for 32bit don't exist.
+  Because recent MariaDB can't be built for 32bit Windows, and the official packages for 32bit don't exist.
 
 * [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``.[GitHub #537][Reported by ishitaka]
 
-  We can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
+  Now we can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
 
-  今までは固定で ``<span class="keyword">...</span>`` というタグを使用しており、 ``class`` の変更や、別のタグが指定できず不便でした。
-  今回からタグを指定できるようになったので、 ``<mark>...</mark>`` などのハイライト用のタグも使えるようになって便利になりました。
+  It was inconvinient for us to unable specifying different tags or changing ``class`` because the fixed tag ``<span class="keyword">...</span>`` was used.
+  Now, this new parameter provides more convenience for us because it allows specifying tags to highlight, such as ``<mark>...</mark>``.
 
   .. code-block:: sql
 
@@ -44,17 +44,24 @@ Improvements
 
 * Added support for reference count mode.
 
-  この機能によりメモリー使用量を一定量に保つことができますが、パフォーマンスが悪化します。
-  そのため、メモリー不足の場合には、この機能を使用する前に、メモリーを増強することを検討してください。
+  Though this feature can keep fixed memory usage, its performance would be dropped.
+  Thus, memory increments should be first consideration before using this feature.
   
-  参照カウントモードは MySQLの `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>`_ とともに使用します。
-  MySQLは ``table_open_cache`` で指定した個数のテーブルをキャッシュしておくことができます。キャッシュされているテーブルはまだ使用中なので、Groongaのオブジェクトも解放されません。 
-  ``table_open_cache`` で指定した個数よりも多いテーブルが開かれたとき、使用頻度が低いテーブルが閉じられます。参照カウントモードが有効なとき、そのタイミングでGroongaのオブジェクトも閉じられます。
+  The reference count mode is used with `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>`_ of MySQL.
 
-  ステータス変数の `Open_tables <https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Open_tables>`_ の値とメモリー使用量を見ながら
-  ``table_open_cache`` の値を調整することで、メモリー使用量とパフォーマンスのバランスを調整する必要があります。
+  MySQL can cache specified number of tables with ``table_open_cache```.
+  Groonga's object would not be released because the cached tables are still in use.
 
-  ``Open_tables`` の確認方法は以下の通りです。
+  The tables with low usage would be closed if number of open tables is larger than number specified with ``table_open_cache``.
+  Groonga objects would be released at the same time with table closing if the reference count mode is enabled.
+
+  These are how the reference count mode keep fixed memory usage.
+
+  For actual use, we need to adjust balance between memory usage and perfomance with value of ``table_open_cache`` while checking
+  memory usage and value of status variables `Open_tables <https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Open_tables>`_. 
+  Because this feature can keep fixed memory usage, but its performance would be dropped.
+
+  There is how to check ``Open_tables`` as follows.
 
   .. code-block:: sql
 
@@ -65,13 +72,14 @@ Improvements
      -- | Open_tables   | 643   |
      -- +---------------+-------+
 
-  通常は ``Open_tables`` より ``table_open_cache`` を大きくして常に使っているすべてテーブルをキャッシュします。
-  しかし、メモリーに余裕がない環境では一部の使用頻度の低いテーブルをキャッシュから落として解放することでメモリー使用量を削減します。
-  使用頻度の低いテーブルをキャッシュから落とすには ``Open_tables`` より ``table_open_cache`` を小さくします。
-  少し小さくすると少しだけキャッシュから落ちます。その分メモリー使用量は減りますが、テーブルの開き直しが必要になるためパフォーマンスは悪化します。
-  ``table_open_cache`` を小さくするほどその度合いは大きくなるので、小さくするのはメモリー使用量が許容範囲内に収まる程度までにしておきます。
+  Normally, all of tables in use are cached by setting ``table_open_cache`` larger than ``Open_tables``.
+  However, if there is limited memory, memory usage would be decreased by releasing memory for tables with low usage dropping from the cache.
+  In order to releasing tables with low usage from the cache, ``table_open_cache`` should be set smaller than ``Open_tables``.
+  The smaller `Open Tables` setting , the more tables dropping from the cache.
+  As cache is released, memory usage decrease, yet performance become worse due to reopen tables.
+  The smaller `table_open_cache`, the more necessary to reopen tables. `table_open_cache` should set as much value as only to reaching memory tolerance.
 
-  参照カウントモードを有効にするには、my.cnfに以下の値を設定します。
+  In order to enable reference count mode, we need to specify values in my.cnf as follows;
 
   .. code-block::
 
@@ -79,8 +87,8 @@ Improvements
 
   .. note::
   
-     MySQL起動後に変数で指定しても参照カウントモードは有効になりません。
-     my.cnfで指定してください。
+     The reference count mode would not be enabled with variables after booting MySQL.
+     It is necesarry to specify values in my.cnf.
 
      .. code-block:: sql
 
@@ -91,7 +99,7 @@ Fixes
 
 * Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
 
-  Mroonga 12.09 にて groonga-normalizer-mysql を含める(bundle)ように修正したとアナウンスしましたが、修正されていませんでした。
+  It was false announcement in 12.09 that groonga-normalizer-mysql is bundled in.
 
 Thanks
 ^^^^^^
