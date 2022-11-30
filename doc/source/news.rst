@@ -3,6 +3,113 @@
 News
 ====
 
+.. _release-12-10:
+
+Release 12.10 - 2022-11-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.37, 10.4.27, 10.5.18, 
+  10.6.11, 10.7.7, 10.8.6, 10.9.4. [GitHub #564][Reported by Josep Sanz][Patched by Tomohiro KATO]
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.30-22.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.40-43.
+
+* [:doc:`/install/windows`] Added support for MariaDB 10.7, 10.8, 10.9.
+
+* [:doc:`/install/windows`] Dropped support for 32bit versions.
+
+  Because recent MariaDB can't be built for 32bit Windows, and the official packages for 32bit don't exist.
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``. [GitHub #537][Reported by ishitaka]
+
+  Now we can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
+
+  It was inconvinient for us to unable specifying different tags or changing ``class`` because the fixed tag ``<span class="keyword">...</span>`` was used.
+  Now, this new parameter provides more convenience for us because it allows specifying tags to highlight, such as ``<mark>...</mark>``.
+
+  .. code-block:: sql
+
+     SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga',
+                                   '<mark>' AS open_tag, '</mark>' AS close_tag) AS highlighted;
+     
+     -- +-----------------------------------------------------------+
+     -- | highlighted                                               |
+     -- +-----------------------------------------------------------+
+     -- | Mroonga is the <mark>Groonga</mark> based storage engine. |
+     -- +-----------------------------------------------------------+
+
+  Please refer to :doc:`/reference/udf/mroonga_highlight_html` for details.
+
+* Added support for reference count mode.
+
+  Though this feature can keep fixed memory usage, its performance would be dropped.
+  Thus, memory increments should be first consideration before using this feature.
+  
+  The reference count mode is used with `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>`_ of MySQL.
+
+  MySQL can cache specified number of tables with ``table_open_cache```.
+  Groonga's object would not be released because the cached tables are still in use.
+
+  The tables with low usage would be closed if number of open tables is larger than number specified with ``table_open_cache``.
+  Groonga objects would be released at the same time with table closing if the reference count mode is enabled.
+
+  These are how the reference count mode keep fixed memory usage.
+
+  For actual use, we need to adjust balance between memory usage and perfomance with value of ``table_open_cache`` while checking
+  memory usage and value of status variables `Open_tables <https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Open_tables>`_. 
+  Because this feature can keep fixed memory usage, but its performance would be dropped.
+
+  There is how to check ``Open_tables`` as follows.
+
+  .. code-block:: sql
+
+     SHOW GLOBAL STATUS LIKE 'Open_tables';
+     -- +---------------+-------+
+     -- | Variable_name | Value |
+     -- +---------------+-------+
+     -- | Open_tables   | 643   |
+     -- +---------------+-------+
+
+  Normally, all of tables in use are cached by setting ``table_open_cache`` larger than ``Open_tables``.
+  However, if there is limited memory, memory usage would be decreased by releasing memory for tables with low usage dropping from the cache.
+  In order to releasing tables with low usage from the cache, ``table_open_cache`` should be set smaller than ``Open_tables``.
+  The smaller `Open Tables` setting , the more tables dropping from the cache.
+  As cache is released, memory usage decrease, yet performance become worse due to reopen tables.
+  The smaller `table_open_cache`, the more necessary to reopen tables. `table_open_cache` should set as much value as only to reaching memory tolerance.
+
+  In order to enable reference count mode, we need to specify values in my.cnf as follows;
+
+  .. code-block::
+
+     loose-mroonga-enable-reference-count = ON
+
+  .. note::
+  
+     The reference count mode would not be enabled with variables after booting MySQL.
+     It is necesarry to specify values in my.cnf.
+
+     .. code-block:: sql
+
+       SET GLOBAL mroonga_enable_reference_count = ON
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
+
+  It was false announcement in 12.09 that groonga-normalizer-mysql is bundled in.
+
+Thanks
+^^^^^^
+
+* Josep Sanz
+* Tomohiro KATO
+* ishitaka
+
 .. _release-12-09:
 
 Release 12.09 - 2022-10-28
