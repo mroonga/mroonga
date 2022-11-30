@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015-2020  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2015-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,6 +47,7 @@ typedef struct st_mrn_snippet_html_info
   grn_obj *db;
   bool use_shared_db;
   grn_obj *snippet;
+  grn_obj *lexicon;
   grn_obj *query_table;
   grn_obj *query_default_column;
 } mrn_snippet_html_info;
@@ -148,10 +149,10 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       lexicon_name = std::string(index_table_name.c_str(),
                                  index_table_name.length());
     }
-    mrn::SmartGrnObj lexicon(ctx,
-                             lexicon_name.c_str(),
-                             lexicon_name.length());
-    if (!lexicon.get()) {
+    info->lexicon = grn_ctx_get(ctx,
+                                   lexicon_name.c_str(),
+                                   lexicon_name.length());
+    if (!info->lexicon) {
       if (message) {
         snprintf(message, MYSQL_ERRMSG_SIZE,
                  "mroonga_snippet_html(): nonexistent index: <%.*s>",
@@ -160,7 +161,7 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       }
       goto error;
     }
-    grn_snip_set_normalizer(ctx, *snippet, lexicon.get());
+    grn_snip_set_normalizer(ctx, *snippet, info->lexicon);
   }
 
   for (unsigned int i = 1; i < args->arg_count; ++i) {
@@ -358,8 +359,9 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
   info->mysql_index_name_index = 0;
   info->mysql_lexicon_name_index = 0;
 
-  info->query_table = NULL;
-  info->query_default_column = NULL;
+  info->lexicon = nullptr;
+  info->query_table = nullptr;
+  info->query_default_column = nullptr;
   for (unsigned int i = 1; i < args->arg_count; ++i) {
     grn_raw_string arg_name = {
       args->attributes[i],
@@ -571,6 +573,9 @@ MRN_API void mroonga_snippet_html_deinit(UDF_INIT *init)
 
   if (info->snippet) {
     grn_obj_close(info->ctx, info->snippet);
+  }
+  if (info->lexicon) {
+    grn_obj_unref(info->ctx, info->lexicon);
   }
   if (info->query_default_column) {
     grn_obj_close(info->ctx, info->query_default_column);
