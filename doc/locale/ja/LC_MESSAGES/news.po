@@ -21,7 +21,6 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-#, fuzzy
 msgid "Release 12.10 - 2022-11-29"
 msgstr "12.10リリース - 2022-11-29"
 
