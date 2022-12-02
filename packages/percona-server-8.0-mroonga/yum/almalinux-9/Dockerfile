@@ -15,7 +15,7 @@ RUN \
   dnf module disable -y mysql && \
   percona-release setup ps80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
   # Percona Server's SRPM is broken. devtoolset-8 is required by dnf builddep.
@@ -23,7 +23,7 @@ RUN \
      percona-server || :) && \
   dnf download -y ${quiet} --enablerepo=ps-80-release-sources --source \
     percona-server && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     # Percona Server dependencies.
     cmake\
     cyrus-sasl-devel \
