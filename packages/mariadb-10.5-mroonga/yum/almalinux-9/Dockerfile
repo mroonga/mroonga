@@ -9,7 +9,7 @@ RUN \
   { \
     echo "[mariadb]"; \
     echo "name = MariaDB"; \
-    echo "baseurl = http://yum.mariadb.org/10.5/centos9-amd64"; \
+    echo "baseurl = http://yum.mariadb.org/10.5/rhel9-amd64"; \
     echo "gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"; \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
