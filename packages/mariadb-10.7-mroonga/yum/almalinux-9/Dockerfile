@@ -16,16 +16,16 @@ RUN \
   dnf install -y \
     https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
-  dnf module --enablerepo=powertools -y ${quiet} enable mariadb-devel && \
-  dnf builddep --enablerepo=powertools -y ${quiet} MariaDB && \
-  dnf module --enablerepo=powertools -y ${quiet} disable mariadb-devel && \
+  dnf module --enablerepo=crb -y ${quiet} enable mariadb-devel && \
+  dnf builddep --enablerepo=crb -y ${quiet} MariaDB && \
+  dnf module --enablerepo=crb -y ${quiet} disable mariadb-devel && \
   dnf module -y ${quiet} disable mariadb && \
   dnf module -y ${quiet} disable mysql && \
   dnf download -y ${quiet} --source MariaDB && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     MariaDB-devel \
     ccache \
     gcc-c++ \
