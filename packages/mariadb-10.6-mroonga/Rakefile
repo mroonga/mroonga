@@ -20,6 +20,7 @@ class MariaDB106MroongaPackageTask < MroongaPackageTask
   def yum_targets_default
     [
       "almalinux-8",
+      "almalinux-8-aarch64",
       "centos-7",
     ]
   end
