@@ -187,6 +187,11 @@ jobs:
           path: groonga
           repository: groonga/groonga
           submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt -V install \
+            qemu-user-static
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
