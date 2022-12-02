@@ -91,18 +91,12 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.3
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.3
           - os: centos-7
             package-type: yum
             package: mariadb-10.3
 
           # MariaDB 10.4
           - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.4
-          - os: almalinux-9
             package-type: yum
             package: mariadb-10.4
           - os: centos-7
@@ -341,18 +335,12 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.3
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.3
           - os: centos-7
             package-type: yum
             package: mariadb-10.3
 
           # MariaDB 10.4
           - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.4
-          - os: almalinux-9
             package-type: yum
             package: mariadb-10.4
           - os: centos-7
