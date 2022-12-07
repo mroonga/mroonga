@@ -159,6 +159,7 @@ mtr_args+=(--no-check-testcases)
 mtr_args+=(--parallel=${parallel})
 mtr_args+=(--retry=3)
 mtr_args+=(--suite="${test_suite_names}")
+mtr_args+=(--mysqld=--explicit_defaults_for_timestamp=ON)
 if [ -d "${mysql_test_dir}/bin" ]; then
   mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
 fi

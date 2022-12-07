@@ -189,6 +189,7 @@ sudo \
   --force \
   --mysqld=--loose-plugin-load-add=${ha_mroonga_so} \
   --mysqld=--loose-plugin-mroonga=ON \
+  --mysqld=--explicit_defaults_for_timestamp=ON \
   --no-check-testcases \
   --parallel=${parallel} \
   --retry=3 \
@@ -202,6 +203,7 @@ case ${package} in
       --force \
       --mysqld=--loose-plugin-load-add=${ha_mroonga_so} \
       --mysqld=--loose-plugin-mroonga=ON \
+      --mysqld=--explicit_defaults_for_timestamp=ON \
       --parallel=${parallel} \
       --ps-protocol \
       --retry=3 \

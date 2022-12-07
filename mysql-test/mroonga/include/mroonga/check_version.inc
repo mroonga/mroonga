@@ -53,5 +53,4 @@ let $version_10_2_or_later  = `SELECT $version_major_minor >= 10.02`;
 let $version_10_3_or_later  = `SELECT $version_major_minor >= 10.03`;
 let $version_10_4_or_later  = `SELECT $version_major_minor >= 10.04`;
 let $version_10_5_or_later  = `SELECT $version_major_minor >= 10.05`;
-let $version_10_10_or_later = `SELECT $version_major_minor >= 10.10`;
 --enable_query_log
