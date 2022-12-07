@@ -44,13 +44,14 @@ let $version_10_4          = `SELECT $version_major_minor = 10.04`;
 let $version_10_5          = `SELECT $version_major_minor = 10.05`;
 let $version_10_6          = `SELECT $version_major_minor = 10.06`;
 
-let $version_5_5_or_later  = `SELECT $version_major_minor >= 5.05`;
-let $version_5_6_or_later  = `SELECT $version_major_minor >= 5.06`;
-let $version_5_7_or_later  = `SELECT $version_major_minor >= 5.07`;
-let $version_8_0_or_later  = `SELECT $version_major_minor >= 8.00`;
-let $version_10_0_or_later = `SELECT $version_major_minor >= 10.00`;
-let $version_10_2_or_later = `SELECT $version_major_minor >= 10.02`;
-let $version_10_3_or_later = `SELECT $version_major_minor >= 10.03`;
-let $version_10_4_or_later = `SELECT $version_major_minor >= 10.04`;
-let $version_10_5_or_later = `SELECT $version_major_minor >= 10.05`;
+let $version_5_5_or_later   = `SELECT $version_major_minor >= 5.05`;
+let $version_5_6_or_later   = `SELECT $version_major_minor >= 5.06`;
+let $version_5_7_or_later   = `SELECT $version_major_minor >= 5.07`;
+let $version_8_0_or_later   = `SELECT $version_major_minor >= 8.00`;
+let $version_10_0_or_later  = `SELECT $version_major_minor >= 10.00`;
+let $version_10_2_or_later  = `SELECT $version_major_minor >= 10.02`;
+let $version_10_3_or_later  = `SELECT $version_major_minor >= 10.03`;
+let $version_10_4_or_later  = `SELECT $version_major_minor >= 10.04`;
+let $version_10_5_or_later  = `SELECT $version_major_minor >= 10.05`;
+let $version_10_10_or_later = `SELECT $version_major_minor >= 10.10`;
 --enable_query_log

@@ -44,4 +44,10 @@ if ($have_default_tmp_storage_engine_variable) {
   set default_tmp_storage_engine=Mroonga;
 }
 
+if ($mariadb) {
+  if ($version_10_10_or_later) {
+    SET explicit_defaults_for_timestamp=false;
+  }
+}
+
 enable_query_log;
