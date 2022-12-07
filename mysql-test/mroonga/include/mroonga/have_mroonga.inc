@@ -22,7 +22,6 @@
 
 disable_query_log;
 
-SET explicit_defaults_for_timestamp=false;
 let have_mroonga_storage_engine=`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`;
 if (!$have_mroonga_storage_engine) {
   --skip This test is for Mroonga
