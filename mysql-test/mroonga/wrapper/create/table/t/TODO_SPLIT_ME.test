@@ -70,7 +70,7 @@ create table t1 (c1 timestamp primary key) COMMENT = 'engine "innodb"';
 -- replace_result current_timestamp() CURRENT_TIMESTAMP
 desc t1;
 drop table t1;
-create table t1 (c1 datetime primary key) COMMENT = 'engine "innodb"';
+create table t1 (c1 datetime primary key DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP) COMMENT = 'engine "innodb"';
 desc t1;
 drop table t1;
 create table t1 (c1 year primary key) COMMENT = 'engine "innodb"';

@@ -265,7 +265,6 @@ mysql_test_run_args="${mysql_test_run_args} --suite=${test_suite_names}"
 mysql_test_run_args="${mysql_test_run_args} --force"
 mysql_test_run_args="${mysql_test_run_args} --mysqld=--loose-plugin-load-add=ha_mroonga.so"
 mysql_test_run_args="${mysql_test_run_args} --mysqld=--loose-plugin-mroonga=ON"
-mysql_test_run_args="${mysql_test_run_args} --mysqld=--explicit_defaults_for_timestamp=ON"
 
 if [ -n "$test_names" ]; then
   mysql_test_run_args="${mysql_test_run_args} --do-test=${test_names}"
