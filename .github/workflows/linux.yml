@@ -82,13 +82,15 @@ jobs:
   build:
     name: Build
     needs: source
-    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
         include:
           # MariaDB 10.3
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.3
+          - os: almalinux-8-aarch64
             package-type: yum
             package: mariadb-10.3
           - os: centos-7
@@ -99,12 +101,18 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.4
+          - os: almalinux-8-aarch64
+            package-type: yum
+            package: mariadb-10.4
           - os: centos-7
             package-type: yum
             package: mariadb-10.4
 
           # MariaDB 10.5
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.5
+          - os: almalinux-8-aarch64
             package-type: yum
             package: mariadb-10.5
           - os: amazon-linux-2
@@ -121,36 +129,29 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.6
-          - os: centos-7
+          - os: almalinux-8-aarch64
             package-type: yum
             package: mariadb-10.6
-          - os: ubuntu-jammy
-            package-type: apt
+          - os: centos-7
+            package-type: yum
             package: mariadb-10.6
 
           # MariaDB 10.7
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.7
+          - os: almalinux-8-aarch64
+            package-type: yum
+            package: mariadb-10.7
           - os: centos-7
             package-type: yum
             package: mariadb-10.7
-
-          # MariaDB 10.8
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.8
           - os: centos-7
             package-type: yum
             package: mariadb-10.8
-
-          # MariaDB 10.9
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.9
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.9
 
           # MySQL 8.0
           - os: ubuntu-jammy
@@ -164,6 +165,9 @@ jobs:
 
           # MySQL community 8.0
           - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.0
+          - os: almalinux-8-aarch64
             package-type: yum
             package: mysql-community-8.0
           - os: centos-7
@@ -186,6 +190,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: percona-server-8.0
+          - os: almalinux-8-aarch64
+            package-type: yum
+            package: percona-server-8.0
           - os: centos-7
             package-type: yum
             package: percona-server-8.0
@@ -197,6 +204,11 @@ jobs:
           path: groonga
           repository: groonga/groonga
           submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt -V install \
+            qemu-user-static
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
@@ -304,6 +316,9 @@ jobs:
         include:
           # MariaDB 10.3
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.3
+          - os: almalinux-8-aarch64
             package-type: yum
             package: mariadb-10.3
           - os: centos-7
