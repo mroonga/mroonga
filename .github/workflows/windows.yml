@@ -206,17 +206,6 @@ jobs:
             .
           cd mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}
           Remove-Item mysql-test -Recurse -Force
-          netsh advfirewall firewall add rule `
-            name="mariadb" `
-            dir=in `
-            action=allow `
-            protocol=TCP `
-            localport=3306 `
-            enable=yes `
-            profile=any
-          ..\..\source\storage\mroonga\packages\windows\install-mroonga.ps1 `
-            -mariadbVersion ${{ matrix.mariadb-version }} `
-            -platform ${Env:PACKAGE_PLATFORM}
           cd ..
           Move-Item `
             mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
