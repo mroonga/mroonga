@@ -222,7 +222,7 @@ sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${package} in
-  *-mariadb-10.9-*) # TODO: Remove this after 12.09 release.
+  *-mariadb-10.10-*) # TODO: Remove this after 12.10 release.
     exit
     ;;
 esac

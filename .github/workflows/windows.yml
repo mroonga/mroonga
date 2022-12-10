@@ -19,8 +19,9 @@ jobs:
           - MariaDB 10.7
           - MariaDB 10.8
           - MariaDB 10.9
-          - MariaDB 10.9 (master)
-          - MariaDB 10.9 (master/embed)
+          - MariaDB 10.10
+          - MariaDB 10.10 (master)
+          - MariaDB 10.10 (master/embed)
         include:
           - label: MariaDB 10.3
             mariadb-version: "10.3.37"
@@ -36,11 +37,13 @@ jobs:
             mariadb-version: "10.8.6"
           - label: MariaDB 10.9
             mariadb-version: "10.9.4"
-          - label: MariaDB 10.9 (master)
-            mariadb-version: "10.9.4"
+          - label: MariaDB 10.10
+            mariadb-version: "10.10.2"
+          - label: MariaDB 10.10 (master)
+            mariadb-version: "10.10.2"
             use-master: "yes"
-          - label: MariaDB 10.9 (master/embed)
-            mariadb-version: "10.9.4"
+          - label: MariaDB 10.10 (master/embed)
+            mariadb-version: "10.10.2"
             use-master: "yes"
             embed: "ON"
     env:
@@ -110,7 +113,7 @@ jobs:
           ridk exec tar xzf "${MARIADB_TAR_GZ}"
           Move-Item mariadb-${{ matrix.mariadb-version }} ..\source
           cd ..\source
-          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6|^10\.7|^10\.8|^10\.9") {
+          if ("${{ matrix.mariadb-version }}" -match "^10\.5|^10\.6|^10\.7|^10\.8|^10\.9|^10\.10") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }

@@ -152,6 +152,14 @@ jobs:
             package-type: yum
             package: mariadb-10.9
 
+          # MariaDB 10.10
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.10
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.10
+
           # MySQL 8.0
           - os: ubuntu-jammy
             package-type: apt
@@ -366,6 +374,14 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.9
+
+          # MariaDB 10.10
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.10
+          - os: centos-7
+            package-type: yum
+            package: mariadb-10.10
 
           # MySQL 8.0
           - os: ubuntu-jammy

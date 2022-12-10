@@ -15,28 +15,42 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --disable_query_log
-let $version_major_minor =
-  `SELECT CAST(SUBSTRING_INDEX(@@global.version, '.', 2) AS DECIMAL(4, 2))`;
+let $version_major_minor = 
+  `SELECT CAST(
+    CONCAT(
+      SUBSTRING_INDEX(@@global.version, '.', 1),
+      '.',
+      LPAD(
+        SUBSTRING_INDEX(
+          SUBSTRING_INDEX(@@global.version, '.', 2),
+          '.',
+          -1),
+        2,
+        '0'
+      )
+    )
+    AS DECIMAL(4, 2)
+  )`;
 
-let $version_5_5           = `SELECT $version_major_minor = 5.5`;
-let $version_5_6           = `SELECT $version_major_minor = 5.6`;
-let $version_5_7           = `SELECT $version_major_minor = 5.7`;
-let $version_8_0           = `SELECT $version_major_minor = 8.0`;
-let $version_10_0          = `SELECT $version_major_minor = 10.0`;
-let $version_10_1          = `SELECT $version_major_minor = 10.1`;
-let $version_10_2          = `SELECT $version_major_minor = 10.2`;
-let $version_10_3          = `SELECT $version_major_minor = 10.3`;
-let $version_10_4          = `SELECT $version_major_minor = 10.4`;
-let $version_10_5          = `SELECT $version_major_minor = 10.5`;
-let $version_10_6          = `SELECT $version_major_minor = 10.6`;
+let $version_5_5           = `SELECT $version_major_minor = 5.05`;
+let $version_5_6           = `SELECT $version_major_minor = 5.06`;
+let $version_5_7           = `SELECT $version_major_minor = 5.07`;
+let $version_8_0           = `SELECT $version_major_minor = 8.00`;
+let $version_10_0          = `SELECT $version_major_minor = 10.00`;
+let $version_10_1          = `SELECT $version_major_minor = 10.01`;
+let $version_10_2          = `SELECT $version_major_minor = 10.02`;
+let $version_10_3          = `SELECT $version_major_minor = 10.03`;
+let $version_10_4          = `SELECT $version_major_minor = 10.04`;
+let $version_10_5          = `SELECT $version_major_minor = 10.05`;
+let $version_10_6          = `SELECT $version_major_minor = 10.06`;
 
-let $version_5_5_or_later  = `SELECT $version_major_minor >= 5.5`;
-let $version_5_6_or_later  = `SELECT $version_major_minor >= 5.6`;
-let $version_5_7_or_later  = `SELECT $version_major_minor >= 5.7`;
-let $version_8_0_or_later  = `SELECT $version_major_minor >= 8.0`;
-let $version_10_0_or_later = `SELECT $version_major_minor >= 10.0`;
-let $version_10_2_or_later = `SELECT $version_major_minor >= 10.2`;
-let $version_10_3_or_later = `SELECT $version_major_minor >= 10.3`;
-let $version_10_4_or_later = `SELECT $version_major_minor >= 10.4`;
-let $version_10_5_or_later = `SELECT $version_major_minor >= 10.5`;
+let $version_5_5_or_later   = `SELECT $version_major_minor >= 5.05`;
+let $version_5_6_or_later   = `SELECT $version_major_minor >= 5.06`;
+let $version_5_7_or_later   = `SELECT $version_major_minor >= 5.07`;
+let $version_8_0_or_later   = `SELECT $version_major_minor >= 8.00`;
+let $version_10_0_or_later  = `SELECT $version_major_minor >= 10.00`;
+let $version_10_2_or_later  = `SELECT $version_major_minor >= 10.02`;
+let $version_10_3_or_later  = `SELECT $version_major_minor >= 10.03`;
+let $version_10_4_or_later  = `SELECT $version_major_minor >= 10.04`;
+let $version_10_5_or_later  = `SELECT $version_major_minor >= 10.05`;
 --enable_query_log
