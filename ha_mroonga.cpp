@@ -1264,7 +1264,7 @@ static mrn_bool grn_check_mecab_support()
     is_mecab_support = true;
   }
 
-  return is_zstd_support;
+  return is_mecab_support;
 }
 
 static MYSQL_SYSVAR_BOOL(libgroonga_support_mecab, mrn_libgroonga_support_mecab,
