@@ -1256,6 +1256,24 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_mecab,
                          NULL,
                          mrn_libgroonga_support_mecab);
 
+static mrn_bool grn_check_mecab_support()
+{
+  bool is_mecab_support = false;
+
+  if (grn_ctx_get(&mrn_ctx, "TokenMecab", -1) != NULL) {
+    is_mecab_support = true;
+  }
+
+  return is_zstd_support;
+}
+
+static MYSQL_SYSVAR_BOOL(libgroonga_support_mecab, mrn_libgroonga_support_mecab,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports MeCab",
+                         NULL,
+                         NULL,
+                         grn_check_mecab_support());
+
 static void mrn_enable_operations_recording_update(THD *thd,
                                                    mrn_sys_var *var,
                                                    void *var_ptr,
