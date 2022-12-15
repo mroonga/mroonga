@@ -226,7 +226,7 @@ Here is an example for the case that the MySQL version is ``5.7.26``, the Mroong
 
 You have to specify the latest versions.
 
-After you check `GitHub Actions of the Mroonga's Docker repository <https://github.com/mroonga/docker/actions>`_ is succeeded, push tag to remote, push tag to remote.::
+After you check `GitHub Actions of the Mroonga's Docker repository <https://github.com/mroonga/docker/actions>`_ are succeeded, push tag to remote, push tag to remote.::
 
     % git push --tags
 

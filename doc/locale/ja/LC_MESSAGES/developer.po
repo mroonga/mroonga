@@ -1387,7 +1387,7 @@ msgstr "作業時には最新のバージョンを指定してください。"
 
 msgid ""
 "After you check `GitHub Actions of the Mroonga's Docker repository <https://"
-"github.com/mroonga/docker/actions>`_ is succeeded, push tag to remote, push "
+"github.com/mroonga/docker/actions>`_ are succeeded, push tag to remote, push "
 "tag to remote.::"
 msgstr ""
 "`MroongaのDockerリポジトリーのGithub Actions <https://github.com/mroonga/"
