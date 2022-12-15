@@ -208,6 +208,32 @@ Windows
 
 For windows packages, we use artifacts of `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ .
 
+Update Docker images
+--------------------
+
+We update Mroonga's Docker images of `Docker Hub <https://hub.docker.com/r/groonga/mroonga>`_ .
+
+Clone `the Mroonga's Docker repository <https://github.com/mroonga/docker>`_ and update Dockerfiles in tha repository.
+
+Here is an example for the case that the MySQL version is ``5.7.26``, the Mroonga version is ``9.01``, the Groonga version is ``9.0.2``::
+
+    % mkdir -p ~/work/mroonga
+    % rm -rf ~/work/mroonga/docker.clean
+    % git clone --recursive git@github.com:mroonga/docker.git ~/work/mroonga/docker.clean
+    % cd ~/work/mroonga/docker.clean
+    % ./update.sh 5.7.26 9.01 9.0.2 #Automatically update Dockerfiles and commit changes and create a tag.
+    % git push
+
+You have to specify the latest versions.
+
+After you check `GitHub Actions of the Mroonga's Docker repository <https://github.com/mroonga/docker/actions>`_ is succeeded, push tag to remote, push tag to remote.::
+
+    % git push --tags
+
+GitHub Actions of the Mroonga's Docker repository automatically update the Mroonga's docker images of Docker Hub after you push the tag.
+
+You have to execute this procedure for both MySQL 5.x.x and 8.x.x.
+
 Upload documents
 ----------------
 
