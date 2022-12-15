@@ -253,20 +253,28 @@ jobs:
       - name: Test
         run: |
           cd ..\install\mysql-test
+          $suites = `
+            Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
+              Split-Path -Parent | `
+              % {$_.replace("\", "/")}
           perl mysql-test-run.pl `
             --force `
             --no-check-testcases `
             --parallel=${Env:NUMBER_OF_PROCESSORS} `
             --retry=3 `
-            --suite=mroonga/**/*
+            --suite=$($suites -join ",")
 
       - name: "Test: reference count"
         run: |
           cd ..\install\mysql-test
+          $suites = `
+            Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
+              Split-Path -Parent | `
+              % {$_.replace("\", "/")}
           perl mysql-test-run.pl `
             --force `
             --mysqld=--loose-plugin-mroonga-enable-reference-count=ON `
             --no-check-testcases `
             --parallel=${Env:NUMBER_OF_PROCESSORS} `
             --retry=3 `
-            --suite=mroonga/**/*
+            --suite=$($suites -join ",")
