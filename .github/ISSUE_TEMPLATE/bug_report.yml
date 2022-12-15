@@ -1,0 +1,53 @@
+name: Bug report
+description: Suggest an idea for this project
+title: "[Bug]: "
+labels: ["Bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happend?
+      description: Tell us what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: Tell us how to reproduce the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: Tell us the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Tell us your environment.
+      value: |
+        - OS: [e.g. Ubuntu]
+        - OS Version: [e.g. Ubuntu 20.04.2 LTS]
+        - DB: [e.g. MySQL/MariaDB/Percona]
+        - DB Version: [e.g. 8.0.30]
+        - Mroonga Version: [e.g. 12.1.0]
+          - https://mroonga.org/docs/reference/server_variables.html#mroonga-version
+        - libgroonga Version: [e.g. 1.2.8-9]
+          - https://mroonga.org/docs/reference/server_variables.html#mroonga-libgroonga-version
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Tell us the additional context if you have.
+    validations:
+      required: false
