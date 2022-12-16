@@ -17154,7 +17154,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
       my_printf_error(ER_DUP_UNIQUE,
                       MRN_GET_ERR_MSG(ER_DUP_UNIQUE),
                       MYF(0),
-                      table_share->table_name);
+                      table_share->table_name.str);
       ++i;
       break;
     }
@@ -17176,7 +17176,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
       my_printf_error(ER_DUP_UNIQUE,
                       MRN_GET_ERR_MSG(ER_DUP_UNIQUE),
                       MYF(0),
-                      table_share->table_name);
+                      table_share->table_name.str);
     } else if (error) {
       my_message(error, "failed to create multiple column index", MYF(0));
     }
