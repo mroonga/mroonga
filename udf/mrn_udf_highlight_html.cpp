@@ -170,6 +170,9 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       }
       GRN_OBJ_FIN(ctx, &extracted_keywords);
     }
+
+    grn_obj_close(ctx, expr);
+    expr = nullptr;
   } else {
     for (unsigned int i = 1; i < args->arg_count; ++i) {
       if (!args->args[i]) {
