@@ -759,6 +759,7 @@ static char *mrn_vector_column_delimiter = NULL;
 static mrn_bool mrn_libgroonga_support_zlib = false;
 static mrn_bool mrn_libgroonga_support_lz4 = false;
 static mrn_bool mrn_libgroonga_support_zstd = false;
+static mrn_bool mrn_libgroonga_support_mecab = false;
 static mrn_bool mrn_enable_operations_recording = false;
 static const char *mrn_boolean_mode_sytnax_flag_names[] = {
   "DEFAULT",
@@ -1283,6 +1284,14 @@ static MYSQL_SYSVAR_BOOL(libgroonga_support_zstd, mrn_libgroonga_support_zstd,
                          NULL,
                          grn_check_zstd_support());
 
+static MYSQL_SYSVAR_BOOL(libgroonga_support_mecab,
+                         mrn_libgroonga_support_mecab,
+                         PLUGIN_VAR_NOCMDARG | PLUGIN_VAR_READONLY,
+                         "The status of libgroonga supports MeCab",
+                         NULL,
+                         NULL,
+                         mrn_libgroonga_support_mecab);
+
 static void mrn_enable_operations_recording_update(THD *thd,
                                                    mrn_sys_var *var,
                                                    void *var_ptr,
@@ -1438,6 +1447,7 @@ static mrn_sys_var *mrn_system_variables[] =
   MYSQL_SYSVAR(libgroonga_support_zlib),
   MYSQL_SYSVAR(libgroonga_support_lz4),
   MYSQL_SYSVAR(libgroonga_support_zstd),
+  MYSQL_SYSVAR(libgroonga_support_mecab),
   MYSQL_SYSVAR(boolean_mode_syntax_flags),
   MYSQL_SYSVAR(max_n_records_for_estimate),
   MYSQL_SYSVAR(libgroonga_embedded),
@@ -2510,6 +2520,10 @@ static int mrn_init(void *p)
 #endif
 
   mrn_fix_db_type();
+
+  if (grn_table_at(&mrn_ctx, mrn_db, GRN_DB_MECAB) == GRN_DB_MECAB) {
+    mrn_libgroonga_support_mecab = true;
+  }
 
   return 0;
 
