@@ -2503,7 +2503,7 @@ static int mrn_init(void *p)
 
     GRN_OBJ_FIN(&mrn_ctx, &grn_support_p);
   }
-  if (grn_table_at(&mrn_ctx, mrn_db, GRN_DB_MECAB) == GRN_DB_MECAB) {
+  if (grn_ctx_at(&mrn_ctx, GRN_DB_MECAB)) {
     mrn_libgroonga_support_mecab = true;
   }
 
