@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries (
+id int PRIMARY KEY AUTO_INCREMENT,
+body text,
+FULLTEXT INDEX body_index (body) COMMENT 'tokenizer "TokenMecab"'
+) DEFAULT CHARSET utf8mb4;
+INSERT INTO diaries (body) VALUES ("東京都");
+INSERT INTO diaries (body) VALUES ("京都");
+SELECT * FROM diaries
+WHERE MATCH(body) AGAINST("+京都" IN BOOLEAN MODE)
+ORDER BY id;
+id	body
+2	京都
+DROP TABLE diaries;
