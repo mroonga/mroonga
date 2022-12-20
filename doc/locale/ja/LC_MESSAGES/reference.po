@@ -58,7 +58,6 @@ msgid ""
 "These qualifiers and pragmas can change the relative rank of search results."
 msgstr "この修飾子とプラグマで検索結果の順位を変更できます。"
 
-# c797e652db7c4f12bb345564b592a999
 msgid ""
 "In the case of a search string not using neither a qualifier nor a pragma, "
 "the search results that contain the search string will be rated higher."
@@ -72,8 +71,6 @@ msgstr "使いかた"
 msgid "Here are schema and data to show examples::"
 msgstr "以下は例を示すためのスキーマとデータです。::"
 
-# 71ca20d077b348898500f27958dfba2c
-# db3f7a6140cd4736a108c1a2c42f4764
 msgid "Qualifier"
 msgstr "修飾子"
 
@@ -718,7 +715,6 @@ msgstr "実行結果はこちらです。::"
 msgid "Limitations of column size"
 msgstr "カラムサイズの制限事項"
 
-# 6e9f19caddb6415780b33abd1d596ade
 msgid "A column has the following limitation."
 msgstr "1つのカラムにつき、次の制限があります。"
 
@@ -1124,14 +1120,9 @@ msgstr ""
 msgid "Here is an example SQL to use script syntax in Groonga::"
 msgstr "Groongaのスクリプト構文を使うようにするSQLの例です::"
 
-# 0c57c52e93ca4f559e8362022cd62879
 msgid "``mroonga_database_path_prefix``"
 msgstr ""
 
-# 56df30ea885443298b6d5b3b968e694f
-# a358fdd183ae4bf7aff1313f198ef73d
-# 82372d0e963c4388bdedba617c51d456
-# df2d266b56e34bca959bd3da8b8e1c73
 msgid "TODO:"
 msgstr ""
 
@@ -1157,7 +1148,6 @@ msgstr ""
 "の例では ``body_index`` 全文検索インデックスは "
 "``TokenBigramSplitSymbolAlphaDigit`` を使います。"
 
-# 9ab11a7d36774de195fa0bade135e92d
 msgid "``mroonga_default_tokenizer``"
 msgstr ""
 
@@ -1178,7 +1168,6 @@ msgstr ""
 "``TokenBigramSplitSymbolAlphaDigit`` を使う例です。この例では ``body_index`` "
 "全文検索インデックスは ``TokenBigramSplitSymbolAlphaDigit`` を使います。"
 
-# 8e7a51278bea48a48de60d1b8cddc4d6
 msgid "``mroonga_default_wrapper_engine``"
 msgstr ""
 
@@ -1257,7 +1246,7 @@ msgid "The status of libgroonga supports MeCab."
 msgstr "GroongaライブラリーのMeCabサポート状況"
 
 msgid ""
-"Here is an example SQL to confirm the status of libgroonga supports Mecab."
+"Here is an example SQL to confirm the status of libgroonga supports MeCab."
 msgstr ""
 "GroongaライブラリーがMeCabをサポートしているかを確認するためのSQL例です。"
 
@@ -1270,7 +1259,6 @@ msgstr "groongaライブラリのバージョン"
 msgid "Here is an example SQL to confirm the using groonga library version::"
 msgstr "groongaライブラリのバージョンを確認するためのSQL例です::"
 
-# fcf49b295ede4321ad3b6fc6283a6ab0
 msgid "``mroonga_lock_timeout``"
 msgstr ""
 
@@ -1452,7 +1440,6 @@ msgid ""
 "space::"
 msgstr "区切り文字を空白からセミコロンに変更するSQL例です::"
 
-# f5b4502357ee4cc492b0de2ad642d495
 msgid "``mroonga_version``"
 msgstr ""
 

@@ -286,7 +286,7 @@ Here is an example SQL to confirm the status of libgroonga supports Zstandard::
 
 The status of libgroonga supports MeCab.
 
-Here is an example SQL to confirm the status of libgroonga supports Mecab.
+Here is an example SQL to confirm the status of libgroonga supports MeCab.
 
 .. code-block:: sql
 
