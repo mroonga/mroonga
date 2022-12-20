@@ -1,3 +1,9 @@
+mariadb-10.5-mroonga (12.10-2) unstable; urgency=low
+
+  * Rebuilt against MariaDB 10.5.18
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Mon, 28 Nov 2022 15:00:00 -0000
+
 mariadb-10.5-mroonga (12.10-1) unstable; urgency=low
 
   * New upstream release.
