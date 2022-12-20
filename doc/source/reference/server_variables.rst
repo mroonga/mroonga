@@ -279,6 +279,24 @@ Here is an example SQL to confirm the status of libgroonga supports Zstandard::
   | mroonga_libgroonga_support_zstd | ON    |
   +---------------------------------+-------+
 
+.. _server-variable-mroonga-libgroonga-support-mecab:
+
+``mroonga_libgroonga_support_mecab``
+------------------------------------
+
+The status of libgroonga supports MeCab.
+
+Here is an example SQL to confirm the status of libgroonga supports MeCab.
+
+.. code-block:: sql
+
+  mysql> SHOW GLOBAL VARIABLES LIKE 'mroonga_libgroonga_support_mecab';
+  +----------------------------------+-------+
+  | Variable_name                    | Value |
+  +----------------------------------+-------+
+  | mroonga_libgroonga_support_mecab | ON    |
+  +----------------------------------+-------+
+
 .. _serer-variable-mroonga-libgroonga-version:
 
 
