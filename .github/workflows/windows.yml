@@ -198,7 +198,7 @@ jobs:
             --target package ^
             --verbose || exit /B
           ccache --show-stats --verbose
-      - name: Enable Mroonga in package
+      - name: Prepare package
         run: |
           cd ..\build
           Expand-Archive `
@@ -210,13 +210,11 @@ jobs:
           Move-Item `
             mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
             ..\mroonga\
-
-      # Artifact
-      - name: Compress the artifact
-        run: |
           Compress-Archive `
             -Path mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
+
+      # Artifact
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.info.outputs.artifact-name }}
