@@ -218,9 +218,11 @@ Clone `the Mroonga's Docker repository <https://github.com/mroonga/docker>`_ and
 Here is an example for the case that the MySQL version is ``5.7.26``, the Mroonga version is ``9.01``, the Groonga version is ``9.0.2``::
 
     % mkdir -p ~/work/mroonga
-    % rm -rf ~/work/mroonga/docker.clean
-    % git clone --recursive git@github.com:mroonga/docker.git ~/work/mroonga/docker.clean
+    % test -e ~/work/mroonga/docker.clean || git clone --recursive git@github.com:mroonga/docker.git ~/work/mroonga/docker.clean
     % cd ~/work/mroonga/docker.clean
+    % git clean -xdf
+    % git checkout .
+    % git pull
     % ./update.sh 5.7.26 9.01 9.0.2 #Automatically update Dockerfiles and commit changes and create a tag.
     % git push
 
