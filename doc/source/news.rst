@@ -3,6 +3,32 @@
 News
 ====
 
+.. _release-12-11:
+
+Release 12.11 - 2023-01-06
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support for MariaDB 10.10.
+
+* [:doc:`/install/amazonlinux`] Added support for MariaDB 10.5.10-2.amzn2.0.2.
+
+* [:doc:`/reference/server_variables`] Added a new status variable ``libgroonga_support_mecab``.
+
+  It's true only when Groonga supports TokenMecab.
+
+* [:doc:`/install/debian`] Added support for MariaDB 10.5.18.
+
+
+Fixes
+^^^^^
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Fixed memory leak when we use ``mroonga_highlight_html()`` with ``AS query``.
+
+* Fixed a bug that initialization of MeCab is fail when we use Mroonga on MariaDB 10.9 or later for Windows.
+
 .. _release-12-10:
 
 Release 12.10 - 2022-11-29
