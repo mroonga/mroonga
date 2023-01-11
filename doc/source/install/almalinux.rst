@@ -96,7 +96,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-4:
 
@@ -129,7 +131,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-5:
 
@@ -162,7 +166,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-6:
 
@@ -195,7 +201,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-7:
 
@@ -228,7 +236,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-8:
 
@@ -261,7 +271,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-9:
 
@@ -294,7 +306,9 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-10:
 
@@ -327,4 +341,6 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
+  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
