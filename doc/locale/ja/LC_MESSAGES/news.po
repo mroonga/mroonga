@@ -35,9 +35,10 @@ msgstr ""
 "ポートしました。"
 
 msgid ""
-"[:doc:`/install/amazonlinux`] Added support for MariaDB 10.5.10-2.amzn2.0.2."
+"[:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.10-2.amzn2.0.2."
 msgstr ""
-"[:doc:`/install/amazonlinux`] MariaDB 10.5.10-2.amzn2.0.2をサポートしました。"
+"[:doc:`/install/amazon-linux`] MariaDB 10.5.10-2.amzn2.0.2をサポートしまし"
+"た。"
 
 msgid ""
 "[:doc:`/reference/server_variables`] Added a new status variable "

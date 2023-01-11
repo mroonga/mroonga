@@ -13,7 +13,7 @@ Improvements
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support for MariaDB 10.10.
 
-* [:doc:`/install/amazonlinux`] Added support for MariaDB 10.5.10-2.amzn2.0.2.
+* [:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.10-2.amzn2.0.2.
 
 * [:doc:`/reference/server_variables`] Added a new status variable ``libgroonga_support_mecab``.
 
