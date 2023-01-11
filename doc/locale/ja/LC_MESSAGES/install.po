@@ -182,6 +182,19 @@ msgstr ""
 "AlmaLinux 8では、Mroonga 12.11からMariaDB提供のMariaDB 10.10パッケージを利用"
 "できます。"
 
+msgid "Amazon Linux"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga related RPM packages on Amazon "
+"Linux. You can install them by ``yum``."
+msgstr ""
+"このセクションではAmazon Linux上でMroonga関連のRPMパッケージをインストールす"
+"る方法を説明します。これらのパッケージは ``yum`` でインストールできます。"
+
+msgid "Amazon Linux 2 (with MariaDB 10.5 package)"
+msgstr "Amazon Linux 2（MariaDB 10.5のパッケージを利用）"
+
 msgid "CentOS"
 msgstr ""
 

@@ -21,6 +21,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/install.rst \
 	$(top_srcdir)/doc/source/install/32bit-note.inc \
 	$(top_srcdir)/doc/source/install/almalinux.rst \
+	$(top_srcdir)/doc/source/install/amazon-linux.rst \
 	$(top_srcdir)/doc/source/install/centos.rst \
 	$(top_srcdir)/doc/source/install/debian.rst \
 	$(top_srcdir)/doc/source/install/docker.rst \
@@ -96,6 +97,7 @@ source_files_relative_from_doc_dir = \
 	source/install.rst \
 	source/install/32bit-note.inc \
 	source/install/almalinux.rst \
+	source/install/amazon-linux.rst \
 	source/install/centos.rst \
 	source/install/debian.rst \
 	source/install/docker.rst \
@@ -270,6 +272,7 @@ html_files_relative_from_locale_dir = \
 	html/index.html \
 	html/install.html \
 	html/install/almalinux.html \
+	html/install/amazon-linux.html \
 	html/install/centos.html \
 	html/install/debian.html \
 	html/install/docker.html \
