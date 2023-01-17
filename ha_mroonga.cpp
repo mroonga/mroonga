@@ -7966,6 +7966,38 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     pkey_info = &(table->key_info[table->s->primary_key]);
   }
   GRN_VOID_INIT(&colbuf);
+  if (pkey_info) {
+    grn_obj old_value;
+    GRN_VOID_INIT(&old_value);
+    for (i = 0; i < n_columns; i++) {
+      Field *field = table->field[i];
+      mrn::ColumnName column_name(FIELD_NAME(field));
+      for (j = 0; j < KEY_N_KEY_PARTS(pkey_info); j++) {
+        Field *pkey_field = pkey_info->key_part[j].field;
+        if (FIELD_NAME_EQUAL(pkey_field, column_name.c_str())) {
+          generic_store_bulk(field, &colbuf);
+          GRN_BULK_REWIND(&old_value);
+          grn_obj_get_value(ctx, grn_columns[i], record_id, &old_value);
+          if (!(GRN_BULK_VSIZE(&colbuf) == GRN_BULK_VSIZE(&old_value) &&
+                (memcmp(GRN_BULK_HEAD(&colbuf),
+                        GRN_BULK_HEAD(&old_value),
+                        GRN_BULK_VSIZE(&colbuf)) == 0))) {
+            GRN_OBJ_FIN(ctx, &colbuf);
+            GRN_OBJ_FIN(ctx, &old_value);
+            char message[MRN_BUFFER_SIZE];
+            snprintf(message, MRN_BUFFER_SIZE,
+                     "changing composite primary key isn't supported: <%s>",
+                     column_name.c_str());
+            error = ER_ERROR_ON_WRITE;
+            my_message(error, message, MYF(0));
+            goto err;
+          }
+          break;
+        }
+      }
+    }
+    GRN_OBJ_FIN(ctx, &old_value);
+  }
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
@@ -8003,39 +8035,16 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
         }
       }
 
-      generic_store_bulk(field, &colbuf);
       if (is_pkey) {
-        bool is_multiple_column_index = KEY_N_KEY_PARTS(pkey_info) > 1;
-        bool is_same_value;
-        if (is_multiple_column_index) {
-          is_same_value = false;
-        } else {
-          grn_id found_record_id = grn_table_get(ctx,
-                                                 grn_table,
-                                                 GRN_BULK_HEAD(&colbuf),
-                                                 GRN_BULK_VSIZE(&colbuf));
-          is_same_value = (record_id == found_record_id);
-        }
-        if (!is_same_value && !replacing_) {
-          char message[MRN_BUFFER_SIZE];
-          snprintf(message, MRN_BUFFER_SIZE,
-                   "data truncated for primary key column: <%s>",
-                   column_name.c_str());
-          push_warning(thd, MRN_SEVERITY_WARNING,
-                       WARN_DATA_TRUNCATED, message);
-          if (thd->is_strict_mode()) {
-            error = ER_ERROR_ON_WRITE;
-            goto err;
-          }
-        }
         continue;
       }
 
+      generic_store_bulk(field, &colbuf);
       grn_obj_set_value(ctx, grn_columns[i], record_id, &colbuf, GRN_OBJ_SET);
       if (ctx->rc) {
         grn_obj_unlink(ctx, &colbuf);
-        my_message(ER_ERROR_ON_WRITE, ctx->errbuf, MYF(0));
         error = ER_ERROR_ON_WRITE;
+        my_message(error, ctx->errbuf, MYF(0));
         goto err;
       }
     }
