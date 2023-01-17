@@ -9,10 +9,12 @@ RUN \
   { \
     echo "[mariadb]"; \
     echo "name = MariaDB"; \
-    echo "baseurl = https://yum.mariadb.org/10.6/rhel9-amd64"; \
+    echo "baseurl = https://yum.mariadb.org/10.10/rhel9-amd64"; \
     echo "gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"; \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
+  dnf install -y \
+    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm && \
   dnf install -y epel-release && \
   dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
   dnf config-manager --set-enabled epel|| : && \
@@ -23,7 +25,7 @@ RUN \
     'dnf-command(download)' && \
   dnf builddep --enablerepo=crb -y ${quiet} MariaDB && \
   dnf download -y ${quiet} --source MariaDB && \
-  dnf install --enablerepo=crb -y ${quiet} \
+  dnf install --enablerepo=powertools -y ${quiet} \
     arrow-devel \
     MariaDB-devel \
     ccache \
