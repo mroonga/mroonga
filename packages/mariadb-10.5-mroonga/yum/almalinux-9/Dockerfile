@@ -19,11 +19,7 @@ RUN \
   dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
-  dnf module --enablerepo=crb -y ${quiet} enable mariadb-devel && \
   dnf builddep --enablerepo=crb -y ${quiet} MariaDB && \
-  dnf module --enablerepo=crb -y ${quiet} disable mariadb-devel && \
-  dnf module -y ${quiet} disable mariadb && \
-  dnf module -y ${quiet} disable mysql && \
   dnf download -y ${quiet} --source MariaDB && \
   dnf install --enablerepo=crb -y ${quiet} \
     MariaDB-devel \
