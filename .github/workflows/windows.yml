@@ -200,16 +200,17 @@ jobs:
           ccache --show-stats --verbose
       - name: Prepare package
         run: |
-          cd ..\build
+          pushd ..\build
           Expand-Archive `
             mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}.zip `
             .
-          cd mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}
+          pushd mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM}
           Remove-Item mysql-test -Recurse -Force
-          cd ..
+          popd
           Move-Item `
             mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
             ..\mroonga\
+          popd
           Compress-Archive `
             -Path mariadb-${{ matrix.mariadb-version }}-${Env:PACKAGE_PLATFORM} `
             -DestinationPath "${{ steps.info.outputs.artifact-name }}.zip"
