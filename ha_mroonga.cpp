@@ -7971,6 +7971,15 @@ int ha_mroonga::storage_update_row(const uchar *old_data,
     GRN_VOID_INIT(&old_value);
     for (i = 0; i < n_columns; i++) {
       Field *field = table->field[i];
+      if (!bitmap_is_set(table->write_set, MRN_FIELD_FIELD_INDEX(field))) {
+        continue;
+      }
+
+      mrn::DebugColumnAccess debug_column_access(table, &(table->read_set));
+      if (field->is_null()) {
+        continue;
+      }
+
       mrn::ColumnName column_name(FIELD_NAME(field));
       for (j = 0; j < KEY_N_KEY_PARTS(pkey_info); j++) {
         Field *pkey_field = pkey_info->key_part[j].field;
