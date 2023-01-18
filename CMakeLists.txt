@@ -287,16 +287,14 @@ else()
   set(MYSQL_PROTOBUF_INCLUDE_DIR)
 endif()
 
-if(${MYSQL_VARIANT} STREQUAL "MySQL")
-  set(ZLIB_VERSION "1.2.13")
-else()
-  set(ZLIB_VERSION "1.2.12")
-endif()
-
-if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-${ZLIB_VERSION}")
+if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13")
   set(MYSQL_ZLIB_INCLUDE_DIR
-    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-${ZLIB_VERSION}"
-    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-${ZLIB_VERSION}")
+    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13"
+    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.13")
+elseif(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12")
+  set(MYSQL_ZLIB_INCLUDE_DIR
+    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12"
+    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
 else()
   set(MYSQL_ZLIB_INCLUDE_DIR)
 endif()
