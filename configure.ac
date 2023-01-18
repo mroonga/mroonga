@@ -220,6 +220,11 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_include_dir"
     mysql_zlib_config_include_dir="$ac_mysql_build_dir/extra/zlib/zlib-1.2.13"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_config_include_dir"
+  elif test -d "$ac_mysql_build_dir/extra/zlib/zlib-1.2.12"; then
+    mysql_zlib_include_dir="$ac_mysql_source_dir/extra/zlib/zlib-1.2.12"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_include_dir"
+    mysql_zlib_config_include_dir="$ac_mysql_build_dir/extra/zlib/zlib-1.2.12"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_config_include_dir"
   elif test -d "$ac_mysql_build_dir/extra/zlib"; then
     mysql_zlib_include_dir="$ac_mysql_source_dir/extra/zlib"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_include_dir"

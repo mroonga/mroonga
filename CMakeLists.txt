@@ -291,6 +291,10 @@ if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13")
   set(MYSQL_ZLIB_INCLUDE_DIR
     "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13"
     "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.13")
+elseif(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12")
+  set(MYSQL_ZLIB_INCLUDE_DIR
+    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12"
+    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
 else()
   set(MYSQL_ZLIB_INCLUDE_DIR)
 endif()
