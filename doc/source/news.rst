@@ -3,6 +3,23 @@
 News
 ====
 
+.. _release-12-12:
+
+Release 12.12 - 2023-01-20
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.32.
+
+* Added support for updating normal columns with composite primary key table. [GitHub#592][Reported by handmound]
+
+Thanks
+^^^^^^
+
+* handmound
+
 .. _release-12-11:
 
 Release 12.11 - 2023-01-06
@@ -20,7 +37,6 @@ Improvements
   It's true only when Groonga supports TokenMecab.
 
 * [:doc:`/install/debian`] Added support for MariaDB 10.5.18.
-
 
 Fixes
 ^^^^^
