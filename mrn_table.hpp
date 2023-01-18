@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013  Kentoku SHIBA
-  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
 
 #include <list>
 
-#include "mrn_mysql.h"
+#include "mrn_mysql_compat.h"
 
 #include <groonga.h>
 

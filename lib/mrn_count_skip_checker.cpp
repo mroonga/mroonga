@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2011-2023 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -64,16 +64,18 @@ namespace mrn {
               "[mroonga][count-skip][false] have HAVING");
       DBUG_RETURN(false);
     }
-    if (MRN_LIST_SIZE(query_block_->join_list) != 1) {
+    if (MRN_LIST_SIZE(MRN_QUERY_BLOCK_GET_CURRENT_TABLE_NEST(query_block_)) != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] have JOINs: %u",
-              static_cast<uint32_t>(MRN_LIST_SIZE(query_block_->join_list)));
+              static_cast<uint32_t>(
+                MRN_LIST_SIZE(
+                  MRN_QUERY_BLOCK_GET_CURRENT_TABLE_NEST(query_block_))));
       DBUG_RETURN(false);
     }
-    if (query_block_->table_list.elements != 1) {
+    if (MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block_).elements != 1) {
       GRN_LOG(ctx_, GRN_LOG_DEBUG,
               "[mroonga][count-skip][false] not only one table: %u",
-              query_block_->table_list.elements);
+              MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block_).elements);
       DBUG_RETURN(false);
     }
 
