@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010 Tetsuro IKEDA
   Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2022 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2023 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
   Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -11635,10 +11635,10 @@ bool ha_mroonga::check_fast_order_limit(grn_obj *result_set,
     !query_block->with_sum_func &&
     !query_block->group_list.elements &&
     !MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) &&
-    query_block->table_list.elements == 1 &&
-    strcmp(query_block->table_list.first->get_db_name(),
+    MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).elements == 1 &&
+    strcmp(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first->get_db_name(),
            table_list->get_db_name()) == 0 &&
-    strcmp(query_block->table_list.first->get_table_name(),
+    strcmp(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first->get_table_name(),
            table_list->get_table_name()) == 0 &&
     query_block->order_list.elements &&
     MRN_QUERY_BLOCK_HAS_LIMIT(query_block) &&

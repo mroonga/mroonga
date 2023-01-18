@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -481,6 +481,18 @@ typedef uint mrn_srid;
   (query_block->explicit_limit)
 #endif
 
+#if MYSQL_VERSION_ID >= 80032 && !defined(MRN_MARIADB_P)
+#  define MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block) \
+  ((query_block)->m_table_list)
+#  define MRN_QUERY_BLOCK_GET_CURRENT_TABLE_NEST(query_block) \
+  ((query_block)->m_current_table_nest)
+#else
+#  define MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block) \
+  ((query_block)->table_list)
+#  define MRN_QUERY_BLOCK_GET_CURRENT_TABLE_NEST(query_block) \
+  ((query_block)->join_list)
+#endif
+
 #if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
 #  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) \
   (query_block->limit_params.select_limit)
@@ -927,6 +939,10 @@ typedef uint mrn_srid;
 #  define MRN_MI_FLOAT8GET(result, data) (result) = mi_float8get((data))
 #else
 #  define MRN_MI_FLOAT8GET(result, data) mi_float8get((result), (data))
+#endif
+
+#if (MYSQL_VERSION_ID >= 80032 && !defined(MRN_MARIADB_P))
+  using TABLE_LIST = Table_ref;
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
