@@ -15,6 +15,27 @@ Improvements
 
 * Added support for updating normal columns with composite primary key table. [GitHub#592][Reported by handmound]
 
+  We could not update normal columns when we set composite primary keys using Mroonga storage engine as below.
+
+  .. code-block:: sql
+
+     CREATE TABLE scores (
+       name char(30) NOT NULL,
+       score int NOT NULL,
+       PRIMARY KEY (name, score),
+       note char(30),
+       FULLTEXT INDEX search_note_idx (note)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO scores (name, score) VALUES ("Taro Yamada", 29);
+
+     UPDATE scores SET note = "Note"
+       WHERE name = "Taro Yamada" AND score = 29;
+
+     ERROR 1265 (01000): data truncated for primary key column: <name>
+
+  This error doesn't occur Mroonga with MariaDB.
+
 Thanks
 ^^^^^^
 
