@@ -22,7 +22,7 @@ case ${os} in
         DNF=yum
         ;;
       9)
-        DNF="dnf --enablerepo=powertools"
+        DNF="dnf --enablerepo=crb"
         ;;
       *)
         DNF="dnf --enablerepo=powertools"
