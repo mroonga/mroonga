@@ -25,7 +25,7 @@ RUN \
     'dnf-command(download)' && \
   dnf builddep --enablerepo=crb -y ${quiet} MariaDB && \
   dnf download -y ${quiet} --source MariaDB && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     arrow-devel \
     MariaDB-devel \
     ccache \
