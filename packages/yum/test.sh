@@ -21,6 +21,9 @@ case ${os} in
       7)
         DNF=yum
         ;;
+      9)
+        DNF="dnf --enablerepo=powertools"
+        ;;
       *)
         DNF="dnf --enablerepo=powertools"
         sudo dnf module -y disable mariadb
