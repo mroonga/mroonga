@@ -12,7 +12,6 @@ RUN \
   dnf install -y \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
     https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm && \
-  dnf module disable -y mysql && \
   percona-release setup ps80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=crb -y ${quiet} \
