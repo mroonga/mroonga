@@ -28,6 +28,7 @@ RUN \
     cmake\
     cyrus-sasl-devel \
     cyrus-sasl-scram \
+    krb5-devel \
     libaio-devel \
     libcurl-devel \
     libtirpc-devel \
