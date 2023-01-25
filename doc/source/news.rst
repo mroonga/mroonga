@@ -5,13 +5,15 @@ News
 
 .. _release-12-12:
 
-Release 12.12 - 2023-01-20
+Release 12.12 - 2023-01-29
 --------------------------
 
 Improvements
 ^^^^^^^^^^^^
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.32.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.41
 
 * Added support for updating normal columns with composite primary key table. [GitHub#592][Reported by handmound]
 

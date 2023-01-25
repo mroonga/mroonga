@@ -21,11 +21,51 @@ msgstr ""
 msgid "News"
 msgstr "お知らせ"
 
-msgid "Release 12.11 - 2023-01-06"
-msgstr "12.11リリース - 2020-01-06"
+msgid "Release 12.12 - 2023-01-29"
+msgstr "12.12リリース - 2020-01-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
+"doc:`/install/ubuntu`] Added support for MySQL 8.0.32."
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
+"doc:`/install/ubuntu`] MySQL 8.0.32をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
+"doc:`/install/ubuntu`] Added support for MySQL 5.7.41"
+msgstr ""
+"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
+"doc:`/install/ubuntu`] MySQL 5.7.41をサポートしました。"
+
+msgid ""
+"Added support for updating normal columns with composite primary key table. "
+"[GitHub#592][Reported by handmound]"
+msgstr ""
+"複合主キーを設定しているテーブルで通常のカラムの更新ができるようになりまし"
+"た。 [GitHub#592] [handmoundさんが報告]"
+
+msgid ""
+"We could not update normal columns when we set composite primary keys using "
+"Mroonga storage engine as below."
+msgstr ""
+"以下のようにMroongaストレージエンジンを使ったテーブルに複合主キーを設定してい"
+"るときは、通常のカラムを更新できませんでした。"
+
+msgid "This error doesn't occur Mroonga with MariaDB."
+msgstr "このエラーはMariaDB向けMroongaでは発生しません。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "handmound"
+msgstr "handmoundさん"
+
+msgid "Release 12.11 - 2023-01-06"
+msgstr "12.11リリース - 2020-01-06"
 
 msgid ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support for "
@@ -244,9 +284,6 @@ msgstr ""
 "Mroonga 12.09 にて groonga-normalizer-mysql をバンドルするよう修正したとアナ"
 "ウンスしましたが、修正されていませんでした。"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Josep Sanz"
 msgstr "Josep Sanzさん"
 
@@ -431,9 +468,6 @@ msgid ""
 msgstr ""
 "[:doc:`/install/almalinux`] AlmaLinux 8 向けMroongaのインストール手順を修正し"
 "ました。[Gitter/ja:62fe4ca5b16e8236e3ef225c][handmoundさんの報告]"
-
-msgid "handmound"
-msgstr "handmoundさん"
 
 msgid "Jérome Perrin"
 msgstr "Jérome Perrinさん"
