@@ -23,6 +23,8 @@ case ${os} in
         ;;
       9)
         DNF="dnf --enablerepo=crb"
+        sudo ${DNF} install -y \
+          https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm
         ;;
       *)
         DNF="dnf --enablerepo=powertools"
