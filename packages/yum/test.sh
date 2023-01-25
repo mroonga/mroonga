@@ -57,7 +57,7 @@ case ${package} in
       ha_mroonga_so=ha_mroonga_official.so
       test_package_name=MariaDB-test
       case ${mysql_version} in
-        10.6|10.7|10.8|10.9|10.10)
+        10.5|10.6|10.7|10.8|10.9|10.10)
           baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
           ;;
         *)
