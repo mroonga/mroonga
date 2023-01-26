@@ -152,6 +152,12 @@ sudo ${DNF} install -y \
   gdb \
   patch
 
+case ${os}-${major_version} in
+  almalinux-9)
+    sudo ${DNF} install -y perl-lib
+    ;;
+esac
+
 cd /usr/share/mysql-test/
 if [ -d plugin ]; then
   sudo mv plugin plugin.backup
