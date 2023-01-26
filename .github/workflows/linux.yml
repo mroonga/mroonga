@@ -107,6 +107,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.5
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.5
           - os: amazon-linux-2
             package-type: yum
             package: mariadb-10.5
@@ -121,6 +124,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.6
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
@@ -132,12 +138,18 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.7
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.7
           - os: centos-7
             package-type: yum
             package: mariadb-10.7
 
           # MariaDB 10.8
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.8
+          - os: almalinux-9
             package-type: yum
             package: mariadb-10.8
           - os: centos-7
@@ -148,12 +160,18 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.9
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.9
           - os: centos-7
             package-type: yum
             package: mariadb-10.9
 
           # MariaDB 10.10
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.10
+          - os: almalinux-9
             package-type: yum
             package: mariadb-10.10
           - os: centos-7
@@ -174,6 +192,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mysql-community-8.0
+          - os: almalinux-9
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -192,6 +213,9 @@ jobs:
 
           # Percona Server 8.0
           - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
+          - os: almalinux-9
             package-type: yum
             package: percona-server-8.0
           - os: centos-7
@@ -330,6 +354,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.5
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.5
           - os: amazon-linux-2
             package-type: yum
             package: mariadb-10.5
@@ -344,6 +371,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.6
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.6
           - os: centos-7
             package-type: yum
             package: mariadb-10.6
@@ -355,12 +385,18 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.7
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.7
           - os: centos-7
             package-type: yum
             package: mariadb-10.7
 
           # MariaDB 10.8
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.8
+          - os: almalinux-9
             package-type: yum
             package: mariadb-10.8
           - os: centos-7
@@ -371,12 +407,18 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.9
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-10.9
           - os: centos-7
             package-type: yum
             package: mariadb-10.9
 
           # MariaDB 10.10
           - os: almalinux-8
+            package-type: yum
+            package: mariadb-10.10
+          - os: almalinux-9
             package-type: yum
             package: mariadb-10.10
           - os: centos-7
@@ -397,6 +439,9 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mysql-community-8.0
+          - os: almalinux-9
+            package-type: yum
+            package: mysql-community-8.0
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
@@ -411,6 +456,9 @@ jobs:
 
           # Percona Server 8.0
           - os: almalinux-8
+            package-type: yum
+            package: percona-server-8.0
+          - os: almalinux-9
             package-type: yum
             package: percona-server-8.0
           - os: centos-7

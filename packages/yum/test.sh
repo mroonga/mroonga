@@ -21,6 +21,11 @@ case ${os} in
       7)
         DNF=yum
         ;;
+      9)
+        DNF="dnf --enablerepo=crb"
+        sudo ${DNF} install -y \
+          https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm
+        ;;
       *)
         DNF="dnf --enablerepo=powertools"
         sudo dnf module -y disable mariadb
@@ -52,7 +57,7 @@ case ${package} in
       ha_mroonga_so=ha_mroonga_official.so
       test_package_name=MariaDB-test
       case ${mysql_version} in
-        10.6|10.7|10.8)
+        10.5|10.6|10.7|10.8|10.9|10.10)
           baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
           ;;
         *)
@@ -147,6 +152,12 @@ sudo ${DNF} install -y \
   gdb \
   patch
 
+case ${os}-${major_version} in
+  almalinux-9)
+    sudo ${DNF} install -y perl-lib
+    ;;
+esac
+
 cd /usr/share/mysql-test/
 if [ -d plugin ]; then
   sudo mv plugin plugin.backup
@@ -219,6 +230,13 @@ sudo ${DNF} erase -y \
   ${package} \
   "${mysql_package_prefix}-*"
 sudo rm -rf /var/lib/mysql
+
+# Disable upgrade test for first time packages.
+case ${os}-${major_version} in
+  almalinux-9) # TODO: Remove this after 12.12 release.
+    exit
+    ;;
+esac
 
 sudo ${DNF} install -y ${old_package}
 sudo ${DNF} install -y \
