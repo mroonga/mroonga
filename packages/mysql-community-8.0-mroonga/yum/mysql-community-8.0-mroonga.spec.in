@@ -23,7 +23,7 @@
 
 Name:		mysql-community-8.0-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -144,6 +144,9 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Sat Jan 28 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.12-1
+- New upstream release.
+
 * Wed Jan 18 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 12.11-2
 - build against MySQL 8.0.32.
 
