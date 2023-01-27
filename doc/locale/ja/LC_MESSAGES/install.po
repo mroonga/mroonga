@@ -182,6 +182,85 @@ msgstr ""
 "AlmaLinux 8では、Mroonga 12.11からMariaDB提供のMariaDB 10.10パッケージを利用"
 "できます。"
 
+msgid "AlmaLinux 9 (with the Oracle MySQL 8.0 package)"
+msgstr "AlmaLinux 9（OracleのMySQL 8.0パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on AlmaLinux 9 since Mroonga "
+"12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からOracleのMySQL 8.0パッケージを利用できます。"
+
+msgid "AlmaLinux 9 (with Percona Server 8.0 package)"
+msgstr "AlmaLinux 9（Percona Server 8.0パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 8.0 on AlmaLinux 9 since Mroonga "
+"12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からPercona Server 8.0パッケージを利用できま"
+"す。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.5 package)"
+msgstr "AlmaLinux 9（MariaDB 10.5のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.5 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.5パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.6 package)"
+msgstr "AlmaLinux 9（MariaDB 10.6のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.6 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.6パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.7 package)"
+msgstr "AlmaLinux 9（MariaDB 10.7のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.7 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.7パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.8 package)"
+msgstr "AlmaLinux 9（MariaDB 10.8のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.8 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.8パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.9 package)"
+msgstr "AlmaLinux 9（MariaDB 10.9のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.9 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.9パッケージを利用で"
+"きます。"
+
+msgid "AlmaLinux 9 (with MariaDB 10.10 package)"
+msgstr "AlmaLinux 9（MariaDB 10.10のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.10 on AlmaLinux 9 since "
+"Mroonga 12.12 release."
+msgstr ""
+"AlmaLinux 9では、Mroonga 12.12からMariaDB提供のMariaDB 10.10パッケージを利用"
+"できます。"
+
 msgid "Amazon Linux"
 msgstr ""
 
