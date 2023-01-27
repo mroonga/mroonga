@@ -3,6 +3,48 @@
 News
 ====
 
+.. _release-12-12:
+
+Release 12.12 - 2023-01-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/almalinux`] Added newly support for AlmaLinux 9.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.32.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.41
+
+* Added support for updating normal columns with composite primary key table. [GitHub#592][Reported by handmound]
+
+  We could not update normal columns when we set composite primary keys using Mroonga storage engine as below.
+
+  .. code-block:: sql
+
+     CREATE TABLE scores (
+       name char(30) NOT NULL,
+       score int NOT NULL,
+       PRIMARY KEY (name, score),
+       note char(30),
+       FULLTEXT INDEX search_note_idx (note)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO scores (name, score) VALUES ("Taro Yamada", 29);
+
+     UPDATE scores SET note = "Note"
+       WHERE name = "Taro Yamada" AND score = 29;
+
+     ERROR 1265 (01000): data truncated for primary key column: <name>
+
+  This error doesn't occur Mroonga with MariaDB.
+
+Thanks
+^^^^^^
+
+* handmound
+
 .. _release-12-11:
 
 Release 12.11 - 2023-01-06
@@ -20,7 +62,6 @@ Improvements
   It's true only when Groonga supports TokenMecab.
 
 * [:doc:`/install/debian`] Added support for MariaDB 10.5.18.
-
 
 Fixes
 ^^^^^
