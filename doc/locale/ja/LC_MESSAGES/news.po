@@ -27,6 +27,9 @@ msgstr "12.12リリース - 2020-01-29"
 msgid "Improvements"
 msgstr "改良"
 
+msgid "[:doc:`/install/almalinux`] Added newly support for AlmaLinux 9."
+msgstr "[:doc:`/install/almalinux`] AlmaLinux 9 を新しくサポートしました。"
+
 msgid ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
 "doc:`/install/ubuntu`] Added support for MySQL 8.0.32."
@@ -7688,13 +7691,3 @@ msgid ""
 msgstr ""
 "[:doc:`/reference/udf/mroonga_normalize`] インストールSQLに抜けていた "
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
-
-#~ msgid ""
-#~ "MySQL uses ``max_execution_time`` and MariaDB uses ``max_statement_time`` "
-#~ "for aborting query with timeout."
-#~ msgstr ""
-#~ "タイムアウトによるクエリの中断には、MySQLでは ``max_execution_time`` を "
-#~ "MariaDB では ``max_statement_time`` を指定します。"
-
-#~ msgid "[:doc:`/install/centos`] Added support for MySQL 5.7.40."
-#~ msgstr "[:doc:`/install/centos`] MySQL 5.7.40をサポートしました。"

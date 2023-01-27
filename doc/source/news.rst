@@ -11,6 +11,8 @@ Release 12.12 - 2023-01-29
 Improvements
 ^^^^^^^^^^^^
 
+* [:doc:`/install/almalinux`] Added newly support for AlmaLinux 9.
+
 * [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.32.
 
 * [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.41
