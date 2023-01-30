@@ -56,7 +56,11 @@ generated_files =				\
 	changes-build-stamp			\
 	linkcheck				\
 	linkcheck-build-stamp			\
-	doctest
+	doctest					\
+	markdown				\
+	markdown-build-stamp			\
+	text					\
+	text-build-stamp
 
 $(mo_files_relative_from_locale_dir): mo-build-stamp
 
@@ -77,6 +81,8 @@ endif
 .PHONY: help
 .PHONY: man clean-man
 .PHONY: html clean-html
+.PHONY: markdown clean-markdown
+.PHONY: text clean-text
 .PHONY: pdf
 .PHONY: dirhtml
 .PHONY: pickle
@@ -107,6 +113,8 @@ help:
 
 man: man-build-stamp
 html: html-recursive html-build-stamp
+markdown: markdown-recursive markdown-build-stamp
+text: text-recursive text-build-stamp
 dirhtml: dirhtml-build-stamp
 pickle: pickle-build-stamp
 json: json-build-stamp
@@ -132,7 +140,9 @@ clean_targets =					\
 	clean-textile				\
 	clean-changes				\
 	clean-linkcheck				\
-	clean-doctest
+	clean-doctest				\
+	clean-markdown				\
+	clean-text
 
 $(clean_targets):
 	target=`echo $@ | sed -e 's/^clean-//'`;	\
@@ -151,7 +161,9 @@ build_stamps =					\
 	textile-build-stamp			\
 	changes-build-stamp			\
 	linkcheck-build-stamp			\
-	doctest-build-stamp
+	doctest-build-stamp			\
+	markdown-build-stamp			\
+	text-build-stamp
 
 $(build_stamps): $(document_source_files)
 	target=`echo $@ | sed -e 's/-build-stamp$$//'`;	\
