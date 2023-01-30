@@ -245,7 +245,7 @@ class TwitterEnArticleBaseGenerator < MroongaArticleGenerator
 
   def generate_article
     "Mroonga #{@version} has been released!(#{@release_date}) " + 
-    "https://mroonga.org/en/blog/#{@release_date_in_link}/groonga-#{@version}.html"
+    "https://mroonga.org/en/blog/#{@release_date_in_link}/mroonga-#{@version}.html"
   end
 end
 
@@ -257,7 +257,7 @@ class TwitterJaArticleBaseGenerator < MroongaArticleGenerator
 
   def generate_article
     "Mroonga #{@version}をリリースしました！(#{@release_date}) " +
-    "https://mroonga.org/ja/blog/#{@release_date_in_link}/groonga-#{@version}.html"
+    "https://mroonga.org/ja/blog/#{@release_date_in_link}/mroonga-#{@version}.html"
   end
 end
 
