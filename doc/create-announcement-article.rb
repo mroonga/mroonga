@@ -261,6 +261,47 @@ class TwitterJaArticleBaseGenerator < MroongaArticleGenerator
   end
 end
 
+class MySQLMailingListJaArticleGenerator < MroongaArticleGenerator
+  def initialize(release_date, version, previous_version, mroonga_org_repository)
+    super(release_date, version, previous_version, mroonga_org_repository)
+    @input_file_path = "./locale/ja/text/news.txt"
+    @output_file_path = "./tmp/mysql-mailinglist-ja-#{release_date}-mroonga-#{version}.txt"
+    @release_headline_regexp_pattern = /^.*リリース.+\n=.+/
+  end
+  
+  def generate
+    FileUtils.mkdir_p("tmp")
+    super
+  end
+
+  def generate_article
+    <<-ARTICLE
+こんにちは。
+
+リリースアナウンス:
+  https://mroonga.org/ja/blog/#{@release_date_in_link}/mroonga-#{@version_in_link}.html
+    
+MroongaはMySQLで日本語全文検索を実現するストレージエンジンです。高速で
+あることや位置情報検索をサポートしていることなどが特徴です。詳細につい
+はドキュメントをご覧ください。
+    
+  * Mroongaの特徴 ― Mroonga v#{@version} documentation
+    https://mroonga.org/ja/docs/characteristic.html#what-is-mroonga
+
+主な変更内容
+============
+
+主な変更点は以下の通りです。
+
+https://mroonga.org/ja/docs/news.html#release-#{@version}
+
+#{extract_latest_release_note}
+
+以上です！ 
+    ARTICLE
+  end
+end
+
 generator_classes = [
   BlogEnArticleGenerator,
   BlogJaArticleGenerator,
@@ -269,7 +310,8 @@ generator_classes = [
   FacebookEnArticleGenerator,
   FacebookJaArticleGenerator,
   TwitterEnArticleBaseGenerator,
-  TwitterJaArticleBaseGenerator
+  TwitterJaArticleBaseGenerator,
+  MySQLMailingListJaArticleGenerator
 ]
 
 generator_classes.each do |generator_class|
