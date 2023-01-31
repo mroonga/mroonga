@@ -21,7 +21,6 @@ guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
   - [ ] Announce on mailing lists
     - [ ] [GitHub Dicussions](https://github.com/mroonga/groonga/discussions/categories/releases) (Japanese)
     - [ ] [GitHub Dicussions](https://github.com/mroonga/groonga/discussions/categories/releases) (English)
-    - [ ] groonga-talk(English)
     - [ ] mysql@mysql.gr.jp
     - [ ] Twitter (Japanese/English)
     - [ ] Facebook (Japanese/English)
