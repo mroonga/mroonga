@@ -210,8 +210,8 @@ jobs:
           #- os: centos-7
           #  package-type: yum
           #  package: percona-server-5.7
-          #
-          ## Percona Server 8.0
+
+          # Percona Server 8.0
           #- os: almalinux-8
           #  package-type: yum
           #  package: percona-server-8.0
@@ -450,20 +450,20 @@ jobs:
             package: mysql-community-8.0
 
           # Percona Server 5.7
-          - os: centos-7
-            package-type: yum
-            package: percona-server-5.7
+          #- os: centos-7
+          #  package-type: yum
+          #  package: percona-server-5.7
 
           # Percona Server 8.0
-          - os: almalinux-8
-            package-type: yum
-            package: percona-server-8.0
-          - os: almalinux-9
-            package-type: yum
-            package: percona-server-8.0
-          - os: centos-7
-            package-type: yum
-            package: percona-server-8.0
+          #- os: almalinux-8
+          #  package-type: yum
+          #  package: percona-server-8.0
+          #- os: almalinux-9
+          #  package-type: yum
+          #  package: percona-server-8.0
+          #- os: centos-7
+          #  package-type: yum
+          #  package: percona-server-8.0
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
