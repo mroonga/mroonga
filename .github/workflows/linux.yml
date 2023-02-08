@@ -206,11 +206,13 @@ jobs:
           #   package-type: apt
           #   package: mysql-community-8.0
 
+          # We will enable this when https://jira.percona.com/browse/PS-8623 resolved.
           # Percona Server 5.7
           #- os: centos-7
           #  package-type: yum
           #  package: percona-server-5.7
 
+          # We will enable this when https://jira.percona.com/browse/PS-8623 resolved.
           # Percona Server 8.0
           #- os: almalinux-8
           #  package-type: yum
@@ -449,11 +451,13 @@ jobs:
             package-type: apt
             package: mysql-community-8.0
 
+          # We will enable this when https://jira.percona.com/browse/PS-8623 resolved.
           # Percona Server 5.7
           #- os: centos-7
           #  package-type: yum
           #  package: percona-server-5.7
 
+          # We will enable this when https://jira.percona.com/browse/PS-8623 resolved.
           # Percona Server 8.0
           #- os: almalinux-8
           #  package-type: yum
