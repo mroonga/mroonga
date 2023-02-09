@@ -364,10 +364,10 @@ Mroonga 12.12 release.
 
 Install::
 
-  % sudo dnf -y module disable mysql
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el9.rpm
-  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,powertools mysql-community-8.0-mroonga
+  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,crb mysql-community-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
@@ -377,9 +377,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf -y module enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf -y module disable mysql
 
 .. _almalinux-9-percona-8-0:
 
