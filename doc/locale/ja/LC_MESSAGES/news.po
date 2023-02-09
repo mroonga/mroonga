@@ -41,6 +41,16 @@ msgstr ""
 msgid "New Features and Improvements in 13.00"
 msgstr "13.00の新規機能と改良"
 
+msgid ""
+"Currently, we don't provide packages of Mroonga 13.00 for Percona Server. "
+"Because there is a problem with buildong packages of Mroonga 13.00 for "
+"Percona Server. If we will resolve this problem, we will provide packages of "
+"Mroonga for Percona Server again."
+msgstr ""
+"現在、Percona Server向けMroonga 13.00のパッケージを提供していません。Percona "
+"Server向けパッケージのビルドに問題があるためです。この問題が解決したら、再度"
+"Percona Server向けパッケージを提供します。"
+
 msgid "Improvements"
 msgstr "改良"
 

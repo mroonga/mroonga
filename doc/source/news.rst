@@ -17,6 +17,12 @@ Then, we introduce the hilight and summary of changes from Mroonga 12.00 to 12.1
 New Features and Improvements in 13.00
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+  .. note::
+
+     Currently, we don't provide packages of Mroonga 13.00 for Percona Server.
+     Because there is a problem with buildong packages of Mroonga 13.00 for Percona Server.
+     If we will resolve this problem, we will provide packages of Mroonga for Percona Server again.
+
 Improvements
 ^^^^^^^^^^^^
 
