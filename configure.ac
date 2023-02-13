@@ -601,7 +601,6 @@ AC_CONFIG_FILES([
   mysql-test/Makefile
   packages/Makefile
   packages/source/Makefile
-  packages/windows/Makefile
   tools/Makefile
   doc/Makefile
   doc/locale/Makefile

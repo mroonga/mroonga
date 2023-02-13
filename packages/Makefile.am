@@ -1,3 +1,2 @@
 SUBDIRS =					\
-	source					\
-	windows
+	source
