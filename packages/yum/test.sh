@@ -34,6 +34,7 @@ case ${os} in
     esac
     ;;
   linux) # Oracle Linux
+    os=oracle-linux
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
     DNF="dnf --enablerepo=ol8_codeready_builder"
     sudo dnf module -y disable mariadb
@@ -41,16 +42,8 @@ case ${os} in
     ;;
 esac
 
-case ${os} in
-  linux) # Oracle Linux
-    sudo ${DNF} install -y \
-         https://packages.groonga.org/oracle-linux/${major_version}/groonga-release-latest.noarch.rpm
-    ;;
-  *)
-    sudo ${DNF} install -y \
-         https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
-    ;;
-esac
+sudo ${DNF} install -y \
+     https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
 
 ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
