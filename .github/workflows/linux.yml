@@ -508,7 +508,7 @@ jobs:
               os_type=amazon-linux
               ;;
             oracle-linux-*)
-              os_type=linux
+              os_type=oracle-linux
               ;;
             *)
               os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
