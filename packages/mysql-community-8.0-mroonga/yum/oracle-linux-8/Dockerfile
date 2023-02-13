@@ -13,7 +13,8 @@ RUN \
   dnf install -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
-    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
+    https://apache.jfrog.io/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm \
+    https://packages.groonga.org/oracle-linux/8/groonga-release-latest.noarch.rpm \
     https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm && \
   dnf builddep --enablerepo=mysql80-community-minimal-source,ol8_codeready_builder -y ${quiet} mysql-community-minimal && \
   dnf download --enablerepo=mysql80-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
