@@ -36,3 +36,11 @@ RUN \
   dnf install --disablerepo=appstream -y ${quiet} \
     mysql-community-devel && \
   dnf clean ${quiet} all
+
+# Workaround: We can remove this once redhat-rpm-config uses "annobin"
+# not "gcc-annobin".
+RUN \
+  sed \
+    -i \
+    -e 's/gcc-annobin/annobin/g' \
+    /usr/lib/rpm/redhat/redhat-annobin-select-gcc-built-plugin
