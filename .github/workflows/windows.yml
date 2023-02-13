@@ -1,7 +1,12 @@
 name: Windows
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - master
+      - 'maintenance/**'
+    tags:
+      - '*'
+  pull_request:
 concurrency:
   group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
   cancel-in-progress: true
