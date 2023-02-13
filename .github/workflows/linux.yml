@@ -3,10 +3,22 @@ on:
   push:
     branches:
       - master
-      - 'maintenance/**'
+      - "maintenance/**"
     tags:
-      - '*'
+      - "*"
   pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/linux.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
   schedule:
     - cron: |
         0 0 * * *

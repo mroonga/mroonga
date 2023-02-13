@@ -3,10 +3,20 @@ on:
   push:
     branches:
       - master
-      - 'maintenance/**'
+      - "maintenance/**"
     tags:
-      - '*'
+      - "*"
   pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.def"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - ".github/workflows/windows.yml"
+      - "mysql-test/**"
+      - "packages/source/**"
+      - "version_*"
 concurrency:
   group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
   cancel-in-progress: true
