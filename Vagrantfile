@@ -42,6 +42,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :id => "oracle-linux-8",
       :box => "bento/oracle-8",
     },
+    {
+      :id => "oracle-linux-9",
+      :box => "bento/oracle-9",
+    },
   ]
 
   n_cpus = ENV["VM_N_CPUS"] || 2

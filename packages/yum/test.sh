@@ -36,11 +36,15 @@ case ${os} in
   linux) # Oracle Linux
     os=oracle-linux
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
-    DNF="dnf --enablerepo=ol8_codeready_builder"
+    DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
     sudo ${DNF} install -y \
       https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
-    sudo dnf module -y disable mariadb
-    sudo dnf module -y disable mysql
+    case ${major_version} in
+      8)
+        sudo dnf module -y disable mariadb
+        sudo dnf module -y disable mysql
+        ;;
+    esac
     ;;
 esac
 
@@ -104,8 +108,8 @@ REPO
         ;;
     esac
     if [ "${major_version}" = "7" ] && [ "${mysql_version}" = "5.7" ]; then
-        sudo yum-config-manager --disable mysql80-community
-        sudo yum-config-manager --enable mysql57-community
+      sudo yum-config-manager --disable mysql80-community
+      sudo yum-config-manager --enable mysql57-community
     fi
     ;;
   percona-*)
@@ -164,6 +168,9 @@ sudo ${DNF} install -y \
 case ${os}-${major_version} in
   almalinux-9)
     sudo ${DNF} install -y perl-lib
+    ;;
+  oracle-linux-9)
+    sudo ${DNF} install -y perl-base perl-lib
     ;;
 esac
 
@@ -242,7 +249,7 @@ sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${major_version} in
-  oracle-linux-8) # TODO: Remove this after 13.01 release.
+  oracle-linux-*) # TODO: Remove this after 13.01 release.
     exit
     ;;
 esac

@@ -217,6 +217,9 @@ jobs:
           - os: oracle-linux-8
             package-type: yum
             package: mysql-community-8.0
+          - os: oracle-linux-9
+            package-type: yum
+            package: mysql-community-8.0
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
@@ -467,6 +470,9 @@ jobs:
             package-type: yum
             package: mysql-community-8.0
           - os: oracle-linux-8
+            package-type: yum
+            package: mysql-community-8.0
+          - os: oracle-linux-9
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bullseye
