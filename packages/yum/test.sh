@@ -242,7 +242,7 @@ sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${major_version} in
-  almalinux-9) # TODO: Remove this after 12.12 release.
+  oracle-linux-8) # TODO: Remove this after 13.01 release.
     exit
     ;;
 esac
