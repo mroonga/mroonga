@@ -24,7 +24,7 @@ case ${os} in
       9)
         DNF="dnf --enablerepo=crb"
         sudo ${DNF} install -y \
-          https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm
+          https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
         ;;
       *)
         DNF="dnf --enablerepo=powertools"
@@ -32,6 +32,15 @@ case ${os} in
         sudo dnf module -y disable mysql
         ;;
     esac
+    ;;
+  linux) # Oracle Linux
+    os=oracle-linux
+    major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
+    DNF="dnf --enablerepo=ol8_codeready_builder"
+    sudo ${DNF} install -y \
+      https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
+    sudo dnf module -y disable mariadb
+    sudo dnf module -y disable mysql
     ;;
 esac
 
@@ -233,7 +242,7 @@ sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${major_version} in
-  almalinux-9) # TODO: Remove this after 12.12 release.
+  oracle-linux-8) # TODO: Remove this after 13.01 release.
     exit
     ;;
 esac
