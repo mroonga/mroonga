@@ -45,7 +45,7 @@ case ${os} in
 esac
 
 sudo ${DNF} install -y \
-     https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
+  https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
 
 ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
