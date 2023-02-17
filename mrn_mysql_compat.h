@@ -694,7 +694,8 @@ typedef uint mrn_srid;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if (((MYSQL_VERSION_ID >= 101002) && (MYSQL_VERSION_ID < 101100)) || \
+#  if (((MYSQL_VERSION_ID >= 101102) && (MYSQL_VERSION_ID < 101200)) || \
+       ((MYSQL_VERSION_ID >= 101002) && (MYSQL_VERSION_ID < 101100)) || \
        ((MYSQL_VERSION_ID >= 100904) && (MYSQL_VERSION_ID < 101000)) || \
        ((MYSQL_VERSION_ID >= 100806) && (MYSQL_VERSION_ID < 100900)) || \
        ((MYSQL_VERSION_ID >= 100707) && (MYSQL_VERSION_ID < 100800)) || \
