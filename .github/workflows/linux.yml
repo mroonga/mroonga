@@ -223,10 +223,9 @@ jobs:
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
-          # MySQL 8.0 doesn't provide packages for Ubuntu 22.04 yet.
-          # - os: ubuntu-jammy
-          #   package-type: apt
-          #   package: mysql-community-8.0
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mysql-community-8.0
 
           # We will enable this when https://jira.percona.com/browse/PS-8623 resolved.
           # Percona Server 5.7
