@@ -249,6 +249,9 @@ sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
 case ${os}-${major_version} in
+  *-mariadb-10.11-*) # TODO: Remove this after 13.01 release.
+    exit
+    ;;
   oracle-linux-*) # TODO: Remove this after 13.01 release.
     exit
     ;;

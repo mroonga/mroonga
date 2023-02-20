@@ -54,11 +54,13 @@ jobs:
             mariadb-version: "10.9.5"
           - label: MariaDB 10.10
             mariadb-version: "10.10.3"
-          - label: MariaDB 10.10 (master)
-            mariadb-version: "10.10.3"
+          - label: MariaDB 10.11
+            mariadb-version: "10.11.2"
+          - label: MariaDB 10.11 (master)
+            mariadb-version: "10.11.2"
             use-master: "yes"
           - label: MariaDB 10.10 (master/embed)
-            mariadb-version: "10.10.3"
+            mariadb-version: "10.11.2"
             use-master: "yes"
             embed: "ON"
     env:
