@@ -389,6 +389,7 @@ since Mroonga 12.12 release.
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
   % sudo percona-release setup ps80
