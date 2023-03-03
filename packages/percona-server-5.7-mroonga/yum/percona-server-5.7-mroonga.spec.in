@@ -146,7 +146,7 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
-* Wed Feb 08 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-2
+* Fri Mar 03 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-2
 - build against Percona Server 5.7.41-44
 
 * Wed Feb 08 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
