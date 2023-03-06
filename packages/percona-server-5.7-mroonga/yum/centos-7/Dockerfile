@@ -31,6 +31,7 @@ RUN \
     libtool \
     make \
     pkgconfig \
+    scl-utils \
     selinux-policy-devel \
     wget \
     which && \
