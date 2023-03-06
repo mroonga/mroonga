@@ -2,8 +2,8 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mysql_version_default 5.7.40
-%define percona_server_version_default 43
+%define mysql_version_default 5.7.41
+%define percona_server_version_default 44
 %define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_spec_file_default percona-server.spec
@@ -28,7 +28,7 @@
 
 Name:           percona-server-5.7-mroonga
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
@@ -146,6 +146,9 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Fri Mar 03 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-2
+- build against Percona Server 5.7.41-44
+
 * Wed Feb 08 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
 - New upstream release.
 
