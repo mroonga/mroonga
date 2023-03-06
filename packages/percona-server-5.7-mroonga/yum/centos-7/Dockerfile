@@ -31,6 +31,7 @@ RUN \
     libtool \
     make \
     pkgconfig \
+    ${SCL} \
     scl-utils \
     selinux-policy-devel \
     wget \
