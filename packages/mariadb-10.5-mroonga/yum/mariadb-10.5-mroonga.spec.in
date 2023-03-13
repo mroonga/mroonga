@@ -7,9 +7,9 @@
   %define mariadb_package mariadb
   %define mariadb_client_package mariadb
   %define mariadb_epoch_default   3
-  %define mariadb_version_default 10.5.10
-  %define mariadb_release_default 2
-  %define mariadb_dist_default    amzn2.0.2
+  %define mariadb_version_default 10.5.18
+  %define mariadb_release_default 1
+  %define mariadb_dist_default    amzn2
   %define plugin_dir %{_libdir}/mariadb/plugin
 %else
   %define mariadb_package MariaDB
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Mon Mar 13 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-2
+- Rebuild against MariaDB 10.5.18-1.amzn2.
+
 * Wed Feb 08 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
 - New upstream release.
 
