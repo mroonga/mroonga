@@ -35,8 +35,9 @@ jobs:
           - MariaDB 10.8
           - MariaDB 10.9
           - MariaDB 10.10
-          - MariaDB 10.10 (master)
-          - MariaDB 10.10 (master/embed)
+          - MariaDB 10.11
+          - MariaDB 10.11 (master)
+          - MariaDB 10.11 (master/embed)
         include:
           - label: MariaDB 10.3
             mariadb-version: "10.3.38"
@@ -59,7 +60,7 @@ jobs:
           - label: MariaDB 10.11 (master)
             mariadb-version: "10.11.2"
             use-master: "yes"
-          - label: MariaDB 10.10 (master/embed)
+          - label: MariaDB 10.11 (master/embed)
             mariadb-version: "10.11.2"
             use-master: "yes"
             embed: "ON"
