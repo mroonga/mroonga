@@ -238,6 +238,11 @@ jobs:
             package-type: apt
             package: mysql-community-8.0
 
+          # MySQL community minimal 8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-minimal-8.0
+
           # Percona Server 5.7
           - os: centos-7
             package-type: yum
@@ -497,6 +502,11 @@ jobs:
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
+
+          # MySQL community minimal 8.0
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-minimal-8.0
 
           # Percona Server 5.7
           - os: centos-7

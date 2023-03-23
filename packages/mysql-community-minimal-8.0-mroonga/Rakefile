@@ -1,0 +1,33 @@
+require_relative "../mroonga-package-task"
+
+class MySQLCommunityMinimalMroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-community-8.0")
+  end
+
+  def apt_targets_default
+    [
+#      "debian-bullseye",
+# We disable Ubuntu 22.04 temporaliy.
+# MySQL 8.0 doesn't provide packages for Ubuntu 22.04 yet
+#      "ubuntu-jammy",
+    ]
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "almalinux-8",
+#      "almalinux-9",
+#      "centos-7",
+#      "oracle-linux-8",
+#      "oracle-linux-9",
+    ]
+  end
+end
+
+task = MySQLCommunityMinimalMroongaPackageTask.new
+task.define
