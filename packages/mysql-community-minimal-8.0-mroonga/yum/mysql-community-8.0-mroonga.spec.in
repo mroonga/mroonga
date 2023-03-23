@@ -113,7 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/man/man1/*
 %{_datadir}/man/*/man1/*
 
-%package -n mysql80-community-mroonga
+%package -n mysql80-community-minimal-mroonga
 Summary:	A fast fulltext searchable storage engine for MySQL (transitional)
 Group:		Applications/Databases
 License:	LGPLv2.1
