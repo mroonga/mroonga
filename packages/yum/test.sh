@@ -103,6 +103,7 @@ REPO
              https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
         sudo ${DNF} install -y \
              https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm
+        echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
         ;;
 #      *)
 #        sudo ${DNF} install -y \
