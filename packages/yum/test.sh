@@ -70,7 +70,7 @@ case ${package} in
       ha_mroonga_so=ha_mroonga_official.so
       test_package_name=MariaDB-test
       case ${mysql_version} in
-        10.5|10.6|10.7|10.8|10.9|10.10)
+        10.5|10.6|10.7|10.8|10.9|10.10|10.11)
           baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
           ;;
         *)
@@ -250,6 +250,11 @@ sudo rm -rf /var/lib/mysql
 # Disable upgrade test for first time packages.
 case ${os}-${major_version} in
   oracle-linux-*) # TODO: Remove this after 13.01 release.
+    exit
+    ;;
+esac
+case ${package} in
+  mariadb-10.11-*) # TODO: Remove this after 13.01 release.
     exit
     ;;
 esac
