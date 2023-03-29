@@ -27,7 +27,7 @@ case ${os} in
           https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
         ;;
       *)
-        DNF="dnf --enablerepo=powertools,mysql80-community-minimal"
+        DNF="dnf --enablerepo=powertools"
         sudo dnf module -y disable mariadb
         sudo dnf module -y disable mysql
         ;;
@@ -104,6 +104,7 @@ REPO
         sudo ${DNF} install -y \
              https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm
         echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+        sudo sed -i -e 's/enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
         ;;
 #      *)
 #        sudo ${DNF} install -y \
