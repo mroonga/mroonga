@@ -27,7 +27,7 @@ case ${os} in
           https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
         ;;
       *)
-        DNF="dnf --enablerepo=powertools"
+        DNF="dnf --enablerepo=powertools,mysql80-community-minimal"
         sudo dnf module -y disable mariadb
         sudo dnf module -y disable mysql
         ;;
