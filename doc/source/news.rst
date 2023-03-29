@@ -3,6 +3,37 @@
 News
 ====
 
+.. _release-13-01:
+
+Release 13.01 - 2023-03-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support for MariaDB 10.11 [GitHub#606][Patched by Josep Sanz]
+
+* [:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.18-1.amzn2.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.32-24.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.41-44.
+
+* [Oracle Linux] Dropped support for Oracle Linux 8 and 9
+
+  We supported Oracle Linux for installing Mroonga to MySQL official Docker image.
+  However, a package that needed to install to MySQL official Docker image is Mroonga for MySQL community server minimal
+
+  Therefore, we cann't install Mroonga to MySQL official Docker image even if we use Mroonga for Oracle Linux.
+
+* [:doc:`/install/ubuntu`] Dropped support for Ubuntu 18.04.
+
+  Because Ubuntu 18.04 reached EOL.
+
+* [:doc:`/install/almalinux`] Added support for MySQL community server minimal 8.0.
+
+  This is for supporting the `mysql:8.0-oracle` Docker image.
+
 .. _release-13-00:
 
 Release 13.00 - 2023-02-09
