@@ -45,7 +45,6 @@ BuildRequires:	dnf-command(download)
 %else
 BuildRequires:	yum-utils
 %endif
-Requires:	mysql-community-client = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-common = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-libs = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-server-minimal = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
