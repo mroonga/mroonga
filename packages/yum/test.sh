@@ -205,6 +205,20 @@ sudo ${DNF} install -y \
 case ${package} in
   mysql-community-minimal-*)
     mroonga_is_registered_for_mysql_community_minimal
+    case ${major_version} in
+      7)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
+        ;;
+      8)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
+        ;;
+      *)
+        sudo ${DNF} install -y \
+             https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
+        ;;
+    esac
     ;;
   *)
     mroonga_is_registered
