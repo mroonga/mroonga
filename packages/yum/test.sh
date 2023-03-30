@@ -181,11 +181,32 @@ function mroonga_is_registered() {
   sudo systemctl stop ${service_name}
 }
 
+function mroonga_is_registered_for_mysql_community_minimal() {
+  sudo mkdir -p /var/lib/mysql /var/run/mysqld; \
+  sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld; \
+  sudo chmod 1777 /var/lib/mysql /var/run/mysqld
+
+  auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+  mysqld &
+  mysql="mysql -u root -p${auto_generated_password}"
+  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+
+  sudo ${mysql} < /usr/share/mroonga/install.sql
+  sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
+}
+
 repositories_dir=/vagrant/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-mroonga_is_registered
+case ${package} in
+  mysql-community-minimal-*)
+    mroonga_is_registered_for_mysql_community_minimal
+    ;;
+  *)
+    mroonga_is_registered
+    ;;
+esac
 
 # Run test
 sudo ${DNF} install -y \
@@ -217,7 +238,7 @@ sed -i'' -e "s/\$HA_MROONGA_SO/${ha_mroonga_so}/g" \
 
 parallel=$(nproc)
 case ${package} in
-  mysql-8.*|mysql-community-8.*|percona-server-8.*)
+  mysql-8.*|mysql-community-8.*|mysql-community-minimal-8.*|percona-server-8.*)
     parallel=1
     # TODO: Remove the following "rm" as soon as possible
     # when these functionality is supported or test case is fixed for MySQL 8.0.
