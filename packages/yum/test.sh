@@ -188,13 +188,16 @@ function mroonga_is_registered_for_mysql_community_minimal() {
 
   auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
   mysql="mysql -u root -p${auto_generated_password}"
-  mysqld &
+  mysqld &> /dev/null &
+
   while :
   do
     mysqladmin ping -hlocalhost --silent
-    if [ $? -ne 0 ]; then
+    is_started_mysqld=$?
+    if [ "${is_started_mysqld}" -ne 0 ]; then
       sleep 1
     else
+      echo "AAA"
       break
     fi
   done
