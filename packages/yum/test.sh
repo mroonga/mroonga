@@ -205,20 +205,6 @@ sudo ${DNF} install -y \
 case ${package} in
   mysql-community-minimal-*)
     mroonga_is_registered_for_mysql_community_minimal
-    case ${major_version} in
-      7)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
-        ;;
-      8)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
-        ;;
-      *)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
-        ;;
-    esac
     ;;
   *)
     mroonga_is_registered
@@ -226,6 +212,28 @@ case ${package} in
 esac
 
 # Run test
+case ${package} in
+  mysql-community-minimal-*)
+    # Upgrade
+    sudo ${DNF} erase -y \
+      ${package} \
+      "${mysql_package_prefix}-*"
+    sudo rm -rf /var/lib/mysql
+
+    # Disable upgrade test for first time packages.
+    case ${os}-${major_version} in
+      mysql-community-minimal-*) # TODO: Remove this after 13.02 release.
+        exit
+        ;;
+    esac
+    ;;
+
+  sudo ${DNF} install -y ${old_package}
+  sudo ${DNF} install -y \
+    ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
+  mroonga_is_registered_for_mysql_community_minimal
+esac
+
 sudo ${DNF} install -y \
   ${test_package_name} \
   gdb \
