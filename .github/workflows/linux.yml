@@ -482,7 +482,7 @@ jobs:
 #            package: mysql-community-8.0
 
           # MySQL community minimal 8.0
-          - os: almalinux-8
+          - os: oracle-linux-8
             package-type: yum
             package: mysql-community-minimal-8.0
 

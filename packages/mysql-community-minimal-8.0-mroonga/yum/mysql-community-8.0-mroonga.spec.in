@@ -45,7 +45,6 @@ BuildRequires:	dnf-command(download)
 %else
 BuildRequires:	yum-utils
 %endif
-Requires:	mysql-community-common = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-server-minimal = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
