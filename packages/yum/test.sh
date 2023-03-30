@@ -187,8 +187,17 @@ function mroonga_is_registered_for_mysql_community_minimal() {
   sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
   auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
-  mysqld &
   mysql="mysql -u root -p${auto_generated_password}"
+  mysqld &
+  while :
+  do
+    mysqladmin ping -hlocalhost --silent
+    if [ $? -ne 0 ]; then
+      sleep 1
+    else
+      break
+    fi
+  done
   sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 
   sudo ${mysql} < /usr/share/mroonga/install.sql
