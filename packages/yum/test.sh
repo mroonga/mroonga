@@ -212,26 +212,43 @@ case ${package} in
 esac
 
 # Run test
-case ${package} in
-  mysql-community-minimal-*)
-    # Upgrade
-    sudo ${DNF} erase -y \
-      ${package} \
-      "${mysql_package_prefix}-*"
-    sudo rm -rf /var/lib/mysql
 
-    # Disable upgrade test for first time packages.
-    case ${os}-${major_version} in
-      mysql-community-minimal-*) # TODO: Remove this after 13.02 release.
-        exit
-        ;;
-    esac
-    ;;
+function run_upgrade_test() {
+  sudo ${DNF} erase -y \
+    ${package} \
+    "${mysql_package_prefix}-*"
+  sudo rm -rf /var/lib/mysql
+
+  # Disable upgrade test for first time packages.
+  case ${os}-${major_version} in
+    oracle-linux-*) # TODO: Remove this after 13.01 release.
+      exit
+      ;;
+  esac
+  case ${package} in
+    mariadb-10.11-*) # TODO: Remove this after 13.01 release.
+      exit
+      ;;
+    mysql-community-minimal-*) # TODO: Remove this after 13.02 release.
+      exit
+      ;;
+  esac
 
   sudo ${DNF} install -y ${old_package}
   sudo ${DNF} install -y \
     ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
-  mroonga_is_registered_for_mysql_community_minimal
+
+  mroonga_is_registered
+}
+
+case ${package} in
+  mysql-community-minimal-*)
+  # mysql-community-minimal only execute a upgrade test.
+  # Because we can not install mysql-community-test package on the enviromnment that is installed mysql-community-minimal.
+  # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
+    run_upgrade_test
+    exit
+    ;;
 esac
 
 sudo ${DNF} install -y \
@@ -316,25 +333,4 @@ if [ -d plugin.backup ]; then
 fi
 
 # Upgrade
-sudo ${DNF} erase -y \
-  ${package} \
-  "${mysql_package_prefix}-*"
-sudo rm -rf /var/lib/mysql
-
-# Disable upgrade test for first time packages.
-case ${os}-${major_version} in
-  oracle-linux-*) # TODO: Remove this after 13.01 release.
-    exit
-    ;;
-esac
-case ${package} in
-  mariadb-10.11-*) # TODO: Remove this after 13.01 release.
-    exit
-    ;;
-esac
-
-sudo ${DNF} install -y ${old_package}
-sudo ${DNF} install -y \
-  ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
-
-mroonga_is_registered
+run_upgrade_test
