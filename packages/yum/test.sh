@@ -37,14 +37,9 @@ case ${os} in
     os=almalinux
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
     DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
-    sudo ${DNF} install -y \
-      https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
-    case ${major_version} in
-      8)
-        sudo dnf module -y disable mariadb
-        sudo dnf module -y disable mysql
-        ;;
-    esac
+
+    sudo dnf module -y disable mariadb
+    sudo dnf module -y disable mysql
     ;;
 esac
 
@@ -88,31 +83,13 @@ REPO
     ;;
   mysql-community-minimal-*)
     mysql_package_prefix=mysql-community-minimal
-    service_name=mysqld
-    test_package_name=mysql-community-test
-    have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=mysql${mysql_package_version}-community-minimal-mroonga
-    case ${major_version} in
-#      7)
-#        sudo ${DNF} install -y \
-#             https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
-#        ;;
-      8)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm
-        echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
-        sudo sed -i -e 's/enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
-        ;;
-#      *)
-#        sudo ${DNF} install -y \
-#             https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
-#        ;;
-    esac
-    if [ "${major_version}" = "7" ] && [ "${mysql_version}" = "5.7" ]; then
-      sudo yum-config-manager --disable mysql80-community
-      sudo yum-config-manager --enable mysql57-community
-    fi
+
+    sudo ${DNF} install -y \
+         https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
+    echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+    sudo sed -i -e 's/enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
     ;;
   mysql-community-*)
     mysql_package_prefix=mysql-community
