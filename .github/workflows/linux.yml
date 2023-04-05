@@ -536,7 +536,7 @@ jobs:
               os=${{ matrix.os }}
               ;;
           esac
-          case "${{ matrix.os }}" in
+          case "${os}" in
             amazon-linux-*)
               os_type=amazon-linux
               ;;
