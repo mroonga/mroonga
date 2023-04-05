@@ -13,7 +13,7 @@ RUN \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
     https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/mysql-community-minimal-release-el8-1.noarch.rpm && \
+    https://repo.mysql.com/mysql-community-minimal-release-el8.rpm && \
   dnf builddep --enablerepo=mysql80-community-minimal-source,powertools -y ${quiet} mysql-community-minimal && \
   dnf download --enablerepo=mysql80-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
   dnf install --enablerepo=powertools -y ${quiet} \
