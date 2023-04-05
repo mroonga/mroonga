@@ -523,7 +523,7 @@ jobs:
         run: |
           case "${{ matrix.package }}" in
             mysql-community-minimal-*)
-              os=${{ matrix.target_os }}
+              os=${{ matrix.target-os }}
               ;;
             *)
               os=${{ matrix.os }}
@@ -536,7 +536,7 @@ jobs:
           mkdir -p "${repositories_dir}"
           case "${{ matrix.package }}" in
             mysql-community-minimal-*)
-              os=${{ matrix.target_os }}
+              os=${{ matrix.target-os }}
               ;;
             *)
               os=${{ matrix.os }}
