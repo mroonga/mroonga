@@ -10,9 +10,6 @@
 %define _mysql_dist %{?mysql_dist:%{mysql_dist}}%{!?mysql_dist:%{mysql_dist_default}}
 %define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:%{mysql_spec_file_default}}
 
-%define use_dnf (%{rhel} >= 8)
-%define use_cmake (%{rhel} >= 8)
-
 %if %{use_dnf}
 %define dnf_download dnf download
 %else
