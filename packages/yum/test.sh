@@ -161,8 +161,8 @@ function mroonga_is_registered() {
 }
 
 function mroonga_is_registered_for_mysql_community_minimal() {
-  sudo mkdir -p /var/lib/mysql /var/run/mysqld; \
-  sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld; \
+  sudo mkdir -p /var/lib/mysql /var/run/mysqld
+  sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
   sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
   auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
