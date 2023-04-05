@@ -167,7 +167,7 @@ function mroonga_is_registered_for_mysql_community_minimal() {
 
   auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
   mysql="mysql -u root -p${auto_generated_password}"
-  mysqld &> /dev/null &
+  mysqld &
 
   while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
 
