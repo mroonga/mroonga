@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class MySQLCommunityMinimalMroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mysql-community-8.0")
+    super("mysql-community-minimal-8.0")
   end
 
   def apt_targets_default
