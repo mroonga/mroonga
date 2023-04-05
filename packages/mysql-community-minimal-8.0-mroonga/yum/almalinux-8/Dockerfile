@@ -30,7 +30,7 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf install -y ${quiet} https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm && \
+  dnf install -y ${quiet} https://repo.mysql.com/mysql80-community-release-el8.rpm && \
   dnf install --disablerepo=appstream -y ${quiet} \
     mysql-community-devel && \
   dnf clean ${quiet} all
