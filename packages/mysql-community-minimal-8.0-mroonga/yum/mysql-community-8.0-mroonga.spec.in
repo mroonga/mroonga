@@ -82,21 +82,6 @@ rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-# Ensure returning success status for manual Mroonga preparation.
-%{_datadir}/mroonga/rpm/post.sh \
-  "$1" \
-  mysql \
-  %{_datadir} \
-  %{groonga_required_version} || :
-
-%preun
-# Ensure returning success status for manual Mroonga preparation.
-%{_datadir}/mroonga/rpm/preun.sh \
-  "$1" \
-  mysql \
-  %{_datadir} || :
-
 %files
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
