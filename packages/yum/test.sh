@@ -15,7 +15,7 @@ case ${os} in
     sudo amazon-linux-extras install -y epel
     sudo yum install -y ca-certificates
     ;;
-  centos|almalinux)
+  centos|almalinux|linux)
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
     case ${major_version} in
       7)
@@ -27,21 +27,15 @@ case ${os} in
           https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
         ;;
       *)
-        DNF="dnf --enablerepo=powertools"
+        if [ ${os} = "linux" ]; then
+          DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
+        else
+          DNF="dnf --enablerepo=powertools"
+        fi
         sudo dnf module -y disable mariadb
         sudo dnf module -y disable mysql
         ;;
     esac
-    ;;
-  linux) # Oracle Linux
-    os=almalinux
-    major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
-    DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
-    sudo ${DNF} install -y \
-      https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
-
-    sudo dnf module -y disable mariadb
-    sudo dnf module -y disable mysql
     ;;
 esac
 
