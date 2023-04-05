@@ -28,8 +28,6 @@ License:	LGPLv2.1
 URL:		https://mroonga.org/
 Source0:	https://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
-Obsoletes:	mysql80-community-mroonga < 11.02-2%{?dist}
-
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	libcurl-devel
 BuildRequires:	groonga-devel >= %{groonga_required_version}
