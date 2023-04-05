@@ -494,7 +494,7 @@ jobs:
 
           # MySQL community minimal 8.0
           - os: almalinux-8
-            target_os: oracle-linux-8
+            target-os: oracle-linux-8
             package-type: yum
             package: mysql-community-minimal-8.0
 
