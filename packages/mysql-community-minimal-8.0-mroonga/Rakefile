@@ -5,13 +5,8 @@ class MySQLCommunityMinimalMroongaPackageTask < MroongaPackageTask
     super("mysql-community-minimal-8.0")
   end
 
-  def apt_targets_default
-    [
-#      "debian-bullseye",
-# We disable Ubuntu 22.04 temporaliy.
-# MySQL 8.0 doesn't provide packages for Ubuntu 22.04 yet
-#      "ubuntu-jammy",
-    ]
+  def enable_apt?
+    false
   end
 
   def enable_ubuntu?
