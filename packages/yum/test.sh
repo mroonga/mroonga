@@ -226,7 +226,7 @@ sed -i'' -e "s/\$HA_MROONGA_SO/${ha_mroonga_so}/g" \
 
 parallel=$(nproc)
 case ${package} in
-  mysql-8.*|mysql-community-8.*|mysql-community-minimal-8.*|percona-server-8.*)
+  mysql-8.*|mysql-community-8.*|percona-server-8.*)
     parallel=1
     # TODO: Remove the following "rm" as soon as possible
     # when these functionality is supported or test case is fixed for MySQL 8.0.
