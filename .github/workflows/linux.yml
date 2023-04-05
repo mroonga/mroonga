@@ -521,14 +521,8 @@ jobs:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
       - name: Run VM
         run: |
-          case "${{ matrix.package }}" in
-            mysql-community-minimal-*)
-              os=${{ matrix.target-os }}
-              ;;
-            *)
-              os=${{ matrix.os }}
-              ;;
-          esac
+          os=${{ matrix.target-os }}
+          : ${os:=${{ matrix.os }}
           vagrant up ${os}
       - name: Run test
         run: |
