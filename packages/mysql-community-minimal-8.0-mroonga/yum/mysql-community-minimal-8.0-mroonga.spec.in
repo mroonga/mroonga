@@ -107,7 +107,6 @@ Documentation for Mroonga
 %files doc
 %defattr(-,root,root,-)
 %doc README COPYING
-%doc mysql-mroonga-doc/*
 
 %changelog
 * Thu Mar 23 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
