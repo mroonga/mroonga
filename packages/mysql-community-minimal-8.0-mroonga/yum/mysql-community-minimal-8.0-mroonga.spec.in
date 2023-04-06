@@ -96,18 +96,6 @@ This is a trnsitional package. This can safely be removed.
 %defattr(-,root,root,-)
 %doc README COPYING
 
-%package doc
-Summary:	Documentation for Mroonga
-Group:		Documentation
-License:	LGPLv2.1
-
-%description doc
-Documentation for Mroonga
-
-%files doc
-%defattr(-,root,root,-)
-%doc README COPYING
-
 %changelog
 * Thu Mar 23 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
 - New upstream release.
