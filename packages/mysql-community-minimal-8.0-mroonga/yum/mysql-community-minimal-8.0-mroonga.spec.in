@@ -49,9 +49,7 @@ if ! cp /mysql-community-*.src.rpm ./; then
 fi
 rpm -Uvh mysql-community-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-%if %{use_cmake}
 sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-%endif
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
