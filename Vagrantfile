@@ -7,10 +7,6 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   vms = [
     {
-      :id => "ubuntu-bionic",
-      :box => "bento/ubuntu-18.04",
-    },
-    {
       :id => "ubuntu-focal",
       :box => "bento/ubuntu-20.04",
     },

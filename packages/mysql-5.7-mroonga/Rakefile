@@ -10,9 +10,7 @@ class MySQL57MroongaPackageTask < MroongaPackageTask
   end
 
   def ubuntu_targets_default
-    [
-      ["bionic", "18.04"],
-    ]
+    []
   end
 
   def enable_yum?
