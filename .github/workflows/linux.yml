@@ -540,6 +540,8 @@ jobs:
               ;;
           esac
           cp -a ${os_type} "${repositories_dir}"
+          os=${{ matrix.target-os }}
+          : ${os:=${{ matrix.os }}}
           vagrant \
             ssh ${os} \
             -- \
