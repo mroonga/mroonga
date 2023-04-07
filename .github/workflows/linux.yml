@@ -522,14 +522,14 @@ jobs:
       - name: Run VM
         run: |
           os=${{ matrix.target-os }}
-          : ${os:=${{ matrix.os }}
+          : ${os:=${{ matrix.os }}}
           vagrant up ${os}
       - name: Run test
         run: |
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
           os=${{ matrix.target-os }}
-          : ${os:=${{ matrix.os }}
+          : ${os:=${{ matrix.os }}}
           case "${os}" in
             amazon-linux-*)
               os_type=amazon-linux
