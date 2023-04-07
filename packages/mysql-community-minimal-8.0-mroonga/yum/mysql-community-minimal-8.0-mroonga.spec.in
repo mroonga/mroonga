@@ -14,8 +14,6 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
-%define _unpackaged_files_terminate_build 0
-
 Name:		mysql-community-minimal-8.0-mroonga
 Version:	@VERSION@
 Release:	1%{?dist}
@@ -70,6 +68,7 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
+rm -rf  $RPM_BUILD_ROOT%{_datadir}/doc/mroonga
 
 %clean
 rm -rf $RPM_BUILD_ROOT
