@@ -528,9 +528,7 @@ jobs:
         run: |
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
-          os=${{ matrix.target-os }}
-          : ${os:=${{ matrix.os }}}
-          case "${os}" in
+          case "${{ matrix.os }}" in
             amazon-linux-*)
               os_type=amazon-linux
               ;;
