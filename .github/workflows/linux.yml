@@ -528,14 +528,8 @@ jobs:
         run: |
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
-          case "${{ matrix.package }}" in
-            mysql-community-minimal-*)
-              os=${{ matrix.target-os }}
-              ;;
-            *)
-              os=${{ matrix.os }}
-              ;;
-          esac
+          os=${{ matrix.target-os }}
+          : ${os:=${{ matrix.os }}
           case "${os}" in
             amazon-linux-*)
               os_type=amazon-linux
@@ -544,7 +538,7 @@ jobs:
               os_type=oracle-linux
               ;;
             *)
-              os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
+              os_type=$(echo "${os}" | grep -o '^[^-]*')
               ;;
           esac
           cp -a ${os_type} "${repositories_dir}"
