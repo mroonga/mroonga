@@ -538,7 +538,7 @@ jobs:
               os_type=oracle-linux
               ;;
             *)
-              os_type=$(echo "${os}" | grep -o '^[^-]*')
+              os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
               ;;
           esac
           cp -a ${os_type} "${repositories_dir}"
