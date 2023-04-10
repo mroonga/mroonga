@@ -196,7 +196,7 @@ case ${package} in
     # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
     # Also, mysql-community-minimal doesn't execute upgrade test.
     # Because this package is only used in Docker. Docker image doesn't use package upgrade.
-    exit
+    exit 0
     ;;
 esac
 
