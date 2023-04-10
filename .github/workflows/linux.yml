@@ -547,4 +547,4 @@ jobs:
             -- \
             /vagrant/packages/${{ matrix.package-type }}/test.sh \
             ${{ matrix.package }}-mroonga
-        timeout-minutes: 20
+        timeout-minutes: 30
