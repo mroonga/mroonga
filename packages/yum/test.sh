@@ -29,6 +29,8 @@ case ${os} in
       *)
         if [ ${os} = "linux" ]; then
           DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
+          sudo ${DNF} install -y \
+            https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
           os=almalinux # Because we can use packages for AlmaLinux on Oracle Linux.
         else
           DNF="dnf --enablerepo=powertools"
