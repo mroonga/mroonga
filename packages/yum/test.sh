@@ -181,6 +181,12 @@ sudo ${DNF} install -y \
 case ${package} in
   mysql-community-minimal-*)
     mroonga_can_be_registered_for_mysql_community_minimal
+    # mysql-community-minimal doesn't execute tests.
+    # Because we can not install mysql-community-test package on the enviromnment that is installed mysql-community-minimal.
+    # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
+    # Also, mysql-community-minimal doesn't execute upgrade test.
+    # Because this package is only used in Docker. Docker image doesn't use package upgrade.
+    exit
     ;;
   *)
     mroonga_is_registered
@@ -188,17 +194,6 @@ case ${package} in
 esac
 
 # Run test
-
-case ${package} in
-  mysql-community-minimal-*)
-    # mysql-community-minimal doesn't execute tests.
-    # Because we can not install mysql-community-test package on the enviromnment that is installed mysql-community-minimal.
-    # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
-    # Also, mysql-community-minimal doesn't execute upgrade test.
-    # Because this package is only used in Docker. Docker image doesn't use package upgrade.
-    exit 0
-    ;;
-esac
 
 sudo ${DNF} install -y \
   ${test_package_name} \
