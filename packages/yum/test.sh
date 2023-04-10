@@ -16,7 +16,6 @@ case ${os} in
     sudo yum install -y ca-certificates
     ;;
   centos|almalinux|linux)
-    if [ ${os} = "linux" ]; then os=almalinux; fi
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
     case ${major_version} in
       7)
@@ -30,6 +29,7 @@ case ${os} in
       *)
         if [ ${os} = "linux" ]; then
           DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
+          os=almalinux # Because we can use packages for AlmaLinux on Oracle Linux.
         else
           DNF="dnf --enablerepo=powertools"
         fi
