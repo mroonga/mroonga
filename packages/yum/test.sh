@@ -180,7 +180,7 @@ sudo ${DNF} install -y \
 
 case ${package} in
   mysql-community-minimal-*)
-    mroonga_is_registered_for_mysql_community_minimal
+    mroonga_can_be_registered_for_mysql_community_minimal
     ;;
   *)
     mroonga_is_registered
