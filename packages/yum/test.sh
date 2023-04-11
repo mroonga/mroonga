@@ -172,6 +172,7 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
 
   sudo ${mysql} < /usr/share/mroonga/install.sql
   sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
+  mysqladmin -u root -p${auto_generated_password} shutdown
 }
 
 repositories_dir=/vagrant/packages/${package}/yum/repositories
@@ -186,7 +187,6 @@ case ${package} in
     # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
     # Also, mysql-community-minimal doesn't execute upgrade test.
     # Because this package is only used in Docker. Docker image doesn't use package upgrade.
-    mysqladmin -u root -p${auto_generated_password} shutdown
     exit
     ;;
   *)
