@@ -195,7 +195,6 @@ case ${package} in
 esac
 
 # Run test
-
 sudo ${DNF} install -y \
   ${test_package_name} \
   gdb \
