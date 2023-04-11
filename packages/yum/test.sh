@@ -15,7 +15,7 @@ case ${os} in
     sudo amazon-linux-extras install -y epel
     sudo yum install -y ca-certificates
     ;;
-  centos|almalinux)
+  centos|almalinux|linux)
     major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
     case ${major_version} in
       7)
@@ -27,20 +27,14 @@ case ${os} in
           https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
         ;;
       *)
-        DNF="dnf --enablerepo=powertools"
-        sudo dnf module -y disable mariadb
-        sudo dnf module -y disable mysql
-        ;;
-    esac
-    ;;
-  linux) # Oracle Linux
-    os=oracle-linux
-    major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
-    DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
-    sudo ${DNF} install -y \
-      https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
-    case ${major_version} in
-      8)
+        if [ ${os} = "linux" ]; then
+          DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
+          sudo ${DNF} install -y \
+            https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
+          os=almalinux # Because we can use packages for AlmaLinux on Oracle Linux.
+        else
+          DNF="dnf --enablerepo=powertools"
+        fi
         sudo dnf module -y disable mariadb
         sudo dnf module -y disable mysql
         ;;
@@ -85,6 +79,16 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 REPO
     fi
+    ;;
+  mysql-community-minimal-*)
+    mysql_package_prefix=mysql-community-minimal
+    mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
+    old_package=mysql${mysql_package_version}-community-minimal-mroonga
+
+    sudo ${DNF} install -y \
+         https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
+    echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+    sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
     ;;
   mysql-community-*)
     mysql_package_prefix=mysql-community
@@ -153,11 +157,42 @@ function mroonga_is_registered() {
   sudo systemctl stop ${service_name}
 }
 
+function mroonga_can_be_registered_for_mysql_community_minimal() {
+  sudo mkdir -p /var/lib/mysql /var/run/mysqld
+  sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
+  sudo chmod 1777 /var/lib/mysql /var/run/mysqld
+
+  auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+  mysql="mysql -u root -p${auto_generated_password}"
+  mysqld &
+
+  while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
+
+  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+
+  sudo ${mysql} < /usr/share/mroonga/install.sql
+  sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
+  mysqladmin -u root -p${auto_generated_password} shutdown
+}
+
 repositories_dir=/vagrant/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-mroonga_is_registered
+case ${package} in
+  mysql-community-minimal-*)
+    mroonga_can_be_registered_for_mysql_community_minimal
+    # mysql-community-minimal doesn't execute tests.
+    # Because we can not install mysql-community-test package on the enviromnment that is installed mysql-community-minimal.
+    # Because the mysql-community-minimal package and the mysql-community-test package are conflict.
+    # Also, mysql-community-minimal doesn't execute upgrade test.
+    # Because this package is only used in Docker. Docker image doesn't use package upgrade.
+    exit
+    ;;
+  *)
+    mroonga_is_registered
+    ;;
+esac
 
 # Run test
 sudo ${DNF} install -y \
