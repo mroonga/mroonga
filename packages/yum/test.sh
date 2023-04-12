@@ -204,9 +204,6 @@ case ${os}-${major_version} in
   almalinux-9)
     sudo ${DNF} install -y perl-lib
     ;;
-  oracle-linux-9)
-    sudo ${DNF} install -y perl-base perl-lib
-    ;;
 esac
 
 cd /usr/share/mysql-test/
@@ -283,11 +280,6 @@ sudo ${DNF} erase -y \
 sudo rm -rf /var/lib/mysql
 
 # Disable upgrade test for first time packages.
-case ${os}-${major_version} in
-  oracle-linux-*) # TODO: Remove this after 13.01 release.
-    exit
-    ;;
-esac
 case ${package} in
   mariadb-10.11-*) # TODO: Remove this after 13.01 release.
     exit
