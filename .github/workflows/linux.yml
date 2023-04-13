@@ -225,12 +225,6 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
-          - os: oracle-linux-8
-            package-type: yum
-            package: mysql-community-8.0
-          - os: oracle-linux-9
-            package-type: yum
-            package: mysql-community-8.0
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
@@ -493,12 +487,6 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mysql-community-8.0
-          - os: oracle-linux-8
-            package-type: yum
-            package: mysql-community-8.0
-          - os: oracle-linux-9
-            package-type: yum
-            package: mysql-community-8.0
           - os: debian-bullseye
             package-type: apt
             package: mysql-community-8.0
@@ -542,9 +530,6 @@ jobs:
           case "${{ matrix.os }}" in
             amazon-linux-*)
               os_type=amazon-linux
-              ;;
-            oracle-linux-*)
-              os_type=oracle-linux
               ;;
             *)
               os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
