@@ -190,6 +190,6 @@ if [ -n "${old_package}" ]; then
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
-  sudo env DEBIAN_FRONTEND=noninteractive apt upgrade -V -y
+  sudo apt upgrade -V -y
   sudo mysql -e "SHOW ENGINES" | grep Mroonga
 fi
