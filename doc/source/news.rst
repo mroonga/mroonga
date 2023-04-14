@@ -32,7 +32,7 @@ Improvements
 
 * [:doc:`/install/almalinux`] Added support for MySQL community server minimal 8.0.
 
-  This is for supporting the `mysql:8.0-oracle` Docker image.
+  This is for supporting the ``mysql:8.0-oracle`` Docker image.
 
 .. _release-13-00:
 
