@@ -35,6 +35,22 @@ wget \
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 sudo apt update
 
+mysql_community_install_mysql_apt_config() {
+  # We need to specify DEBIAN_FRONTEND=noninteractive explicitly
+  # because the mysql-apt-config's config script refers the
+  # DEBIAN_FRONTEND environment variable directly. :<
+  sudo \
+    env DEBIAN_FRONTEND=noninteractive \
+        MYSQL_SERVER_VERSION=mysql-${mysql_version} \
+      apt install -V -y ./mysql-apt-config_*_all.deb
+  sudo apt update
+  # Ensure using the latest mysql-apt-config
+  sudo \
+    env DEBIAN_FRONTEND=noninteractive \
+        MYSQL_SERVER_VERSION=mysql-${mysql_version} \
+      apt upgrade -V -y
+}
+
 case ${package} in
   mariadb-*)
     old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
@@ -49,12 +65,8 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=${package}
-    wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb
-    sudo \
-      env DEBIAN_FRONTEND=noninteractive \
-          MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-        apt install -y ./mysql-apt-config_*_all.deb
-    sudo apt update
+    wget https://repo.mysql.com/mysql-apt-config_0.8.24-1_all.deb
+    mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
     test_package=mysql-testsuite
@@ -180,10 +192,7 @@ if [ -n "${old_package}" ]; then
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   case ${package} in
     mysql-community-8.*)
-      sudo \
-        env DEBIAN_FRONTEND=noninteractive \
-            MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-          apt install -y ./mysql-apt-config_*_all.deb
+      mysql_community_install_mysql_apt_config
       ;;
   esac
   sudo apt update
