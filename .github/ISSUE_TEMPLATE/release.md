@@ -28,6 +28,7 @@ guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
   - [ ] Update .rst
   - [ ] Translate (Update .po)
 - [ ] Check CI https://github.com/mroonga/mroonga/actions
+- [ ] Check LaunchPad Nightly https://launchpad.net/~groonga/+archive/ubuntu/nightly/+packages
 - [ ] Tagging
 - [ ] Upload source archives (.tar.gz、.zip)
 - [ ] Upload packages
