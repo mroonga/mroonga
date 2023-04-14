@@ -29,7 +29,7 @@
 
 Name:           percona-server-8.0-mroonga
 Version:        @VERSION@
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
@@ -149,6 +149,9 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Thu Apr 13 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-1
+- New upstream release.
+
 * Wed Mar 22 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-3
 - build against Percona Server 8.0.32-24.1.
 
