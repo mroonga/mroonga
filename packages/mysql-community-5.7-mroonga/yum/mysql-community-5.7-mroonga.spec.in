@@ -2,7 +2,7 @@
 
 %define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
 
-%define mysql_version_default 5.7.41
+%define mysql_version_default 5.7.42
 %define mysql_release_default 1
 %define mysql_dist_default    el7
 %define mysql_spec_file_default mysql.spec
@@ -24,7 +24,7 @@
 
 Name:		mysql-community-5.7-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -141,6 +141,9 @@ Documentation for Mroonga
 %doc mysql-mroonga-doc/*
 
 %changelog
+* Wed Apr 19 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-2
+- build against MySQL 5.7.42.
+
 * Thu Apr 13 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-1
 - New upstream release.
 
