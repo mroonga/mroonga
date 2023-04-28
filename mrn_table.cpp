@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013  Kentoku SHIBA
-  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020-2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -985,18 +985,12 @@ TABLE_SHARE *mrn_get_table_share(TABLE_LIST *table_list, int *error)
   TABLE_SHARE *share;
   THD *thd = current_thd;
   MRN_DBUG_ENTER_FUNCTION();
-#if defined(MRN_HAVE_TDC_ACQUIRE_SHARE) &&      \
-  !defined(MRN_TDC_ACQUIRE_SHARE_REQUIRE_KEY)
+#if defined(MRN_HAVE_TDC_ACQUIRE_SHARE)
   share = tdc_acquire_share(thd, table_list, GTS_TABLE);
 #else
   uint key_length;
-#  ifdef MRN_HAVE_GET_TABLE_DEF_KEY
   const char *key;
   key_length = get_table_def_key(table_list, &key);
-#  else
-  char key[MAX_DBKEY_LENGTH];
-  key_length = create_table_def_key(thd, key, table_list, false);
-#  endif
 #  ifdef MRN_HAVE_TABLE_DEF_CACHE
 #    ifdef MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
   share = get_table_share(thd,
@@ -1035,13 +1029,8 @@ TABLE_SHARE *mrn_create_tmp_table_share(TABLE_LIST *table_list,
   THD *thd = current_thd;
 
   MRN_DBUG_ENTER_FUNCTION();
-#ifdef MRN_HAVE_GET_TABLE_DEF_KEY
   const char *key;
   key_length = get_table_def_key(table_list, &key);
-#else
-  char key[MAX_DBKEY_LENGTH];
-  key_length = create_table_def_key(thd, key, table_list, false);
-#endif
   share = mrn_alloc_table_share(table_list, key, key_length);
   if (!share)
   {

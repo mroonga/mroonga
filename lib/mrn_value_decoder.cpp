@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2021 Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2015-2023 Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,7 @@
 #include "mrn_value_decoder.hpp"
 #include <mrn_mysql_compat.h>
 
-#ifdef MRN_HAVE_MY_BYTEORDER_H
-#  include <my_byteorder.h>
-#endif
+#include <my_byteorder.h>
 
 namespace mrn {
   namespace {

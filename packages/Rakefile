@@ -1,5 +1,4 @@
 packages = [
-  "mariadb-10.3-mroonga",
   "mariadb-10.4-mroonga",
   "mariadb-10.5-mroonga",
   "mariadb-10.6-mroonga",

@@ -32,7 +32,7 @@
 #  define MRN_HAVE_MYSQL_TYPE_JSON
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_MYSQL_TYPE_VARCHAR_COMPRESSED
 #  define MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
 #endif
@@ -45,46 +45,15 @@
 #  define MRN_HAVE_CREATE_FIELD_H
 #endif
 
-#if MYSQL_VERSION_ID < 50603
-  typedef MYSQL_ERROR Sql_condition;
-#endif
-
-#if defined(MRN_MARIADB_P)
-#  if MYSQL_VERSION_ID < 100000
-     typedef COST_VECT Cost_estimate;
-#  endif
-#endif
-
 #ifndef MRN_MARIADB_P
   typedef char *range_id_t;
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  define MRN_SUPPORT_FOREIGN_KEYS 1
-#endif
+#define KEY_N_KEY_PARTS(key) (key)->user_defined_key_parts
 
-#if MYSQL_VERSION_ID >= 50609
-#  define MRN_KEY_HAVE_USER_DEFINED_KEYPARTS
-#endif
-
-#ifdef MRN_KEY_HAVE_USER_DEFINED_KEYPARTS
-#  define KEY_N_KEY_PARTS(key) (key)->user_defined_key_parts
-#else
-#  define KEY_N_KEY_PARTS(key) (key)->key_parts
-#endif
-
-#if (MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)) || \
-    (MYSQL_VERSION_ID >= 100302)
-#  define MRN_FOREIGN_KEY_USE_CONST_STRING
-#endif
-
-#ifdef MRN_FOREIGN_KEY_USE_CONST_STRING
   typedef LEX_CSTRING mrn_foreign_key_name;
-#else
-  typedef LEX_STRING mrn_foreign_key_name;
-#endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_KEY_NAME_IS_LEX_STRING
 #  define MRN_FIELD_FIELD_NAME_IS_LEX_STRING
 #  define MRN_FIELD_SET_USE_LEX_STRING
@@ -156,7 +125,7 @@
 #  define FIELD_NAME_FORMAT_VALUE(field) (field)->field_name
 #endif
 
-#if (MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)) ||   \
+#if defined(MRN_MARIADB_P) ||                                   \
   (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
 #  define MRN_KEY_PART_SPEC_FIELD_NAME_USE_CONST_STRING
 #endif
@@ -196,7 +165,7 @@
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_THD_MAKE_LEX_STRING_USE_CONST_STRING
 #endif
 
@@ -209,12 +178,9 @@
 #if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
   init_alloc_root(mrn_memory_key, root, block_size, pre_alloc_size, flags)
-#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#elif defined(MRN_MARIADB_P)
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
   init_alloc_root(root, name, block_size, pre_alloc_size, flags)
-#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
-#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
-  init_alloc_root(root, block_size, pre_alloc_size, flags)
 #elif MYSQL_VERSION_ID >= 80027
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags) \
   ::new ((void *)root) MEM_ROOT(mrn_memory_key, block_size)
@@ -227,39 +193,28 @@
 #  define GTS_TABLE 0
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
-#    define MRN_GET_ERROR_MESSAGE thd_get_error_message(current_thd)
-#    define MRN_GET_ERROR_NUMBER thd_get_error_number(current_thd)
-#    define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd_get_error_row(thd)
-#  else
-#    define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
-#    define MRN_GET_ERROR_NUMBER current_thd->get_stmt_da()->sql_errno()
-#    if MYSQL_VERSION_ID >= 50706
-#      define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) \
-  thd->get_stmt_da()->current_row_for_condition()
-#    else
-#      define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) \
-  thd->get_stmt_da()->current_row_for_warning()
-#    endif
-#  endif
+#ifdef MRN_MARIADB_P
+#  define MRN_GET_ERROR_MESSAGE thd_get_error_message(current_thd)
+#  define MRN_GET_ERROR_NUMBER thd_get_error_number(current_thd)
+#  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd_get_error_row(thd)
 #else
-#  define MRN_GET_ERROR_MESSAGE current_thd->stmt_da->message()
-#  define MRN_GET_ERROR_NUMBER current_thd->stmt_da->sql_errno()
-#  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) thd->warning_info->current_row_for_warning()
+#  define MRN_GET_ERROR_MESSAGE current_thd->get_stmt_da()->message()
+#  define MRN_GET_ERROR_NUMBER current_thd->get_stmt_da()->sql_errno()
+#  define MRN_GET_CURRENT_ROW_FOR_WARNING(thd) \
+  thd->get_stmt_da()->current_row_for_condition()
 #endif
 
-#if MYSQL_VERSION_ID >= 50607 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_ITEM_HAVE_ITEM_NAME
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_ITEM_ITEM_NAME_IS_LEX_STRING
 #endif
 
-#if MYSQL_VERSION_ID < 100000
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_TABLE_DEF_CACHE
-#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  if MYSQL_VERSION_ID >= 80011
 #    define MRN_TABLE_DEF_CACHE_TYPE_IS_MAP
 #  endif
 
@@ -274,22 +229,11 @@ typedef HASH mrn_table_def_cache_type;
 #  endif
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100009
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_TDC_ACQUIRE_SHARE
-#  if MYSQL_VERSION_ID < 100200
-#    define MRN_TDC_ACQUIRE_SHARE_REQUIRE_KEY
-#  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 50613
-#  define MRN_HAVE_ALTER_INFO
-#endif
-
-#if MYSQL_VERSION_ID >= 50603
-#  define MRN_HAVE_GET_TABLE_DEF_KEY
-#endif
-
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100004
+#ifdef MRN_MARIADB_P
 #  define MRN_TABLE_SHARE_HAVE_LOCK_SHARE
 #endif
 
@@ -300,17 +244,17 @@ typedef HASH mrn_table_def_cache_type;
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_USE_MYSQL_DATA_HOME
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_SEVERITY_WARNING Sql_condition::SL_WARNING
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_SEVERITY_WARNING Sql_condition::WARN_LEVEL_WARN
+#else
+#  define MRN_SEVERITY_WARNING Sql_condition::SL_WARNING
 #endif
 
-#if (MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)) || \
+#if !defined(MRN_MARIADB_P) || \
   (MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P))
 #  define MRN_HAVE_PSI_MEMORY_KEY
 #endif
@@ -337,18 +281,16 @@ typedef HASH mrn_table_def_cache_type;
   my_multi_malloc(flags, __VA_ARGS__)
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_STRING_FREE(string) string.mem_free();
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_STRING_FREE(string) string.free();
+#else
+#  define MRN_STRING_FREE(string) string.mem_free();
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_THD_DB_PATH(thd) ((thd)->db().str)
-#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 #  define MRN_THD_DB_PATH(thd) ((thd)->db.str)
 #else
-#  define MRN_THD_DB_PATH(thd) ((thd)->db)
+#  define MRN_THD_DB_PATH(thd) ((thd)->db().str)
 #endif
 
 #ifndef INT_MAX64
@@ -361,23 +303,21 @@ typedef HASH mrn_table_def_cache_type;
 #  define UINT_MAX64 LONGLONG_MAX
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define mrn_my_stpmov(dst, src) my_stpmov(dst, src)
-#else
+#ifdef MRN_MARIADB_P
 #  define mrn_my_stpmov(dst, src) strmov(dst, src)
+#else
+#  define mrn_my_stpmov(dst, src) my_stpmov(dst, src)
 #endif
 
-#if MYSQL_VERSION_ID >= 50607
-#  if !defined(MRN_MARIADB_P)
-#    define MRN_HAVE_SQL_OPTIMIZER_H
-#  endif
+#ifndef MRN_MARIADB_P
+#  define MRN_HAVE_SQL_OPTIMIZER_H
 #endif
 
-#if MYSQL_VERSION_ID >= 50600 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_BINLOG_H
 #endif
 
-#if MYSQL_VERSION_ID >= 50720 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_MYSQL_PSI_MYSQL_MEMORY_H
 #endif
 
@@ -385,16 +325,11 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_HAVE_SQL_DERROR_H
 #endif
 
-#if !defined(MRN_MARIADB_P) ||                                     \
-  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000)
-#  define MRN_HAVE_MY_BYTEORDER_H
-#endif
-
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
 #  define MRN_HAVE_SQL_TYPE_GEOM_H
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_SPATIAL
 #  if MYSQL_VERSION_ID >= 80000
 #    define MRN_HAVE_SRID
@@ -416,10 +351,10 @@ typedef uint mrn_srid;
 #    define MRN_FIELD_GEOM_GET_SRID(field) (field->get_srid())
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_FORMAT_STRING_LENGTH "zu"
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_FORMAT_STRING_LENGTH "u"
+#else
+#  define MRN_FORMAT_STRING_LENGTH "zu"
 #endif
 
 #ifdef MRN_MARIADB_P
@@ -430,20 +365,20 @@ typedef uint mrn_srid;
 #  define MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
 #endif
 
-#if MYSQL_VERSION_ID >= 50706 && !defined(MRN_MARIADB_P)
-#  define MRN_QUERY_BLOCK_GET_WHERE_COND(query_block) \
-  ((query_block)->where_cond())
-#  define MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) \
-  ((query_block)->having_cond())
-#  define MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(query_block) \
-  ((query_block)->active_options())
-#else
+#ifdef MRN_MARIADB_P
 #  define MRN_QUERY_BLOCK_GET_WHERE_COND(query_block) \
   ((query_block)->where)
 #  define MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) \
   ((query_block)->having)
 #  define MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(query_block) \
   ((query_block)->options)
+#else
+#  define MRN_QUERY_BLOCK_GET_WHERE_COND(query_block) \
+  ((query_block)->where_cond())
+#  define MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) \
+  ((query_block)->having_cond())
+#  define MRN_QUERY_BLOCK_GET_ACTIVE_OPTIONS(query_block) \
+  ((query_block)->active_options())
 #endif
 
 #if MYSQL_VERSION_ID >= 80021 && !defined(MRN_MARIADB_P)
@@ -505,7 +440,7 @@ typedef uint mrn_srid;
   (query_block->offset_limit)
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
+#ifdef MRN_MARIADB_P
 #  if MYSQL_VERSION_ID >= 100504
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
   init_sql_alloc(mrn_memory_key,                                        \
@@ -513,45 +448,26 @@ typedef uint mrn_srid;
                  TABLE_ALLOC_BLOCK_SIZE,                                \
                  0,                                                     \
                  MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
-#  elif MYSQL_VERSION_ID >= 100306
+#  else
 #    define mrn_init_sql_alloc(thd, name, mem_root)                     \
   init_sql_alloc(mem_root,                                              \
                  name,                                                  \
                  TABLE_ALLOC_BLOCK_SIZE,                                \
                  0,                                                     \
                  MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
-#  elif MYSQL_VERSION_ID >= 100104
-#    define mrn_init_sql_alloc(thd, name, mem_root)                     \
-  init_sql_alloc(mem_root,                                              \
-                 TABLE_ALLOC_BLOCK_SIZE,                                \
-                 0,                                                     \
-                 MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
-#  else
-#    define mrn_init_sql_alloc(thd, name, mem_root)      \
-  init_sql_alloc(mem_root,                              \
-                 TABLE_ALLOC_BLOCK_SIZE,                \
-                 0,                                     \
-                 MYF(0))
 #  endif
 #else
-#  if MYSQL_VERSION_ID >= 50709
-#    define mrn_init_sql_alloc(thd, name, mem_root)     \
+#  define mrn_init_sql_alloc(thd, name, mem_root)       \
   init_sql_alloc(mrn_memory_key,                        \
                  mem_root,                              \
                  TABLE_ALLOC_BLOCK_SIZE,                \
                  0)
-#  else
-#    define mrn_init_sql_alloc(thd, name, mem_root)     \
-  init_sql_alloc(mem_root,                              \
-                 TABLE_ALLOC_BLOCK_SIZE,                \
-                 0)
-#  endif
 #endif
 
 #define MRN_ERROR_CODE_DATA_TRUNCATE(thd)                               \
   (thd->is_strict_mode() ? ER_WARN_DATA_OUT_OF_RANGE : WARN_DATA_TRUNCATED)
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000
+#ifdef MRN_MARIADB_P
 #  define mrn_strconvert(from_cs,               \
                          from,                  \
                          from_length,           \
@@ -582,24 +498,15 @@ typedef uint mrn_srid;
              (errors))
 #endif
 
-#if MYSQL_VERSION_ID >= 50717 && !defined(MRN_MARIADB_P)
-#  define mrn_is_directory_separator(c)         \
-  is_directory_separator((c))
-#else
+#ifdef MRN_MARIADB_P
 #  define mrn_is_directory_separator(c)         \
   (c == FN_LIBCHAR || c == FN_LIBCHAR2)
+#else
+#  define mrn_is_directory_separator(c)         \
+  is_directory_separator((c))
 #endif
 
-#if ((MYSQL_VERSION_ID < 50636) || \
-    (MYSQL_VERSION_ID >= 50700 && MYSQL_VERSION_ID < 50718)) && !defined(MRN_MARIADB_P)
-#  define MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
-#endif
-
-#if defined(MRN_MARIADB_P) &&                                           \
-  ((MYSQL_VERSION_ID >= 100207) ||                                      \
-   ((MYSQL_VERSION_ID >= 100126) && (MYSQL_VERSION_ID < 100200)) ||     \
-   ((MYSQL_VERSION_ID >= 100032) && (MYSQL_VERSION_ID < 100100)) ||     \
-   ((MYSQL_VERSION_ID >= 50557) && (MYSQL_VERSION_ID < 100000)))
+#ifdef MRN_MARIADB_P
 #  define mrn_create_partition_name(out,                                \
                                     out_length,                         \
                                     in1,                                \
@@ -662,55 +569,20 @@ typedef uint mrn_srid;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if (MYSQL_VERSION_ID >= 100200)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-       (!field->stored_in_db())
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
-       (field->vcol_info && field->vcol_info->is_stored())
-#  elif (MYSQL_VERSION_ID >= 50500)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-       (!field->stored_in_db)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
-       (field->vcol_info && field->vcol_info->is_stored())
-#  else
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) false
-#  endif
+#  define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+     (!field->stored_in_db())
+#  define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+     (field->vcol_info && field->vcol_info->is_stored())
 #else
-#  if (MYSQL_VERSION_ID >= 50708)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-       (field->is_virtual_gcol())
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
-       (field->is_gcol() && !field->is_virtual_gcol())
-#  elif (MYSQL_VERSION_ID >= 50706)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
-       (!field->stored_in_db)
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
-       (field->gcol_info && field->gcol_info->get_field_stored())
-#  else
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) false
-#    define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) false
-#  endif
+#  define MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field) \
+     (field->is_virtual_gcol())
+#  define MRN_GENERATED_COLUMNS_FIELD_IS_STORED(field) \
+     (field->is_gcol() && !field->is_virtual_gcol())
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if ((MYSQL_VERSION_ID >= 101002) || \
-       ((MYSQL_VERSION_ID >= 100904) && (MYSQL_VERSION_ID < 101000)) || \
-       ((MYSQL_VERSION_ID >= 100806) && (MYSQL_VERSION_ID < 100900)) || \
-       ((MYSQL_VERSION_ID >= 100707) && (MYSQL_VERSION_ID < 100800)) || \
-       ((MYSQL_VERSION_ID >= 100611) && (MYSQL_VERSION_ID < 100700)) || \
-       ((MYSQL_VERSION_ID >= 100518) && (MYSQL_VERSION_ID < 100600)) || \
-       ((MYSQL_VERSION_ID >= 100427) && (MYSQL_VERSION_ID < 100500)) || \
-       ((MYSQL_VERSION_ID >= 100337) && (MYSQL_VERSION_ID < 100400)))
-#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
-       (table->update_virtual_field(field, false))
-#  elif (MYSQL_VERSION_ID >= 100203)
-#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
-       (table->update_virtual_field(field))
-#  else
-#    define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
-       (field->vcol_info->expr_item->save_in_field(field, 0))
-#  endif
+#  define MRN_GENERATED_COLUMNS_UPDATE_VIRTUAL_FIELD(table, field) \
+     (table->update_virtual_field(field, false))
 #endif
 
 #ifdef MRN_PERCONA_P
@@ -721,7 +593,7 @@ typedef uint mrn_srid;
 #  endif
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 #  define MRN_TABLE_LIST_TABLE_NAME_DATA(table_list)    \
   (table_list)->table_name.str
 #  define MRN_TABLE_LIST_TABLE_NAME_LENGTH(table_list)  \
@@ -741,21 +613,7 @@ typedef uint mrn_srid;
    (table_list)->select_lex
 #endif
 
-#if !defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80018
-#  define MRN_DECLARE_TABLE_LIST(variable_name,                         \
-                                 db_name,                               \
-                                 db_name_length,                        \
-                                 table_name,                            \
-                                 table_name_length,                     \
-                                 alias,                                 \
-                                 lock_type)                             \
-    TABLE_LIST variable_name((db_name),                                 \
-                             (db_name_length),                          \
-                             (table_name),                              \
-                             (table_name_length),                       \
-                             (alias),                                   \
-                             (lock_type))
-#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 #  define MRN_DECLARE_TABLE_LIST(variable_name,                         \
                                  db_name,                               \
                                  db_name_length,                        \
@@ -774,20 +632,19 @@ typedef uint mrn_srid;
                                    (lock_type));                        \
     } while(false)
 #else
-#  define MRN_DECLARE_TABLE_LIST(variable_name,                 \
-                                 db_name,                       \
-                                 db_name_length,                \
-                                 table_name,                    \
-                                 table_name_length,             \
-                                 alias,                         \
-                                 lock_type)                     \
-    TABLE_LIST variable_name;                                   \
-    variable_name.init_one_table((db_name),                     \
-                                 (db_name_length),              \
-                                 (table_name),                  \
-                                 (table_name_length),           \
-                                 (alias),                       \
-                                 (lock_type))
+#  define MRN_DECLARE_TABLE_LIST(variable_name,                         \
+                                 db_name,                               \
+                                 db_name_length,                        \
+                                 table_name,                            \
+                                 table_name_length,                     \
+                                 alias,                                 \
+                                 lock_type)                             \
+    TABLE_LIST variable_name((db_name),                                 \
+                             (db_name_length),                          \
+                             (table_name),                              \
+                             (table_name_length),                       \
+                             (alias),                                   \
+                             (lock_type))
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
@@ -868,10 +725,10 @@ typedef uint mrn_srid;
 #  define MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
 #endif
 
-#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_GET_ERR_MSG(code) my_get_err_msg(code)
 #else
-#  if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
+#  if MYSQL_VERSION_ID >= 80011
 #    define MRN_GET_ERR_MSG(code) ER_DEFAULT(code)
 #  else
 #    define MRN_GET_ERR_MSG(code) ER(code)
@@ -899,18 +756,11 @@ typedef uint mrn_srid;
                     (key),                                   \
                     (key_length),                            \
                     false)
-#elif MYSQL_VERSION_ID >= 100306 && defined(MRN_MARIADB_P)
+#elif defined(MRN_MARIADB_P)
 #  define mrn_alloc_table_share(table_list, key, key_length) \
   alloc_table_share((table_list)->db.str,                    \
                     (table_list)->table_name.str,            \
                     (key),                                   \
-                    (key_length))
-#elif (MYSQL_VERSION_ID >= 100002 && defined(MRN_MARIADB_P)) || \
-  (MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P))
-#  define mrn_alloc_table_share(table_list, key, key_length)    \
-  alloc_table_share((table_list)->db,                           \
-                    (table_list)->table_name,                   \
-                    (key),                                      \
                     (key_length))
 #else
 #  define mrn_alloc_table_share(table_list, key, key_length)    \
@@ -945,7 +795,7 @@ typedef uint mrn_srid;
   using TABLE_LIST = Table_ref;
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#ifdef MRN_MARIADB_P
 #  define MRN_ITEM_IS_STRING_TYPE(item) \
   ((item)->is_of_type(Item::CONST_ITEM, STRING_RESULT))
 #  define MRN_ITEM_IS_INT_TYPE(item) \
@@ -955,7 +805,7 @@ typedef uint mrn_srid;
 #  define MRN_ITEM_IS_INT_TYPE(item) ((item)->type() == Item::INT_ITEM)
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#ifdef MRN_MARIADB_P
 #  define MRN_ITEM_GET_TIME(item, time, thd)                    \
   ((item)->get_date((thd), (time), Time::Options((thd))))
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                      \
@@ -967,7 +817,7 @@ typedef uint mrn_srid;
   ((item)->get_date((time), TIME_FUZZY_DATE))
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#ifdef MRN_MARIADB_P
 #  define MRN_FIELD_GET_TIME(field, time, thd)  \
   ((field)->get_date((time), Time::Options((thd))))
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)  \
@@ -1003,7 +853,7 @@ typedef uint mrn_srid;
   (field)->ptr = (new_ptr)
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100400)
+#ifdef MRN_MARIADB_P
 #  define MRN_TABLE_RESET(table) ((table)->reset())
 #  define MRN_TABLE_SHARE_RESET(table_share) ((table_share)->reset())
 #else
@@ -1030,10 +880,7 @@ typedef uint mrn_srid;
     bitmap_free((map))
 #endif
 
-#if defined(MRN_MARIADB_P) && ((MYSQL_VERSION_ID >= 100237 && MYSQL_VERSION_ID < 100300) || \
-                               (MYSQL_VERSION_ID >= 100328 && MYSQL_VERSION_ID < 100400) || \
-                               (MYSQL_VERSION_ID >= 100418 && MYSQL_VERSION_ID < 100500) || \
-                               (MYSQL_VERSION_ID >= 100509))
+#ifdef MRN_MARIADB_P
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
 
@@ -1082,9 +929,7 @@ typedef uint mrn_srid;
 #ifdef MRN_MARIADB_P
 #  define MRN_ERROR_CANCEL ER_STATEMENT_TIMEOUT
 #else
-#  if MYSQL_VERSION_ID >= 50700
-#    define MRN_ERROR_CANCEL ER_QUERY_TIMEOUT
-#  endif
+#  define MRN_ERROR_CANCEL ER_QUERY_TIMEOUT
 #endif
 
 #ifdef MRN_ERROR_CANCEL

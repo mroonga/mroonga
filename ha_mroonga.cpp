@@ -50,9 +50,7 @@
 #ifdef MRN_SUPPORT_CUSTOM_OPTIONS
 #  include <create_options.h>
 #endif
-#ifdef MRN_HAVE_MY_BYTEORDER_H
-#  include <my_byteorder.h>
-#endif
+#include <my_byteorder.h>
 #ifdef MRN_NEED_ROCKSDB_DB_TYPE_FIX
 #  include <mysql/psi/mysql_file.h>
 #endif
@@ -62,9 +60,7 @@
 #ifdef MRN_HAVE_SQL_OPTIMIZER_H
 #  include <sql_optimizer.h>
 #endif
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
-#  include <sql_table.h>
-#endif
+#include <sql_table.h>
 #ifdef MRN_HAVE_SQL_DD_TYPES_TABLE_H
 #  include <dd/types/table.h>
 #endif
@@ -2092,15 +2088,9 @@ mrn_hton_alter_table_flags(mrn_alter_table_flags flags)
   mrn_alter_table_flags alter_flags = 0;
 #ifdef HA_INPLACE_ADD_INDEX_NO_READ_WRITE
   bool is_inplace_index_change;
-#  ifdef MRN_HAVE_ALTER_INFO
   is_inplace_index_change = (((flags & MRN_ALTER_INFO_FLAG(ADD_INDEX)) &&
                               (flags & MRN_ALTER_INFO_FLAG(DROP_INDEX))) ||
                              (flags & MRN_ALTER_INFO_FLAG(CHANGE_COLUMN)));
-#  else
-  is_inplace_index_change = (((flags & ALTER_ADD_INDEX) &&
-                              (flags & ALTER_DROP_INDEX)) ||
-                             (flags & ALTER_CHANGE_COLUMN));
-#  endif
   if (!is_inplace_index_change) {
     alter_flags |=
       HA_INPLACE_ADD_INDEX_NO_READ_WRITE |
@@ -4309,21 +4299,20 @@ int ha_mroonga::storage_create(const char *name,
       continue;
     }
 
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
-#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
     bool is_created = storage_create_foreign_key(table,
                                                  mapper.table_name(),
                                                  field,
                                                  table_obj,
                                                  table_def,
                                                  error);
-#  else
+#else
     bool is_created = storage_create_foreign_key(table,
                                                  mapper.table_name(),
                                                  field,
                                                  table_obj,
                                                  error);
-#  endif
+#endif
     if (is_created) {
       continue;
     }
@@ -4331,7 +4320,6 @@ int ha_mroonga::storage_create(const char *name,
       grn_obj_remove(ctx, table_obj);
       DBUG_RETURN(error);
     }
-#endif
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
     if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
@@ -4409,7 +4397,6 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE *table)
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
 bool ha_mroonga::storage_create_foreign_key(TABLE *table,
                                             const char *grn_table_name,
                                             Field *field,
@@ -4662,7 +4649,6 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
   error = 0;
   DBUG_RETURN(false);
 }
-#endif
 
 int ha_mroonga::storage_create_validate_index(TABLE *table)
 {
@@ -5467,9 +5453,6 @@ void ha_mroonga::wrapper_overwrite_index_bits()
   {
     Field *field = table_share->field[i];
     field->part_of_key.clear_all();
-#  ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
-    field->part_of_key_not_clustered.clear_all();
-#  endif
     field->part_of_sortkey.clear_all();
     /*
       TODO: We may need to update field->part_of_key_not_extended for
@@ -5491,9 +5474,6 @@ void ha_mroonga::wrapper_overwrite_index_bits()
         {
           table_share->keys_for_keyread.set_bit(i);
           field->part_of_key.set_bit(i);
-#  ifdef MRN_HAVE_MYSQL_FIELD_PART_OF_KEY_NOT_CLUSTERED
-          field->part_of_key_not_clustered.set_bit(i);
-#  endif
         }
         if (index_flags(i, j, 1) & HA_READ_ORDER)
           field->part_of_sortkey.set_bit(i);
@@ -15417,12 +15397,10 @@ int ha_mroonga::storage_rename_table(const char *from, const char *to,
       }
     }
   }
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
   error = storage_rename_foreign_key(tmp_share, from_table_name, to_table_name);
   if (error) {
     goto error_end;
   }
-#endif
   {
     grn_obj *table_obj = grn_ctx_get(ctx, from_table_name, strlen(from_table_name));
     if (ctx->rc != GRN_SUCCESS) {
@@ -15445,7 +15423,6 @@ error_end:
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
 int ha_mroonga::storage_rename_foreign_key(MRN_SHARE *tmp_share,
                                            const char *from_table_name,
                                            const char *to_table_name)
@@ -15496,7 +15473,6 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE *tmp_share,
   }
   DBUG_RETURN(0);
 }
-#endif
 
 int ha_mroonga::rename_table(const char *from,
                              const char *to
@@ -16687,8 +16663,8 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
       (
         MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::ADD_COLUMN, ADD_COLUMN) |
         MRN_ALTER_INPLACE_INFO_FLAG(Alter_inplace_info::DROP_COLUMN, DROP_COLUMN) |
-        MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE |
-        MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER |
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_TYPE) |
+        MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_ORDER) |
         MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NULLABLE) |
         MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_NOT_NULLABLE) |
         MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_STORAGE_TYPE) |
@@ -17992,44 +17968,6 @@ void ha_mroonga::restore_auto_increment(ulonglong prev_insert_id)
   DBUG_VOID_RETURN;
 }
 
-#ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-void ha_mroonga::wrapper_restore_auto_increment()
-{
-  MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  wrap_handler->restore_auto_increment();
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_VOID_RETURN;
-}
-#  endif
-
-void ha_mroonga::storage_restore_auto_increment()
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler::restore_auto_increment();
-  DBUG_VOID_RETURN;
-}
-
-void ha_mroonga::restore_auto_increment()
-{
-  MRN_DBUG_ENTER_METHOD();
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  if (share->wrapper_mode)
-  {
-    wrapper_restore_auto_increment();
-  } else {
-#  endif
-    storage_restore_auto_increment();
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  }
-#  endif
-  DBUG_VOID_RETURN;
-}
-#endif
-
 #ifdef MRN_ENABLE_WRAPPER_MODE
 void ha_mroonga::wrapper_release_auto_increment()
 {
@@ -18541,7 +18479,6 @@ char *ha_mroonga::wrapper_get_foreign_key_create_info()
 }
 #  endif
 
-#  ifdef MRN_SUPPORT_FOREIGN_KEYS
 char *ha_mroonga::storage_get_foreign_key_create_info()
 {
   int error;
@@ -18621,14 +18558,14 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
                            ref_table_buff,
                            TL_WRITE);
     mrn_open_mutex_lock(table_share);
-#    ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
     // TODO
     TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, NULL, &error);
-#    else
+#  else
     TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
-#    endif
+#  endif
     mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(NULL);
@@ -18653,14 +18590,6 @@ char *ha_mroonga::storage_get_foreign_key_create_info()
   create_info[create_info_str.length()] = '\0';
   DBUG_RETURN(create_info);
 }
-#  else
-char *ha_mroonga::storage_get_foreign_key_create_info()
-{
-  MRN_DBUG_ENTER_METHOD();
-  char *res = handler::get_foreign_key_create_info();
-  DBUG_RETURN(res);
-}
-#  endif
 
 char *ha_mroonga::get_foreign_key_create_info()
 {
@@ -18694,7 +18623,6 @@ int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
 }
 #  endif
 
-#  ifdef MRN_SUPPORT_FOREIGN_KEYS
 int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
 {
@@ -18746,15 +18674,15 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                                        ref_table_buff,
                                                        ref_table_name_length,
                                                        true);
-#    ifdef MRN_FOREIGN_KEY_USE_METHOD_ENUM
+#  ifdef MRN_FOREIGN_KEY_USE_METHOD_ENUM
     f_key_info.update_method = FK_OPTION_RESTRICT;
     f_key_info.delete_method = FK_OPTION_RESTRICT;
-#    else
+#  else
     f_key_info.update_method = thd_make_lex_string(thd, NULL, "RESTRICT",
                                                     8, true);
     f_key_info.delete_method = thd_make_lex_string(thd, NULL, "RESTRICT",
                                                     8, true);
-#    endif
+#  endif
     f_key_info.referenced_key_name = thd_make_lex_string(thd, NULL, "PRIMARY",
                                                           7, true);
     mrn_thd_lex_string *field_name =
@@ -18777,13 +18705,13 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                            ref_table_buff,
                            TL_WRITE);
     mrn_open_mutex_lock(table_share);
-#    ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
+#  ifdef MRN_OPEN_TABLE_DEF_USE_TABLE_DEFINITION
     TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, NULL, &error);
-#    else
+#  else
     TABLE_SHARE *tmp_ref_table_share =
       mrn_create_tmp_table_share(&table_list, ref_path, &error);
-#    endif
+#  endif
     mrn_open_mutex_unlock(table_share);
     if (!tmp_ref_table_share) {
       DBUG_RETURN(error);
@@ -18806,15 +18734,6 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
   }
   DBUG_RETURN(0);
 }
-#  else
-int ha_mroonga::storage_get_foreign_key_list(THD *thd,
-                                             List<FOREIGN_KEY_INFO> *f_key_list)
-{
-  MRN_DBUG_ENTER_METHOD();
-  int res = handler::get_foreign_key_list(thd, f_key_list);
-  DBUG_RETURN(res);
-}
-#  endif
 
 int ha_mroonga::get_foreign_key_list(THD *thd,
                                      List<FOREIGN_KEY_INFO> *f_key_list)
@@ -18928,21 +18847,12 @@ void ha_mroonga::wrapper_free_foreign_key_create_info(char* str)
 }
 #  endif
 
-#  ifdef MRN_SUPPORT_FOREIGN_KEYS
 void ha_mroonga::storage_free_foreign_key_create_info(char* str)
 {
   MRN_DBUG_ENTER_METHOD();
   my_free(str);
   DBUG_VOID_RETURN;
 }
-#  else
-void ha_mroonga::storage_free_foreign_key_create_info(char* str)
-{
-  MRN_DBUG_ENTER_METHOD();
-  handler::free_foreign_key_create_info(str);
-  DBUG_VOID_RETURN;
-}
-#  endif
 
 void ha_mroonga::free_foreign_key_create_info(char* str)
 {
@@ -19070,77 +18980,6 @@ void ha_mroonga::rebind_psi()
   }
 #  endif
   DBUG_VOID_RETURN;
-}
-#endif
-
-#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-mrn_bool ha_mroonga::wrapper_register_query_cache_table(THD *thd,
-                                                        char *table_key,
-                                                        uint key_length,
-                                                        qc_engine_callback
-                                                        *engine_callback,
-                                                        ulonglong *engine_data)
-{
-  MRN_DBUG_ENTER_METHOD();
-  mrn_bool res;
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->register_query_cache_table(thd,
-                                                 table_key,
-                                                 key_length,
-                                                 engine_callback,
-                                                 engine_data);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
-}
-#  endif
-
-mrn_bool ha_mroonga::storage_register_query_cache_table(THD *thd,
-                                                        char *table_key,
-                                                        uint key_length,
-                                                        qc_engine_callback
-                                                        *engine_callback,
-                                                        ulonglong *engine_data)
-{
-  MRN_DBUG_ENTER_METHOD();
-  mrn_bool res = handler::register_query_cache_table(thd,
-                                                    table_key,
-                                                    key_length,
-                                                    engine_callback,
-                                                    engine_data);
-  DBUG_RETURN(res);
-}
-
-mrn_bool ha_mroonga::register_query_cache_table(THD *thd,
-                                                char *table_key,
-                                                uint key_length,
-                                                qc_engine_callback
-                                                *engine_callback,
-                                                ulonglong *engine_data)
-{
-  MRN_DBUG_ENTER_METHOD();
-  mrn_bool res;
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  if (share->wrapper_mode)
-  {
-    res = wrapper_register_query_cache_table(thd,
-                                             table_key,
-                                             key_length,
-                                             engine_callback,
-                                             engine_data);
-  } else {
-#  endif
-    res = storage_register_query_cache_table(thd,
-                                             table_key,
-                                             key_length,
-                                             engine_callback,
-                                             engine_data);
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  }
-#  endif
-  DBUG_RETURN(res);
 }
 #endif
 

@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2022  Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2012-2023  Sutou Kouhei <kou@clear-code.com>
 # Copyright(C) 2013  Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -447,10 +447,6 @@ else()
     mrn_build_flag("-Wno-strict-aliasing")
     mrn_build_flag("-Wno-deprecated")
     mrn_check_cxxflag("-felide-constructors")
-    if("${MYSQL_VARIANT}" STREQUAL "MariaDB" AND
-        "${MYSQL_VERSION}" VERSION_LESS "10.4.0")
-      mrn_check_cxxflag("-fno-rtti")
-    endif()
   endif()
   set_source_files_properties(${MRN_SOURCES} PROPERTIES
     COMPILE_FLAGS "${MYSQL_CFLAGS} ${MRN_CXX_COMPILE_FLAGS}")

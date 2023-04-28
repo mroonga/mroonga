@@ -2,7 +2,7 @@
 /*
   Copyright(C) 2010  Tetsuro IKEDA
   Copyright(C) 2010-2013  Kentoku SHIBA
-  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -87,8 +87,7 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002) ||   \
-  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100224)
+#if MYSQL_VERSION_ID >= 80002
 #  define MRN_HAVE_HA_EXTRA_BEGIN_ALTER_COPY
 #  define MRN_HAVE_HA_EXTRA_END_ALTER_COPY
 #endif
@@ -101,8 +100,7 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
 #endif
 
-#if (defined(MRN_MARIADB_P) &&                                  \
-     (MYSQL_VERSION_ID >= 100224 && MYSQL_VERSION_ID < 100510))
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100510
 #  define MRN_HAVE_HA_EXTRA_FAKE_START_STMT
 #endif
 
@@ -118,11 +116,11 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_ALTER_TABLE
 #endif
 
-#if MYSQL_VERSION_ID >= 100304 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_STARTING_ORDERED_INDEX_SCAN
 #endif
 
@@ -137,9 +135,7 @@ extern "C" {
 
 #ifdef MRN_MARIADB_P
 #  define MRN_TIMESTAMP_USE_MY_TIME_T
-#  if MYSQL_VERSION_ID >= 100100
-#    define MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS
-#  endif
+#  define MRN_TIMESTAMP_USE_MY_TIME_T_AND_POS
 #elif MYSQL_VERSION_ID >= 80028
 #  define MRN_TIMESTAMP_USE_MY_TIMEVAL
 #else
@@ -162,22 +158,16 @@ extern "C" {
 #  define MRN_HAVE_POINT_XY
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100000)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_START_BULK_INSERT_HAS_FLAGS
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100010)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_TDC_LOCK_TABLE_SHARE
-#  if MYSQL_VERSION_ID >= 100100
-#    define MRN_TABLE_SHARE_TDC_IS_POINTER
-#  endif
+#  define MRN_TABLE_SHARE_TDC_IS_POINTER
 #endif
 
-#ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID < 100000
-#    define MRN_SUPPORT_PARTITION
-#  endif
-#else
+#ifndef MRN_MARIADB_P
 #  define MRN_SUPPORT_PARTITION
 #endif
 
@@ -185,12 +175,8 @@ extern "C" {
 #  define MRN_FLUSH_LOGS_HAVE_BINLOG_GROUP_FLUSH
 #endif
 
-/* Note that MariaDB 10.2.2 and older MariaDB 10.2 series are not supported since 8.07 */
 #ifdef MRN_MARIADB_P
-#  if (MYSQL_VERSION_ID >= 100037 && MYSQL_VERSION_ID < 100100) || \
-      (MYSQL_VERSION_ID >= 100136)
-#    define MRN_FOREIGN_KEY_USE_METHOD_ENUM
-#  endif
+#  define MRN_FOREIGN_KEY_USE_METHOD_ENUM
 #endif
 
 #ifdef MRN_MARIADB_P
@@ -201,7 +187,7 @@ extern "C" {
 #  define MRN_HANDLER_HAVE_RESET_AUTO_INCREMENT
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 typedef alter_table_operations mrn_alter_flags;
 typedef alter_table_operations mrn_alter_table_flags;
 #  define MRN_ALTER_INPLACE_INFO_FLAG(alter_inplace_info_name, name)    \
@@ -217,26 +203,13 @@ typedef Alter_inplace_info::HA_ALTER_FLAGS mrn_alter_flags;
 #  define MRN_ALTER_INFO_FLAG(name) Alter_info::ALTER_ ## name
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 typedef alter_table_operations mrn_alter_flags;
 #else
 typedef uint mrn_alter_table_flags;
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 50709) ||   \
-  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100203)
-#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_TYPE)
-#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(STORED_COLUMN_ORDER)
-#else
-#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_TYPE \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_TYPE)
-#  define MRN_ALTER_INPLACE_INFO_ALTER_STORED_COLUMN_ORDER \
-  MRN_ALTER_INPLACE_INFO_ALTER_FLAG(COLUMN_ORDER)
-#endif
-
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100306
+#ifdef MRN_MARIADB_P
 #  define MRN_ALTER_INPLACE_INFO_ALTER_ADD_NON_UNIQUE_NON_PRIM_INDEX \
   MRN_ALTER_INPLACE_INFO_ALTER_FLAG(ADD_NON_UNIQUE_NON_PRIM_INDEX)
 #  define MRN_ALTER_INPLACE_INFO_ALTER_DROP_NON_UNIQUE_NON_PRIM_INDEX \
@@ -268,10 +241,6 @@ typedef uint mrn_alter_table_flags;
 
 #if MYSQL_VERSION_ID < 80011 || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
-#endif
-
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100315
-#  define MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
 #endif
 
 #if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
@@ -345,11 +314,7 @@ typedef uint mrn_alter_table_flags;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100302
   typedef const uchar * mrn_key_copy_from_record_t;
-#  else
-  typedef uchar * mrn_key_copy_from_record_t;
-#  endif
 #else
 #  if MYSQL_VERSION_ID >= 80000
   using mrn_key_copy_from_record_t = const uchar *;
@@ -358,13 +323,13 @@ typedef uint mrn_alter_table_flags;
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 100302 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
   typedef const uchar * mrn_update_row_new_data_t;
 #else
   typedef uchar * mrn_update_row_new_data_t;
 #endif
 
-#if MYSQL_VERSION_ID >= 100400 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
   using mrn_write_row_buf_t = const uchar *;
 #else
   typedef uchar * mrn_write_row_buf_t;
@@ -399,15 +364,8 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_HA_EXTRA
 #endif
 
-#if defined(MRN_MARIADB_P) && \
-   ((MYSQL_VERSION_ID >= 100320 && MYSQL_VERSION_ID < 100400) || \
-    (MYSQL_VERSION_ID >= 100410))
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE mrn_override
-#  if ((MYSQL_VERSION_ID >= 100320 && MYSQL_VERSION_ID < 100328) || \
-       (MYSQL_VERSION_ID >= 100410 && MYSQL_VERSION_ID < 100418) || \
-       (MYSQL_VERSION_ID >= 100500 && MYSQL_VERSION_ID < 100509))
-#    define MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
-#  endif
 #  define MRN_HANDLER_RELEASE_AUTO_INCREMENT_OVERRIDE mrn_override
 #else
 #  define MRN_HANDLER_RESTORE_AUTO_INCREMENT_OVERRIDE
@@ -847,13 +805,6 @@ protected:
 #ifdef MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
   void rebind_psi() mrn_override;
 #endif
-#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
-  mrn_bool register_query_cache_table(THD *thd,
-                                      char *table_key,
-                                      uint key_length,
-                                      qc_engine_callback *engine_callback,
-                                      ulonglong *engine_data) mrn_override;
-#endif
   bool prepare_inplace_alter_table(TABLE *altered_table,
                                    Alter_inplace_info *ha_alter_info
 #  ifdef MRN_HANDLER_PREPARE_INPLACE_ALTER_TABLE_HAVE_TABLE_DEFINITION
@@ -1141,7 +1092,6 @@ private:
                            MRN_SHARE *tmp_share);
 #endif
   int storage_create_validate_pseudo_column(TABLE *table);
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
   bool storage_create_foreign_key(TABLE *table,
                                   const char *grn_table_name,
                                   Field *field,
@@ -1150,7 +1100,6 @@ private:
                                   const dd::Table *table_def,
 #  endif
                                   int &error);
-#endif
   int storage_create_validate_index(TABLE *table);
   bool find_lexicon_flags(KEY *key, grn_table_flags *lexicon_flags);
   int storage_create_index_table(TABLE *table, const char *grn_table_name,
@@ -1667,11 +1616,9 @@ private:
                            dd::Table *to_table_def
 #endif
     );
-#ifdef MRN_SUPPORT_FOREIGN_KEYS
   int storage_rename_foreign_key(MRN_SHARE *tmp_share,
                                  const char *from_table_name,
                                  const char *to_table_name);
-#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
   bool wrapper_is_crashed() const;
 #endif
@@ -1853,12 +1800,6 @@ private:
   void wrapper_restore_auto_increment(ulonglong prev_insert_id);
 #endif
   void storage_restore_auto_increment(ulonglong prev_insert_id);
-#ifdef MRN_HANDLER_HAVE_RESTORE_AUTO_INCREMENT_NO_ARGUMENT
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  void wrapper_restore_auto_increment();
-#  endif
-  void storage_restore_auto_increment();
-#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_release_auto_increment();
 #endif
@@ -1954,22 +1895,6 @@ private:
   void wrapper_rebind_psi();
 #  endif
   void storage_rebind_psi();
-#endif
-#ifdef MRN_HANDLER_HAVE_REGISTER_QUERY_CACHE_TABLE
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-  mrn_bool wrapper_register_query_cache_table(THD *thd,
-                                              char *table_key,
-                                              uint key_length,
-                                              qc_engine_callback
-                                              *engine_callback,
-                                              ulonglong *engine_data);
-#  endif
-  mrn_bool storage_register_query_cache_table(THD *thd,
-                                              char *table_key,
-                                              uint key_length,
-                                              qc_engine_callback
-                                              *engine_callback,
-                                              ulonglong *engine_data);
 #endif
 };
 

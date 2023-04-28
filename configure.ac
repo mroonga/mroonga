@@ -249,12 +249,6 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
              [AX_CXX_COMPILE_STDCXX_17([ext], [mandatory])],
              [CHECK_CXXFLAG([-std=gnu++17])])
     ;;
-  10.3)
-    MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS -fno-rtti"
-    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
-             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
-             [CHECK_CXXFLAG([-std=gnu++11])])
-    ;;
   10.*)
     m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
              [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
@@ -286,7 +280,7 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
 
   case "$MYSQL_MAJOR_MINOR_VERSION" in
-  10.1|10.2|10.3|10.4)
+  10.4)
     :
     ;;
   10.*)
