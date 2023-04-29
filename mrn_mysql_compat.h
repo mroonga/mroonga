@@ -631,7 +631,7 @@ typedef uint mrn_srid;
                                    &alias_,                             \
                                    (lock_type));                        \
     } while(false)
-#else
+#elif MYSQL_VERSION_ID >= 80018
 #  define MRN_DECLARE_TABLE_LIST(variable_name,                         \
                                  db_name,                               \
                                  db_name_length,                        \
@@ -645,6 +645,21 @@ typedef uint mrn_srid;
                              (table_name_length),                       \
                              (alias),                                   \
                              (lock_type))
+#elsif
+#  define MRN_DECLARE_TABLE_LIST(variable_name,                 \
+                                 db_name,                       \
+                                 db_name_length,                \
+                                 table_name,                    \
+                                 table_name_length,             \
+                                 alias,                         \
+                                 lock_type)                     \
+    TABLE_LIST variable_name;                                   \
+    variable_name.init_one_table((db_name),                     \
+                                 (db_name_length),              \
+                                 (table_name),                  \
+                                 (table_name_length),           \
+                                 (alias),                       \
+                                 (lock_type))
 #endif
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
