@@ -645,7 +645,7 @@ typedef uint mrn_srid;
                              (table_name_length),                       \
                              (alias),                                   \
                              (lock_type))
-#elsif
+#else
 #  define MRN_DECLARE_TABLE_LIST(variable_name,                 \
                                  db_name,                       \
                                  db_name_length,                \
