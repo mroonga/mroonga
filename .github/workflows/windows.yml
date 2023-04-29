@@ -27,7 +27,6 @@ jobs:
       fail-fast: false
       matrix:
         label:
-          - MariaDB 10.3
           - MariaDB 10.4
           - MariaDB 10.5
           - MariaDB 10.6
@@ -39,8 +38,6 @@ jobs:
           - MariaDB 10.11 (master)
           - MariaDB 10.11 (master/embed)
         include:
-          - label: MariaDB 10.3
-            mariadb-version: "10.3.38"
           - label: MariaDB 10.4
             mariadb-version: "10.4.28"
           - label: MariaDB 10.5
