@@ -70,6 +70,9 @@ jobs:
               -Verbose | `
               ConvertFrom-Json -AsHashTable
           $latestRelease = $releasesResponse["releases"].Keys[0]
+          Write-Output $releasesResponse["releases"]
+          Write-Output $releasesResponse["releases"].Keys
+          Write-Output $releasesResponse["releases"].Keys[0]
           Write-Output "MARIADB_VERSION=${latestRelease}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           $mroongaVersion = "$(Get-Content version_full)"
