@@ -82,7 +82,7 @@ jobs:
           $artifactName += "-${Env:PACKAGE_PLATFORM}"
           Write-Output "MROONGA_VERSION=${mroongaVersion}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-          Write-Output "ARTIFACT_NAME=${ARTIFACT_NAME}" | `
+          Write-Output "ARTIFACT_NAME=${artifactName}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
       - uses: actions/cache@v3
         with:
