@@ -66,10 +66,10 @@ jobs:
         run: |
           $releasesResponse = `
             Invoke-WebRequest `
-              -Uri "https://downloads.mariadb.org/rest-api/mariadb/${{ matrix.mariadb-release }}/ `
+              -Uri "https://downloads.mariadb.org/rest-api/mariadb/${{ matrix.mariadb-release }}/" `
               -Verbose | `
               ConvertFrom-Json -AsHashTable
-          Write-Output "MAIRADB_VERSION=ccache=$($releasesResponse.releases.Keys[0])" | `
+          Write-Output "MAIRADB_VERSION=$($releasesResponse.releases.Keys[0])" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           $mroongaVersion = "$(Get-Content version_full)"
           $artifactName = "mariadb-${Env:MARIADB_VERSION}-with-mroonga-${mroongaVersion}"
