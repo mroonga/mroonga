@@ -88,14 +88,26 @@ set(MRN_PLUGIN_SUFFIX ${CMAKE_SHARED_MODULE_SUFFIX})
 
 
 if(MRN_BUNDLED)
+  set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+  set(MYSQL_BUILD_DIR ${CMAKE_BINARY_DIR})
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
   set(MYSQL_CFLAGS "${CMAKE_C_FLAGS}")
   set(MYSQL_VERSION "${MYSQL_BASE_VERSION}")
 else()
+  set(MYSQL_SOURCE_DIR "/PATH/TO/MYSQL/SOURCE/DIRECTORY/"
+    CACHE PATH "MySQL source directory")
+  if(NOT EXISTS ${MYSQL_SOURCE_DIR})
+    message(FATAL_ERROR
+      "MySQL source directory (MYSQL_SOURCE_DIR) doesn't exist: <${MYSQL_SOURCE_DIR}>")
+  endif()
+  set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
+  set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
+  find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
+
   macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
     if(NOT ${VARIABLE})
       execute_process(COMMAND "${MYSQL_CONFIG}" ${OPTION}
-       OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
+        OUTPUT_VARIABLE MYSQL_CONFIG_OUTPUT)
       string(STRIP ${MYSQL_CONFIG_OUTPUT} ${VARIABLE})
     endif()
   endmacro()
@@ -118,10 +130,6 @@ else()
   endif()
   set_mysql_config_value("--cflags" MYSQL_CFLAGS)
   set_mysql_config_value("--version" MYSQL_VERSION)
-  if(${MYSQL_VERSION} VERSION_GREATER "7")
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQURED TRUE)
-  endif()
 endif()
 
 if(MRN_GROONGA_BUNDLED)
@@ -228,22 +236,6 @@ string(REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/lib/\\1"
 read_file_list(${CMAKE_CURRENT_SOURCE_DIR}/udf/sources.am MRN_UDF_SOURCES)
 string(REGEX REPLACE "([^;]+)" "${CMAKE_CURRENT_SOURCE_DIR}/udf/\\1"
   MRN_UDF_SOURCES "${MRN_UDF_SOURCES}")
-
-if(MRN_BUNDLED)
-  set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-  set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR})
-  set(MYSQL_CONFIG ${CMAKE_SOURCE_DIR}/scripts/mysql_config)
-else()
-  set(MYSQL_SOURCE_DIR "/PATH/TO/MYSQL/SOURCE/DIRECTORY/"
-    CACHE PATH "MySQL source directory")
-  if(NOT EXISTS ${MYSQL_SOURCE_DIR})
-    message(FATAL_ERROR
-      "MySQL source directory (MYSQL_SOURCE_DIR) doesn't exist: <${MYSQL_SOURCE_DIR}>")
-  endif()
-  set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
-  set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
-endif()
-find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
 if(EXISTS "${MYSQL_SOURCE_DIR}/storage/maria")
   set(MYSQL_VARIANT "MariaDB")
