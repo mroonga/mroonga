@@ -72,10 +72,11 @@ jobs:
           $latestRelease = (($releasesResponse.releases | `
                                Get-Member -MemberType NoteProperty).Name | `
                               Sort-Object -Property {[Version]$_})[-1]
-          Write-Output "MARIADB_VERSION=${latestRelease}" | `
+          $mariaDBVersion = $latestRelease
+          Write-Output "MARIADB_VERSION=${mariaDBVersion}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           $mroongaVersion = "$(Get-Content version_full)"
-          $artifactName = "mariadb-${Env:MARIADB_VERSION}-with-mroonga-${mroongaVersion}"
+          $artifactName = "mariadb-${mariaDBVersion}-with-mroonga-${mroongaVersion}"
           if ("${{ matrix.use-master }}" -eq "yes") {
             $artifactName += "-with-groonga-master"
           }
