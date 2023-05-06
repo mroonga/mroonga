@@ -86,6 +86,9 @@ endif()
 
 set(MRN_PLUGIN_SUFFIX ${CMAKE_SHARED_MODULE_SUFFIX})
 
+# Reset include directories defined by MariaDB.
+get_directory_property(DEFAULT_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
+set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES "")
 
 if(MRN_BUNDLED)
   set(MYSQL_SOURCE_DIR ${CMAKE_SOURCE_DIR})
@@ -332,45 +335,6 @@ else()
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
-if(MRN_GROONGA_BUNDLED)
-  set(GROONGA_INCLUDE_DIRS
-    "${MRN_BUNDLED_GROONGA_DIR}/include"
-    "${CMAKE_CURRENT_BINARY_DIR}/groonga/include")
-  set(GROONGA_LIBRARY_DIR)
-  set(GROONGA_LIBRARY libgroonga)
-
-  set(MRN_LIBRARY_DIRS)
-  set(MRN_LIBRARIES ${GROONGA_LIBRARY})
-  if(MRN_GROONGA_NORMALIZER_MYSQL_EMBED)
-    set(MRN_LIBRARIES ${MRN_LIBRARIES} mysql_normalizer)
-  endif()
-else()
-  include(FindPkgConfig)
-  pkg_check_modules(GROONGA REQUIRED "groonga >= ${REQUIRED_GROONGA_VERSION}")
-  pkg_check_modules(GROONGA_NORMALIZER_MYSQL
-    "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
-  set(MRN_LIBRARY_DIRS
-    ${MRN_LIBRARY_DIRS}
-    ${GROONGA_LIBRARY_DIRS})
-  set(MRN_LIBRARIES ${GROONGA_LIBRARIES})
-endif()
-
-include_directories(
-  "${PROJECT_BINARY_DIR}"
-  "${PROJECT_SOURCE_DIR}"
-  "${PROJECT_SOURCE_DIR}/lib"
-  ${MYSQL_INCLUDE_DIRS}
-  ${GROONGA_INCLUDE_DIRS})
-
-if(WIN32)
-  set(MYSQL_LIBRARY_DIRS
-    "${MYSQL_BUILD_DIR}/lib"
-    "${MYSQL_BUILD_DIR}/libmysqld")
-endif()
-link_directories(
-  ${MRN_LIBRARY_DIRS}
-  ${MYSQL_LIBRARY_DIRS})
-
 set(MRN_ALL_SOURCES
   ${MRN_SOURCES}
   ${MRN_UDF_SOURCES}
@@ -382,9 +346,6 @@ if(MRN_BUNDLED)
     ${MRN_ALL_SOURCES}
     STORAGE_ENGINE MODULE_ONLY
     LINK_LIBRARIES ${MRN_LIBRARIES})
-  if(NOT TARGET mroonga)
-    return()
-  endif()
 else()
   add_library(mroonga MODULE ${MRN_ALL_SOURCES})
 
@@ -403,7 +364,7 @@ else()
     set_property(TARGET mysqld PROPERTY ENABLE_EXPORTS TRUE)
     list(APPEND MRN_LIBRARIES mysqld)
   endif()
-  target_link_libraries(mroonga ${MRN_LIBRARIES})
+  target_link_libraries(mroonga PRIVATE ${MRN_LIBRARIES})
 
   option(WITH_DEBUG "Enable debug options" OFF)
   if(WITH_DEBUG)
@@ -464,6 +425,38 @@ else()
 
   install(TARGETS mroonga DESTINATION "${MYSQL_PLUGIN_DIR}")
 endif()
+
+if(MRN_GROONGA_BUNDLED)
+  set(GROONGA_INCLUDE_DIRS
+    "${MRN_BUNDLED_GROONGA_DIR}/include"
+    "${CMAKE_CURRENT_BINARY_DIR}/groonga/include")
+  target_link_libraries(mroonga PRIVATE libgroonga)
+  if(TARGET mysql_normalizer)
+    target_link_libraries(mroonga PRIVATE mysql_normalizer)
+  endif()
+else()
+  include(FindPkgConfig)
+  pkg_check_modules(GROONGA REQUIRED IMPORTED_TARGET
+    "groonga >= ${REQUIRED_GROONGA_VERSION}")
+  target_link_libraries(mroonga PRIVATE PkgConfig::GROONGA)
+  pkg_check_modules(GROONGA_NORMALIZER_MYSQL
+    "groonga-normalizer-mysql >= ${REQUIRED_GROONGA_NORMALIZER_MYSQL_VERSION}")
+endif()
+
+target_include_directories(mroonga BEFORE PRIVATE
+  "${PROJECT_BINARY_DIR}"
+  "${PROJECT_SOURCE_DIR}"
+  "${PROJECT_SOURCE_DIR}/lib")
+target_include_directories(mroonga AFTER PRIVATE
+  ${DEFAULT_INCLUDE_DIRECTORIES}
+  ${MYSQL_INCLUDE_DIRS})
+
+if(WIN32)
+  target_link_directories(mroonga PRIVATE
+    "${MYSQL_BUILD_DIR}/lib"
+    "${MYSQL_BUILD_DIR}/libmysqld")
+endif()
+
 
 option(MRN_BUILD_FOR_EMBEDDED_SERVER
   "Whether to build Mroonga for embedded server or not. You can't use Mroonga built for embedded server with non embedded server."
