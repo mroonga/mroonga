@@ -439,6 +439,7 @@ if(NOT MRN_BUNDLED)
       if(BREW_PREFIX_OPENSSL11)
         target_include_directories(mroonga AFTER PRIVATE
           "${BREW_PREFIX_OPENSSL11}")
+      endif()
     endif()
   endif()
 endif()
