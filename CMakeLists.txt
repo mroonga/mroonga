@@ -17,14 +17,35 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-cmake_minimum_required(VERSION 2.8.12)
-project(mroonga)
-
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
   set(MRN_BUNDLED FALSE)
 else()
   set(MRN_BUNDLED TRUE)
 endif()
+
+if(MRN_BUNDLED)
+  if(WITHOUT_MROONGA OR
+      WITHOUT_MROONGA_STORAGE_ENGINE OR
+      "${PLUGIN_MROONGA}" STREQUAL "NO")
+    return()
+  endif()
+endif()
+
+# Ubuntu 20.04: 3.16
+# CentOS 7's EPEL: 3.17
+cmake_minimum_required(VERSION 3.16)
+
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
+
+project(mroonga
+  VERSION "${VERSION}"
+  DESCRIPTION "CJK-ready fulltext search, column store"
+  LANGUAGES C CXX)
 
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
@@ -51,14 +72,6 @@ if(MSVC)
   endif()
 endif()
 
-if(MRN_BUNDLED)
-  if(WITHOUT_MROONGA OR
-      WITHOUT_MROONGA_STORAGE_ENGINE OR
-      "${PLUGIN_MROONGA}" STREQUAL "NO")
-    return()
-  endif()
-endif()
-
 set(MRN_BUNDLED_GROONGA_RELATIVE_DIR "../../extra/groonga")
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${MRN_BUNDLED_GROONGA_RELATIVE_DIR}")
   set(MRN_BUNDLED_GROONGA_RELATIVE_DIR "vendor/groonga")
@@ -73,12 +86,6 @@ endif()
 
 set(MRN_PLUGIN_SUFFIX ${CMAKE_SHARED_MODULE_SUFFIX})
 
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_minor  MRN_VERSION_MINOR)
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_micro  MRN_VERSION_MICRO)
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_in_hex MRN_VERSION_IN_HEX)
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 
 if(MRN_BUNDLED)
   set(MYSQL_PLUGIN_DIR "${INSTALL_PLUGINDIR}")
