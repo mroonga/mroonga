@@ -105,7 +105,7 @@ else()
   endif()
   set(MYSQL_BUILD_DIR ${MYSQL_SOURCE_DIR} CACHE PATH "MySQL build directory")
   set(MYSQL_CONFIG "mysql_config" CACHE PATH "mysql-config command path")
-  find_path(MYSQL_CONFIG "${MYSQL_CONFIG}")
+  find_program(MYSQL_CONFIG "${MYSQL_CONFIG}")
 
   macro(SET_MYSQL_CONFIG_VALUE OPTION VARIABLE)
     if(NOT ${VARIABLE})
@@ -246,83 +246,6 @@ else()
   set(MYSQL_VARIANT "MySQL")
 endif()
 
-if(EXISTS "${MYSQL_SOURCE_DIR}/wsrep-lib")
-  set(MYSQL_WSREP_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/wsrep-lib/include")
-  file(GLOB
-    MYSQL_WSREP_API_H
-    "${MYSQL_SOURCE_DIR}/wsrep-lib/wsrep-API/*/wsrep_api.h")
-  get_filename_component(MYSQL_WSREP_API_INCLUDE_DIR
-    "${MYSQL_WSREP_API_H}"
-    DIRECTORY)
-else()
-  set(MYSQL_WSREP_INCLUDE_DIR)
-  set(MYSQL_WSREP_API_INCLUDE_DIR)
-endif()
-
-if(EXISTS "${MYSQL_SOURCE_DIR}/pcre")
-  set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/pcre")
-else()
-  set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/regex")
-endif()
-
-if(EXISTS "${MYSQL_SOURCE_DIR}/extra/rapidjson")
-  set(MYSQL_RAPIDJSON_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/extra/rapidjson/include")
-else()
-  set(MYSQL_RAPIDJSON_INCLUDE_DIR)
-endif()
-
-if(EXISTS "${MYSQL_SOURCE_DIR}/libbinlogevents")
-  set(MYSQL_LIBBINLOGEVENTS_EXPORT_DIR
-    "${MYSQL_SOURCE_DIR}/libbinlogevents/export")
-  set(MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR
-    "${MYSQL_BUILD_DIR}/libbinlogevents/include"
-    "${MYSQL_SOURCE_DIR}/libbinlogevents/include")
-else()
-  set(MYSQL_LIBBINLOGEVENTS_EXPORT_DIR)
-  set(MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR)
-endif()
-
-if(EXISTS "${MYSQL_BUILD_DIR}/extra/protobuf/protobuf-3.11.4")
-  set(MYSQL_PROTOBUF_INCLUDE_DIR
-    "${MYSQL_SOURCE_DIR}/extra/protobuf/protobuf-3.11.4/src")
-else()
-  set(MYSQL_PROTOBUF_INCLUDE_DIR)
-endif()
-
-if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13")
-  set(MYSQL_ZLIB_INCLUDE_DIR
-    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13"
-    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.13")
-elseif(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12")
-  set(MYSQL_ZLIB_INCLUDE_DIR
-    "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12"
-    "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
-else()
-  set(MYSQL_ZLIB_INCLUDE_DIR)
-endif()
-
-set(MYSQL_INCLUDE_DIRS
-  "${MYSQL_BUILD_DIR}/include"
-  "${MYSQL_SOURCE_DIR}/sql"
-  "${MYSQL_SOURCE_DIR}/include"
-  "${MYSQL_WSREP_INCLUDE_DIR}"
-  "${MYSQL_WSREP_API_INCLUDE_DIR}"
-  "${MYSQL_REGEX_INCLUDE_DIR}"
-  "${MYSQL_RAPIDJSON_INCLUDE_DIR}"
-  "${MYSQL_LIBBINLOGEVENTS_EXPORT_DIR}"
-  "${MYSQL_LIBBINLOGEVENTS_INCLUDE_DIR}"
-  "${MYSQL_PROTOBUF_INCLUDE_DIR}"
-  "${MYSQL_ZLIB_INCLUDE_DIR}")
-if(${MYSQL_VARIANT} STREQUAL "MySQL")
-  list(APPEND MYSQL_INCLUDE_DIRS "${MYSQL_SOURCE_DIR}")
-endif()
-
-if(NOT MRN_BUNDLED AND APPLE)
-  # This assumes that MySQL is installed by Homebrew.
-  # TODO: Use $(brew --prefix openssl).
-  list(APPEND MYSQL_INCLUDE_DIRS "/usr/local/opt/openssl/include")
-endif()
-
 if(${MYSQL_VARIANT} STREQUAL "MariaDB")
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -448,8 +371,77 @@ target_include_directories(mroonga BEFORE PRIVATE
   "${PROJECT_SOURCE_DIR}"
   "${PROJECT_SOURCE_DIR}/lib")
 target_include_directories(mroonga AFTER PRIVATE
-  ${DEFAULT_INCLUDE_DIRECTORIES}
-  ${MYSQL_INCLUDE_DIRS})
+  ${DEFAULT_INCLUDE_DIRECTORIES})
+if(NOT MRN_BUNDLED)
+  target_include_directories(mroonga AFTER PRIVATE
+    "${MYSQL_BUILD_DIR}/include"
+    "${MYSQL_SOURCE_DIR}/sql"
+    "${MYSQL_SOURCE_DIR}/include")
+  if(${MYSQL_VARIANT} STREQUAL "MySQL")
+    target_include_directories(mroonga AFTER PRIVATE "${MYSQL_SOURCE_DIR}")
+  endif()
+
+  if(EXISTS "${MYSQL_SOURCE_DIR}/wsrep-lib")
+    set(MYSQL_WSREP_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/wsrep-lib/include")
+    file(GLOB
+      MYSQL_WSREP_API_H
+      "${MYSQL_SOURCE_DIR}/wsrep-lib/wsrep-API/*/wsrep_api.h")
+    get_filename_component(MYSQL_WSREP_API_INCLUDE_DIR
+      "${MYSQL_WSREP_API_H}"
+      DIRECTORY)
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_WSREP_INCLUDE_DIR}"
+      "${MYSQL_WSREP_API_INCLUDE_DIR}")
+  endif()
+
+  if(EXISTS "${MYSQL_SOURCE_DIR}/pcre")
+    set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/pcre")
+  else()
+    set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/regex")
+  endif()
+  target_include_directories(mroonga AFTER PRIVATE
+    "${MYSQL_REGEX_INCLUDE_DIR}")
+
+  if(EXISTS "${MYSQL_SOURCE_DIR}/extra/rapidjson")
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_SOURCE_DIR}/extra/rapidjson/include")
+  endif()
+
+  if(EXISTS "${MYSQL_SOURCE_DIR}/libbinlogevents")
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_SOURCE_DIR}/libbinlogevents/export"
+      "${MYSQL_BUILD_DIR}/libbinlogevents/include"
+      "${MYSQL_SOURCE_DIR}/libbinlogevents/include")
+  endif()
+
+  if(EXISTS "${MYSQL_BUILD_DIR}/extra/protobuf/protobuf-3.11.4")
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_SOURCE_DIR}/extra/protobuf/protobuf-3.11.4/src")
+  endif()
+
+  if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13")
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13"
+      "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.13")
+  elseif(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12")
+    target_include_directories(mroonga AFTER PRIVATE
+      "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12"
+      "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
+  endif()
+
+  if(APPLE)
+    find_program(BREW "brew")
+    if(BREW)
+      # This assumes that MySQL is installed by Homebrew.
+      execute_process(COMMAND ${BREW} --prefix "openssl@1.1"
+        OUTPUT_VARIABLE BREW_PREFIX_OPENSSL11
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      if(BREW_PREFIX_OPENSSL11)
+        target_include_directories(mroonga AFTER PRIVATE
+          "${BREW_PREFIX_OPENSSL11}")
+    endif()
+  endif()
+endif()
 
 if(WIN32)
   target_link_directories(mroonga PRIVATE
