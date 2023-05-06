@@ -316,6 +316,7 @@ endif()
 
 if(NOT MRN_BUNDLED AND APPLE)
   # This assumes that MySQL is installed by Homebrew.
+  # TODO: Use $(brew --prefix openssl).
   list(APPEND MYSQL_INCLUDE_DIRS "/usr/local/opt/openssl/include")
 endif()
 
