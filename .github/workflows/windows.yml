@@ -154,7 +154,9 @@ jobs:
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
-          if ("${{ matrix.use-master }}" -eq "yes") {
+          # TODO: Remove " -Or $true" when we release
+          # groonga-normalizer-mysql 1.2.2.
+          if ("${{ matrix.use-master }}" -eq "yes" -Or $true) {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga-normalizer-mysql.git `
               extra\groonga-normalizer-mysql
