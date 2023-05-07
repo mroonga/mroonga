@@ -136,6 +136,10 @@ else()
 endif()
 
 if(MRN_GROONGA_BUNDLED)
+  if(WITH_ZLIB STREQUAL "bundled")
+    target_include_directories(zlib SYSTEM INTERFACE ${ZLIB_INCLUDE_DIR})
+  endif()
+
   option(MRN_GROONGA_EMBED
     "Embed libgroonga"
     ON)
