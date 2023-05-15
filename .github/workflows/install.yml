@@ -18,6 +18,8 @@ jobs:
           - os: ubuntu-focal
             package: mysql
           - os: ubuntu-jammy
+            package: mariadb
+          - os: ubuntu-jammy
             package: mysql
     runs-on: macos-12
     steps:
