@@ -1,7 +1,5 @@
 name: Detect version up of Databases
 on:
-  push: # This is for Debug. I'll remove it after I finish tests.
-    branches:
   schedule:
     - cron: |
         0 0 * * *
