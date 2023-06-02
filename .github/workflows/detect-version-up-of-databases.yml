@@ -1,0 +1,32 @@
+name: Detect version up of Databases
+on:
+  push: # This is for Debug. I'll remove it after I finish tests.
+    branches:
+  schedule:
+    - cron: |
+        0 0 * * *
+jobs:
+  detect-version-up:
+    name: Detact version up
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+#          - package: mariadb-10.4
+#          - package: mariadb-10.5
+#          - package: mariadb-10.6
+#          - package: mariadb-10.7
+#          - package: mariadb-10.8
+#          - package: mariadb-10.9
+#          - package: mariadb-10.10
+#          - package: mariadb-10.11
+          - package: mysql-8.0
+          - package: mysql-5.7
+#          - package: percona-server-5.7
+#          - package: percona-server-8.0
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: ${{ matrix.package }}
+        run: |
+          ruby tools/detect-version-up-of-databases.rb ${{ matrix.package }}
