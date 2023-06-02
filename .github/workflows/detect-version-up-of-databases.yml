@@ -27,6 +27,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependency gems
+        run: |
+          gem install nokogiri
       - name: ${{ matrix.package }}
         run: |
           ruby tools/detect-version-up-of-databases.rb ${{ matrix.package }}
