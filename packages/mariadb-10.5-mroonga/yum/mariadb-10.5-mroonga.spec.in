@@ -15,7 +15,7 @@
   %define mariadb_package MariaDB
   %define mariadb_client_package %{mariadb_package}-client
   #%%define mariadb_epoch_default
-  %define mariadb_version_default 10.5.20
+  %define mariadb_version_default 10.5.21
   %define mariadb_release_default 1
   %if %{rhel} == 7
     %define mariadb_dist_default    el%{rhel}.centos
@@ -42,7 +42,7 @@
 
 Name:		mariadb-10.5-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary:	A fast fulltext searchable storage engine for MariaDB
 
 Group:		Applications/Databases
@@ -162,6 +162,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
+* Thu Jun 15 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-3
+- Rebuild against MariaDB 10.5.21.
+
 * Fri May 12 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-2
 - Rebuild against MariaDB 10.5.20.
 
