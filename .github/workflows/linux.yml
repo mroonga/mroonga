@@ -230,6 +230,17 @@ jobs:
             package-type: apt
             package: mariadb-10.11
 
+          # MariaDB 11.0
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-11.0
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-11.0
+          - os: centos-7
+            package-type: yum
+            package: mariadb-11.0
+
           # MySQL 8.0
           - os: ubuntu-jammy
             package-type: apt
@@ -475,6 +486,17 @@ jobs:
           - os: debian-bookworm
             package-type: apt
             package: mariadb-10.11
+
+          # MariaDB 11.0
+          - os: almalinux-8
+            package-type: yum
+            package: mariadb-11.0
+          - os: almalinux-9
+            package-type: yum
+            package: mariadb-11.0
+          - os: centos-7
+            package-type: yum
+            package: mariadb-11.0
 
           # MySQL 8.0
           - os: ubuntu-jammy
