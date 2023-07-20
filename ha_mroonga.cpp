@@ -14963,7 +14963,7 @@ double ha_mroonga::scan_time()
 #if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
 #  ifdef MRN_ENABLE_WRAPPER_MODE
 IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
-                                                 uint ranges,
+                                                 ulong ranges,
                                                  ha_rows rows,
                                                  ulonglong blocks)
 {
@@ -14992,7 +14992,7 @@ IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
 #  endif
 
 IO_AND_CPU_COST ha_mroonga::storage_keyread_time(uint index,
-                                                 uint ranges,
+                                                 ulong ranges,
                                                  ha_rows rows,
                                                  ulonglong blocks)
 {
