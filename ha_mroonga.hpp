@@ -656,7 +656,11 @@ public:
 #else
   double scan_time() mrn_override;
 #endif
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+  IO_AND_CPU_COST keyread_time(uint index, ulong ranges, ha_rows rows, ulonglong blocks) mrn_override;
+#else
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
 #endif
