@@ -4,7 +4,7 @@
   Copyright(C) 2010-2013 Kentoku SHIBA
   Copyright(C) 2011-2023 Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
-  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2020-2023 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -14883,42 +14883,82 @@ int ha_mroonga::truncate(
 }
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
-double ha_mroonga::wrapper_scan_time()
+#  if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+IO_AND_CPU_COST ha_mroonga::wrapper_scan_time()
 {
-  double res;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->scan_time();
+  IO_AND_CPU_COST res = wrap_handler->scan_time();
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(res);
 }
+#  else
+double ha_mroonga::wrapper_scan_time()
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  double res = wrap_handler->scan_time();
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+#  endif
 #endif
 
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+IO_AND_CPU_COST ha_mroonga::storage_scan_time()
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST time = handler::scan_time();
+  DBUG_RETURN(time);
+}
+#else
 double ha_mroonga::storage_scan_time()
 {
   MRN_DBUG_ENTER_METHOD();
   double time = handler::scan_time();
   DBUG_RETURN(time);
 }
+#endif
 
-double ha_mroonga::scan_time()
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+IO_AND_CPU_COST ha_mroonga::scan_time()
 {
   MRN_DBUG_ENTER_METHOD();
-  double time;
-#ifdef MRN_ENABLE_WRAPPER_MODE
+  IO_AND_CPU_COST time;
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode)
   {
     time = wrapper_scan_time();
   } else {
-#endif
+#  endif
     time = storage_scan_time();
-#ifdef MRN_ENABLE_WRAPPER_MODE
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   }
-#endif
+#  endif
   DBUG_RETURN(time);
 }
+#else
+double ha_mroonga::scan_time()
+{
+  MRN_DBUG_ENTER_METHOD();
+  double time;
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  if (share->wrapper_mode)
+  {
+    time = wrapper_scan_time();
+  } else {
+#  endif
+    time = storage_scan_time();
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  }
+#  endif
+  DBUG_RETURN(time);
+}
+#endif
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
 double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)

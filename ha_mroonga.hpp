@@ -651,7 +651,11 @@ public:
                            uint child_key_name_len) mrn_override;
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+  IO_AND_CPU_COST scan_time() mrn_override;
+#else
   double scan_time() mrn_override;
+#endif
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
@@ -1472,10 +1476,17 @@ private:
   void wrapper_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
 #endif
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
-#ifdef MRN_ENABLE_WRAPPER_MODE
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  IO_AND_CPU_COST wrapper_scan_time();
+#  endif
+  IO_AND_CPU_COST storage_scan_time();
+#else
+#  ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_scan_time();
-#endif
+#  endif
   double storage_scan_time();
+#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
 #endif
