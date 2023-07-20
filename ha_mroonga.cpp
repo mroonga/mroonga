@@ -15002,7 +15002,7 @@ IO_AND_CPU_COST ha_mroonga::storage_keyread_time(uint index,
 }
 
 IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
-                                         uint ranges,
+                                         ulong ranges,
                                          ha_rows rows,
                                          ulonglong blocks)
 {
