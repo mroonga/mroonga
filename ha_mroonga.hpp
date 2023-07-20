@@ -661,6 +661,7 @@ public:
                                ulong ranges,
                                ha_rows rows,
                                ulonglong blocks) mrn_override;
+  IO_AND_CPU_COST rnd_pos_time(ha_rows rows) mrn_override;
 #else
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
 #endif
@@ -1490,12 +1491,14 @@ private:
                                        ulong ranges,
                                        ha_rows rows,
                                        ulonglong blocks);
+  IO_AND_CPU_COST wrapper_rnd_pos_time(ha_rows rows);
 #  endif
   IO_AND_CPU_COST storage_scan_time();
   IO_AND_CPU_COST storage_keyread_time(uint index,
                                        ulong ranges,
                                        ha_rows rows,
                                        ulonglong blocks);
+  IO_AND_CPU_COST storage_rnd_pos_time(ha_rows rows);
 #else
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_scan_time();

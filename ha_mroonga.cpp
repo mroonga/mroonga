@@ -15019,9 +15019,36 @@ IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
   DBUG_RETURN(time);
 }
 
-#  endif
 #  ifdef MRN_ENABLE_WRAPPER_MODE
+IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  IO_AND_CPU_COST time = wrap_handler->rnd_pos_time(rows);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(time);
+}
+#  endif
+IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST time = handler::rnd_pos_time(rows);
+  DBUG_RETURN(time);
+}
+
+IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST time;
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  if (share->wrapper_mode)
+  {
+    time = wrapper_rnd_pos_time(rows);
   }
+#  else
+  time = storage_rnd_pos_time(rows);
 #  endif
   DBUG_RETURN(time);
 }
