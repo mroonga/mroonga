@@ -1486,8 +1486,16 @@ private:
 #if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   IO_AND_CPU_COST wrapper_scan_time();
+  IO_AND_CPU_COST wrapper_keyread_time(uint index,
+                                       ulong ranges,
+                                       ha_rows rows,
+                                       ulonglong blocks);
 #  endif
   IO_AND_CPU_COST storage_scan_time();
+  IO_AND_CPU_COST storage_keyread_time(uint index,
+                                       ulong ranges,
+                                       ha_rows rows,
+                                       ulonglong blocks);
 #else
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_scan_time();
