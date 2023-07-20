@@ -15012,9 +15012,14 @@ IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
   if (share->wrapper_mode)
   {
     time = wrapper_keyread_time(index, ranges, rows, blocks);
-  } else {
+  }
+#  else
+  time = storage_keyread_time(index, ranges, rows, blocks);
+# endif
+  DBUG_RETURN(time);
+}
+
 #  endif
-    time = storage_keyread_time(index, ranges, rows, blocks);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #  endif
