@@ -3,6 +3,9 @@ FROM ${FROM}
 
 ARG DEBUG
 
+ENV \
+  SCL=devtoolset-11
+
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   yum update -y ${quiet} && \
@@ -14,14 +17,15 @@ RUN \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   yum install -y \
+    centos-release-scl-rh \
     https://packages.groonga.org/centos/7/groonga-release-latest.noarch.rpm && \
   yum groupinstall -y ${quiet} "Development Tools" && \
   yum-builddep -y ${quiet} MariaDB && \
   yumdownloader -y ${quiet} --source MariaDB && \
   yum install -y ${quiet} \
+    ${SCL} \
     MariaDB-devel \
     ccache \
-    gcc-c++ \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
