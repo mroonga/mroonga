@@ -677,7 +677,9 @@ public:
                                       uint n_ranges,
                                       uint *bufsz,
                                       uint *flags,
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
                                       ha_rows limit,
+#endif
                                       Cost_estimate *cost) mrn_override;
   ha_rows multi_range_read_info(uint keyno,
                                 uint n_ranges,
@@ -1529,7 +1531,9 @@ private:
                                               uint n_ranges,
                                               uint *bufsz,
                                               uint *flags,
+#  if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
                                               ha_rows limit,
+#  endif
                                               Cost_estimate *cost);
 #endif
   ha_rows storage_multi_range_read_info_const(uint keyno,
@@ -1538,7 +1542,9 @@ private:
                                               uint n_ranges,
                                               uint *bufsz,
                                               uint *flags,
+#if MYSQL_VERSION_ID >= 110002 && defined(MRN_MARIADB_P)
                                               ha_rows limit,
+#endif
                                               Cost_estimate *cost);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_multi_range_read_info(uint keyno, uint n_ranges, uint keys,
