@@ -143,6 +143,15 @@ esac
 function mroonga_is_registered() {
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
+  case ${package} in
+    mariadb-*)
+      case ${mysql_version} in
+        11.0)
+          mysql="mariadb -u root"
+          ;;
+      esac
+      ;;
+  esac
   if [ "${have_auto_generated_password}" = "yes" ]; then
     auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
     mysql="${mysql} -p${auto_generated_password}"
