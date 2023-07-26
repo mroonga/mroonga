@@ -413,6 +413,12 @@ msgstr ""
 "このセクションではDebian GNU/Linux上でMroonga関連のdebパッケージをインストー"
 "ルする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
+msgid "bookworm (MariaDB)"
+msgstr ""
+
+msgid "bookworm (with the Oracle MySQL 8.0 package)"
+msgstr "bookworm（OracleのMySQL 8.0パッケージを利用）"
+
 msgid "bullseye (MariaDB)"
 msgstr ""
 
