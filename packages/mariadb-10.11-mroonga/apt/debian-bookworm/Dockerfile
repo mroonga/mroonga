@@ -8,7 +8,9 @@ RUN \
 ARG DEBUG
 
 RUN \
-  echo "deb-src http://deb.debian.org/debian/ bookworm main" > /etc/apt/sources.list.d/base-source.list && \
+  sed -e 's/^Types: deb/Types: deb-src/' \
+    /etc/apt/sources.list.d/debian.sources > \
+    /etc/apt/sources.list.d/debian-source.sources && \
   apt update ${quiet} && \
   apt install -y -V ${quiet} \
     lsb-release \
