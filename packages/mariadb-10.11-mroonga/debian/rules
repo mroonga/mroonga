@@ -13,7 +13,7 @@ export MARIADB_VERSION := $(shell apt-cache show mariadb-server | grep Version |
 	dh $@
 
 override_dh_auto_configure:
-	archive_base=mariadb-10.11_$(MARIADB_VERSION);			\
+	archive_base=mariadb_$(MARIADB_VERSION);			\
 	archive=$${archive_base}.orig.tar.gz;				\
 	debian=mariadb_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
 	source_base=mariadb-$(MARIADB_VERSION);				\
