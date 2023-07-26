@@ -11,7 +11,11 @@ RUN \
   echo "deb-src http://deb.debian.org/debian/ bookworm main" > /etc/apt/sources.list.d/base-source.list && \
   apt update ${quiet} && \
   apt install -y -V ${quiet} \
+    lsb-release \
     wget && \
+  wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
+  apt install -y -V ${quiet} ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
+  rm apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
   wget https://packages.groonga.org/debian/groonga-apt-source-latest-bookworm.deb && \
   apt install -y -V ${quiet} ./groonga-apt-source-latest-bookworm.deb && \
   apt update ${quiet} && \
