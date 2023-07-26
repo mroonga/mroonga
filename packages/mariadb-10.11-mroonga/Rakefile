@@ -6,7 +6,9 @@ class MariaDB1011MroongaPackageTask < MroongaPackageTask
   end
 
   def enable_apt?
-    false
+    [
+      "debian-bookworm",
+    ]
   end
 
   def enable_ubuntu?

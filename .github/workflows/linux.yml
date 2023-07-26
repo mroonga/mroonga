@@ -196,6 +196,9 @@ jobs:
           - os: centos-7
             package-type: yum
             package: mariadb-10.11
+          - os: debian-bookworm
+            package-type: apt
+            package: mariadb-10.11
 
           # MySQL 8.0
           - os: ubuntu-jammy
@@ -218,6 +221,9 @@ jobs:
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bullseye
+            package-type: apt
+            package: mysql-community-8.0
+          - os: debian-bookworm
             package-type: apt
             package: mysql-community-8.0
           - os: ubuntu-jammy
