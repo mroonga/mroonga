@@ -23,7 +23,7 @@ override_dh_auto_configure:
 	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
 	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
 	else								\
-	  path=main/m/mariadb-10.11;					\
+	  path=main/m/mariadb;					\
 	  base_url=http://ftp.debian.org/debian/pool;			\
 	  security_base_url=http://security.debian.org/pool/updates;	\
 	fi;								\
