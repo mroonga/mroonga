@@ -29,6 +29,7 @@ RUN \
     devscripts \
     dh-apparmor \
     groonga-normalizer-mysql \
+    libaio-dev \
     libgroonga-dev \
     libmariadb-client-lgpl-dev-compat \
     libmariadbd-dev \
