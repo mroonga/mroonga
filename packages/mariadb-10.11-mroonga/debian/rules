@@ -15,7 +15,7 @@ export MARIADB_VERSION := $(shell apt-cache show mariadb-server | grep Version |
 override_dh_auto_configure:
 	archive_base=mariadb-10.11_$(MARIADB_VERSION);			\
 	archive=$${archive_base}.orig.tar.gz;				\
-	debian=mariadb-10.11_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
+	debian=mariadb_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
 	source_base=mariadb-$(MARIADB_VERSION);				\
 	build_dir=$${source_base}/builddir;				\
 	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
