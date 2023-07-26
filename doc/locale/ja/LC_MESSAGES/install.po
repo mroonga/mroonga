@@ -416,9 +416,6 @@ msgstr ""
 msgid "bookworm (MariaDB)"
 msgstr ""
 
-msgid "bookworm (with the Oracle MySQL 8.0 package)"
-msgstr "bookworm（OracleのMySQL 8.0パッケージを利用）"
-
 msgid "bullseye (MariaDB)"
 msgstr ""
 
