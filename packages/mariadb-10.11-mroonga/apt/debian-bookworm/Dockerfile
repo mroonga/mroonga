@@ -17,7 +17,7 @@ RUN \
   wget https://packages.groonga.org/debian/groonga-apt-source-latest-bookworm.deb && \
   apt install -y -V ${quiet} ./groonga-apt-source-latest-bookworm.deb && \
   apt update ${quiet} && \
-  apt build-dep -y mariadb-server-10.11 && \
+  apt build-dep -y mariadb-server && \
   apt install -y -V ${quiet} \
     autoconf-archive \
     build-essential \
