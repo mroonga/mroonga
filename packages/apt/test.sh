@@ -199,6 +199,14 @@ if [ -n "${old_package}" ]; then
     ${package} \
     "${mysql_package_prefix}-*"
   sudo rm -rf /var/lib/mysql
+
+  # Disable upgrade test for first time packages.
+  case ${code_name} in
+  bookworm) # TODO: Remove this after 13.04 release.
+    exit
+    ;;
+  esac
+
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   case ${package} in
     mysql-community-8.*)
