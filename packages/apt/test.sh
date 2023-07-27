@@ -33,6 +33,16 @@ architecture=$(dpkg --print-architecture)
 wget \
   https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
+
+case ${code_name} in
+  bookworm)
+    wget \
+      https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    rm apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    ;;
+esac
+
 sudo apt update
 
 mysql_community_install_mysql_apt_config() {
