@@ -175,6 +175,7 @@ po_files = \
 	install.po \
 	news.po \
 	news/0.po \
+	news/1.po \
 	reference.po \
 	tutorial.po \
 	upgrade.po \
