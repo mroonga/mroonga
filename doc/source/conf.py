@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# mroonga documentation build configuration file, created by
+# Mroonga documentation build configuration file, created by
 # sphinx-quickstart on Tue Aug 03 14:53:35 2010.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -26,14 +26,35 @@ needs_sphinx = '1.1'
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = []
+extensions = [
+  'myst_parser'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = {
+  '.rst': 'restructuredtext',
+  '.md': 'markdown',
+}
 
+myst_enable_extensions = [
+  "amsmath",
+  "attrs_inline",
+  "colon_fence",
+  "deflist",
+  "dollarmath",
+  "fieldlist",
+  "html_admonition",
+  "html_image",
+  "linkify",
+  # "replacements",
+  # "smartquotes",
+  "strikethrough",
+  "substitution",
+  "tasklist",
+]
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
 
