@@ -79,8 +79,8 @@ Depends:
 	${misc:Depends},
 	${shlibs:Depends},
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
-	mariadb-server-10.11 (= @MYSQL_VERSION@),
-	mariadb-server-core-10.11 (= @MYSQL_VERSION@),
+	mariadb-server (= @MYSQL_VERSION@),
+	mariadb-server-core (= @MYSQL_VERSION@),
 	groonga-normalizer-mysql
 Conflicts:
 	mariadb-plugin-mroonga
