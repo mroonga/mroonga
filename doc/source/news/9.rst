@@ -1,0 +1,302 @@
+News - 9 series
+===============
+
+.. _release-9-12:
+
+Release 9.12 - 2020-01-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.44, 10.2.31, 10.3.22, 10.4.12.
+
+* Fixed a build error when we built by using source of MySQL 8.0.19.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.47.
+
+.. _release-9-11:
+
+Release 9.11 - 2020-01-08
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 18.10 (Cosmic Cuttlefish) support.
+
+* [:doc:`/install/centos`] Added how to install for CentOS 8.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.30, 10.3.21, 10.4.11.
+
+* Applied a patch for visualizing the shutdown process of InnoDB into MariaDB 10.3 and 10.4.
+
+  * This is a temporary change. We will remove this modify in a future version.
+  * This modify Increasing outputted logs when InnoDB shutdown.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that was missing.
+
+.. _release-9-10:
+
+Release 9.10 - 2019-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29, 10.3.20, 10.4.10
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.20, 10.4.10, and MySQL 8.0.18 on CentOS 8.
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)
+
+Fixes
+^^^^^
+
+* Fixed a bug that ``dpkg --configure`` will fail when we install the package on Ubuntu 18.04 on WSL. [GitHub#282][Patched by ochaochaocha3]
+
+Thanks
+^^^^^^
+
+* ochaochaocha3
+
+.. _release-9-09:
+
+Release 9.09 - 2019-10-30
+-------------------------
+
+.. note::
+
+    Maybe performance decreases from this version.
+    Therefore, If performance decreases than before, please report us with reproducible steps.
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.46, 5.7.28, and 8.0.18(with restrictions).
+
+Fixes
+^^^^^
+
+* Fixed a build error a package for MySQL 8.0.18.
+
+.. _release-9-08:
+
+Release 9.08 - 2019-09-27
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MariaDB 5.5.64, 10.2.27, 10.3.18, and 10.4.8
+
+* [:doc:`/install/centos`] Dropped 32-bit package support on CentOS 6.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/debian`] Fixed that can't install mariadb-server-10.3-mroonga in Debian 10(buster).
+
+Thanks
+^^^^^^
+
+* kajiys
+
+* bizlevel
+
+.. _release-9-07:
+
+Release 9.07 - 2019-08-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/debian`] Added a install document for Debian 10(buster).
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.41, 10.2.26, 10.3.17, and 10.4.7.
+
+* [:doc:`/reference/server_variables`] Added a document for ``mroonga_query_log_file``.
+
+* [:doc:`/install/others`] Added a document about how to uninstall Mroonga. [GitHub#135][Patched by ryfjwr]
+
+* [:doc:`/tutorial/storage`] Added a document about how to use regular expression search.
+
+* Dropped support for MariaDB 10.0
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.45 and
+  5.7.27
+
+* [:doc:`/install/centos`] Dropped support for MariaDB 10.x on CentOS 6
+
+Thanks
+^^^^^^
+
+* ryfjwr
+
+.. _release-9-05:
+
+Release 9.05 - 2019-07-30
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added a description about current limitation with MySQL 8.0.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.45, 5.7.27 and 8.0.17.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Fixed a wrong ``mysql80-comunity-release`` package name.
+  [groonga-dev,04759][Reported by Kagami Hiroshi]
+
+* [:doc:`/tutorial/storage`] Fixed an unique index update bug. This bug causes duplicated key error when the following conditions are met.
+
+  * An unique index is created against multiple column index
+  * partial unique key column is updated
+
+  Note that if you already created an unique index, you must recreate target tables because unique index may have garbage entries. We recommend to recreate an target table with dump and restore, or execute ``ALTER TABLE (TABLE_NAME) FORCE``.
+
+* [mysql8.0] Added a support for ``TIMESTAMP``
+  [groonga-dev,04763][Reported by Kagami Hiroshi]
+
+Thanks
+^^^^^^
+
+* Kagami Hiroshi
+
+.. _release-9-04:
+
+Release 9.04 - 2019-06-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.26.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16.
+
+* [:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16.
+
+Fixes
+^^^^^
+
+* Fixed a infinite loop bug.
+  This bug is occurred when invalid flag is specified such as ``FULLTEXT INDEX (...) COMMENT 'index_flags "INVALID|WITH_SECTION"'``.
+
+* [windows] Fixed a inappropriate pdb path with MariaDB 10.2/10.3.
+
+* [:doc:`/install/others`] Fixed a typo about missing appropriate account name in plugin install instruction.
+
+* Fixed a crash bug with ``((MATCH OR MATCH) AND (MATCH))`` query.
+
+.. _release-9-03:
+
+Release 9.03 - 2019-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/tutorial/storage`] Updated example to use ``tokenizer "XXX"` in ``COMMENT`` because ``default_tokenizer "XXX"`` is deprecated since 9.01.
+
+* [:doc:`/install/windows`] Added support to provide MariaDB 10.1, 10.2 zip package again.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.14 and 10.3.15.
+
+* [:doc:`/install/debian`] Updated install instruction for copy and paste friendly.
+
+* Added support for ``INDEX_LARGE`` flag such as ``COMMENT 'flags "INDEX_LARGE"'`` syntax.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.24.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.1.40.
+
+* [:doc:`/install/ubuntu`] Added support for Ubuntu 19.04 (Disco Dingo)
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.6.44.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.6.44 and 5.7.26.
+
+.. _release-9-01:
+
+Release 9.01 - 2019-03-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [storage] Added support for tokenizer options.
+
+  * For example, you can specify tokenizer options in COMMENT section such as ``CREATE TABLE foo (...) COMMENT='tokenizer "TokenNgram(''n'', 4)"'``.
+
+* [mariadb] Added support for "tokenizer" table parameter.
+
+  * For example, you can specify "tokenizer" such as ``CREATE TABLE foo (...) TOKENIZER='TokenNgram("n", 4)'``.
+
+* [storage] Added support for tokenizer parameter in comment.
+
+  * Note that ``default_tokenizer`` is deprecated.
+
+* [mariadb] Added support for "normalizer" table parameter.
+
+  * For example, you can specify "normalizer" such as ``CREATE TABLE foo (...) NORMALIZER='NormalizerNFKC100("unify_kana", true)'``.
+
+* [mariadb] Added support for "token_filters" table parameter.
+
+  * For example, you can specify "token_filters" such as ``CREATE TABLE foo (...)  TOKEN_FILTERS='TokenFilterNFKC100("unify_katakana_v_sounds", true)'``.
+
+* Added support for "LEXICON" index parameter.
+
+  * For example, you can specify ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` or ``FULLTEXT INDEX foo (bar) COMMENT 'lexicon "terms"'``.
+
+* [appveyor] Improved support to building Mroonga enabled package [GitHub#230]
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.25-28.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.3.13.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.23.
+
+.. _release-9-00:
+
+Release 9.00 - 2019-02-09
+-------------------------
+
+This is a major version up! But It keeps backward compatibility.
+You can upgrade to 9.00 without rebuilding database.
+
+In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and
+``remove_blank`` for ``NormalizerNFKC100`` is supported.
+If you upgrade to Groonga 9.0.0, you can use them from Mroonga 9.00!
+
+* ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.24-27.
+
+* [:doc:`/install/centos`] Supported Percona Server 5.6.43 rel84.3.
+
+* [rpm][centos] Supported MariaDB 10.3.12.
+
+* [rpm][centos] Supported MariaDB 10.2.21.
+
+* [rpm][centos] Supported Percona Server 5.7.24-27.
+
+* [rpm][centos] Supported Percona Server 5.6.43 rel84.3.
+
+* [rpm][centos] Supported MySQL 5.7.25.
+
+* [rpm][centos] Supported MySQL 5.6.43.
