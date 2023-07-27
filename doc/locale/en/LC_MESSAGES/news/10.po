@@ -1,0 +1,372 @@
+# -*- po -*-
+# English translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "News - 10 series"
+msgstr "News - 10 series"
+
+msgid "Release 10.11 - 2021-01-29"
+msgstr "Release 10.11 - 2021-01-29"
+
+msgid "Improvements"
+msgstr "Improvements"
+
+msgid "Added support for ``lexicon_flags`` parameter."
+msgstr "Added support for ``lexicon_flags`` parameter."
+
+msgid ""
+"We can add ``KEY_LARGE`` flag to a ``USING HASH`` (non full-text search "
+"index) index as below by this parameter."
+msgstr ""
+"We can add ``KEY_LARGE`` flag to a ``USING HASH`` (non full-text search "
+"index) index as below by this parameter."
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.51, 5.7.33, and 8.0.23."
+msgstr ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.51, 5.7.33, and 8.0.23."
+
+msgid "There are below restrictions in the MySQL 8.0 package."
+msgstr "There are below restrictions in the MySQL 8.0 package."
+
+msgid "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+msgstr "[:doc:`/tutorial/wrapper`] Wrapper mode is not supported yet."
+
+msgid "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+msgstr "[:doc:`/tutorial/storage`] JSON data type is not supported yet."
+
+msgid "Fixes"
+msgstr "Fixes"
+
+msgid ""
+"[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "
+"optimization doen't work when \"WHERE COLUMN IN (SUBQUERY)\" exists."
+msgstr ""
+"[:doc:`/reference/optimizations`] Fixed a bug that the fast order limit "
+"optimization doen't work when \"WHERE COLUMN IN (SUBQUERY)\" exists."
+
+msgid ""
+"Fixed a bug that we can't use in place ``ALTER TABLE`` when we modify the "
+"data type of a column that has any indexes."
+msgstr ""
+"Fixed a bug that we can't use in place ``ALTER TABLE`` when we modify the "
+"data type of a column that has any indexes."
+
+msgid ""
+"This bug occur when we execute ``ALTER TABLE`` in ``ALGORITHM=INPLACE``. "
+"Therefore, this bug doesn't occur when we use ``ALTER TABLE`` in "
+"``ALGORITHM=COPY``"
+msgstr ""
+"This bug occur when we execute ``ALTER TABLE`` in ``ALGORITHM=INPLACE``. "
+"Therefore, this bug doesn't occur when we use ``ALTER TABLE`` in "
+"``ALGORITHM=COPY``"
+
+msgid "Release 10.10 - 2020-12-29"
+msgstr "Release 10.10 - 2020-12-29"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Added support for customize table flags. [Gitter]"
+"[Reported by Shinichi Takayanagi]"
+msgstr ""
+"[:doc:`/tutorial/storage`] Added support for customize table flags. [Gitter]"
+"[Reported by Shinichi Takayanagi]"
+
+msgid "Until now, we can't customize table flags in storage mode."
+msgstr "Until now, we can't customize table flags in storage mode."
+
+msgid "We can customize table flags as below since this release."
+msgstr "We can customize table flags as below since this release."
+
+msgid "Please refer to the following URL about customizable items."
+msgstr "Please refer to the following URL about customizable items."
+
+msgid "https://groonga.org/ja/docs/reference/commands/table_create.html#flags"
+msgstr "https://groonga.org/ja/docs/reference/commands/table_create.html#flags"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 20.10 (Groovy Gorilla)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 20.10 (Groovy Gorilla)."
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.22."
+msgstr "[:doc:`/install/centos`] Added support for Percona Server 8.0.22."
+
+msgid "Thanks"
+msgstr "Thanks"
+
+msgid "Shinichi Takayanagi"
+msgstr "Shinichi Takayanagi"
+
+msgid "pinpikokun [Provided the patch at GitHub#373]"
+msgstr "pinpikokun [Provided the patch at GitHub#373]"
+
+msgid "Release 10.09 - 2020-12-04"
+msgstr "Release 10.09 - 2020-12-04"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.36, 10.3.27, "
+"10.4.17, and 10.5.8"
+msgstr ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.36, 10.3.27, "
+"10.4.17, and 10.5.8"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.50, 5.7.32, "
+"and 8.0.21."
+msgstr ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.50, 5.7.32, "
+"and 8.0.21."
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22."
+msgstr ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.50, 5.7.32, and 8.0.22."
+
+msgid "Dropped support for MariaDB 10.1 except Ubuntu 18.04 LTS."
+msgstr "Dropped support for MariaDB 10.1 except Ubuntu 18.04 LTS."
+
+msgid "Because MariaDB 10.1 is EOL."
+msgstr "Because MariaDB 10.1 is EOL."
+
+msgid "However, we have only supported MariaDB 10.1 for Ubintu 18.04 LTS"
+msgstr "However, we have only supported MariaDB 10.1 for Ubintu 18.04 LTS"
+
+msgid "Because MariaDB 10.1 has supported yet on it."
+msgstr "Because MariaDB 10.1 has supported yet on it."
+
+msgid "Dropped support for CentOS 6."
+msgstr "Dropped support for CentOS 6."
+
+msgid "Because CentOS 6 is EOL."
+msgstr "Because CentOS 6 is EOL."
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing "
+"normalizer."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_snippet_html`] Added support for customizing "
+"normalizer."
+
+msgid ""
+"We can use custom normalizer instead of the default "
+"normalizer(NromalizerAuto) by using ``table_name`` and ``index_name``."
+msgstr ""
+"We can use custom normalizer instead of the default "
+"normalizer(NromalizerAuto) by using ``table_name`` and ``index_name``."
+
+msgid "We specify target table name to ``table_name`` as below."
+msgstr "We specify target table name to ``table_name`` as below."
+
+msgid ""
+"We specify index name that is specified on target table  to ``index_name`` "
+"as below."
+msgstr ""
+"We specify index name that is specified on target table  to ``index_name`` "
+"as below."
+
+msgid ""
+"We can also use mixing search by query and search by keywords by this "
+"modification."
+msgstr ""
+"We can also use mixing search by query and search by keywords by this "
+"modification."
+
+msgid ""
+"For example as below, we can highlight keywords that we both specify by ``AS "
+"query`` and ``AS snippet``."
+msgstr ""
+"For example as below, we can highlight keywords that we both specify by ``AS "
+"query`` and ``AS snippet``."
+
+msgid "Release 10.07 - 2020-10-02"
+msgstr "Release 10.07 - 2020-10-02"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.5.5"
+msgstr "[:doc:`/install/centos`] Added support for MariaDB 10.5.5"
+
+msgid ""
+"Added new tests that use > 256 byte strings in the column compression tests. "
+"[GitHub#350][Patched by KartikSoneji]"
+msgstr ""
+"Added new tests that use > 256 byte strings in the column compression tests. "
+"[GitHub#350][Patched by KartikSoneji]"
+
+msgid "KartikSoneji"
+msgstr "KartikSoneji"
+
+msgid "Release 10.06 - 2020-09-02"
+msgstr "Release 10.06 - 2020-09-02"
+
+msgid "We removed the news that \"Added support for MariaDB 10.5.5\"."
+msgstr "We removed the news that \"Added support for MariaDB 10.5.5\"."
+
+msgid ""
+"At first, we announced that \"Added support for MariaDB 10.5.5\". However, "
+"it had been wrong. Mroonga 10.06 can build on MariaDB 10.5. However, there "
+"are points that are not working normally yet."
+msgstr ""
+"At first, we announced that \"Added support for MariaDB 10.5.5\". However, "
+"it had been wrong. Mroonga 10.06 can build on MariaDB 10.5. However, there "
+"are points that are not working normally yet."
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support."
+msgstr "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.10 (Eoan Ermine) support."
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 8.0.20."
+msgstr "[:doc:`/install/centos`] Added support for Percona Server 8.0.20."
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, "
+"10.3.24, and 10.4.14."
+msgstr ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.46, 10.2.33, "
+"10.3.24, and 10.4.14."
+
+msgid "Modify how to install into Debian GNU/Linux."
+msgstr "Modify how to install into Debian GNU/Linux."
+
+msgid ""
+"We modify to use ``groonga-apt-source`` instead of ``groonga-archive-"
+"keyring``."
+msgstr ""
+"We modify to use ``groonga-apt-source`` instead of ``groonga-archive-"
+"keyring``."
+
+msgid ""
+"Because the ``lintian`` command recommends using apt-source if a package "
+"that it puts files under the ``/etc/apt/sources.lists.d/``."
+msgstr ""
+"Because the ``lintian`` command recommends using apt-source if a package "
+"that it puts files under the ``/etc/apt/sources.lists.d/``."
+
+msgid ""
+"The ``lintian`` command is the command which checks for many common "
+"packaging errors."
+msgstr ""
+"The ``lintian`` command is the command which checks for many common "
+"packaging errors."
+
+msgid ""
+"Please also refer to the following for the details about installation "
+"procedures."
+msgstr ""
+"Please also refer to the following for the details about installation "
+"procedures."
+
+msgid "[:doc:`/install/debian`]"
+msgstr "[:doc:`/install/debian`]"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.31."
+msgstr "[:doc:`/install/centos`] Added support for Percona Server 5.7.31."
+
+msgid "Release 10.05 - 2020-07-29"
+msgstr "Release 10.05 - 2020-07-29"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21."
+msgstr ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.49, 5.7.31, and 8.0.21."
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.49."
+msgstr "[:doc:`/install/centos`] Added support for Percona Server 5.6.49."
+
+msgid "Release 10.03 - 2020-05-29"
+msgstr "Release 10.03 - 2020-05-29"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 20.04 (Focal Fossa) "
+"support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 20.04 (Focal Fossa) "
+"support."
+
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.04 (Disco Dingo) support."
+msgstr "[:doc:`/install/ubuntu`] Dropped Ubuntu 19.04 (Disco Dingo) support."
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.45, 10.2.32, "
+"10.3.23, and 10.4.13."
+msgstr ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.45, 10.2.32, "
+"10.3.23, and 10.4.13."
+
+msgid ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.48 and 5.7.30."
+msgstr ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.48 and 5.7.30."
+
+msgid "Dropped support for MariaDB 10.1 in Windows."
+msgstr "Dropped support for MariaDB 10.1 in Windows."
+
+msgid "Because MariaDB 10.1 will be EOL soon."
+msgstr "Because MariaDB 10.1 will be EOL soon."
+
+msgid ""
+"[:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan "
+"Ermine) was not provided."
+msgstr ""
+"[:doc:`/install/ubuntu`] Fixed a bug that Mroonga for Ubuntu 19.10 (Eoan "
+"Ermine) was not provided."
+
+msgid "Release 10.02 - 2020-04-29"
+msgstr "Release 10.02 - 2020-04-29"
+
+msgid "Added support for ``WITH_WEIGHT`` column flag."
+msgstr "Added support for ``WITH_WEIGHT`` column flag."
+
+msgid "This flag require Groonga 10.0.2 or later."
+msgstr "This flag require Groonga 10.0.2 or later."
+
+msgid "We can insert vector with weight as below by this flag."
+msgstr "We can insert vector with weight as below by this flag."
+
+msgid "Dropped support for MariaDB 5.5 in CentOS7."
+msgstr "Dropped support for MariaDB 5.5 in CentOS7."
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.48, 5.7.30, 8.0.20"
+msgstr ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.48, 5.7.30, 8.0.20"
+
+msgid "Release 10.01 - 2020-03-30"
+msgstr "Release 10.01 - 2020-03-30"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.29."
+msgstr "[:doc:`/install/centos`] Added support for Percona Server 5.7.29."
+
+msgid ""
+"Fixed a bug that Mroonga crashed when we sent to query as below conditions. "
+"[GitHub#303][Reported by pinpikokun]"
+msgstr ""
+"Fixed a bug that Mroonga crashed when we sent to query as below conditions. "
+"[GitHub#303][Reported by pinpikokun]"
+
+msgid "When Mroonga's optimize of ``ORDER_BY_LIMIT`` is valid."
+msgstr "When Mroonga's optimize of ``ORDER_BY_LIMIT`` is valid."
+
+msgid ""
+"See https://mroonga.org/docs/reference/optimizations.html#order-by-limit "
+"about conditions of this optimize."
+msgstr ""
+"See https://mroonga.org/docs/reference/optimizations.html#order-by-limit "
+"about conditions of this optimize."
+
+msgid "When sub query by using Mroonga does not use ``ORDER BY LIMIT``."
+msgstr "When sub query by using Mroonga does not use ``ORDER BY LIMIT``."
+
+msgid "pinpikokun"
+msgstr "pinpikokun"

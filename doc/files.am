@@ -176,6 +176,18 @@ po_files = \
 	news.po \
 	news/0.po \
 	news/1.po \
+	news/10.po \
+	news/11.po \
+	news/12.po \
+	news/13.po \
+	news/2.po \
+	news/3.po \
+	news/4.po \
+	news/5.po \
+	news/6.po \
+	news/7.po \
+	news/8.po \
+	news/9.po \
 	reference.po \
 	tutorial.po \
 	upgrade.po \
@@ -191,6 +203,20 @@ po_files_relative_from_locale_dir = \
 	LC_MESSAGES/index.po \
 	LC_MESSAGES/install.po \
 	LC_MESSAGES/news.po \
+	LC_MESSAGES/news/0.po \
+	LC_MESSAGES/news/1.po \
+	LC_MESSAGES/news/10.po \
+	LC_MESSAGES/news/11.po \
+	LC_MESSAGES/news/12.po \
+	LC_MESSAGES/news/13.po \
+	LC_MESSAGES/news/2.po \
+	LC_MESSAGES/news/3.po \
+	LC_MESSAGES/news/4.po \
+	LC_MESSAGES/news/5.po \
+	LC_MESSAGES/news/6.po \
+	LC_MESSAGES/news/7.po \
+	LC_MESSAGES/news/8.po \
+	LC_MESSAGES/news/9.po \
 	LC_MESSAGES/reference.po \
 	LC_MESSAGES/tutorial.po \
 	LC_MESSAGES/upgrade.po \
@@ -206,6 +232,20 @@ edit_po_files = \
 	index.edit \
 	install.edit \
 	news.edit \
+	news/0.edit \
+	news/1.edit \
+	news/10.edit \
+	news/11.edit \
+	news/12.edit \
+	news/13.edit \
+	news/2.edit \
+	news/3.edit \
+	news/4.edit \
+	news/5.edit \
+	news/6.edit \
+	news/7.edit \
+	news/8.edit \
+	news/9.edit \
 	reference.edit \
 	tutorial.edit \
 	upgrade.edit \
@@ -221,6 +261,20 @@ edit_po_files_relative_from_locale_dir = \
 	LC_MESSAGES/index.edit \
 	LC_MESSAGES/install.edit \
 	LC_MESSAGES/news.edit \
+	LC_MESSAGES/news/0.edit \
+	LC_MESSAGES/news/1.edit \
+	LC_MESSAGES/news/10.edit \
+	LC_MESSAGES/news/11.edit \
+	LC_MESSAGES/news/12.edit \
+	LC_MESSAGES/news/13.edit \
+	LC_MESSAGES/news/2.edit \
+	LC_MESSAGES/news/3.edit \
+	LC_MESSAGES/news/4.edit \
+	LC_MESSAGES/news/5.edit \
+	LC_MESSAGES/news/6.edit \
+	LC_MESSAGES/news/7.edit \
+	LC_MESSAGES/news/8.edit \
+	LC_MESSAGES/news/9.edit \
 	LC_MESSAGES/reference.edit \
 	LC_MESSAGES/tutorial.edit \
 	LC_MESSAGES/upgrade.edit \
@@ -236,6 +290,20 @@ mo_files = \
 	index.mo \
 	install.mo \
 	news.mo \
+	news/0.mo \
+	news/1.mo \
+	news/10.mo \
+	news/11.mo \
+	news/12.mo \
+	news/13.mo \
+	news/2.mo \
+	news/3.mo \
+	news/4.mo \
+	news/5.mo \
+	news/6.mo \
+	news/7.mo \
+	news/8.mo \
+	news/9.mo \
 	reference.mo \
 	tutorial.mo \
 	upgrade.mo \
@@ -251,6 +319,20 @@ mo_files_relative_from_locale_dir = \
 	LC_MESSAGES/index.mo \
 	LC_MESSAGES/install.mo \
 	LC_MESSAGES/news.mo \
+	LC_MESSAGES/news/0.mo \
+	LC_MESSAGES/news/1.mo \
+	LC_MESSAGES/news/10.mo \
+	LC_MESSAGES/news/11.mo \
+	LC_MESSAGES/news/12.mo \
+	LC_MESSAGES/news/13.mo \
+	LC_MESSAGES/news/2.mo \
+	LC_MESSAGES/news/3.mo \
+	LC_MESSAGES/news/4.mo \
+	LC_MESSAGES/news/5.mo \
+	LC_MESSAGES/news/6.mo \
+	LC_MESSAGES/news/7.mo \
+	LC_MESSAGES/news/8.mo \
+	LC_MESSAGES/news/9.mo \
 	LC_MESSAGES/reference.mo \
 	LC_MESSAGES/tutorial.mo \
 	LC_MESSAGES/upgrade.mo \

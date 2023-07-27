@@ -35,6 +35,10 @@
 /doc/locale/*/LC_MESSAGES/*.edit
 /doc/locale/*/LC_MESSAGES/*.mo
 /doc/locale/*/LC_MESSAGES/*.pot
+/doc/locale/*/LC_MESSAGES/news/*-build-stamp
+/doc/locale/*/LC_MESSAGES/news/*.edit
+/doc/locale/*/LC_MESSAGES/news/*.mo
+/doc/locale/*/LC_MESSAGES/news/*.pot
 /doc/locale/*/LC_MESSAGES/doctrees/
 /doc/locale/*/doctrees/
 /doc/locale/*/html/
