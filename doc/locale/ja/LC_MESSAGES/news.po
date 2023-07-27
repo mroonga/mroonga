@@ -4194,7 +4194,7 @@ msgid "Tomoatsu Shimada"
 msgstr "Tomoatsu Shimadaさん"
 
 msgid "News - 3 series"
-msgstr "お知らせ - 2系"
+msgstr "お知らせ - 3系"
 
 msgid "Release 3.12 - 2014/01/29"
 msgstr "3.12リリース - 2014/01/29"
@@ -8252,6 +8252,3 @@ msgstr "[rpm][centos] MySQL 5.7.25をサポートしました。"
 
 msgid "[rpm][centos] Supported MySQL 5.6.43."
 msgstr "[rpm][centos] MySQL 5.6.43をサポートしました。"
-
-#~ msgid "Past releases"
-#~ msgstr "過去のリリース"
