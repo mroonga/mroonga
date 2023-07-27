@@ -59,7 +59,7 @@ jobs:
           sudo pip3 install -U pip
       - name: Install Sphinx
         run: |
-          sudo pip3 install sphinx
+          sudo pip3 install sphinx myst-parser linkify-it-py
       - name: Download MySQL source
         run: |
           mkdir -p ../mysql

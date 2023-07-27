@@ -25,6 +25,7 @@ Setup build environment
 Install the following packages::
 
     % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
+    % pip3 install -U sphinx myst-parser linkify-it-py
 
 Describe the changes
 --------------------
@@ -46,6 +47,11 @@ Should be included
 Shoud not be included
 
 * The changes which doesn't affect to users (Internal source code changes or refactoring)
+
+Execute the following command to create HTML for news.
+
+  % make update-files
+  % make -C doc html
 
 Generate configure script
 -------------------------
