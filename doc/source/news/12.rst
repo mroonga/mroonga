@@ -1,0 +1,628 @@
+News - 12 series
+================
+
+.. _release-12-12:
+
+Release 12.12 - 2023-01-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/almalinux`] Added newly support for AlmaLinux 9.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.32.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.41
+
+* Added support for updating normal columns with composite primary key table. [GitHub#592][Reported by handmound]
+
+  We could not update normal columns when we set composite primary keys using Mroonga storage engine as below.
+
+  .. code-block:: sql
+
+     CREATE TABLE scores (
+       name char(30) NOT NULL,
+       score int NOT NULL,
+       PRIMARY KEY (name, score),
+       note char(30),
+       FULLTEXT INDEX search_note_idx (note)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO scores (name, score) VALUES ("Taro Yamada", 29);
+
+     UPDATE scores SET note = "Note"
+       WHERE name = "Taro Yamada" AND score = 29;
+
+     ERROR 1265 (01000): data truncated for primary key column: <name>
+
+  This error doesn't occur Mroonga with MariaDB.
+
+Thanks
+^^^^^^
+
+* handmound
+
+.. _release-12-11:
+
+Release 12.11 - 2023-01-06
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support for MariaDB 10.10.
+
+* [:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.10-2.amzn2.0.2.
+
+* [:doc:`/reference/server_variables`] Added a new status variable ``libgroonga_support_mecab``.
+
+  It's true only when Groonga supports TokenMecab.
+
+* [:doc:`/install/debian`] Added support for MariaDB 10.5.18.
+
+Fixes
+^^^^^
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Fixed memory leak when we use ``mroonga_highlight_html()`` with ``AS query``.
+
+* Fixed a bug that initialization of MeCab is fail when we use Mroonga on MariaDB 10.9 or later for Windows.
+
+.. _release-12-10:
+
+Release 12.10 - 2022-11-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.37, 10.4.27, 10.5.18, 
+  10.6.11, 10.7.7, 10.8.6, 10.9.4. [GitHub #564][Reported by Josep Sanz][Patched by Tomohiro KATO]
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.30-22.
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.40-43.
+
+* [:doc:`/install/windows`] Added support for MariaDB 10.7, 10.8, 10.9.
+
+* [:doc:`/install/windows`] Dropped support for 32bit versions.
+
+  Because recent MariaDB can't be built for 32bit Windows, and the official packages for 32bit don't exist.
+
+* [:doc:`/reference/udf/mroonga_highlight_html`] Added new parameters: ``open_tag`` and ``close_tag``. [GitHub #537][Reported by ishitaka]
+
+  Now we can specify a tag for highlighting with ``open_tag`` and ``close_tag``.
+
+  It was inconvinient for us to unable specifying different tags or changing ``class`` because the fixed tag ``<span class="keyword">...</span>`` was used.
+  Now, this new parameter provides more convenience for us because it allows specifying tags to highlight, such as ``<mark>...</mark>``.
+
+  .. code-block:: sql
+
+     SELECT mroonga_highlight_html('Mroonga is the Groonga based storage engine.', 'groonga',
+                                   '<mark>' AS open_tag, '</mark>' AS close_tag) AS highlighted;
+     
+     -- +-----------------------------------------------------------+
+     -- | highlighted                                               |
+     -- +-----------------------------------------------------------+
+     -- | Mroonga is the <mark>Groonga</mark> based storage engine. |
+     -- +-----------------------------------------------------------+
+
+  Please refer to :doc:`/reference/udf/mroonga_highlight_html` for details.
+
+* Added support for reference count mode.
+
+  Though this feature can keep fixed memory usage, its performance would be dropped.
+  Thus, memory increments should be first consideration before using this feature.
+  
+  The reference count mode is used with `table_open_cache <https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_table_open_cache>`_ of MySQL.
+
+  MySQL can cache specified number of tables with ``table_open_cache```.
+  Groonga's object would not be released because the cached tables are still in use.
+
+  The tables with low usage would be closed if number of open tables is larger than number specified with ``table_open_cache``.
+  Groonga objects would be released at the same time with table closing if the reference count mode is enabled.
+
+  These are how the reference count mode keep fixed memory usage.
+
+  For actual use, we need to adjust balance between memory usage and perfomance with value of ``table_open_cache`` while checking
+  memory usage and value of status variables `Open_tables <https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Open_tables>`_. 
+  Because this feature can keep fixed memory usage, but its performance would be dropped.
+
+  There is how to check ``Open_tables`` as follows.
+
+  .. code-block:: sql
+
+     SHOW GLOBAL STATUS LIKE 'Open_tables';
+     -- +---------------+-------+
+     -- | Variable_name | Value |
+     -- +---------------+-------+
+     -- | Open_tables   | 643   |
+     -- +---------------+-------+
+
+  Normally, all of tables in use are cached by setting ``table_open_cache`` larger than ``Open_tables``.
+  However, if there is limited memory, memory usage would be decreased by releasing memory for tables with low usage dropping from the cache.
+  In order to releasing tables with low usage from the cache, ``table_open_cache`` should be set smaller than ``Open_tables``.
+  The smaller ``Open Tables`` setting , the more tables dropping from the cache.
+  As cache is released, memory usage decrease, yet performance become worse due to reopen tables.
+  The smaller ``table_open_cache``, the more necessary to reopen tables. ``table_open_cache`` should set as much value as only to reaching memory tolerance.
+
+  In order to enable reference count mode, we need to specify values in my.cnf as follows;
+
+  .. code-block::
+
+     loose-mroonga-enable-reference-count = ON
+
+  .. note::
+  
+     The reference count mode would not be enabled with variables after booting MySQL.
+     It is necesarry to specify values in my.cnf.
+
+     .. code-block:: sql
+
+       SET GLOBAL mroonga_enable_reference_count = ON
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
+
+  It was false announcement in 12.09 that groonga-normalizer-mysql is bundled in.
+
+Thanks
+^^^^^^
+
+* Josep Sanz
+* Tomohiro KATO
+* ishitaka
+
+.. _release-12-09:
+
+Release 12.09 - 2022-10-28
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.9.3.
+
+* [:doc:`/install/centos`][:doc:`/install/ubuntu`] Added support for MySQL 5.7.40.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:doc:`/install/ubuntu`] Added support for MySQL 8.0.31.
+
+* [:doc:`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 (Jammy Jellyfish).
+
+* Added support for execution timeout parameter.[GitHub #344][Reported by Kazuhiko]
+
+  MySQL/MariaDB can abort queries if the execution timeout parameter is specified and a execution time exceeds a time specified with the parameter.
+  The execution timeout parameter is ``MAX_EXECUTION_TIME`` in MySQL and ``max_statement_time`` in MariaDB.
+
+  However, Mroonga did not abort executing queries even after MySQL/MariaDB abort the queries and return results.
+  So if the Groonga queries match too many results, it could continue to consume memory and CPU resources even after MySQL/MariaDB abort the queries.
+
+  From this version, Mroonga can abort queries in the specified time and the execution timeout parameter works correctly. So Mroonga don't continue to consume memory and CPU resources after MySQL/MariaDB abort the queries.
+
+  The following how to use this feature.
+
+  Here is a sample for MySQL.
+
+  .. code-block:: sql
+
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SELECT /*+ MAX_EXECUTION_TIME(1) */ title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
+  Here is a sample for MariaDB.
+
+  .. code-block:: sql
+
+     CREATE TABLE diaries(
+       title TEXT
+       FULLTEXT INDEX (title)
+     ) ENGINE = Mroonga DEFAULT CHARSET=utf8mb4;
+
+     INSERT INTO diaries (title) VALUES ("It'll be fine tomorrow.");
+     INSERT INTO diaries (title) VALUES ("It'll rain tomorrow");
+
+     SET STATEMENT max_statement_time = 0.001 FOR
+     SELECT title
+       FROM diaries
+      WHERE MATCH(title) AGAINST("+fine" IN BOOLEAN MODE);
+
+  This feature can use in ``mroonga_command()`` also.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga for Windows does not bundle groonga-normalizer-mysql.
+
+  This bug had existed since Mroonga 12.02.
+  Therefore, We can't groonga-normalizer-mysql from Mroonga 12.02 for Windows to Mroonga 12.08 for Windows.
+
+Thanks
+^^^^^^
+
+* Kazuhiko
+
+.. _release-12-08:
+
+Release 12.08 - 2022-10-03
+--------------------------
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.6.10, 10.7.6 and 10.8.5.
+
+* [:doc:`/install/oracle-linux`] Added support for MySQL 8.0.30.
+
+.. _release-12-07:
+
+Release 12.07 - 2022-08-30
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.36, 10.4.26, 10.5.17, 10.6.9, 10.7.5 and 10.8.4.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.39-42.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.29-21.
+
+  .. note::
+     
+     MySQL 8.0.29 used by Percona Server 8.0.29 has a critical issue. So we do not recommend to use this version.
+     
+     See `MySQL 8.0.29 Release Notes <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-29.html>`_ for details about the issue.
+
+Fixes
+^^^^^
+
+* Fixed a bug to fail to install or upgrade Mroonga with install.sql.[GitHub #525][Reported by Tomohiro KATO][Patched by Jérome Perrin]
+  
+  Broken install.sql caused this bug. This bug had occurred since Mroonga 12.06.
+
+* Fixed a bug that ``mroonga_command()`` returns results with hex dump for MySQL 8.0 and above.
+
+  ``mroonga_command()`` returns results with a correct character code form this version.
+
+* [:doc:`/install/almalinux`] Fixed an installation document for Mroonga on AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]
+
+Thanks
+^^^^^^
+
+* handmound
+* Jérome Perrin
+* Tomohiro KATO
+
+.. _release-12-06:
+
+Release 12.06 - 2022-08-04
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.39.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.30.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-20.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.8.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Dropped support for MariaDB 10.2.
+
+* [:doc:`/install/debian`] Dropped support for Debian 10 (buster).
+
+* Changed to not require to run update.sql for registering Mroonga to MySQL.[GitHub #509][Reported by Jérome Perrin]
+  
+  Mroonga has required to run both install.sql and update.sql to register to MySQL since Mroonga 12.04.
+
+  .. code-block::
+
+     % mysql -u root < /usr/share/mroonga/install.sql
+     % mysql -u root < /usr/share/mroonga/update.sql
+
+  This improvement has changed Mroonga to only require to run install.sql to register to MySQL as before than Mroonga 12.04.
+
+  .. code-block::
+
+    % mysql -u root < /usr/share/mroonga/install.sql
+
+Thanks
+^^^^^^
+
+* Jérome Perrin
+
+.. _release-12-04:
+
+Release 12.04 - 2022-06-01
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/reference/server_variables`] Add a new status variable ``Mroonga_memory_map_size``.
+
+  We can get the total memory map size in bytes of Mroonga as below.
+
+  .. code-block::
+
+     mysql> SHOW STATUS LIKE 'Mroonga_memory_map_size';
+     +-------------------------+----------+
+     | Variable_name           | Value    |
+     +-------------------------+----------+
+     | Mroonga_memory_map_size | 83406848 |
+     +-------------------------+----------+
+     1 row in set (0.00 sec)
+
+  In Windows, If Mroonga uses up physical memory and swap area, Mroonga can't more mapping memory than that.
+  Therefore, we can control properly memory map size by monitoring this value even if the environment does have not enough memory.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.28-19.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 5.7.38-41.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.2.44, 10.3.35, 10.4.25, 10.5.16, 10.6.8, and 10.7.4.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga may update failed. [groonga-dev,04982, groonga-dev,04987][Reported by Mitsuo Yoshida and OHTSUKA Soushi]
+
+  If this bug occurs, Mroonga is disabled after Mroonga update with such as "apt update".
+  In that case, we install Mroonga manually with the following procedure.
+
+  .. code-block::
+
+     % mysql -u root < /usr/share/mroonga/install.sql
+
+Thanks
+^^^^^^
+
+* Mitsuo Yoshida
+* OHTSUKA Soushi
+
+.. _release-12-03:
+
+Release 12.03 - 2022-05-06
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Added support for Percona Server 5.7.37-40.
+
+* [:doc:`/install/centos`] Added support for MySQL 5.7.38.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MySQL 8.0.29.
+
+Fixes
+^^^^^
+
+* Fixed a bug that Mroonga may fail create the index on MariaDB 10.5.14. [GitHub clear-code/redmine_full_text_search#103][Reported by wate]
+
+* Fixed a memory leak on full text search. [Reported by OHTSUKA Soushi and Mitsuo Yoshida]
+
+  This is occurred when `order limit optimization <https://mroonga.org/ja/docs/reference/optimizations.html#order-by-limit>`_ is used.
+  However, if we use MariaDB, this occurs even if we don't use order limit optimization.
+
+  This bug had occurred since Mroonga 11.03.
+
+Thanks
+^^^^^^
+
+* wate
+* OHTSUKA Soushi
+* Mitsuo Yoshida
+
+.. _release-12-02:
+
+Release 12.02 - 2022-03-29
+--------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Dropped support wrapper mode with MySQL 8.0 or later.
+
+* Added support for disabling a back trace by the server variable.
+
+  We can disable a back trace by "SET GLOBAL mroonga_enable_back_trace = false;".
+
+* Added support for ``float32`` weight vector.
+
+  We can store weight as ``float32``.
+  We need to add ``WEIGHT_FLOAT32`` flag when we define a column to use this feature.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for MariaDB 10.3.34, 10.4.24, 10.5.15, 10.6.7, and 10.7.3.
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.43.
+
+* [:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for Percona Server 8.0.27-18.
+
+* Added support for ``MISSING_*`` and ``INVALID_*`` flags
+
+  Please refer to https://groonga.org/docs/news.html#release-12-0-2 about details of these flags.
+
+.. _release-12-00:
+
+Release 12.00 - 2022-02-09
+--------------------------
+
+This is a major version up!
+But It keeps backward compatibility. We can upgrade to 12.00 without rebuilding database.
+
+First of all, we introduce the Summary of changes from Mroonga 11.00 to 11.13.
+Then, we introduce the main changes in 12.00.
+
+Summary of changes from Mroonga 11.0.0 to 11.1.3
+------------------------------------------------
+
+New Features and Improvements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Renamed package names as below.
+
+  * ``mariadb-server-10.x-mroonga`` -> ``mariadb-10.x-mroonga``
+  * ``mysql-server-5.x-mroonga`` -> ``mysql-community-5.x-mroonga``
+  * ``mysql-server-8.x-mroonga`` -> ``mysql-community-8.x-mroonga``
+  * ``percona-server-5x-mroonga`` -> ``percona-server-5.x-mroonga``
+  * ``percona-server-8x-mroonga`` -> ``percona-server-8.x-mroonga``
+
+  .. warning::
+
+     The package names are changed.
+     Mroonga may be invalid after upgrade by the influence of this modification.
+     If we upgrade to this version, please always be sure to confirm the below points.
+
+     If Mroonga is invalid after the upgrade, we need to install manually Mroonga again.
+     Please refer to the following URL about the manual installation of Mroonga and how to confirming whether Mroonga is valid or not.
+
+       * https://mroonga.org/docs/tutorial/installation_check.html
+
+     If we will upgrade mroonga to stride over a Mroonga 11.03.
+
+     If Mroonga is valid after upgrade to this version but, Mroonga's version is old, we need to restart MySQL, MariaDB, or PerconaServer.
+     We can confirm Mroonga's version as the below command.
+
+       * ``SHOW VARIABLES LIKE 'mroonga_version';``
+
+* [:doc:`/reference/udf/mroonga_snippet_html`] Added support for custom normalizer in ``mroonga_snippet_html()``
+
+  * We can use custom normalizer in ``mroonga_snippet_html()`` by this feature as below.
+
+    .. code-block::
+
+       CREATE TABLE terms (
+         term VARCHAR(64) NOT NULL PRIMARY KEY
+       ) COMMENT='normalizer "NormalizerNFKC130(''unify_kana'', true)"'
+         DEFAULT CHARSET=utf8mb4
+         COLLATE=utf8mb4_unicode_ci;
+
+       SELECT mroonga_snippet_html('これはMroonga（ムルンガ）です。',
+                                   'terms' as lexicon_name,
+                                   'むるんが') as snippet;
+
+       snippet
+       <div class="snippet">これはMroonga（<span class="keyword">ムルンガ</span>）です。</div>
+
+* [:doc:`/reference/server_variables`] We disabled ``mroonga_enable_operations_recording`` by default.
+
+  ``mroonga_enable_operations_recording`` to determine whether recording operations for auto recovering are enabled or not. 
+
+  This recording of operations is for auto recovering Mroonga when it crashed.
+  Normally, if lock remain in Mroonga, we can't execute INSERT/DELETE/UPDATE, but if ``mroonga_enable_operations_recording`` is enable, we may not execute SELECT at times in addition to INSERT/DELETE/UPDATE.
+  Because auto recovery is sometimes blocked by residual lock when they crashed.
+
+  Therefore, we set ``OFF`` to the default value in this version.
+  By we disable operation recording, INSERT/DELETE/UPDATE is blocked as usual because of the residual lock, but "SELECT" may bework.
+
+  An appropriate way to handle to residual lock is as follows.
+
+    * https://www.clear-code.com/blog/2021/6/1/mroonga-recover-lock-failed-2021.html
+      (Japanese only)
+
+Fixes
+^^^^^
+
+* Fix a crash bug that may be caused after MySQL/MariaDB upgrade.
+
+  * Mronnga may crash if we execute ``SELECT ... MATCH AGAINST`` after MySQL/MariaDB upgrade.
+
+* Fixed a bug that if we use "WHERE primary_key IN ("")" in a where clause, Mroonga may return wrong record.
+
+  See :ref:`release 11.07 <release-11-07>` for details.
+
+* [:doc:`/reference/optimizations`] Fixed a bug that Mroonga apply the optimization of row count wrongly.
+
+  See :ref:`release 11.10 <release-11-10>` for details.
+
+* Fixed a bug that Mroonga crashed when we upgrade DB created by MySQL 5.7 to MySQL 8.0.
+
+* Fixed a bug that latitude and longitude are stored conversely.
+
+  .. warning::
+
+     backward compatibility is broken by this fix.
+
+     Users that are using ``GEOMETRY`` type need to store the current data before upgrading to Mroonga 11.03 and restore the stored data after upgrading to Mroonga 11.03.
+     Users can use the following methods for dumping/restoring data.
+
+       * ``mysqldump``
+       * Execute ``ALTER TABLE ENGINE=InnoDB`` before upgrading and execute ``ALTER TABLE ENGINE=Mroonga`` after upgrading.
+
+     If without this fix, ``INSERT/UPDATE/SELECT/SELECT`` works well but data stored in Groonga are wrong (Latitude and longitude are swapped in Groonga). Therefore, ``mroonga_command('select ...')`` doesn't work for spatial data.
+
+* Fixed a bug that FOREIGN KEY constraint was not registered.
+
+  This bug had only occurred on MySQL 8.0.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that ``DROP DATABASE`` had failed if a target database had FOREIGN KEY constraint.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that ``DROP COLUMN`` had failed if a target table was referred a other table.
+
+  See :ref:`release 11.01 <release-11-01>` for details.
+
+* Fixed a bug that a update of Mroonga fails on MariaDB.
+
+Newly supported OSes
+^^^^^^^^^^^^^^^^^^^^
+
+* [:doc:`/install/debian`] Added support for Debian 11 (bullseye).
+
+* [:doc:`/install/almalinux`] Added support for Mroonga on AlamLinux 8.
+
+Dropped OSes
+^^^^^^^^^^^^
+
+* [:doc:`/install/centos`] Dropped support for CentOS 8.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 21.04 (Hirsute Hippo) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 20.10 (Groovy Gorilla) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 16.04 LTS (Xenial Xerus) support.
+
+* [:doc:`/install/ubuntu`] Dropped support for MariaDB 10.1 on Ubuntu 18.04 LTS.
+
+Thanks
+^^^^^^
+
+* shibanao4870
+* Marc Laporte
+* santalex
+* Josep Sanz
+* Tomohiro KATO
+* Katsuhito Watanabe
+* kenichi arimoto
+* Vincent Pelletier
+* Kosuke Yamashita
+* ひじー
+
+The main changes in 12.00 are as follows.
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Added support for the latest version of mysql-server package for Ubuntu.
+
+  We supported the following versions.
+
+  * Ubuntu 18.04 LTS (bionic) mysql-server (5.7.37-0ubuntu0.18.04.1)
+  * Ubuntu 20.04 LTS (focal) mysql-server (8.0.28-0ubuntu0.20.04.3)
+  * Ubuntu 21.10 LTS (impish) mysql-server (8.0.28-0ubuntu0.21.10.3)
+
+* [:doc:`/install/centos`] Added support for MariaDB 10.2.42, 10.3.33, 10.4.23, 10.5.14, and 10.6.6.
+
+* [:doc:`/install/almalinux`] Added support for MariaDB 10.3.33, 10.4.23, 10.5.14, and 10.6.6.

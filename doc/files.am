@@ -32,14 +32,20 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/install/ubuntu.rst \
 	$(top_srcdir)/doc/source/install/windows.rst \
 	$(top_srcdir)/doc/source/news.rst \
-	$(top_srcdir)/doc/source/news/0.x.rst \
-	$(top_srcdir)/doc/source/news/1.x.rst \
-	$(top_srcdir)/doc/source/news/2.x.rst \
-	$(top_srcdir)/doc/source/news/3.x.rst \
-	$(top_srcdir)/doc/source/news/4.x.rst \
-	$(top_srcdir)/doc/source/news/5.x.rst \
-	$(top_srcdir)/doc/source/news/6.x.rst \
+	$(top_srcdir)/doc/source/news/0.rst \
+	$(top_srcdir)/doc/source/news/1.rst \
+	$(top_srcdir)/doc/source/news/10.rst \
+	$(top_srcdir)/doc/source/news/11.rst \
+	$(top_srcdir)/doc/source/news/12.rst \
 	$(top_srcdir)/doc/source/news/13.md \
+	$(top_srcdir)/doc/source/news/2.rst \
+	$(top_srcdir)/doc/source/news/3.rst \
+	$(top_srcdir)/doc/source/news/4.rst \
+	$(top_srcdir)/doc/source/news/5.rst \
+	$(top_srcdir)/doc/source/news/6.rst \
+	$(top_srcdir)/doc/source/news/7.rst \
+	$(top_srcdir)/doc/source/news/8.rst \
+	$(top_srcdir)/doc/source/news/9.rst \
 	$(top_srcdir)/doc/source/reference.rst \
 	$(top_srcdir)/doc/source/reference/full_text_search.rst \
 	$(top_srcdir)/doc/source/reference/full_text_search/boolean_mode.rst \
@@ -109,14 +115,20 @@ source_files_relative_from_doc_dir = \
 	source/install/ubuntu.rst \
 	source/install/windows.rst \
 	source/news.rst \
-	source/news/0.x.rst \
-	source/news/1.x.rst \
-	source/news/2.x.rst \
-	source/news/3.x.rst \
-	source/news/4.x.rst \
-	source/news/5.x.rst \
-	source/news/6.x.rst \
+	source/news/0.rst \
+	source/news/1.rst \
+	source/news/10.rst \
+	source/news/11.rst \
+	source/news/12.rst \
 	source/news/13.md \
+	source/news/2.rst \
+	source/news/3.rst \
+	source/news/4.rst \
+	source/news/5.rst \
+	source/news/6.rst \
+	source/news/7.rst \
+	source/news/8.rst \
+	source/news/9.rst \
 	source/reference.rst \
 	source/reference/full_text_search.rst \
 	source/reference/full_text_search/boolean_mode.rst \
@@ -285,14 +297,20 @@ html_files_relative_from_locale_dir = \
 	html/install/ubuntu.html \
 	html/install/windows.html \
 	html/news.html \
-	html/news/0.x.html \
-	html/news/1.x.html \
-	html/news/2.x.html \
-	html/news/3.x.html \
-	html/news/4.x.html \
-	html/news/5.x.html \
-	html/news/6.x.html \
+	html/news/0.html \
+	html/news/1.html \
+	html/news/10.html \
+	html/news/11.html \
+	html/news/12.html \
 	html/news/13.html \
+	html/news/2.html \
+	html/news/3.html \
+	html/news/4.html \
+	html/news/5.html \
+	html/news/6.html \
+	html/news/7.html \
+	html/news/8.html \
+	html/news/9.html \
 	html/objects.inv \
 	html/reference.html \
 	html/reference/full_text_search.html \
@@ -320,4 +338,3 @@ html_files_relative_from_locale_dir = \
 	html/tutorial/wrapper.html \
 	html/upgrade.html \
 	$(NULL)
-

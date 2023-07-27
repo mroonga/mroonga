@@ -1,0 +1,251 @@
+News - 8 series
+===============
+
+.. _release-8-09:
+
+Release 8.09 - 2018-11-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Supported Ubuntu 18.10 (Cosmic Cuttlefish).
+
+* [:doc:`/install/windows`] Supported MariaDB 10.3.10.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.2.19
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.37
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.23-25.
+
+* [rpm][centos] Supported MariaDB 10.3.11.
+
+* [rpm][centos] Supported MySQL 5.6.42.
+
+* [rpm][centos] Supported MySQL 5.7.24.
+
+Revision:
+
+We deleted information as below.
+
+"Supported MySQL 8"
+
+Sorry, There was wrong release information in Mroonga 8.09.
+The MySQL 8 is not supported. That is still being handled.
+
+.. _release-8-07:
+
+Release 8.07 - 2018-09-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead.
+* Dropped support for MariaDB 10.2.2 which is shipped at Sep 27, 2016 and older series.
+
+Fixes
+^^^^^
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.36.
+
+.. _release-8-06:
+
+Release 8.06 - 2018-08-29
+-------------------------
+
+In this version, MySQL will be automatically restarted if you had
+already installed Mroonga and not installed Groonga 8.0.4 or later.
+Because Mroonga 8.06 requires Groonga 8.0.4 or later but it will not
+reloaded until MySQL is restarted.
+
+Improvements
+^^^^^^^^^^^^
+
+* Updated required Groonga version to 8.0.4 or later.
+
+* Updated required groonga-normalizer-mysql version to 1.1.3 or later.
+
+* Supported utf8mb4_0900 family collation.
+
+  * ref: https://github.com/groonga/groonga-normalizer-mysql#description
+
+* Supported tokenizer options.
+
+  * e.g.: ``tokenizer "TokenNgram(\'loose_symbol\', true)"``
+
+  * ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29
+
+* Use the Groonga's default logger.
+
+* [:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33.
+
+  * NOTICE: Before upgrading to MariaDB 10.3, you need to dump existing MariaDB 10.1 databases. Then restore it after upgrading.
+
+* [:doc:`/install/debian`] Dropped Debian 8 (jessie) support.
+
+* [:doc:`/install/ubuntu`] Dropped Ubuntu 17.10 (Artful Aardvark) support.
+
+* [WIP] Working on supporting MySQL 8.
+
+  * The storage mode is almost done (JSON type doesn't work yet).
+
+  * The wrapper mode is in progress.
+
+Fixes
+^^^^^
+
+* [storage] Fixed a bug that wrong result may be returned on multi range read.
+  [GitHub#211][Reported by colt27]
+
+Thanks
+^^^^^^
+
+* colt27
+
+.. _release-8-03:
+
+Release 8.03 - 2018-05-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/docker`] Added quick start guide link to Docker Hub.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.3.7.
+
+* [:doc:`/install/centos`] Supported MariaDB 10.2.15 (backported to 8.02).
+
+* [:doc:`/install/centos`] Supported MariaDB 10.1.33 (backported to 8.02).
+
+Fixes
+^^^^^
+
+* [:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty)
+  (backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]
+
+Thanks
+^^^^^^
+
+* Masato Hirai
+
+.. _release-8-02:
+
+Release 8.02 - 2018-04-29
+-------------------------
+
+Improvements
+^^^^^^^^^^^^
+
+* [:doc:`/install/ubuntu`] Supported Ubuntu 18.04 LTS (Bionic Beaver).
+
+* [:doc:`/install/debian`] Supported i386 for Jessie.
+
+* Suppress meaningless "duplicated unique id" error log. [GitHub#197]
+
+* [developer][test] Supported `--record` option.
+
+* [:doc:`/install/centos`] Use `groonga-release-latest` instead of `groonga-release-X.X.X`.
+
+* [:doc:`/tutorial/installation_check`] Added version check howto.
+
+* [:doc:`/install/centos`][percona] Supported upgrading from "< 5.6.34" and "< 5.7.21".
+  [groonga-dev,04599][Reported by Takashi Kinoshita][Looked into by Satoshi Mitani]
+
+* [:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22.
+
+* [:doc:`/install/centos`] Supported Percona Server 5.7.21-21.
+
+Fixes
+^^^^^
+
+* Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER BY 1 + 1, id, content`.
+
+* Fixed a bug that `MATCH AGAINST` condition is ignored if SQL containing such as
+  `AND (x = 1 OR x = 2)` when condition push down is enabled.
+  [Gitter/ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]
+
+* Fixed a memory leak for column caches.
+
+Thanks
+^^^^^^
+
+* Takashi Kinoshita
+
+* Satoshi Mitani
+
+* colt27
+
+.. _release-8-01:
+
+Release 8.01 - 2018-03-29
+-------------------------
+
+In this version, MySQL will be automatically restarted if you had
+already installed Mroonga. This is because Mroonga requires newer
+version of Groonga (8.0.1) to fix bugs, but it will not reloaded until
+MySQL is restarted.
+
+Improvements
+^^^^^^^^^^^^
+
+* [rpm][centos] Supported Percona Server 5.6.39. [Reported by @iiiiyyyy]
+
+* [rpm][centos] Supported Percona Server 5.7.21.
+
+* [rpm][centos] Supported MariaDB 10.2.13. [GitHub#198] [Reported by
+  shota suzuki]
+
+* [rpm][centos] Supported MariaDB 10.2.14.
+
+Fixes
+^^^^^
+
+* Fixed a bug that wrong cache for other database is used. If you
+  create multiple database and use `mroonga_command()` against one of
+  them, wrong cache is returned unexpectedly. To fix this issue,
+  Groonga 8.0.1 or later is required.
+
+* Fixed a bug that "NOT IN" query returns empty result. This bug
+  occurs when "NOT IN" is used with multiple arguments such as "NOT IN
+  (xxx, xxx)"
+
+* Fixed a bug that specified "NOT IN" can't exclude correctly when
+  condition push down is enabled.
+
+* Fixed a bug that "ORDER BY RAND()" query returns wrong result. This
+  bug occurs when "ORDER BY RAND()" and "LIMIT" is specified at the
+  same time.
+
+* Fixed a bug that "fast order limit" optimization is applied
+  unexpectedly to "ORDER BY function()".
+
+Thanks
+^^^^^^
+
+* @iiiiyyyy
+
+* shota suzuki
+
+.. _release-8-00:
+
+Release 8.00 - 2018-02-09
+-------------------------
+
+This is a major version up! But It keeps backward compatibility.
+You can upgrade to 8.0.0 without rebuilding database.
+
+Improvements
+^^^^^^^^^^^^
+
+* When create hash index, used tiny hash for reducing used resource.
+
+* [percona57] Added gap lock detection support.
+  [GitHub#188][Reported by Iwo]
+
+Thanks
+^^^^^^
+
+* Iwo
