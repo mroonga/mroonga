@@ -27,7 +27,6 @@ Build-Depends:
 	libssl-dev,
 	libxml2-dev,
 	lsb-release,
-	lsb-release,
 	perl,
 	pkg-config,
 	po-debconf,
