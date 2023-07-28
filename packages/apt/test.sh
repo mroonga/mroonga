@@ -34,8 +34,11 @@ wget \
   https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 
-case ${code_name} in
-  bookworm)
+case ${distribution}-${code_name} in
+  debian-bullseye|ubuntu-*)
+    :
+    ;;
+  *)
     wget \
       https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
     sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
