@@ -36,7 +36,7 @@ Build-Depends:
 	wget,
 	zlib1g-dev
 Standards-Version: 4.6.2
-Homepage: http://mroonga.org/
+Homepage: https://mroonga.org/
 
 Package: mariadb-mroonga
 Section: database
