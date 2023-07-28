@@ -78,8 +78,6 @@ Description: A fast fulltext searchable storage engine for MariaDB 10.11.
 Package: mariadb-10.11-mroonga-doc
 Section: doc
 Architecture: all
-Replaces: mariadb-server-10.11-mroonga-doc (<< 11.02-1)
-Breaks: mariadb-server-10.11-mroonga-doc (<< 11.02-1)
 Depends:
 	${misc:Depends}
 Description: Documentation of Mroonga.
