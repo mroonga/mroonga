@@ -251,7 +251,7 @@ msgid "初回テストリリース"
 msgstr ""
 
 msgid "News - 1 series"
-msgstr ""
+msgstr "お知らせ - 1系"
 
 msgid "Release 1.20 - 2012/01/29"
 msgstr "1.20リリース - 2012/01/29"
@@ -804,7 +804,7 @@ msgid "Tomohiro MITSUMUNEさん"
 msgstr ""
 
 msgid "News - 10 series"
-msgstr ""
+msgstr "お知らせ - 10系"
 
 msgid "Release 10.11 - 2021-01-29"
 msgstr "10.11リリース - 2021-01-29"
@@ -1153,7 +1153,7 @@ msgid "pinpikokun"
 msgstr "pinpikokunさん"
 
 msgid "News - 11 series"
-msgstr ""
+msgstr "お知らせ - 11系"
 
 msgid "Release 11.13 - 2022-01-29"
 msgstr "11.13リリース - 2022-01-29"
@@ -1961,7 +1961,7 @@ msgstr ""
 "Groonga 11.0.0 で影響の大きなインデックス破損の問題が修正されているためです。"
 
 msgid "News - 12 series"
-msgstr ""
+msgstr "お知らせ - 12系"
 
 msgid "Release 12.12 - 2023-01-29"
 msgstr "12.12リリース - 2023-01-29"
@@ -2767,39 +2767,106 @@ msgstr ""
 "トしました。"
 
 msgid "News - 13 series"
+msgstr "お知らせ - 13系"
+
+msgid "Release 13.04 - 2023-07-29"
+msgstr "13.04リリース - 2023-07-29"
+
+msgid ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support MySQL "
+"5.7.43."
 msgstr ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MySQL 5.7.43をサポートし"
+"ました。"
+
+msgid ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support MySQL "
+"8.0.34."
+msgstr ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MySQL 8.0.34をサポートし"
+"ました。"
+
+msgid ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
+"Percona Server 5.7.42-46."
+msgstr ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 5.7.42-46"
+"をサポートしました。"
+
+msgid ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
+"Percona Server 8.0.33-25."
+msgstr ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.33-25"
+"をサポートしました。"
+
+msgid ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support MariaDB "
+"10.4.30, 10.5.21, 10.6.14, 10.8.8, 10.9.7, 10.10.5, and 10.11.4."
+msgstr ""
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.4.30、"
+"10.5.21、10.6.14、10.8.8、10.9.7、10.10.5、10.11.4をサポートしました。"
+
+msgid "[{doc}`/install/debian`] Added support for MariaDB 10.5.19."
+msgstr "[{doc}`/install/debian`] MariaDB 10.5.19をサポートしました。"
+
+msgid "[{doc}`/install/debian`] Added newly support for Debian 12 (bookworm)."
+msgstr "[{doc}`/install/debian`] Debian 12 (bookworm)をサポートしました。"
+
+msgid "However, we only support Mroonga with MariaDB 10.11 in this release."
+msgstr ""
+"今回のリリースでは、 MariaDB 10.11 向けのパッケージのみサポートしています。"
+
+msgid ""
+"Because the source of MySQL Community Server for Debian 12 doesn't exist in "
+"MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/) currently."
+msgstr ""
+"現状、 MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/) に "
+"Debian 12 向けの MySQL Community Server 8.0 のソースコードが存在しないためで"
+"す。"
+
+msgid ""
+"Therefore, we don't support Mroonga with MySQL community server 8.0 on "
+"Debian 12 temporarily. We will support Mroonga with MySQL community server "
+"8.0 after the source of it for Debian 12 is available."
+msgstr ""
+"したがって、MySQL community server 8.0 向けのMroongaパッケージは一時的にサ"
+"ポートしていません。MySQL APT Repository で Debian 12 向けの MySQL Community "
+"Server のソースコードが利用可能になった後に提供予定です。"
+
+msgid "Dropped support for MariaDB 10.3."
+msgstr "MariaDB 10.3のサポートをやめました。"
+
+msgid "It reached EOL on 2023-05-25."
+msgstr "2023-05-25 にEOLになったためです。"
 
 msgid "Release 13.01 - 2023-03-29"
 msgstr "13.01リリース - 2023-03-29"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added newly support for "
 "MariaDB 10.11 [GitHub#606][Patched by Josep Sanz]"
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] 新しくMariaDB 10.11をサ"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] 新しくMariaDB 10.11をサ"
 "ポートしました。 [GitHub#606][Patched by Josep Sanz]"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/amazon-linux`] Added support for MariaDB 10.5.18-1.amzn2."
 msgstr ""
-"[:doc:`/install/amazon-linux`] MariaDB 10.5.18-1.amzn2をサポートしました。"
+"[{doc}`/install/amazon-linux`] MariaDB 10.5.18-1.amzn2をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.32-24."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.32-24"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.32-24"
 "をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 5.7.41-44."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.41-44"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 5.7.41-44"
 "をサポートしました。"
 
 msgid "[Oracle Linux] Dropped support for Oracle Linux 8 and 9"
@@ -2822,22 +2889,19 @@ msgstr ""
 "そのため、Oracle Linux用のMroongaを使ってもMySQLの公式Dockerイメージには"
 "Mroongaをインストールできません。"
 
-#, fuzzy
 msgid "[{doc}`/install/ubuntu`] Dropped support for Ubuntu 18.04."
-msgstr "[:doc:`/install/ubuntu`] Ubuntu 18.04 のサポートをやめました。"
+msgstr "[{doc}`/install/ubuntu`] Ubuntu 18.04 のサポートをやめました。"
 
 msgid "Because Ubuntu 18.04 reached EOL."
 msgstr "Ubuntu 18.04 はEOLとなったためです。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/almalinux`] Added support for MySQL community server minimal "
 "8.0."
 msgstr ""
-"[:doc:`/install/almalinux`] MySQL community server minimal 8.0 をサポートしま"
+"[{doc}`/install/almalinux`] MySQL community server minimal 8.0 をサポートしま"
 "した。"
 
-#, fuzzy
 msgid "This is for supporting the `mysql:8.0-oracle` Docker image."
 msgstr ""
 "このパッケージは、 ``mysql:8.0-oracle`` Dockerイメージをサポートするためのも"
@@ -2863,7 +2927,6 @@ msgstr ""
 msgid "New Features and Improvements in 13.00"
 msgstr "13.00の新規機能と改良"
 
-#, fuzzy
 msgid ""
 "Currently, we don't provide packages of Mroonga 13.00 for Percona Server.   "
 "Because there is a problem with buildong packages of Mroonga 13.00 for "
@@ -2874,13 +2937,12 @@ msgstr ""
 "Server向けパッケージのビルドに問題があるためです。この問題が解決したら、再度"
 "Percona Server向けパッケージを提供します。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.3.38, 10.4.28, 10.5.19, 10.6.12, 10.7.8, 10.8.7, 10.9.5, and "
 "10.10.3."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.38、"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.3.38、"
 "10.4.28、10.5.19、10.6.12、10.7.8、10.8.7、10.9.5、10.10.3をサポートしまし"
 "た。"
 
@@ -2890,7 +2952,6 @@ msgstr "Mroonga 12.00から 12.12までの主な変更点"
 msgid "Higlight"
 msgstr "ハイライト"
 
-#, fuzzy
 msgid ""
 "MySQL can cache specified number of tables with `table_open_cache``. "
 "Groonga's object would not be released because the cached tables are still "
@@ -2900,18 +2961,16 @@ msgstr ""
 "ができます。キャッシュされているテーブルはまだ使用中なので、Groongaのオブジェ"
 "クトも解放されません。 "
 
-#, fuzzy
 msgid ""
 "The tables with low usage would be closed if number of open tables is larger "
 "than number specified with `table_open_cache`. Groonga objects would be "
 "released at the same time with table closing if the reference count mode is "
 "enabled."
 msgstr ""
-"``table_open_cache`` で指定した個数よりも多いテーブルが開かれたとき、使用頻度"
-"が低いテーブルが閉じられます。参照カウントモードが有効なとき、そのタイミング"
-"でGroongaのオブジェクトも閉じられます。"
+"`table_open_cache` で指定した個数よりも多いテーブルが開かれたとき、使用頻度が"
+"低いテーブルが閉じられます。参照カウントモードが有効なとき、そのタイミングで"
+"Groongaのオブジェクトも閉じられます。"
 
-#, fuzzy
 msgid ""
 "For actual use, we need to adjust balance between memory usage and "
 "perfomance with value of `table_open_cache` while checking memory usage and "
@@ -2921,15 +2980,13 @@ msgid ""
 msgstr ""
 "実際に使用する際には、ステータス変数の `Open_tables <https://dev.mysql.com/"
 "doc/refman/8.0/ja/server-status-variables.html#statvar_Open_tables>`_ の値と"
-"メモリー使用量を見ながら ``table_open_cache`` の値を調整することで、メモリー"
-"使用量とパフォーマンスのバランスを調整する必要があります。なぜなら、この機能"
-"はメモリー使用量を一定に保ちますが、その分パフォーマンスが悪化するためです。"
+"メモリー使用量を見ながら `table_open_cache` の値を調整することで、メモリー使"
+"用量とパフォーマンスのバランスを調整する必要があります。なぜなら、この機能は"
+"メモリー使用量を一定に保ちますが、その分パフォーマンスが悪化するためです。"
 
-#, fuzzy
 msgid "There is how to check `Open_tables` as follows."
-msgstr "``Open_tables`` の確認方法は以下の通りです。"
+msgstr "`Open_tables` の確認方法は以下の通りです。"
 
-#, fuzzy
 msgid ""
 "Normally, all of tables in use are cached by setting `table_open_cache` "
 "larger than `Open_tables`. However, if there is limited memory, memory usage "
@@ -2942,17 +2999,16 @@ msgid ""
 "`table_open_cache` should set as much value as only to reaching memory "
 "tolerance."
 msgstr ""
-"通常は ``Open_tables`` より ``table_open_cache`` を大きくして常に使っているす"
-"べてテーブルをキャッシュします。しかし、メモリーに余裕がない環境では一部の使"
-"用頻度の低いテーブルをキャッシュから落として解放することでメモリー使用量を削"
-"減します。使用頻度の低いテーブルをキャッシュから落とすには ``Open_tables`` よ"
-"り ``table_open_cache`` を小さくします。``table_open_cache`` を小さくすればす"
-"るほど、より多くのテーブルがキャッシュから落ちます。その分メモリー使用量は減"
-"りますが、テーブルの開き直しが必要になるためパフォーマンスは悪化します。"
-"``table_open_cache`` を小さくすればするほど、パフォーマンスが悪化するので、小"
-"さくするのはメモリー使用量が許容範囲内に収まる程度までにしておきます。"
+"通常は `Open_tables` より `table_open_cache` を大きくして常に使っているすべて"
+"テーブルをキャッシュします。しかし、メモリーに余裕がない環境では一部の使用頻"
+"度の低いテーブルをキャッシュから落として解放することでメモリー使用量を削減し"
+"ます。使用頻度の低いテーブルをキャッシュから落とすには `Open_tables` より "
+"`table_open_cache` を小さくします。`table_open_cache` を小さくすればするほ"
+"ど、より多くのテーブルがキャッシュから落ちます。その分メモリー使用量は減りま"
+"すが、テーブルの開き直しが必要になるためパフォーマンスは悪化します。"
+"`table_open_cache` を小さくすればするほど、パフォーマンスが悪化するので、小さ"
+"くするのはメモリー使用量が許容範囲内に収まる程度までにしておきます。"
 
-#, fuzzy
 msgid ""
 "The reference count mode would not be enabled with variables after booting "
 "MySQL.    It is necesarry to specify values in my.cnf."
@@ -2960,7 +3016,6 @@ msgstr ""
 "MySQL起動後に変数で指定しても参照カウントモードは有効になりません。my.cnfで指"
 "定してください。"
 
-#, fuzzy
 msgid ""
 "MySQL/MariaDB can abort queries if the execution timeout parameter is "
 "specified and a execution time exceeds a time specified with the parameter. "
@@ -2969,11 +3024,10 @@ msgid ""
 msgstr ""
 "MySQL/MariaDB はクエリーの実行時間がタイムアウトパラメータで指定した時間を超"
 "過した場合、クエリーを中断することができます。タイムアウトパラメータは、"
-"MySQL では ``MAX_EXECUTION_TIME`` 、MariaDBでは ``max_statement_time`` です。"
+"MySQL では `MAX_EXECUTION_TIME` 、MariaDBでは `max_statement_time` です。"
 
-#, fuzzy
 msgid "This feature can use in `mroonga_command()` also."
-msgstr "この機能は、 ``mroonga_command()`` でも使えます。"
+msgstr "この機能は、 `mroonga_command()` でも使えます。"
 
 msgid "Summary"
 msgstr "概要"
@@ -2981,355 +3035,309 @@ msgstr "概要"
 msgid "[{ref}`release-12-12`]"
 msgstr ""
 
-#, fuzzy
 msgid "[{doc}`/install/almalinux`] Added newly support for AlmaLinux 9."
-msgstr "[:doc:`/install/almalinux`] AlmaLinux 9 を新しくサポートしました。"
+msgstr "[{doc}`/install/almalinux`] AlmaLinux 9 を新しくサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
 "[{doc}`/install/ubuntu`] Added support for MySQL 8.0.32."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
-"doc:`/install/ubuntu`] MySQL 8.0.32をサポートしました。"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
+"[{doc}`/install/ubuntu`] MySQL 8.0.32をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
 "[{doc}`/install/ubuntu`] Added support for MySQL 5.7.41"
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
-"doc:`/install/ubuntu`] MySQL 5.7.41をサポートしました。"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
+"[{doc}`/install/ubuntu`] MySQL 5.7.41をサポートしました。"
 
 msgid "[{ref}`release-12-11`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added newly support for "
 "MariaDB 10.10."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] 新しく、MariaDB 10.10をサ"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] 新しく、MariaDB 10.10をサ"
 "ポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/amazon-linux`] Added support for MariaDB 10.5.10-2.amzn2.0.2."
 msgstr ""
-"[:doc:`/install/amazon-linux`] MariaDB 10.5.10-2.amzn2.0.2をサポートしまし"
+"[{doc}`/install/amazon-linux`] MariaDB 10.5.10-2.amzn2.0.2をサポートしまし"
 "た。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/reference/server_variables`] Added a new status variable "
 "`libgroonga_support_mecab`."
 msgstr ""
-"[:doc:`/reference/server_variables`] 新しいサーバーステータス変数 "
+"[{doc}`/reference/server_variables`] 新しいサーバーステータス変数 "
 "``libgroonga_support_mecab`` を追加しました。"
 
-#, fuzzy
 msgid "[{doc}`/install/debian`] Added support for MariaDB 10.5.18."
-msgstr "[:doc:`/install/debian`] MariaDB 10.5.18をサポートしました。"
+msgstr "[{doc}`/install/debian`] MariaDB 10.5.18をサポートしました。"
 
 msgid "[{ref}`release-12-10`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.3.37, 10.4.27, 10.5.18, 10.6.11, 10.7.7, 10.8.6, 10.9.4. [GitHub "
 "#564][Reported by Josep Sanz][Patched by Tomohiro KATO]"
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.37、"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.3.37、"
 "10.4.27、10.5.18、10.6.11、10.7.7、10.8.6、10.9.4をサポートしました。 "
 "[GitHub #564][Josep Sanzさんの報告][かとうさんがパッチ提供]"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.30-22."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.30-22"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.30-22"
 "をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/centos`] Added support for Percona Server 5.7.40-43."
-msgstr "[:doc:`/install/centos`] Percona Server 5.7.40-43をサポートしました。"
+msgstr "[{doc}`/install/centos`] Percona Server 5.7.40-43をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/windows`] Added support for MariaDB 10.7, 10.8, 10.9."
-msgstr "[:doc:`/install/windows`] MariaDB 10.7、10.8、10.9をサポートしました。"
+msgstr "[{doc}`/install/windows`] MariaDB 10.7、10.8、10.9をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/windows`] Dropped support for 32bit versions."
-msgstr "[:doc:`/install/windows`] 32bitバージョンのサポートをやめました。"
+msgstr "[{doc}`/install/windows`] 32bitバージョンのサポートをやめました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/reference/udf/mroonga_highlight_html`] Added new parameters: "
 "`open_tag` and `close_tag`. [GitHub #537][Reported by ishitaka]"
 msgstr ""
-"[:doc:`/reference/udf/mroonga_highlight_html`] 新しいパラメータ ``open_tag`` "
+"[{doc}`/reference/udf/mroonga_highlight_html`] 新しいパラメータ ``open_tag`` "
 "と ``close_tag`` を追加しました。 [GitHub #537][ishitakaさんによる報告]"
 
 msgid "[{ref}`release-12-09`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.9.3."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.9.3をサポート"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.9.3をサポート"
 "しました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/ubuntu`] Added support for MySQL "
 "5.7.40."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/ubuntu`] MySQL 5.7.40をサポートしまし"
+"[{doc}`/install/centos`][{doc}`/install/ubuntu`] MySQL 5.7.40をサポートしまし"
 "た。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
 "[{doc}`/install/ubuntu`] Added support for MySQL 8.0.31."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`][:doc:`/install/debian`][:"
-"doc:`/install/ubuntu`] MySQL 8.0.31をサポートしました。"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`][{doc}`/install/debian`]"
+"[{doc}`/install/ubuntu`] MySQL 8.0.31をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/ubuntu`] Added support for MariaDB 10.6 on Ubuntu 22.04 "
 "(Jammy Jellyfish)."
 msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntu 22.04 (Jammy Jellyfish) の MariaDB 10.6 をサ"
+"[{doc}`/install/ubuntu`] Ubuntu 22.04 (Jammy Jellyfish) の MariaDB 10.6 をサ"
 "ポートしました。"
 
 msgid "[{ref}`release-12-08`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.6.10, 10.7.6 and 10.8.5."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.6.10, 10.7.6, "
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.6.10, 10.7.6, "
 "10.8.5をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/oracle-linux`] Added support for MySQL 8.0.30."
-msgstr "[:doc:`/install/oracle-linux`] MySQL 8.0.30をサポートしました。"
+msgstr "[{doc}`/install/oracle-linux`] MySQL 8.0.30をサポートしました。"
 
 msgid "[{ref}`release-12-07`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.3.36, 10.4.26, 10.5.17, 10.6.9, 10.7.5 and 10.8.4."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.36、"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.3.36、"
 "10.4.26、10.5.17、10.6.9、10.7.5、10.8.4をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 5.7.39-42."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.39-42"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 5.7.39-42"
 "をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.29-21."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.29-21"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.29-21"
 "をサポートしました。"
 
 msgid "[{ref}`release-12-06`]"
 msgstr ""
 
-#, fuzzy
 msgid "[{doc}`/install/centos`] Added support for MySQL 5.7.39."
-msgstr "[:doc:`/install/centos`] MySQL 5.7.39をサポートしました。"
+msgstr "[{doc}`/install/centos`] MySQL 5.7.39をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for MySQL "
 "8.0.30."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.30をサポートし"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MySQL 8.0.30をサポートし"
 "ました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.28-20."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.28-20"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.28-20"
 "をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.8."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.8をサポートし"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.8をサポートし"
 "ました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Dropped support for "
 "MariaDB 10.2."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.2のサポートを"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.2のサポートを"
 "やめました。"
 
-#, fuzzy
 msgid "[{doc}`/install/debian`] Dropped support for Debian 10 (buster)."
-msgstr "[:doc:`/install/debian`] Debian 10 (buster)のサポートをやめました。"
+msgstr "[{doc}`/install/debian`] Debian 10 (buster)のサポートをやめました。"
 
 msgid "[{ref}`release-12-04`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/reference/server_variables`] Add a new status variable "
 "`Mroonga_memory_map_size`."
 msgstr ""
-"[:doc:`/reference/server_variables`] 新しいサーバー変数 "
+"[{doc}`/reference/server_variables`] 新しいサーバー変数 "
 "``Mroonga_memory_map_size`` を追加しました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.28-19."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.28-19"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.28-19"
 "をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 5.7.38-41."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 5.7.38-41"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 5.7.38-41"
 "をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.2.44, 10.3.35, 10.4.25, 10.5.16, 10.6.8, and 10.7.4."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.2.44, "
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.2.44, "
 "10.3.35、10.4.25、10.5.16、10.6.8、10.7.4をサポートしました。"
 
 msgid "[{ref}`release-12-03`]"
 msgstr ""
 
-#, fuzzy
 msgid "[{doc}`/install/centos`] Added support for Percona Server 5.7.37-40."
-msgstr "[:doc:`/install/centos`] Percona Server 5.7.37-40をサポートしました。"
+msgstr "[{doc}`/install/centos`] Percona Server 5.7.37-40をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/centos`] Added support for MySQL 5.7.38."
-msgstr "[:doc:`/install/centos`] MySQL 5.7.38をサポートしました。"
+msgstr "[{doc}`/install/centos`] MySQL 5.7.38をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for MySQL "
 "8.0.29."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MySQL 8.0.29をサポートし"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MySQL 8.0.29をサポートし"
 "ました。"
 
 msgid "[{ref}`release-12-02`]"
 msgstr ""
 
-#, fuzzy
 msgid "Added support for `float32` weight vector."
-msgstr "重み付きベクターの重みに ``float32`` 型を追加しました。"
+msgstr "重み付きベクターの重みに `float32` 型を追加しました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "MariaDB 10.3.34, 10.4.24, 10.5.15, 10.6.7, and 10.7.3."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.34、"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] MariaDB 10.3.34、"
 "10.4.24、10.5.15、10.6.7、10.7.3をサポートしました。"
 
-#, fuzzy
 msgid "[{doc}`/install/centos`] Added support for MariaDB 10.2.43."
-msgstr "[:doc:`/install/centos`] MariaDB 10.2.43をサポートしました。"
+msgstr "[{doc}`/install/centos`] MariaDB 10.2.43をサポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`][{doc}`/install/almalinux`] Added support for "
 "Percona Server 8.0.27-18."
 msgstr ""
-"[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server 8.0.27-18"
+"[{doc}`/install/centos`][{doc}`/install/almalinux`] Percona Server 8.0.27-18"
 "をサポートしました。"
 
-#, fuzzy
 msgid "Added support for `MISSING_*` and `INVALID_*` flags"
-msgstr "``MISSING_*`` と ``INVALID_*`` フラグをサポートしました。"
+msgstr "`MISSING_*` と `INVALID_*` フラグをサポートしました。"
 
 msgid "[{ref}`release-12-00`]"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/ubuntu`] Added support for the latest version of mysql-"
 "server package for Ubuntu."
 msgstr ""
-"[:doc:`/install/ubuntu`] Ubuntuの mysql-server パッケージの最新バージョンをサ"
+"[{doc}`/install/ubuntu`] Ubuntuの mysql-server パッケージの最新バージョンをサ"
 "ポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/centos`] Added support for MariaDB 10.2.42, 10.3.33, "
 "10.4.23, 10.5.14, and 10.6.6."
 msgstr ""
-"[:doc:`/install/centos`] MariaDB 10.2.42、10.3.33、10.4.23、10.5.14、10.6.6を"
+"[{doc}`/install/centos`] MariaDB 10.2.42、10.3.33、10.4.23、10.5.14、10.6.6を"
 "サポートしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/almalinux`] Added support for MariaDB 10.3.33, 10.4.23, "
 "10.5.14, and 10.6.6."
 msgstr ""
-"[:doc:`/install/almalinux`] MariaDB 10.3.33、10.4.23、10.5.14、10.6.6をサポー"
+"[{doc}`/install/almalinux`] MariaDB 10.3.33、10.4.23、10.5.14、10.6.6をサポー"
 "トしました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/reference/udf/mroonga_highlight_html`] Fixed memory leak when we use "
 "`mroonga_highlight_html()` with `AS query`."
 msgstr ""
-"[:doc:`/reference/udf/mroonga_highlight_html`] ``mroonga_highlight_html`` を "
+"[{doc}`/reference/udf/mroonga_highlight_html`] ``mroonga_highlight_html`` を "
 "``AS query`` と一緒に使った際にメモリーリークする問題を修正しました。"
 
-#, fuzzy
 msgid ""
 "Fixed a bug that `mroonga_command()` returns results with hex dump for MySQL "
 "8.0 and above."
 msgstr ""
-"MySQL 8.0 以上を使用しているとき、``mroonga_command()`` が16進数ダンプで結果"
-"を返す問題を修正しました。"
+"MySQL 8.0 以上を使用しているとき、`mroonga_command()` が16進数ダンプで結果を"
+"返す問題を修正しました。"
 
-#, fuzzy
 msgid ""
 "[{doc}`/install/almalinux`] Fixed an installation document for Mroonga on "
 "AlmaLinux 8. [Gitter/ja:62fe4ca5b16e8236e3ef225c][Reported by handmound]"
 msgstr ""
-"[:doc:`/install/almalinux`] AlmaLinux 8 向けMroongaのインストール手順を修正し"
+"[{doc}`/install/almalinux`] AlmaLinux 8 向けMroongaのインストール手順を修正し"
 "ました。[Gitter/ja:62fe4ca5b16e8236e3ef225c][handmoundさんの報告]"
 
 msgid "News - 2 series"
-msgstr ""
+msgstr "お知らせ - 2系"
 
 msgid "Release 2.10 - 2012/12/29"
 msgstr "2.10リリース - 2012/12/29"
@@ -4210,7 +4218,7 @@ msgid "Tomoatsu Shimada"
 msgstr "Tomoatsu Shimadaさん"
 
 msgid "News - 3 series"
-msgstr ""
+msgstr "お知らせ - 3系"
 
 msgid "Release 3.12 - 2014/01/29"
 msgstr "3.12リリース - 2014/01/29"
@@ -5022,7 +5030,7 @@ msgstr ""
 "さんが報告]"
 
 msgid "News - 4 series"
-msgstr ""
+msgstr "お知らせ - 4系"
 
 msgid "Release 4.10 - 2015-01-29"
 msgstr "4.10リリース - 2015-01-29"
@@ -5710,7 +5718,7 @@ msgid "Masahiro Nagano"
 msgstr "長野雅広さん"
 
 msgid "News - 5 series"
-msgstr ""
+msgstr "お知らせ - 5系"
 
 msgid "Release 5.12 - 2016-01-29"
 msgstr "5.12リリース - 2016-01-29"
@@ -6466,7 +6474,7 @@ msgid "Kohei Aochi"
 msgstr "青地さん"
 
 msgid "News - 6 series"
-msgstr ""
+msgstr "お知らせ - 6系"
 
 msgid "Release 6.13 - 2017-01-13"
 msgstr "6.13リリース - 2017-01-13"
@@ -6853,7 +6861,7 @@ msgstr ""
 "``CREATE FUNCTION`` を追加しました。 [GitHub#94][村上さんがパッチ提供]"
 
 msgid "News - 7 series"
-msgstr ""
+msgstr "お知らせ - 7系"
 
 msgid "Release 7.11 - 2018-01-29"
 msgstr "7.11リリース - 2018-01-29"
@@ -7449,7 +7457,7 @@ msgstr ""
 "[GitHub#130] [Reported by kitora]"
 
 msgid "News - 8 series"
-msgstr ""
+msgstr "お知らせ - 8系"
 
 msgid "Release 8.09 - 2018-11-29"
 msgstr "8.09リリース - 2018-11-29"
@@ -7801,7 +7809,7 @@ msgid "Iwo"
 msgstr "Iwoさん"
 
 msgid "News - 9 series"
-msgstr ""
+msgstr "お知らせ - 9系"
 
 msgid "Release 9.12 - 2020-01-29"
 msgstr "9.12リリース - 2020-01-29"
@@ -8268,86 +8276,3 @@ msgstr "[rpm][centos] MySQL 5.7.25をサポートしました。"
 
 msgid "[rpm][centos] Supported MySQL 5.6.43."
 msgstr "[rpm][centos] MySQL 5.6.43をサポートしました。"
-
-#, fuzzy
-#~ msgid ""
-#~ ":::{note}     Currently, we don't provide packages of Mroonga 13.00 for "
-#~ "Percona Server.     Because there is a problem with buildong packages of "
-#~ "Mroonga 13.00 for Percona Server.     If we will resolve this problem, we "
-#~ "will provide packages of Mroonga for Percona Server again.   :::"
-#~ msgstr ""
-#~ "現在、Percona Server向けMroonga 13.00のパッケージを提供していません。"
-#~ "Percona Server向けパッケージのビルドに問題があるためです。この問題が解決し"
-#~ "たら、再度Percona Server向けパッケージを提供します。"
-
-#, fuzzy
-#~ msgid ""
-#~ "::note info    The reference count mode would not be enabled with "
-#~ "variables after booting MySQL.    It is necesarry to specify values in my."
-#~ "cnf."
-#~ msgstr ""
-#~ "MySQL起動後に変数で指定しても参照カウントモードは有効になりません。my.cnf"
-#~ "で指定してください。"
-
-#~ msgid ""
-#~ "Currently, we don't provide packages of Mroonga 13.00 for Percona Server. "
-#~ "Because there is a problem with buildong packages of Mroonga 13.00 for "
-#~ "Percona Server. If we will resolve this problem, we will provide packages "
-#~ "of Mroonga for Percona Server again."
-#~ msgstr ""
-#~ "現在、Percona Server向けMroonga 13.00のパッケージを提供していません。"
-#~ "Percona Server向けパッケージのビルドに問題があるためです。この問題が解決し"
-#~ "たら、再度Percona Server向けパッケージを提供します。"
-
-#~ msgid "Past releases"
-#~ msgstr "過去のリリース"
-
-#~ msgid "This is for supporting the ``mysql:8.0-oracle`` Docker image."
-#~ msgstr ""
-#~ "このパッケージは、 ``mysql:8.0-oracle`` Dockerイメージをサポートするための"
-#~ "ものです。"
-
-#~ msgid ""
-#~ "[:doc:`/install/almalinux`] Added support for MySQL community server "
-#~ "minimal 8.0."
-#~ msgstr ""
-#~ "[:doc:`/install/almalinux`] MySQL community server minimal 8.0 をサポート"
-#~ "しました。"
-
-#~ msgid ""
-#~ "[:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.18-1.amzn2."
-#~ msgstr ""
-#~ "[:doc:`/install/amazon-linux`] MariaDB 10.5.18-1.amzn2をサポートしました。"
-
-#~ msgid ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added newly support "
-#~ "for MariaDB 10.11 [GitHub#606][Patched by Josep Sanz]"
-#~ msgstr ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] 新しくMariaDB 10.11を"
-#~ "サポートしました。 [GitHub#606][Patched by Josep Sanz]"
-
-#~ msgid ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
-#~ "MariaDB 10.3.38, 10.4.28, 10.5.19, 10.6.12, 10.7.8, 10.8.7, 10.9.5, and "
-#~ "10.10.3."
-#~ msgstr ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] MariaDB 10.3.38、"
-#~ "10.4.28、10.5.19、10.6.12、10.7.8、10.8.7、10.9.5、10.10.3をサポートしまし"
-#~ "た。"
-
-#~ msgid ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
-#~ "Percona Server 5.7.41-44."
-#~ msgstr ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server "
-#~ "5.7.41-44をサポートしました。"
-
-#~ msgid ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Added support for "
-#~ "Percona Server 8.0.32-24."
-#~ msgstr ""
-#~ "[:doc:`/install/centos`][:doc:`/install/almalinux`] Percona Server "
-#~ "8.0.32-24をサポートしました。"
-
-#~ msgid "[:doc:`/install/ubuntu`] Dropped support for Ubuntu 18.04."
-#~ msgstr "[:doc:`/install/ubuntu`] Ubuntu 18.04 のサポートをやめました。"
