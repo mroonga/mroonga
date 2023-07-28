@@ -54,20 +54,6 @@ Description: A fast fulltext searchable storage engine for MariaDB.
  This provides "Mroonga" storage engine. It means you can use
  "ENGINE = Mroonga" in "CREATE TABLE".
 
-Package: mariadb-server-mroonga
-Section: oldlibs
-Architecture: any
-Priority: optional
-Depends:
-	mariadb-mroonga (= ${binary:Version})
-Description: A fast fulltext searchable storage engine for MariaDB.
- This package is a metapackage depending on the latest version.
- Mroonga is a fast fulltext searchable storage engine for MariaDB.
- It is based on Groonga, a fast fulltext search engine and column store.
- Groonga is good at real time update.
- .
- This is a trnsitional package. This can safely be removed.
-
 Package: mariadb-10.11-mroonga
 Section: database
 Architecture: any
