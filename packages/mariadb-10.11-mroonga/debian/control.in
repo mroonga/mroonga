@@ -3,7 +3,7 @@ Section: database
 Priority: optional
 Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
 Build-Depends:
-	debhelper (>= 10),
+	debhelper (>= 13),
 	autotools-dev,
 	pkg-config,
 	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
