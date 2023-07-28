@@ -61,14 +61,12 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def detect_mysql_version_debian_debian(code_name)
-    package_info_url = ""
-    if (code_name == "bookworm") && (@mysql_package.start_with?("mariadb-"))
-      package_info_url =
-        "https://sources.debian.org/api/src/mariadb/"
-    else
-      package_info_url =
-        "https://sources.debian.org/api/src/#{@mysql_package}/"
+    source_package_name = @mysql_package
+    if code_name == "bookworm" and @mysql_package.start_with?("mariadb-")
+      source_package_name = "mariadb"
     end
+    package_info_url =
+      "https://sources.debian.org/api/src/#{source_package_name}/"
     URI.open(package_info_url) do |response|
       info = JSON.parse(response.read)
       info["versions"].each do |version|
