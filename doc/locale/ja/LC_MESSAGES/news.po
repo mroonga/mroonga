@@ -2810,6 +2810,30 @@ msgstr ""
 msgid "[{doc}`/install/debian`] Added support for MariaDB 10.5.19."
 msgstr "[{doc}`/install/debian`] MariaDB 10.5.19をサポートしました。"
 
+msgid "[{doc}`/install/debian`] Added newly support for Debian 12 (bookworm)."
+msgstr "[{doc}`/install/debian`] Debian 12 (bookworm)をサポートしました。"
+
+msgid "However, we only support Mroonga with MariaDB 10.11 in this release."
+msgstr ""
+"今回のリリースでは、 MariaDB 10.11 向けのパッケージのみサポートしています。"
+
+msgid ""
+"Because the source of MySQL Community Server for Debian 12 doesn't exist in "
+"MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/) currently."
+msgstr ""
+"現状、 MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/) に "
+"Debian 12 向けの MySQL Community Server 8.0 のソースコードが存在しないためで"
+"す。"
+
+msgid ""
+"Therefore, we don't support Mroonga with MySQL community server 8.0 on "
+"Debian 12 temporarily. We will support Mroonga with MySQL community server "
+"8.0 after the source of it for Debian 12 is available."
+msgstr ""
+"したがって、MySQL community server 8.0 向けのMroongaパッケージは一時的にサ"
+"ポートしていません。MySQL APT Repository で Debian 12 向けの MySQL Community "
+"Server のソースコードが利用可能になった後に提供予定です。"
+
 msgid "Dropped support for MariaDB 10.3."
 msgstr "MariaDB 10.3のサポートをやめました。"
 
