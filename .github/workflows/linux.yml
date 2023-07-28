@@ -489,7 +489,7 @@ jobs:
             package: mysql-community-8.0
 # Currently, the source of MySQL Community Server for Debian 12 doesn't exist
 # in MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/)
-# Therefore, these jobs disable temporarily.
+# Therefore, these jobs are disabled temporarily.
 # We will enable these jobs after the source of MySQL Community Server for Debian 12 is availabled.
 #          - os: debian-bookworm
 #            package-type: apt
