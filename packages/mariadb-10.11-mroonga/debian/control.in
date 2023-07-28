@@ -35,7 +35,7 @@ Build-Depends:
 	unixodbc-dev,
 	wget,
 	zlib1g-dev
-Standards-Version: 3.9.1
+Standards-Version: 4.6.2
 Homepage: http://mroonga.org/
 
 Package: mariadb-mroonga
