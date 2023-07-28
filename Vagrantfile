@@ -19,6 +19,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :box => "bento/debian-11",
     },
     {
+      :id => "debian-bookworm",
+      :box => "bento/debian-12",
+    },
+    {
       :id => "almalinux-8",
       :box => "bento/almalinux-8",
     },

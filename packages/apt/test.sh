@@ -33,6 +33,19 @@ architecture=$(dpkg --print-architecture)
 wget \
   https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
+
+case ${distribution}-${code_name} in
+  debian-bullseye|ubuntu-*)
+    :
+    ;;
+  *)
+    wget \
+      https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    rm apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    ;;
+esac
+
 sudo apt update
 
 mysql_community_install_mysql_apt_config() {
@@ -189,6 +202,14 @@ if [ -n "${old_package}" ]; then
     ${package} \
     "${mysql_package_prefix}-*"
   sudo rm -rf /var/lib/mysql
+
+  # Disable upgrade test for first time packages.
+  case ${code_name} in
+    bookworm) # TODO: Remove this after 13.04 release.
+      exit
+      ;;
+  esac
+
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   case ${package} in
     mysql-community-8.*)

@@ -5,8 +5,10 @@ class MariaDB1011MroongaPackageTask < MroongaPackageTask
     super("mariadb-10.11")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    [
+      "debian-bookworm",
+    ]
   end
 
   def enable_ubuntu?

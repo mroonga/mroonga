@@ -1,0 +1,4 @@
+usr/lib/mysql/plugin/ha_mroonga.a
+usr/lib/mysql/plugin/ha_mroonga.la
+usr/share/man/ja/man1/mroonga.1
+usr/share/man/man1/mroonga.1
