@@ -41,8 +41,6 @@ Homepage: https://mroonga.org/
 Package: mariadb-mroonga
 Section: database
 Architecture: any
-Replaces: mariadb-server-mroonga (<< 11.02-1)
-Breaks: mariadb-server-mroonga (<< 11.02-1)
 Depends:
 	mariadb-10.11-mroonga (= ${binary:Version}),
 	mariadb-server (= @MYSQL_VERSION@)
