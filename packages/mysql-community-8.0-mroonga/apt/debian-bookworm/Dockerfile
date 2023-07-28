@@ -18,6 +18,9 @@ RUN \
     ca-certificates \
     lsb-release \
     wget && \
+  wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
+  apt install -y -V ${quiet} ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
+  rm apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb && \
   wget https://packages.groonga.org/$(lsb_release --id --short | tr 'A-Z' 'a-z')/groonga-apt-source-latest-$(lsb_release --codename --short).deb && \
   wget https://repo.mysql.com/mysql-apt-config_0.8.22-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
