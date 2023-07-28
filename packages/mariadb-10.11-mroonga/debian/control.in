@@ -3,38 +3,38 @@ Section: database
 Priority: optional
 Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
 Build-Depends:
-	debhelper (>= 13),
+	autoconf-archive,
 	autotools-dev,
-	pkg-config,
-	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
-	groonga-normalizer-mysql,
-	libmariadb-client-lgpl-dev-compat,
-	libmariadbd-dev,
-	libssl-dev,
-	wget,
-	lsb-release,
 	bison,
 	chrpath,
 	cmake,
+	debhelper (>= 13),
 	dh-apparmor,
 	gdb,
+	groonga-normalizer-mysql,
 	libaio-dev [linux-any],
 	libboost-dev,
+	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	libjemalloc-dev [linux-any],
 	libjudy-dev,
+	libmariadb-client-lgpl-dev-compat,
+	libmariadbd-dev,
 	libncurses5-dev,
 	libpam0g-dev,
 	libpcre3-dev,
 	libreadline-dev,
 	libsnappy-dev,
+	libssl-dev,
 	libxml2-dev,
 	lsb-release,
+	lsb-release,
 	perl,
+	pkg-config,
 	po-debconf,
 	psmisc,
 	unixodbc-dev,
-	zlib1g-dev,
-	autoconf-archive
+	wget,
+	zlib1g-dev
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
@@ -78,10 +78,10 @@ Breaks: mariadb-server-10.11-mroonga (<< 11.03-1)
 Depends:
 	${misc:Depends},
 	${shlibs:Depends},
+	groonga-normalizer-mysql,
 	libgroonga0 (>= @REQUIRED_GROONGA_VERSION@),
 	mariadb-server (= @MYSQL_VERSION@),
-	mariadb-server-core (= @MYSQL_VERSION@),
-	groonga-normalizer-mysql
+	mariadb-server-core (= @MYSQL_VERSION@)
 Conflicts:
 	mariadb-plugin-mroonga
 Description: A fast fulltext searchable storage engine for MariaDB 10.11.
