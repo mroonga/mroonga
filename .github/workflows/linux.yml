@@ -93,6 +93,8 @@ jobs:
         run: |
           gh release create ${GITHUB_REF_NAME} \
             mroonga-*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Build
