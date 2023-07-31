@@ -88,11 +88,10 @@ jobs:
 
       # Release
       - name: Upload to release
-        uses: softprops/action-gh-release@v1
         if: |
           startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
+        run: |
+          gh release create ${GITHUB_REF_NAME} \
             mroonga-*.tar.gz
 
   build:
@@ -337,7 +336,7 @@ jobs:
         if: |
           startsWith(github.ref, 'refs/tags/')
         run: |
-          gh release create ${GITHUB_REF_NAME} \
+          gh release upload ${GITHUB_REF_NAME} \
             ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
