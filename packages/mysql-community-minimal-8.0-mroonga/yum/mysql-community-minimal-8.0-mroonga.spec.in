@@ -98,6 +98,9 @@ This is a trnsitional package. This can safely be removed.
 %doc README COPYING
 
 %changelog
+* Tue Aug 01 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-1
+- New upstream release.
+
 * Fri Jul 28 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.04-1
 - New upstream release.
 
