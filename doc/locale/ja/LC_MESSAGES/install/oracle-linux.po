@@ -1,0 +1,59 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Oracle Linux"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga related RPM packages on "
+"AlmaLinux. You can install them by ``dnf``."
+msgstr ""
+
+msgid "Oracle Linux 8 (with the Oracle MySQL 8.0 package)"
+msgstr ""
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on Oracle Linux 8 since "
+"Mroonga 12.08 release."
+msgstr ""
+
+msgid "There are already known issues about MySQL 8.0."
+msgstr ""
+
+msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported yet"
+msgstr ""
+
+msgid ""
+":doc:`/tutorial/storage`  Storage mode does not support the following "
+"feature."
+msgstr ""
+
+msgid "The feature of relevant to the optimization."
+msgstr ""
+
+msgid "Install::"
+msgstr ""
+
+msgid ""
+"If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a "
+"tokenizer, install groonga-tokenizer-mecab package."
+msgstr ""
+
+msgid "Install groonga-tokenizer-mecab package::"
+msgstr ""
