@@ -1,0 +1,181 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "How to contribute in documentation topics"
+msgstr ""
+
+msgid "We use Sphinx for documentation tool."
+msgstr ""
+
+msgid ""
+"具体的にどんなことをやればいいのかを説明します。基本的にはドキュメントのソー"
+"スファイルごとにpull requestを送ってもらうと進めやすいです。"
+msgstr ""
+
+msgid ""
+"対象となるファイルはdoc/sourceディレクトリ以下の拡張子が「.rst」となっている"
+"ファイルです。"
+msgstr ""
+
+msgid ""
+"あまりGitHubでの作業に慣れていなくてもできるように、「最初にやること」と「作"
+"業ごとにやること」、「ファイルごとにやること」に分けて順に説明します。"
+msgstr ""
+
+msgid "The things you must do at first"
+msgstr ""
+
+msgid "The things you need to do every tasks"
+msgstr ""
+
+msgid "The things you need to do every files"
+msgstr ""
+
+msgid "以下では、最初に一度だけ実施しておけば良いことを説明します。"
+msgstr ""
+
+msgid "Required softwares"
+msgstr ""
+
+msgid "TODO"
+msgstr ""
+
+msgid "Git configuration"
+msgstr ""
+
+msgid ""
+"まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定"
+"はすでに完了しているかも知れません。その場合には飛ばして構いません。::"
+msgstr ""
+
+msgid ""
+"上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメール"
+"アドレスを設定します。"
+msgstr ""
+
+msgid "Fork on GitHub"
+msgstr ""
+
+msgid ""
+"First, create GitHub account. If your GitHub account is ready, login to "
+"GitHub and access following URL."
+msgstr ""
+
+msgid ""
+"`Fork the Mroonga repository <https://github.com/mroonga/mroonga/fork>`_"
+msgstr ""
+
+msgid "Fork リポジトリ選択画面でご自分のリポジトリへとforkしてください。"
+msgstr ""
+
+msgid "Initial configuration for working repository"
+msgstr ""
+
+msgid ""
+"Clone Mroonga repository to working directory. Don't forget to do \"Git "
+"configuration\".::"
+msgstr ""
+
+msgid "Initial configuration for building documentation"
+msgstr ""
+
+msgid ""
+"Execute following commands to prepare for generating Mroonga documentation::"
+msgstr ""
+
+msgid "Next step is \"The things you need to do every tasks\"."
+msgstr ""
+
+msgid "以下では作業ごとにやることを説明します。"
+msgstr ""
+
+msgid "Follow the upstream"
+msgstr ""
+
+msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。::"
+msgstr ""
+
+msgid "最新の状態に追従できたら、「ファイルごとにやること」へと進みます。"
+msgstr ""
+
+msgid ""
+"以下では、例えば http://mroonga.org/docs/characteristic.html を更新する場合で"
+"説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下"
+"にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更"
+"する例で説明します。"
+msgstr ""
+
+msgid "Create working branch"
+msgstr ""
+
+msgid "Create a working branch. Use meaningful branch name."
+msgstr ""
+
+msgid "% git checkout -b use-capitalized-notation-characteristic"
+msgstr ""
+
+msgid "Editing text"
+msgstr ""
+
+msgid "Fix typos, styles or write a new document for Mroonga."
+msgstr ""
+
+msgid "Confirm generated document"
+msgstr ""
+
+msgid ""
+"マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマン"
+"ドを実行します。::"
+msgstr ""
+
+msgid ""
+"いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されてい"
+"ればOKです。::"
+msgstr ""
+
+msgid "Commit"
+msgstr ""
+
+msgid "HTMLに問題がないことを確認できたら、コミットします。::"
+msgstr ""
+
+msgid "コミットするときのメッセージについては、例えば以下のようにします。::"
+msgstr ""
+
+msgid "Push and pull request"
+msgstr ""
+
+msgid "Publish your changes to your own GitHub repository::"
+msgstr ""
+
+msgid ""
+"Note that ``use-capitalized-notation-characteristic`` is already created "
+"branch in advance."
+msgstr ""
+
+msgid ""
+"ブラウザで https://github.com/(GitHubのアカウント)/mroonga を開くと「 @use-"
+"capitalized-notation-characteristic@ 」ブランチをpull requestする！みたいなUI"
+"ができているので、そこのボタンを押してpull requestしてください。入力フォーム"
+"がでてきますが、コミットしたときメッセージで十分なのでそのままpull requestし"
+"てOKです！"
+msgstr ""
+
+msgid "これで、ひととおりの作業は完了しました。"
+msgstr ""
