@@ -1,0 +1,487 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 9 series"
+msgstr "お知らせ - 9系"
+
+msgid "Release 9.12 - 2020-01-29"
+msgstr "9.12リリース - 2020-01-29"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.47, 5.7.29, 8.0.19"
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.47, 5.7.29, 8.0.19をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.44, 10.2.31, "
+"10.3.22, 10.4.12."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.44、10.2.31、10.3.22、10.4.12をサポート"
+"しました。"
+
+msgid "Fixed a build error when we built by using source of MySQL 8.0.19."
+msgstr "MySQL 8.0.19のソースを使ったビルドがエラーになる問題を修正しました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.47."
+msgstr "[:doc:`/install/centos`] Percona Server 5.6.47をサポートしました。"
+
+msgid "Release 9.11 - 2020-01-08"
+msgstr "9.11リリース - 2020-01-08"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 14.04 LTS (Trusty Tahr) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 14.04 LTS (Trusty Tahr) のサポートをやめまし"
+"た。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 18.10 (Cosmic Cuttlefish) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.10 (Cosmic Cuttlefish) のサポートをやめま"
+"した。"
+
+msgid "[:doc:`/install/centos`] Added how to install for CentOS 8."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 8向けのインストール方法を追記しました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.2.30, 10.3.21, 10.4.11."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.30、10.3.21、10.4.11をサポートしまし"
+"た。"
+
+msgid ""
+"Applied a patch for visualizing the shutdown process of InnoDB into MariaDB "
+"10.3 and 10.4."
+msgstr ""
+"InnoDBのシャットダウンプロセスを可視化するためのパッチをMariaDB 10.3と10.4に"
+"適用しました。"
+
+msgid ""
+"This is a temporary change. We will remove this modify in a future version."
+msgstr "この変更は一時的なものです。将来のバージョンで削除する予定です。"
+
+msgid "This modify Increasing outputted logs when InnoDB shutdown."
+msgstr ""
+"この変更によって、InnoDBのシャットダウン時に出力されるログが増加します。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Added support for Ubuntu 16.04 (Xenial Xerus) that "
+"was missing."
+msgstr ""
+"[:doc:`/install/ubuntu`] 不足していた Ubuntu 16.04 (Xenial Xerus) のサポート"
+"を追加しました。"
+
+msgid "Release 9.10 - 2019-11-29"
+msgstr "9.10リリース - 2019-11-29"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.43, 10.2.29, "
+"10.3.20, 10.4.10"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.43、10.2.29、10.3.20、10.4.10をサポート"
+"しました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.3.20, 10.4.10, and "
+"MySQL 8.0.18 on CentOS 8."
+msgstr ""
+"[:doc:`/install/centos`] CentOS8のMariaDB 10.3.20と10.4.10、MySQL 8.0.18をサ"
+"ポートしました。"
+
+msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.10 (Eoan Ermine)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 19.10 (Eoan Ermine)をサポートしました。"
+
+msgid ""
+"Fixed a bug that ``dpkg --configure`` will fail when we install the package "
+"on Ubuntu 18.04 on WSL. [GitHub#282][Patched by ochaochaocha3]"
+msgstr ""
+"WSL上のUbuntu 18.04でパッケージインストール時に dpkg --configure が失敗する問"
+"題を修正しました。 [GitHub#282][ochaochaocha3さんがパッチ提供]"
+
+msgid "ochaochaocha3"
+msgstr "ochaochaocha3さん"
+
+msgid "Release 9.09 - 2019-10-30"
+msgstr "9.09リリース - 2019-10-30"
+
+msgid ""
+"Maybe performance decreases from this version. Therefore, If performance "
+"decreases than before, please report us with reproducible steps."
+msgstr ""
+"今回のバージョンからパフォーマンスが低下しているかもしれません。もし、以前よ"
+"りパフォーマンスが低下していたら、是非、再現手順を報告してほしいです。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.46, 5.7.28, and "
+"8.0.18(with restrictions)."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.46と5.7.28とMySQL 8.0.18(制限あり)をサポー"
+"トしました。"
+
+msgid "Fixed a build error a package for MySQL 8.0.18."
+msgstr "MySQL 8.0.18向けのパッケージのビルドエラーを修正しました。"
+
+msgid "Release 9.08 - 2019-09-27"
+msgstr "9.08リリース - 2019-09-27"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 5.5.64, 10.2.27, 10.3.18, "
+"and 10.4.8"
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 5.5.64、10.2.27、10.3.18、10.4.8をサポートし"
+"ました。"
+
+msgid "[:doc:`/install/centos`] Dropped 32-bit package support on CentOS 6."
+msgstr ""
+"[:doc:`/install/centos`] CentOS 6の32-bitパッケージのサポートをやめました。"
+
+msgid ""
+"[:doc:`/install/debian`] Fixed that can't install mariadb-server-10.3-"
+"mroonga in Debian 10(buster)."
+msgstr ""
+"[:doc:`/install/debian`] Debian 10(buster) に mariadb-server-10.3-mroonga を"
+"インストールできない問題を修正しました。"
+
+msgid "kajiys"
+msgstr "kajiysさん"
+
+msgid "bizlevel"
+msgstr "bizlevelさん"
+
+msgid "Release 9.07 - 2019-08-29"
+msgstr "9.07リリース - 2019-08-29"
+
+msgid ""
+"[:doc:`/install/debian`] Added a install document for Debian 10(buster)."
+msgstr ""
+"[:doc:`/install/debian`] Debian 10(buster)のインストールドキュメントを追加し"
+"ました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MariaDB 10.1.41, 10.2.26, "
+"10.3.17, and 10.4.7."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.41、10.2.26、10.3.17、10.4.7をサポート"
+"しました。"
+
+msgid ""
+"[:doc:`/reference/server_variables`] Added a document for "
+"``mroonga_query_log_file``."
+msgstr ""
+"[:doc:`/reference/server_variables`] ``mroonga_query_log_file`` のドキュメン"
+"トを追加しました。 "
+
+msgid ""
+"[:doc:`/install/others`] Added a document about how to uninstall Mroonga. "
+"[GitHub#135][Patched by ryfjwr]"
+msgstr ""
+"[:doc:`/install/ubuntu`] Mroongaのアンインストール方法についてのドキュメント"
+"を追加しました。 [GitHub#135][ryfjwrさんがパッチ提供]"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Added a document about how to use regular "
+"expression search."
+msgstr ""
+"[:doc:`/tutorial/storage`] 正規表現検索の使い方についてのドキュメントを追加し"
+"ました。 "
+
+msgid "Dropped support for MariaDB 10.0"
+msgstr "MariaDB 10.0のサポートをやめました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for Percona Server 5.6.45 and 5.7.27"
+msgstr ""
+"[:doc:`/install/centos`] Percona Server 5.6.45、5.7.27をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Dropped support for MariaDB 10.x on CentOS 6"
+msgstr ""
+"[:doc:`/install/centos`] CentOS 6でMariaDB 10.x のサポートをやめました。"
+
+msgid "ryfjwr"
+msgstr "ryfjwrさん"
+
+msgid "Release 9.05 - 2019-07-30"
+msgstr "9.05リリース - 2019-07-30"
+
+msgid ""
+"[:doc:`/install/centos`] Added a description about current limitation with "
+"MySQL 8.0."
+msgstr "[:doc:`/install/centos`] MySQL 8.0における制限事項を追記しました。"
+
+msgid ""
+"[:doc:`/install/centos`] Added support for MySQL 5.6.45, 5.7.27 and 8.0.17."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.45と5.7.27とMySQL 8.0.17(制限あり)をサポー"
+"トしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Fixed a wrong ``mysql80-comunity-release`` package "
+"name. [groonga-dev,04759][Reported by Kagami Hiroshi]"
+msgstr ""
+"[:doc:`/install/centos`] ``mysql80-comunity-release`` のパッケージ名が間違っ"
+"ていたのを修正しました。[groonga-dev,04759][各務さんが報告]"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Fixed an unique index update bug. This bug causes "
+"duplicated key error when the following conditions are met."
+msgstr ""
+"[:doc:`/tutorial/storage`] ユニークインデックスを更新する際の不具合を修正しま"
+"した。以下の条件を満たすとキーの重複エラーが発生します。"
+
+# f574aa5f69b9481dbc1a9a7574b5ec09
+msgid "An unique index is created against multiple column index"
+msgstr "ユニークインデックスをマルチカラムに対して作成する。"
+
+msgid "partial unique key column is updated"
+msgstr "ユニークキーのカラムの一部が更新される。"
+
+msgid ""
+"Note that if you already created an unique index, you must recreate target "
+"tables because unique index may have garbage entries. We recommend to "
+"recreate an target table with dump and restore, or execute ``ALTER TABLE "
+"(TABLE_NAME) FORCE``."
+msgstr ""
+"すでにユニークインデックスを作成している場合には、作成したインデックスにゴミ"
+"が残っている可能性があるので該当するテーブルを再作成してください。ダンプ・リ"
+"ストアするか、 ``ALTER TABLE (TABLE_NAME) FORCE`` で再作成することをおすすめ"
+"します。"
+
+msgid ""
+"[mysql8.0] Added a support for ``TIMESTAMP`` [groonga-dev,04763][Reported by "
+"Kagami Hiroshi]"
+msgstr ""
+"[mysql8.0] ``TIMESTAMP`` 型をサポートしました。[groonga-dev,04763][各務さんが"
+"報告]"
+
+msgid "Release 9.04 - 2019-06-29"
+msgstr "9.04リリース - 2019-06-29"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.26."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.26をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.25/10.3.16."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.25/10.3.16をサポートしました。"
+
+msgid "[:doc:`/install/centos`][experimental] Added support for MySQL 8.0.16."
+msgstr "[:doc:`/install/centos`][実験的] MySQL 8.0.16をサポートしました。"
+
+msgid ""
+"Fixed a infinite loop bug. This bug is occurred when invalid flag is "
+"specified such as ``FULLTEXT INDEX (...) COMMENT 'index_flags \"INVALID|"
+"WITH_SECTION\"'``."
+msgstr ""
+"無限ループすることがある不具合を修正しました。この不具合は ``FULLTEXT INDEX "
+"(...) COMMENT 'index_flags \"INVALID|WITH_SECTION\"'`` のようにフラグの指定が"
+"間違っていると発生します。"
+
+msgid "[windows] Fixed a inappropriate pdb path with MariaDB 10.2/10.3."
+msgstr ""
+"[windows] MariaDB 10.2/10.3のpdbのインストール先のパスの誤りを修正しました。"
+
+msgid ""
+"[:doc:`/install/others`] Fixed a typo about missing appropriate account name "
+"in plugin install instruction."
+msgstr ""
+"[:doc:`/install/others`] プラグインのインストール手順でアカウントの指定がない"
+"のを修正しました。"
+
+msgid "Fixed a crash bug with ``((MATCH OR MATCH) AND (MATCH))`` query."
+msgstr ""
+"クラッシュする不具合を修正しました。 ``((MATCH OR MATCH) AND (MATCH))`` とい"
+"うクエリーのパターンで発生します。"
+
+msgid "Release 9.03 - 2019-05-29"
+msgstr "9.03リリース - 2019-05-29"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Updated example to use ``tokenizer \"XXX\"` in "
+"``COMMENT`` because ``default_tokenizer \"XXX\"`` is deprecated since 9.01."
+msgstr ""
+"[:doc:`/tutorial/storage`] サンプルの ``COMMENT`` では ``tokenizer \"XXX\"` "
+"を使うようにしました。``default_tokenizer \"XXX\"`` は9.01から非推奨なためで"
+"す。"
+
+msgid ""
+"[:doc:`/install/windows`] Added support to provide MariaDB 10.1, 10.2 zip "
+"package again."
+msgstr ""
+"[:doc:`/install/windows`] MariaDB 10.1と10.2のzipパッケージを再びサポートしま"
+"した。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.3.14 and 10.3.15."
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.14と10.3.15をサポートしました。"
+
+msgid ""
+"[:doc:`/install/debian`] Updated install instruction for copy and paste "
+"friendly."
+msgstr "[:doc:`/install/debian`] インストール手順をコピペしやすくしました。"
+
+msgid ""
+"Added support for ``INDEX_LARGE`` flag such as ``COMMENT 'flags \"INDEX_LARGE"
+"\"'`` syntax."
+msgstr ""
+"``COMMENT 'flags \"INDEX_LARGE\"'`` というように指定する ``INDEX_LARGE`` フラ"
+"グをサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.24."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.24をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.1.40."
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.40をサポートしました。"
+
+msgid "[:doc:`/install/ubuntu`] Added support for Ubuntu 19.04 (Disco Dingo)"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 19.04 (Disco Dingo)をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.6.44."
+msgstr "[:doc:`/install/centos`] Percona Server 5.6.44をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MySQL 5.6.44 and 5.7.26."
+msgstr "[:doc:`/install/centos`] MySQL 5.6.44と5.7.26をサポートしました。"
+
+msgid "Release 9.01 - 2019-03-29"
+msgstr "9.01リリース - 2019-03-29"
+
+msgid "[storage] Added support for tokenizer options."
+msgstr "[ストレージ] トークナイザーのオプション指定をサポートしました。"
+
+msgid ""
+"For example, you can specify tokenizer options in COMMENT section such as "
+"``CREATE TABLE foo (...) COMMENT='tokenizer \"TokenNgram(''n'', 4)\"'``."
+msgstr ""
+"例えば、 COMMENT にトークナイザーのオプションを ``CREATE TABLE foo (...) "
+"COMMENT='tokenizer \"TokenNgram('n', 4)\"'`` などと指定できます。"
+
+msgid "[mariadb] Added support for \"tokenizer\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメーターとして \"tokenizer\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"tokenizer\" such as ``CREATE TABLE foo (...) "
+"TOKENIZER='TokenNgram(\"n\", 4)'``."
+msgstr ""
+"例えば、 トークナイザーを ``CREATE TABLE foo (...) TOKENIZER='TokenNgram(\"n"
+"\", 4)'``  などと指定できます。"
+
+msgid "[storage] Added support for tokenizer parameter in comment."
+msgstr ""
+"[ストレージ] コメントのトークナイザーのパラメータとして ``tokenizer`` をサ"
+"ポートしました。"
+
+msgid "Note that ``default_tokenizer`` is deprecated."
+msgstr "``default_tokenizer`` は非推奨になりました。"
+
+msgid "[mariadb] Added support for \"normalizer\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメーターとして \"normalizer\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"normalizer\" such as ``CREATE TABLE foo (...) "
+"NORMALIZER='NormalizerNFKC100(\"unify_kana\", true)'``."
+msgstr ""
+"例えば、ノーマライザーを ``CREATE TABLE foo (...) "
+"NORMALIZER='NormalizerNFKC100(\"unify_kana\", true)'`` などと指定できます。"
+
+msgid "[mariadb] Added support for \"token_filters\" table parameter."
+msgstr ""
+"[mariadb] テーブルのパラメータとして \"token_filters\" をサポートしました。"
+
+msgid ""
+"For example, you can specify \"token_filters\" such as ``CREATE TABLE foo "
+"(...)  TOKEN_FILTERS='TokenFilterNFKC100(\"unify_katakana_v_sounds\", "
+"true)'``."
+msgstr ""
+"例えば、トークンフィルターを ``CREATE TABLE foo (...)  "
+"TOKEN_FILTERS='TokenFilterNFKC100(\"unify_katakana_v_sounds\", \"true\")'`` "
+"などと指定できます。"
+
+msgid "Added support for \"LEXICON\" index parameter."
+msgstr "インデックスのパラメーターとして \"LEXICON\" をサポートしました。"
+
+msgid ""
+"For example, you can specify ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` or "
+"``FULLTEXT INDEX foo (bar) COMMENT 'lexicon \"terms\"'``."
+msgstr ""
+"例えば、 ``FULLTEXT INDEX foo (bar) LEXICON='terms'`` や ``FULLTEXT INDEX "
+"foo (bar) COMMENT 'lexicon \"terms\"'`` などと指定できます。"
+
+msgid ""
+"[appveyor] Improved support to building Mroonga enabled package [GitHub#230]"
+msgstr ""
+"[appveyor] Mroongaを有効にしたパッケージのビルドをサポートしました。"
+"[GitHub#230]"
+
+msgid "[:doc:`/install/centos`] Added support for Percona Server 5.7.25-28."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.25-28をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.3.13."
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.13をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Added support for MariaDB 10.2.23."
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.23をサポートしました。"
+
+msgid "Release 9.00 - 2019-02-09"
+msgstr "9.00リリース - 2019-02-09"
+
+msgid ""
+"This is a major version up! But It keeps backward compatibility. You can "
+"upgrade to 9.00 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなく9.00へアップグレードできます。"
+
+msgid ""
+"In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and "
+"``remove_blank`` for ``NormalizerNFKC100`` is supported. If you upgrade to "
+"Groonga 9.0.0, you can use them from Mroonga 9.00!"
+msgstr ""
+"Groonga 9.0.0 にて、 ``TokenPattern`` 、 ``TokenTable`` トークナイザーと "
+"``NormalizerNFKC100`` に ``remove_blank`` をサポートしました。Groonga 9.0.0 "
+"にアップグレードすることで、Mroonga 9.00からこれらを使えます。"
+
+msgid "ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09"
+msgstr "参考: http://groonga.org/ja/docs/news.html#release-9-0-0-2019-02-09"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.24-27."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.24-27をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.6.43 rel84.3."
+msgstr ""
+"[:doc:`/install/centos`] Percona Server 5.6.43 rel84.3をサポートしました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.3.12."
+msgstr "[rpm][centos] MariaDB 10.3.12に対応しました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.21."
+msgstr "[rpm][centos] MariaDB 10.2.21に対応しました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.24-27."
+msgstr "[rpm][centos] Percona Server 5.7.24-27をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6.43 rel84.3."
+msgstr "[rpm][centos] Percona Server 5.6.43 rel84.3に対応しました。"
+
+msgid "[rpm][centos] Supported MySQL 5.7.25."
+msgstr "[rpm][centos] MySQL 5.7.25をサポートしました。"
+
+msgid "[rpm][centos] Supported MySQL 5.6.43."
+msgstr "[rpm][centos] MySQL 5.6.43をサポートしました。"

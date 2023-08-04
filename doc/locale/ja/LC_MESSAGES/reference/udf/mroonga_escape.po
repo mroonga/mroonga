@@ -1,0 +1,80 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_escape()``"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid ""
+"``mroonga_escape`` UDF provides functionality to escape given string. It "
+"also accepts parameter what character should be escaped."
+msgstr ""
+
+msgid "Syntax"
+msgstr ""
+
+msgid "``mroonga_escape()`` has required parameter and optional parameter::"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "Here is the example query which use special characters to be escaped::"
+msgstr ""
+
+msgid "Here is the example about special characters which is escaped::"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Required parameters"
+msgstr ""
+
+msgid "There is one required parameter, ``string``."
+msgstr ""
+
+msgid "``string``"
+msgstr ""
+
+msgid "It specifies text which you want to escape."
+msgstr ""
+
+msgid "Optional parameters"
+msgstr ""
+
+msgid "There is one optional parameter, ``special_characters``."
+msgstr ""
+
+msgid "``special_characters``"
+msgstr ""
+
+msgid "It specifies characters to escape."
+msgstr ""
+
+msgid "The default value is ``+-<>~*()\"\\\\:``."
+msgstr ""
+
+msgid "Return value"
+msgstr ""
+
+msgid "It returns escaped string."
+msgstr ""

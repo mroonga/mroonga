@@ -1,0 +1,58 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Installation check"
+msgstr ""
+
+msgid ""
+"It is better that you check Mroonga installation before you use Mroonga. If "
+"Mroonga installation is failed, the SQLs in this tutorial will fail."
+msgstr ""
+
+msgid "The way to start or stop MySQL server is just same as the normal MySQL."
+msgstr ""
+
+msgid ""
+"After invoking the MySQL server, connect to it by mysql command. If you set "
+"password, you need to add '-p' option. ::"
+msgstr ""
+
+msgid ""
+"By using ``SHOW ENGINES`` command, you can check if ``Mroonga`` is installed:"
+msgstr ""
+
+msgid ""
+"If you see ``Mroonga`` storage engine like the above, the installation is "
+"well done."
+msgstr ""
+
+msgid ""
+"If ``Mroonga`` isn't shown, run the following command. If you don't install "
+"Mroonga by package, the path of ``install.sql`` may be different::"
+msgstr ""
+
+msgid ""
+"If you can't find ``install.sql``, run ``INSTALL PLUGIN`` command like the "
+"following manually:"
+msgstr ""
+
+msgid ""
+"Then, check server variable whether correct Mroonga version is installed by "
+"``SHOW VARIABLES`` command."
+msgstr ""

@@ -1,0 +1,614 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 7 series"
+msgstr "お知らせ - 7系"
+
+msgid "Release 7.11 - 2018-01-29"
+msgstr "7.11リリース - 2018-01-29"
+
+msgid ""
+"[test] Added a test case for sub query and order limit optimization. "
+"[GitHub#184] [Reported by Kazuki Hamasaki]"
+msgstr ""
+"[テスト] サブクエリーとORDER BY ... LIMIT最適化のテストケースを追加しました。"
+"[GitHub#184] [濵﨑一樹さんが報告]"
+
+msgid "[rpm][centos] Supported  10.3."
+msgstr "[rpm][centos] MariaDB 10.3に対応しました。"
+
+msgid "[deb][ubuntu] Supported MariaDB 10.1 for Ubuntu 17.10 (Artful Aadvark)"
+msgstr ""
+"[deb][ubuntu] Ubuntu 17.10向けにMariaDB 10.1のパッケージをサポートしました。"
+
+msgid ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] Fixed a bug that value "
+"is reset unexpectedly by ``FLUSH STATUS``."
+msgstr ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] ``FLUSH STATUS`` により値"
+"が意図せずリセットされてしまう不具合を修正しました。"
+
+msgid ""
+"[maradb10.3] Fixed a build error which is caused by renamed constant "
+"variable (``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` is renamed to "
+"``HA_CAN_TABLE_CONDITION_PUSHDOWN``)."
+msgstr ""
+"[maradb10.3] 定数の変更によりビルドエラーになっていた問題を修正しました。"
+"(``HA_MUST_USE_TABLE_CONDITION_PUSHDOWN`` が "
+"``HA_CAN_TABLE_CONDITION_PUSHDOWN`` へと変更)"
+
+msgid ""
+"[:doc:`/install/macos`] Removed obsolete install guide and updated link to "
+"latest documentation [Reported by Ryuji AMANO]"
+msgstr ""
+"[:doc:`/install/macos`] 現状にそぐわないインストール手順を削除し、最新のド"
+"キュメントへのリンクに差し替えました。 [天野龍司さんが報告]"
+
+msgid ""
+"[rpm][centos] Supported MariaDB 10.2.12. [GitHub#186] [Reported by Shota "
+"Suzuki]"
+msgstr ""
+"[rpm][centos] MariaDB 10.2.12をサポートしました。[GitHub#186] [Shota Suzukiさ"
+"んが報告]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.20-19."
+msgstr "[rpm][centos] Percona Server 5.7.20-19に対応しました。"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 17.04 (Zesty Zapus) support. It has "
+"reached EOL at Jan 13, 2018."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.04（Zesty Zapus）のサポートをやめました。"
+"2018年1月13日でサポートが切れた（EOLになった）ためです。"
+
+msgid "Kazuki Hamasaki"
+msgstr "濵﨑一樹さん"
+
+msgid "Ryuji AMANO"
+msgstr "天野龍司さん"
+
+msgid "Shota Suzuki"
+msgstr "Shota Suzukiさん"
+
+msgid "Release 7.10 - 2017-12-29"
+msgstr "7.10リリース - 2017-12-29"
+
+msgid ""
+"Updated required Groonga version to 7.1.0. You need to restart MySQL after "
+"you upgrade to Mroonga 7.10."
+msgstr ""
+"Groonga 7.1.0が必要になります。Mroonga 7.10にアップグレード後にMySQLを再起動"
+"する必要があります。"
+
+msgid "[mariadb10.3] Supported MariaDB 10.3."
+msgstr "[MariaDB 10.3] MariaDB 10.3に対応しました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.11."
+msgstr "[rpm][centos] MariaDB 10.2.11に対応しました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.1.30."
+msgstr "[rpm][centos] MariaDB 10.1.30に対応しました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.20."
+msgstr "[rpm][centos] Percona Server 5.7.20に対応しました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6.38."
+msgstr "[rpm][centos] Percona Server 5.6.38に対応しました。"
+
+msgid ""
+"[:doc:`/reference/optimizations`] Enable count_skip optimization for multi-"
+"column index."
+msgstr ""
+"[:doc:`/reference/optimizations`] マルチカラムインデックスでもカウントスキッ"
+"プ最適化をサポートしました。"
+
+msgid "Supported condition push down and added related new variables."
+msgstr ""
+"コンディションプッシュダウン（検索条件をMySQLレベルではなくGroongaレベルで処"
+"理する最適化）をサポートしました。この最適化関連の変数をいくつか追加しまし"
+"た。"
+
+msgid ""
+"[:ref:`status-variable-mroonga-condition-push-down`] Added "
+"``Mroonga_condition_push_down``."
+msgstr ""
+"[:ref:`status-variable-mroonga-condition-push-down`] "
+"``Mroonga_condition_push_down`` を追加しました。"
+
+msgid ""
+"[:ref:`server-variable-mroonga-condition-push-down-type`] Added "
+"``mroonga_condition_push_down_type``. The default value is "
+"``ONE_FULL_TEXT_SEARCH``. It means that condition push down is enabled only "
+"when ``WHERE`` clause has one ``MATCH AGAINST`` condition.  If the value "
+"``ALL`` is set, condition push down is always used (``ALL`` is experimental "
+"for now. We are glad if you use it and tell us if it got faster or not)."
+msgstr ""
+"[:ref:`server-variable-mroonga-condition-push-down-type`] "
+"``mroonga_condition_push_down_type`` を追加しました。デフォルト値は "
+"``ONE_FULL_TEXT_SEARCH`` です。このときは、 ``WHERE`` 句の中に1つだけ "
+"``MATCH AGAINST`` がある場合にだけコンディションプッシュダウンを使います。従"
+"来と同じ挙動です。この値を ``ALL`` にすると、常にコンディションプッシュダウン"
+"を使います。今のところ、 ``ALL`` は実験的な機能です。実際に使って、速くなるか"
+"遅くなるかフィードバックして欲しいです。"
+
+msgid ""
+"Supported column cache when to get fixed size column value to improve "
+"performance."
+msgstr ""
+"固定長カラムの値の取得処理を高速化するためにカラムキャッシュ機能をサポートし"
+"ました。"
+
+msgid ""
+"Renamed a function ``last_insert_grn_id`` to ``mroonga_last_insert_grn_id`` "
+"to add missing ``mroonga_`` prefix. ``last_insert_grn_id`` is deprecated. "
+"[GitHub#177] [Reported by Ian Gilfillan]"
+msgstr ""
+"``last_insert_grn_id`` 関数を ``mroonga_last_insert_grn_id`` 関数に改名しまし"
+"た。他のUDFと同じように ``mroonga_`` プレフィックスが付きました。 "
+"``last_insert_grn_id`` は非推奨ですが引き続き使えます。 [GitHub#177] [Ian "
+"Gilfillanさんが報告]"
+
+msgid ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] Added a new status "
+"variable to show the number of pooling contexts for :doc:`/reference/udf/"
+"mroonga_command`."
+msgstr ""
+"[:ref:`status-variable-mroonga-n-pooling-contexts`] :doc:`/reference/udf/"
+"mroonga_command` 用にプールしているコンテキストの数を確認するためのステータス"
+"変数を追加しました。"
+
+msgid ""
+"[ ``FLUSH TABLES`` ] Added clearing pooling contexts for :doc:`/reference/"
+"udf/mroonga_command` support."
+msgstr ""
+"[ ``FLUSH TABLES`` ] :doc:`/reference/udf/mroonga_command` 用にプールしている"
+"コンテキストもクリアーするようになりました。"
+
+msgid "Ian Gilfillan"
+msgstr "Ian Gilfillanさん"
+
+msgid "Release 7.09 - 2017-11-29"
+msgstr "7.09リリース - 2017-11-29"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.10."
+msgstr "[rpm][centos] MariaDB 10.2.10に対応。"
+
+msgid "[rpm][centos] Supported MariaDB 10.1.29."
+msgstr "[rpm][centos] MariaDB 10.1.29に対応。"
+
+msgid "Fixed not to require sed to run tests. [Patch by Sergei Golubchik]"
+msgstr ""
+"テストを実行するときにsedがなくてもよいようにしました。 [Sergei Golubchikさん"
+"がパッチ提供]"
+
+msgid ""
+"[cmake] Changed to skip Mroonga related configurations on without Mroonga "
+"build. [Patch by Vladislav Vaintroub]"
+msgstr ""
+"[cmake] Mroongaを無効にしてビルドする場合にはMroonga関連の設定をスキップする"
+"ようにしました。 [Vladislav Vaintroubさんがパッチ提供]"
+
+msgid "Vladislav Vaintroub"
+msgstr "Vladislav Vaintroubさん"
+
+msgid "Release 7.08 - 2017-10-29"
+msgstr "7.08リリース - 2017-10-29"
+
+msgid ""
+"Supported table level ``flags`` option. You can specify ``TABLE_HASH_KEY``, "
+"``TABLE_PAT_KEY``, ``TABLE_DAT_KEY``, and ``KEY_LARGE`` table options. "
+"[groonga-dev, 04494] [Reported by Masanori Miyashita]"
+msgstr ""
+"テーブル作成時に ``flags`` オプションを指定できるようになりました。 オプショ"
+"ンには ``TABLE_HASH_KEY`` 、 ``TABLE_PAT_KEY`` 、 ``TABLE_DAT_KEY`` と "
+"``KEY_LARGE`` が指定できます。 [groonga-dev, 04494] [宮下さんが報告]"
+
+msgid "[rpm][centos] Supported MySQL 5.6.38-2 and 5.7.20-1."
+msgstr "[rpm][centos] MySQL 5.6.38-2と5.7.20-15.24に対応。"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 17.10 (Artful Aardvark)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark)をサポートしました。"
+
+msgid "Masanori Miyashita"
+msgstr "宮下さん"
+
+msgid "Release 7.07 - 2017-10-12"
+msgstr "7.07リリース - 2017-10-12"
+
+msgid ""
+"[mroonga_query_expand] Added ``mroonga_query_expand`` UDF. If you prepare "
+"synonyms table in advance, you can get expanded synonym in your query by "
+"``mroonga_query_expanded``. Note that Groonga 7.0.6 or later version is "
+"required to use this function."
+msgstr ""
+"[mroonga_query_expand] ``mroonga_query_expand`` UDFを追加しました。同義語テー"
+"ブルを用意しておけば、クエリに含まれる語の同義語を ``mroonga_query_expand`` "
+"で展開できます。この関数を使うためには Groonga 7.0.6以降が必要です。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid ""
+"[rpm][centos] Supported Percona Server 5.7.19-17.1. [Reported by "
+"tigersun2000]"
+msgstr ""
+"[rpm][centos] 最新のPercona Server 5.7.19-17.1をサポートしました。 "
+"[tigersun2000さんが報告]"
+
+msgid "[rpm][centos] Supported MariaDB 5.5.56-2. [Reported by akiko_pusu]"
+msgstr ""
+"[rpm][centos] MariaDB 5.5.56-2をサポートしました。 [@akiko_pusuさんが報告]"
+
+msgid "[rpm][centos] Supported MariaDB 10.1/10.2 provided by MariaDB."
+msgstr ""
+"[rpm][centos] MariaDB公式が提供するMariaDB 10.1/10.2をサポートしました。"
+
+msgid ""
+"Fixed a bug that wrong database may be used on \"DROP DATABASE\". This bug "
+"may cause a crash because internal \"mroonga_operations\" table is removed "
+"unexpectedly. It may happen when the following two conditions are true:"
+msgstr ""
+"\"DROP DATABASE\" したときに誤ったデータベースが使われてしまう可能性のある不"
+"具合を修正しました。この不具合により内部で使っている \"mroonga_operations\" "
+"テーブルが意図せず削除されてしまうため、クラッシュする可能性があります。この"
+"不具合は次の2つの条件を満たすと発生します:"
+
+msgid "There are multiple databases that uses Mroonga."
+msgstr "Mroongaを使っているデータベースが複数あること"
+
+msgid "\"DROP DATABASE\" against no longer Mroonga tables exist."
+msgstr ""
+"\"DROP DATABASE\" をMroongaのテーブルを作成していないデータベースに対して実行"
+"すること"
+
+msgid ""
+"As unexpected result, \"DROP DATABASE x\" may remove \"mroonga_operations\" "
+"table on existing \"y\" database."
+msgstr ""
+"意図しない結果として、 \"DROP DATABASE x\" は 既存の \"y\" データベースの "
+"\"mroonga_operations\" テーブルを削除してしまいます。"
+
+msgid ""
+"Fix a crash bug after CHECK TABLE is used. [GitHub#167] [Reported by GMO "
+"Media, Inc.]"
+msgstr ""
+"CHECK TABLEしたあとにクラッシュする不具合を修正しました。 [GitHub#167] [GMOメ"
+"ディア株式会社さんが報告]"
+
+msgid ""
+"[deb][mariadb10] Added missing dependency to lsb-release package for preinst "
+"and postrm maintainer script. [GitHub#169] [Patch by Tatsuki Sugiura]"
+msgstr ""
+"[deb][mariadb10] lsb-releaseパッケージへの依存関係を追加しました。preinst や "
+"postrm などメンテナスクリプトに必要でした。 [GitHub#169] [すぎうらさんがパッ"
+"チ提供]"
+
+msgid "@tigersun2000"
+msgstr "@tigersun2000さん"
+
+msgid "@akiko_pusu"
+msgstr "@akiko_pusuさん"
+
+msgid "Tatsuki Sugiura"
+msgstr "すぎうらさん"
+
+msgid "Release 7.06 - 2017-08-29"
+msgstr "7.06リリース - 2017-08-29"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] Added usage about "
+"``mroonga_highlight_html``."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] `mroonga_highlight_html` の使"
+"用方法を追記しました。"
+
+msgid ""
+"Supported generated column. It is useful to full-text search for partially "
+"extracted content from JSON column. [GitHub#159,#160,#163] [Patch by Naoya "
+"Murakami]"
+msgstr ""
+"Generated Columnをサポートしました。JSON型のカラムから値を取り出した結果をカ"
+"ラムとして実体化して全文検索できるので便利です。 [GitHub#159,#160,#163] [村上"
+"さんがパッチ提供]"
+
+msgid ""
+"Added :ref:`server-variable-mroonga-enable-operations-recording`. variable. "
+"[GitHub#158] [Patch by Naoya Murakami]"
+msgstr ""
+":ref:`server-variable-mroonga-enable-operations-recording` サーバー変数を追加"
+"しました。 [GitHub#158] [村上さんがパッチ提供]"
+
+msgid ""
+"Supported virtual column for MariaDB 10.2 and MySQL 5.7. It supports "
+"``VIRTUAL`` type.  [GitHub#161,#162] [Patch by Naoya Murakami]"
+msgstr ""
+"MariaDB 10.2 と MySQL 5.7 で ``VIRTUAL`` Generated Columnをサポートしまし"
+"た。 [GitHub#161,#162] [村上さんがパッチ提供]"
+
+msgid "Supported MariaDB 10.1.26."
+msgstr "MariaDB 10.1.26に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported Percona Server 5.6.36 rel82.1 and 5.7.18-16. [Gitter/"
+"ja:59894500bc46472974622cbd] [Reported by @tigersun2000_twitter]"
+msgstr ""
+"[rpm][centos] Percona Server 5.6.36 rel82.1 と 5.7.18-16 をサポートしまし"
+"た。 [Gitter/ja:59894500bc46472974622cbd] [@tigersun2000_twitterさんが報告]"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6.37 and 5.7.19 on CentOS 7. [groonga-"
+"dev,04441] [Reported by Kagami Hiroshi]"
+msgstr ""
+"[rpm][centos] CentOS 7にてMySQL 5.6.37 と MySQL 5.7.19に対応しました。 "
+"[groonga-dev,04441] [各務さんが報告]"
+
+msgid "@tigersun2000_twitter"
+msgstr "@tigersun2000_twitterさん"
+
+msgid "Kagami Hiroshi"
+msgstr "各務さん"
+
+msgid "Release 7.05 - 2017-07-29"
+msgstr "7.05リリース - 2017-07-29"
+
+msgid ""
+"Supported Groonga query log. Use ``mroonga_query_log_file`` variable to use "
+"this feature. [GitHub#148]"
+msgstr ""
+"Groongaのクエリーログをサポートしました。 ``mroonga_query_log_file`` 変数を指"
+"定してください。 [GitHub#148]"
+
+msgid ""
+"Supported MariaDB 10.2.7. [groonga-dev,04397] [Reported by Tomohiro 'Tomo-p' "
+"KATO]"
+msgstr ""
+"MariaDB 10.2.7をサポートしました。 [groonga-dev,04397] [かとうさんが報告]"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_command`] Supported database name that has "
+"special name such as ``db-1`` for example. It contains special character ``-"
+"``."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_command`] データベース名が特別な名前( 例えば "
+"``db-1`` )な場合もサポートしました。データベース名に  ``-`` が含まれていても"
+"大丈夫です。"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_command`] Supported auto command syntax escape "
+"feature. It makes easy to use Groonga functionality from Mroonga."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_command`] コマンドの自動エスケープに対応しまし"
+"た。Groongaの機能をMroongaから使いやすくなります。"
+
+msgid "Supported MariaDB 5.5.57."
+msgstr "MariaDB 5.5.57に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6.37-2 and MySQL 5.7.19-1 on CentOS 6. "
+"[groonga-dev,04403] [Reported by Kagami Hiroshi]"
+msgstr ""
+"[rpm][centos] CentOS 6にてMySQL 5.6.37-2 と MySQL 5.7.19-1に対応しました。 "
+"[groonga-dev,04403] [各務さんが報告]"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 16.10 (Yekkety Yak) support. It has "
+"reached EOL at July 20, 2017."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 16.10（Yakkety Yak）のサポートをやめました。"
+"2017年7月20日でサポートが切れた（EOLになった）ためです。"
+
+msgid ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] Supported a function to "
+"highlight target column or text."
+msgstr ""
+"[:doc:`/reference/udf/mroonga_highlight_html`] 対象となるカラムや文字列をハイ"
+"ライトする関数をサポートしました。"
+
+msgid ""
+"Fixed a crash bug when there is no active index internally. [Gitter:groonga/"
+"ja:596714a5c101bc4e3a7db4e5] [Reported by K Torimoto]"
+msgstr ""
+"内部的に有効なインデックスが見つからない場合にクラッシュする不具合を修正しま"
+"した。 [Gitter:groonga/ja:596714a5c101bc4e3a7db4e5] [K Torimotoさんが報告]"
+
+msgid "K Torimoto"
+msgstr "K Torimotoさん"
+
+msgid "Tomohiro 'Tomo-p' KATO"
+msgstr "かとうさん"
+
+msgid "Release 7.04 - 2017-06-29"
+msgstr "7.04リリース - 2017-06-29"
+
+msgid ""
+"Supported to show error message when failed to create a table for matched "
+"records. This kind of error occurs when indexes are broken. This error "
+"message helps to identify problem."
+msgstr ""
+"ヒットしたレコード用に一時テーブルを作成しようとして失敗したときにエラーメッ"
+"セージをだすようにしました。この種のエラーはインデックスが壊れているときに発"
+"生します。"
+
+msgid "[:doc:`/install/debian`] Supported Debian 9 (stretch)."
+msgstr "[:doc:`/install/debian`] Debian 9 (stretch)をサポートしました。"
+
+msgid ""
+"Fixed a crash bug that missing ``NULL`` check before calling "
+"``grn_table_setoperation`` causes. Such a crash bug occurs when indexes are "
+"broken."
+msgstr ""
+"内部で呼び出している関数 ``grn_table_setoperation`` を呼ぶ前の ``NULL`` "
+"チェックが抜けているせいでクラッシュする不具合を修正しました。このようなク"
+"ラッシュはインデックスが壊れているときに発生します。"
+
+msgid "Release 7.03 - 2017-05-29"
+msgstr "7.03リリース - 2017-05-29"
+
+msgid ""
+"[:doc:`/reference/limitations`] Updated limitations about NULL in column. "
+"[Gitter/ja] [Reported by @bignum_twitter]"
+msgstr ""
+"[:doc:`/reference/limitations`] カラムのNULL値に関する制限情報を更新しまし"
+"た。 [Gitter/ja] [@bignum_twitterさんが報告]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"Supported ``INDEX_MEDIUM`` and ``INDEX_SMALL`` flags. [GitHub#141] [Patch by "
+"Naoya Murakami]"
+msgstr ""
+"``INDEX_MEDIUM`` と ``INDEX_SMALL`` フラグをサポートしました。 [GitHub#141] "
+"[村上さんがパッチ提供]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid ""
+"[:doc:`/install/centos`] Supported recent Percona Server 5.6.36 and 5.7.18. "
+"[Reported by @pinpikokun]"
+msgstr ""
+"[:doc:`/install/centos`] 最新のPercona Server 5.6/5.7をサポートしました。 "
+"[@pinpikokunさんが報告]"
+
+msgid "@bignum_twitter"
+msgstr "@bignum_twitterさん"
+
+msgid "@pinpikokun"
+msgstr "@pinpikokunさん"
+
+msgid "Release 7.02 - 2017-04-29"
+msgstr "7.02リリース - 2017-04-29"
+
+msgid ""
+"[:doc:`/install/centos`] Dropped Ubuntu 12.04 (Precise Pangolin) support "
+"because of EOL."
+msgstr ""
+"[:doc:`/install/ubuntu`] EOLのため、Ubuntu 12.04 (Precise Pangolin)のサポート"
+"をやめました。"
+
+msgid "[:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.04 (Zesty Zapus)をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Fixed build error with MySQL 5.6.36 and MySQL "
+"5.7.18."
+msgstr ""
+"[:doc:`/install/centos`] MySQL 5.6.36とMySQL 5.7.18でビルドエラーになる問題を"
+"修正しました。"
+
+msgid ""
+"[cmake] Fixed missing link to ``libgroonga`` when mroonga is bundled and "
+"``libgroonga`` isn't bundled. [GitHub#137] [Patch by Naoya Murakami]"
+msgstr ""
+"[cmake] Mroongaがバンドルされているがシステムの ``libgroonga`` を使う場合に "
+"``libgroonga`` がリンクされていない問題を修正しました。 [GitHub#137] [村上さ"
+"んがパッチ提供]"
+
+msgid "Release 7.01 - 2017-03-29"
+msgstr "7.01リリース - 2017-03-29"
+
+msgid "[:doc:`/install/centos`] Dropped CentOS 5 support because of EOL."
+msgstr "[:doc:`/install/centos`] EOLのため、CentOS 5のサポートをやめました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported ``ALTER TABLE ADD/DROP FOREIGN KEY``."
+msgstr ""
+"[:doc:`/tutorial/storage`] ``ALTER TABLE ADD/DROP FOREIGN KEY`` をサポートし"
+"ました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported fast ``ORDER LIMIT`` with ``ENUM``.  "
+"[groonga-dev,04277] [Reported by murata satoshi]"
+msgstr ""
+"[:doc:`/tutorial/storage`] ``ENUM`` を使っている場合の ``ORDER LIMIT`` 最適化"
+"をサポートしました。[groonga-dev,04277] [村田さんが報告]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"Supported ``COMPRESS_ZSTD`` column compression flag. [GitHub#133] [Patch by "
+"Naoya Murakami]"
+msgstr ""
+"[ストレージ] カラムのZSTD圧縮フラグ(``COMPRESS_ZSTD``)をサポートしました。 "
+"[GitHub#133] [村上さんがパッチ提供]"
+
+# c2f193ff56e24d088e4f9ff62a1a6c63
+msgid ""
+"[:doc:`/reference/server_variables`] Added documentation about :ref:`server-"
+"variable-mroonga-libgroonga-support-zstd` variable. [GitHub#133] [Patch by "
+"Naoya Murakaimi]"
+msgstr ""
+"[:doc:`/reference/server_variables`] :ref:`server-variable-mroonga-"
+"libgroonga-support-zstd` サーバー変数のドキュメントを追加しました。 "
+"[GitHub#133] [村上さんがパッチ提供]"
+
+msgid ""
+"[:doc:`/install`] Changed to recommend ``https://packages.groonga.org`` for "
+"downloading resources."
+msgstr ""
+"[:doc:`/install`] リソースのダウンロードに ``https://packages.groonga.org`` "
+"を推奨するようにしました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Fixed update error for log-bin and ``UPDATE`` "
+"with collated ``PRIMARY KEY``. [GitHub#132] [Reported by kitora]"
+msgstr ""
+"[:doc:`/tutorial/storage`] log-bin と ``COLLATE`` が指定されている場合、 "
+"``UPDATE PRIMARY KEY`` で更新エラーになる問題を修正しました。 [GitHub#132] "
+"[kitoraさんが報告]"
+
+msgid ""
+"Fixed a bug that ``FOREIGN KEY`` is dumped unexpectedly even though you "
+"didn't set it. [groonga-dev,04276] [Reported by murata satoshi]"
+msgstr ""
+"設定していないのに ``FOREIGN KEY`` が意図せずダンプされる不具合を修正しまし"
+"た。 [groonga-dev,04276] [村田さんが報告]"
+
+msgid "kitora"
+msgstr "kitoraさん"
+
+msgid "murata satoshi"
+msgstr "村田さん"
+
+msgid "Release 7.00 - 2017-02-09"
+msgstr "7.00リリース - 2017-02-09"
+
+msgid ""
+"[:doc:`/install/centos`] Changed to ensure enabling EPEL to install package."
+msgstr ""
+"[:doc:`/install/centos`] EPELをパッケージインストール時に有効にするようにしま"
+"した。"
+
+msgid ""
+"Supported ``FOREIGN KEY`` constrain on ``UPDATE`` and ``DELETE`` parent row. "
+"In the previous versions, only ``FOREIGN KEY`` constrain on ``INSERT`` is "
+"supported."
+msgstr ""
+"``FOREIGN KEY`` 制約を ``UPDATE`` と 親側の行を ``DELETE`` するときにもサポー"
+"トしました。以前のバージョンでは、 ``INSERT`` 時のみサポートしていました。"
+
+msgid ""
+"[:doc:`/tutorial/storage`] Supported updating row even though its table has "
+"primary key with ROW binlog format. In the previous version, it causes "
+"update statement error. [GitHub#130] [Reported by kitora]"
+msgstr ""
+"[:doc:`/tutorial/storage`] 主キーをもつテーブルでbinlogを使っていても、レコー"
+"ドの更新をサポートしました。以前は更新時に構文エラーになっていました。 "
+"[GitHub#130] [Reported by kitora]"

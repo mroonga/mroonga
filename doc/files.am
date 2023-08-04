@@ -169,10 +169,27 @@ po_files = \
 	community.po \
 	conf.po \
 	contribution.po \
+	contribution/documentation.po \
+	contribution/report.po \
 	developer.po \
+	developer/coding_style.po \
+	developer/debug.po \
+	developer/release.po \
 	faq.po \
+	faq/mmap_cannot_allocate_memory.po \
 	index.po \
 	install.po \
+	install/almalinux.po \
+	install/amazon-linux.po \
+	install/centos.po \
+	install/debian.po \
+	install/docker.po \
+	install/fedora.po \
+	install/macos.po \
+	install/oracle-linux.po \
+	install/others.po \
+	install/ubuntu.po \
+	install/windows.po \
 	news.po \
 	news/0.po \
 	news/1.po \
@@ -189,7 +206,27 @@ po_files = \
 	news/8.po \
 	news/9.po \
 	reference.po \
+	reference/full_text_search.po \
+	reference/full_text_search/boolean_mode.po \
+	reference/full_text_search/scoring.po \
+	reference/limitations.po \
+	reference/optimizations.po \
+	reference/server_variables.po \
+	reference/sql_commands.po \
+	reference/status_variables.po \
+	reference/udf.po \
+	reference/udf/mroonga_command.po \
+	reference/udf/mroonga_escape.po \
+	reference/udf/mroonga_highlight_html.po \
+	reference/udf/mroonga_last_insert_grn_id.po \
+	reference/udf/mroonga_normalize.po \
+	reference/udf/mroonga_snippet.po \
+	reference/udf/mroonga_snippet_html.po \
 	tutorial.po \
+	tutorial/installation_check.po \
+	tutorial/mode.po \
+	tutorial/storage.po \
+	tutorial/wrapper.po \
 	upgrade.po \
 	$(NULL)
 
@@ -198,10 +235,27 @@ po_files_relative_from_locale_dir = \
 	LC_MESSAGES/community.po \
 	LC_MESSAGES/conf.po \
 	LC_MESSAGES/contribution.po \
+	LC_MESSAGES/contribution/documentation.po \
+	LC_MESSAGES/contribution/report.po \
 	LC_MESSAGES/developer.po \
+	LC_MESSAGES/developer/coding_style.po \
+	LC_MESSAGES/developer/debug.po \
+	LC_MESSAGES/developer/release.po \
 	LC_MESSAGES/faq.po \
+	LC_MESSAGES/faq/mmap_cannot_allocate_memory.po \
 	LC_MESSAGES/index.po \
 	LC_MESSAGES/install.po \
+	LC_MESSAGES/install/almalinux.po \
+	LC_MESSAGES/install/amazon-linux.po \
+	LC_MESSAGES/install/centos.po \
+	LC_MESSAGES/install/debian.po \
+	LC_MESSAGES/install/docker.po \
+	LC_MESSAGES/install/fedora.po \
+	LC_MESSAGES/install/macos.po \
+	LC_MESSAGES/install/oracle-linux.po \
+	LC_MESSAGES/install/others.po \
+	LC_MESSAGES/install/ubuntu.po \
+	LC_MESSAGES/install/windows.po \
 	LC_MESSAGES/news.po \
 	LC_MESSAGES/news/0.po \
 	LC_MESSAGES/news/1.po \
@@ -218,7 +272,27 @@ po_files_relative_from_locale_dir = \
 	LC_MESSAGES/news/8.po \
 	LC_MESSAGES/news/9.po \
 	LC_MESSAGES/reference.po \
+	LC_MESSAGES/reference/full_text_search.po \
+	LC_MESSAGES/reference/full_text_search/boolean_mode.po \
+	LC_MESSAGES/reference/full_text_search/scoring.po \
+	LC_MESSAGES/reference/limitations.po \
+	LC_MESSAGES/reference/optimizations.po \
+	LC_MESSAGES/reference/server_variables.po \
+	LC_MESSAGES/reference/sql_commands.po \
+	LC_MESSAGES/reference/status_variables.po \
+	LC_MESSAGES/reference/udf.po \
+	LC_MESSAGES/reference/udf/mroonga_command.po \
+	LC_MESSAGES/reference/udf/mroonga_escape.po \
+	LC_MESSAGES/reference/udf/mroonga_highlight_html.po \
+	LC_MESSAGES/reference/udf/mroonga_last_insert_grn_id.po \
+	LC_MESSAGES/reference/udf/mroonga_normalize.po \
+	LC_MESSAGES/reference/udf/mroonga_snippet.po \
+	LC_MESSAGES/reference/udf/mroonga_snippet_html.po \
 	LC_MESSAGES/tutorial.po \
+	LC_MESSAGES/tutorial/installation_check.po \
+	LC_MESSAGES/tutorial/mode.po \
+	LC_MESSAGES/tutorial/storage.po \
+	LC_MESSAGES/tutorial/wrapper.po \
 	LC_MESSAGES/upgrade.po \
 	$(NULL)
 
@@ -227,10 +301,27 @@ edit_po_files = \
 	community.edit \
 	conf.edit \
 	contribution.edit \
+	contribution/documentation.edit \
+	contribution/report.edit \
 	developer.edit \
+	developer/coding_style.edit \
+	developer/debug.edit \
+	developer/release.edit \
 	faq.edit \
+	faq/mmap_cannot_allocate_memory.edit \
 	index.edit \
 	install.edit \
+	install/almalinux.edit \
+	install/amazon-linux.edit \
+	install/centos.edit \
+	install/debian.edit \
+	install/docker.edit \
+	install/fedora.edit \
+	install/macos.edit \
+	install/oracle-linux.edit \
+	install/others.edit \
+	install/ubuntu.edit \
+	install/windows.edit \
 	news.edit \
 	news/0.edit \
 	news/1.edit \
@@ -247,7 +338,27 @@ edit_po_files = \
 	news/8.edit \
 	news/9.edit \
 	reference.edit \
+	reference/full_text_search.edit \
+	reference/full_text_search/boolean_mode.edit \
+	reference/full_text_search/scoring.edit \
+	reference/limitations.edit \
+	reference/optimizations.edit \
+	reference/server_variables.edit \
+	reference/sql_commands.edit \
+	reference/status_variables.edit \
+	reference/udf.edit \
+	reference/udf/mroonga_command.edit \
+	reference/udf/mroonga_escape.edit \
+	reference/udf/mroonga_highlight_html.edit \
+	reference/udf/mroonga_last_insert_grn_id.edit \
+	reference/udf/mroonga_normalize.edit \
+	reference/udf/mroonga_snippet.edit \
+	reference/udf/mroonga_snippet_html.edit \
 	tutorial.edit \
+	tutorial/installation_check.edit \
+	tutorial/mode.edit \
+	tutorial/storage.edit \
+	tutorial/wrapper.edit \
 	upgrade.edit \
 	$(NULL)
 
@@ -256,10 +367,27 @@ edit_po_files_relative_from_locale_dir = \
 	LC_MESSAGES/community.edit \
 	LC_MESSAGES/conf.edit \
 	LC_MESSAGES/contribution.edit \
+	LC_MESSAGES/contribution/documentation.edit \
+	LC_MESSAGES/contribution/report.edit \
 	LC_MESSAGES/developer.edit \
+	LC_MESSAGES/developer/coding_style.edit \
+	LC_MESSAGES/developer/debug.edit \
+	LC_MESSAGES/developer/release.edit \
 	LC_MESSAGES/faq.edit \
+	LC_MESSAGES/faq/mmap_cannot_allocate_memory.edit \
 	LC_MESSAGES/index.edit \
 	LC_MESSAGES/install.edit \
+	LC_MESSAGES/install/almalinux.edit \
+	LC_MESSAGES/install/amazon-linux.edit \
+	LC_MESSAGES/install/centos.edit \
+	LC_MESSAGES/install/debian.edit \
+	LC_MESSAGES/install/docker.edit \
+	LC_MESSAGES/install/fedora.edit \
+	LC_MESSAGES/install/macos.edit \
+	LC_MESSAGES/install/oracle-linux.edit \
+	LC_MESSAGES/install/others.edit \
+	LC_MESSAGES/install/ubuntu.edit \
+	LC_MESSAGES/install/windows.edit \
 	LC_MESSAGES/news.edit \
 	LC_MESSAGES/news/0.edit \
 	LC_MESSAGES/news/1.edit \
@@ -276,7 +404,27 @@ edit_po_files_relative_from_locale_dir = \
 	LC_MESSAGES/news/8.edit \
 	LC_MESSAGES/news/9.edit \
 	LC_MESSAGES/reference.edit \
+	LC_MESSAGES/reference/full_text_search.edit \
+	LC_MESSAGES/reference/full_text_search/boolean_mode.edit \
+	LC_MESSAGES/reference/full_text_search/scoring.edit \
+	LC_MESSAGES/reference/limitations.edit \
+	LC_MESSAGES/reference/optimizations.edit \
+	LC_MESSAGES/reference/server_variables.edit \
+	LC_MESSAGES/reference/sql_commands.edit \
+	LC_MESSAGES/reference/status_variables.edit \
+	LC_MESSAGES/reference/udf.edit \
+	LC_MESSAGES/reference/udf/mroonga_command.edit \
+	LC_MESSAGES/reference/udf/mroonga_escape.edit \
+	LC_MESSAGES/reference/udf/mroonga_highlight_html.edit \
+	LC_MESSAGES/reference/udf/mroonga_last_insert_grn_id.edit \
+	LC_MESSAGES/reference/udf/mroonga_normalize.edit \
+	LC_MESSAGES/reference/udf/mroonga_snippet.edit \
+	LC_MESSAGES/reference/udf/mroonga_snippet_html.edit \
 	LC_MESSAGES/tutorial.edit \
+	LC_MESSAGES/tutorial/installation_check.edit \
+	LC_MESSAGES/tutorial/mode.edit \
+	LC_MESSAGES/tutorial/storage.edit \
+	LC_MESSAGES/tutorial/wrapper.edit \
 	LC_MESSAGES/upgrade.edit \
 	$(NULL)
 
@@ -285,10 +433,27 @@ mo_files = \
 	community.mo \
 	conf.mo \
 	contribution.mo \
+	contribution/documentation.mo \
+	contribution/report.mo \
 	developer.mo \
+	developer/coding_style.mo \
+	developer/debug.mo \
+	developer/release.mo \
 	faq.mo \
+	faq/mmap_cannot_allocate_memory.mo \
 	index.mo \
 	install.mo \
+	install/almalinux.mo \
+	install/amazon-linux.mo \
+	install/centos.mo \
+	install/debian.mo \
+	install/docker.mo \
+	install/fedora.mo \
+	install/macos.mo \
+	install/oracle-linux.mo \
+	install/others.mo \
+	install/ubuntu.mo \
+	install/windows.mo \
 	news.mo \
 	news/0.mo \
 	news/1.mo \
@@ -305,7 +470,27 @@ mo_files = \
 	news/8.mo \
 	news/9.mo \
 	reference.mo \
+	reference/full_text_search.mo \
+	reference/full_text_search/boolean_mode.mo \
+	reference/full_text_search/scoring.mo \
+	reference/limitations.mo \
+	reference/optimizations.mo \
+	reference/server_variables.mo \
+	reference/sql_commands.mo \
+	reference/status_variables.mo \
+	reference/udf.mo \
+	reference/udf/mroonga_command.mo \
+	reference/udf/mroonga_escape.mo \
+	reference/udf/mroonga_highlight_html.mo \
+	reference/udf/mroonga_last_insert_grn_id.mo \
+	reference/udf/mroonga_normalize.mo \
+	reference/udf/mroonga_snippet.mo \
+	reference/udf/mroonga_snippet_html.mo \
 	tutorial.mo \
+	tutorial/installation_check.mo \
+	tutorial/mode.mo \
+	tutorial/storage.mo \
+	tutorial/wrapper.mo \
 	upgrade.mo \
 	$(NULL)
 
@@ -314,10 +499,27 @@ mo_files_relative_from_locale_dir = \
 	LC_MESSAGES/community.mo \
 	LC_MESSAGES/conf.mo \
 	LC_MESSAGES/contribution.mo \
+	LC_MESSAGES/contribution/documentation.mo \
+	LC_MESSAGES/contribution/report.mo \
 	LC_MESSAGES/developer.mo \
+	LC_MESSAGES/developer/coding_style.mo \
+	LC_MESSAGES/developer/debug.mo \
+	LC_MESSAGES/developer/release.mo \
 	LC_MESSAGES/faq.mo \
+	LC_MESSAGES/faq/mmap_cannot_allocate_memory.mo \
 	LC_MESSAGES/index.mo \
 	LC_MESSAGES/install.mo \
+	LC_MESSAGES/install/almalinux.mo \
+	LC_MESSAGES/install/amazon-linux.mo \
+	LC_MESSAGES/install/centos.mo \
+	LC_MESSAGES/install/debian.mo \
+	LC_MESSAGES/install/docker.mo \
+	LC_MESSAGES/install/fedora.mo \
+	LC_MESSAGES/install/macos.mo \
+	LC_MESSAGES/install/oracle-linux.mo \
+	LC_MESSAGES/install/others.mo \
+	LC_MESSAGES/install/ubuntu.mo \
+	LC_MESSAGES/install/windows.mo \
 	LC_MESSAGES/news.mo \
 	LC_MESSAGES/news/0.mo \
 	LC_MESSAGES/news/1.mo \
@@ -334,7 +536,27 @@ mo_files_relative_from_locale_dir = \
 	LC_MESSAGES/news/8.mo \
 	LC_MESSAGES/news/9.mo \
 	LC_MESSAGES/reference.mo \
+	LC_MESSAGES/reference/full_text_search.mo \
+	LC_MESSAGES/reference/full_text_search/boolean_mode.mo \
+	LC_MESSAGES/reference/full_text_search/scoring.mo \
+	LC_MESSAGES/reference/limitations.mo \
+	LC_MESSAGES/reference/optimizations.mo \
+	LC_MESSAGES/reference/server_variables.mo \
+	LC_MESSAGES/reference/sql_commands.mo \
+	LC_MESSAGES/reference/status_variables.mo \
+	LC_MESSAGES/reference/udf.mo \
+	LC_MESSAGES/reference/udf/mroonga_command.mo \
+	LC_MESSAGES/reference/udf/mroonga_escape.mo \
+	LC_MESSAGES/reference/udf/mroonga_highlight_html.mo \
+	LC_MESSAGES/reference/udf/mroonga_last_insert_grn_id.mo \
+	LC_MESSAGES/reference/udf/mroonga_normalize.mo \
+	LC_MESSAGES/reference/udf/mroonga_snippet.mo \
+	LC_MESSAGES/reference/udf/mroonga_snippet_html.mo \
 	LC_MESSAGES/tutorial.mo \
+	LC_MESSAGES/tutorial/installation_check.mo \
+	LC_MESSAGES/tutorial/mode.mo \
+	LC_MESSAGES/tutorial/storage.mo \
+	LC_MESSAGES/tutorial/wrapper.mo \
 	LC_MESSAGES/upgrade.mo \
 	$(NULL)
 
@@ -422,3 +644,4 @@ html_files_relative_from_locale_dir = \
 	html/tutorial/wrapper.html \
 	html/upgrade.html \
 	$(NULL)
+

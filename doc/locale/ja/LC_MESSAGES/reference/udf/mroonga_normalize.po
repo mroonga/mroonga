@@ -1,0 +1,83 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_normalize()``"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "``mroonga_normalize()`` UDF normalizes text by Groonga's normalizer."
+msgstr ""
+
+msgid "Syntax"
+msgstr ""
+
+msgid "``mroonga_normalize()`` has required parameter and optional parameter::"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid ""
+"Here is the example query which use Groonga's ``NormalizerAuto`` normalizer "
+"to be normalized::"
+msgstr ""
+
+msgid ""
+"Here is the example query which use Groonga's "
+"``NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark`` normalizer "
+"to be normalized::"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Required parameters"
+msgstr ""
+
+msgid "There is one required parameter, ``string``."
+msgstr ""
+
+msgid "``string``"
+msgstr ""
+
+msgid "It specifies text which you want to normalize."
+msgstr ""
+
+msgid "Optional parameters"
+msgstr ""
+
+msgid "There is one optional parameter, ``normalizer_name``."
+msgstr ""
+
+msgid "``normalizer_name``"
+msgstr ""
+
+msgid "It specifies Groonga's normalizer name to normalize."
+msgstr ""
+
+msgid "The default value is ``NormalizerAuto``."
+msgstr ""
+
+msgid "Return value"
+msgstr ""
+
+msgid "It returns normalized string."
+msgstr ""

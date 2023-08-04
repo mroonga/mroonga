@@ -282,6 +282,7 @@ man_pages = [
 # -- Options for gettext output --------------------------------------------
 gettext_uuid = False
 
+gettext_compact = False
 # Workaround for slow gettext builder.
 # TODO: REMOVE ME when issue#1426 is fixed
 # See also: https://bitbucket.org/birkenfeld/sphinx/issue/1426/gettext-builder-is-very-slow-during-read

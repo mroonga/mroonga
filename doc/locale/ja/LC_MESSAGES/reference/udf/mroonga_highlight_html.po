@@ -1,0 +1,140 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_highlight_html()``"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid ""
+"``mroonga_highlight_html()`` highlights the specified keywords in target "
+"text. It surrounds each keyword with ``<span class=\"keyword\">...</span>`` "
+"and special characters in HTML such as ``<`` and ``>`` are escaped. You can "
+"use the result as is safely in HTML."
+msgstr ""
+
+msgid "Syntax"
+msgstr ""
+
+msgid ""
+"``mroonga_highlight_html()`` has required parameter and optional parameter::"
+msgstr ""
+
+msgid ""
+"``AS query`` is very important. You must specify it to extract keywords from "
+"query."
+msgstr ""
+
+msgid ""
+"``open_tag`` and ``close_tag`` are optional. You can specify a tag for "
+"highlighting."
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid ""
+"Here is a sample to highlight keywords \"mroonga\" and \"groonga\" in target "
+"text by query \"mroonga OR groonga\". You must specify ``AS query``::"
+msgstr ""
+
+msgid "Here is the result of the execution example::"
+msgstr ""
+
+msgid ""
+"Here is a sample to highlight keywords \"mroonga\" and \"groonga\" in target "
+"text by keywords \"mroonga\" and \"groonga\"::"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Required parameters"
+msgstr ""
+
+msgid "There is one required parameter."
+msgstr ""
+
+msgid "``text``"
+msgstr ""
+
+msgid "The column name of string or string value to be highlighted."
+msgstr ""
+
+msgid "Optional parameters"
+msgstr ""
+
+msgid "There are some optional parameters."
+msgstr ""
+
+msgid "``query``"
+msgstr ""
+
+msgid ""
+"Specify query in `Groonga's query syntax <http://groonga.org/docs/reference/"
+"grn_expr/query_syntax.html>`_."
+msgstr ""
+
+msgid ""
+"You must specify ``AS query`` to extract keywords from query like the "
+"following::"
+msgstr ""
+
+msgid "``keyword``"
+msgstr ""
+
+msgid "Specify 0 or more keywords to be highlighted."
+msgstr ""
+
+msgid "``open_tag``"
+msgstr ""
+
+msgid "Specify an open tag for highlighting."
+msgstr ""
+
+msgid ""
+"You must specify ``AS open_tag`` to specify this parameter like the "
+"following."
+msgstr ""
+
+msgid "The default value is ``<span class=\"keyword\">``."
+msgstr ""
+
+msgid "``close_tag``"
+msgstr ""
+
+msgid "Specify a close tag for highlighting."
+msgstr ""
+
+msgid ""
+"You must specify ``AS close_tag`` to specify this parameter like the "
+"following."
+msgstr ""
+
+msgid "The default value is ``</span>``."
+msgstr ""
+
+msgid "Return value"
+msgstr ""
+
+msgid ""
+"It returns highlighted HTML. If optional parameter is not given, it only "
+"escapes special characters in HTML such as ``<``, ``>`` in ``text``."
+msgstr ""

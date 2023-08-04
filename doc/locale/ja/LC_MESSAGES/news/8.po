@@ -1,0 +1,370 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 8 series"
+msgstr "お知らせ - 8系"
+
+msgid "Release 8.09 - 2018-11-29"
+msgstr "8.09リリース - 2018-11-29"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.10 (Cosmic Cuttlefish)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.10 (Cosmic Cuttlefish)をサポートしました。"
+
+msgid "[:doc:`/install/windows`] Supported MariaDB 10.3.10."
+msgstr "[:doc:`/install/windows`] MariaDB 10.3.10をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.2.19"
+msgstr "[:doc:`/install/centos`] MariaDB 10.2.19をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.1.37"
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.37をサポートしました。"
+
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.23-25."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.23-25をサポートしました。"
+
+msgid "[rpm][centos] Supported MariaDB 10.3.11."
+msgstr "[rpm][centos] MariaDB 10.3.11に対応しました。"
+
+msgid "[rpm][centos] Supported MySQL 5.6.42."
+msgstr "[rpm][centos] MySQL 5.6.42をサポートしました。"
+
+msgid "[rpm][centos] Supported MySQL 5.7.24."
+msgstr "[rpm][centos] MySQL 5.7.24をサポートしました。"
+
+msgid "Revision:"
+msgstr "訂正："
+
+msgid "We deleted information as below."
+msgstr "以下の情報を削除しました。"
+
+msgid "\"Supported MySQL 8\""
+msgstr "\"MySQL 8をサポートしました。\""
+
+msgid ""
+"Sorry, There was wrong release information in Mroonga 8.09. The MySQL 8 is "
+"not supported. That is still being handled."
+msgstr ""
+"すみません。Mroonga 8.09のリリース情報に誤りがありました。MySQL 8はサポートし"
+"ていません。まだ対応中となります。"
+
+msgid "Release 8.07 - 2018-09-29"
+msgstr "8.07リリース - 2018-09-29"
+
+msgid ""
+"Deprecated tokenizer ``off`` option. Use tokenizer ``none`` option instead."
+msgstr ""
+"トークナイザーの ``off`` オプションは非推奨になりました。かわりに ``none`` オ"
+"プションを使ってください。"
+
+msgid ""
+"Dropped support for MariaDB 10.2.2 which is shipped at Sep 27, 2016 and "
+"older series."
+msgstr ""
+"2016年9月27にリリースされたMariaDB 10.2.2以前のMariaDB 10.2系サポートをやめま"
+"した。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.1.36."
+msgstr "[:doc:`/install/centos`] MariaDB 10.1.36をサポートしました。"
+
+msgid "Release 8.06 - 2018-08-29"
+msgstr "8.06リリース - 2018-08-29"
+
+msgid ""
+"In this version, MySQL will be automatically restarted if you had already "
+"installed Mroonga and not installed Groonga 8.0.4 or later. Because Mroonga "
+"8.06 requires Groonga 8.0.4 or later but it will not reloaded until MySQL is "
+"restarted."
+msgstr ""
+"今回のリリースでは、Mroongaをすでにインストールしていて、かつGroonga 8.0.4以"
+"降をインストールしていない場合、MySQLが自動的に再起動されます。Mroonga 8.06が"
+"必要としているGroonga 8.0.4以降が、MySQLが再起動されるまで有効にならないため"
+"です。"
+
+msgid "Updated required Groonga version to 8.0.4 or later."
+msgstr "Groonga 8.0.4以降が必要になります。"
+
+msgid "Updated required groonga-normalizer-mysql version to 1.1.3 or later."
+msgstr "groonga-normalizer-mysql 1.1.3以降が必要になります。"
+
+msgid "Supported utf8mb4_0900 family collation."
+msgstr "utf8mb4_0900族の照合順序をサポートしました。"
+
+msgid "ref: https://github.com/groonga/groonga-normalizer-mysql#description"
+msgstr ""
+
+msgid "Supported tokenizer options."
+msgstr "トークナイザーのオプションをサポートしました。"
+
+msgid "e.g.: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
+msgstr "例: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
+
+msgid "ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
+msgstr "参考: http://groonga.org/ja/docs/news.html#release-8-0-2-2018-04-29"
+
+msgid "Use the Groonga's default logger."
+msgstr "Groongaのデフォルトのロガーを使うようにしました。"
+
+msgid ""
+"[:doc:`/install/windows`] Updated bundled MariaDB to 10.3.9 from 10.1.33."
+msgstr ""
+"[:doc:`/install/windows`] ベースにしているMariaDBを10.1.33から10.3.9にアップ"
+"デートしました。"
+
+msgid ""
+"NOTICE: Before upgrading to MariaDB 10.3, you need to dump existing MariaDB "
+"10.1 databases. Then restore it after upgrading."
+msgstr ""
+"注意: MariaDB 10.3にアップグレードする前に、既存のMariaDB 10.1のデータベース"
+"をダンプする必要があります。そのあと、アップグレード後にリストアしてくださ"
+"い。"
+
+msgid "[:doc:`/install/debian`] Dropped Debian 8 (jessie) support."
+msgstr "[:doc:`/install/debian`] Debian 8 (jessie) のサポートをやめました。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 17.10 (Artful Aardvark) support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 17.10 (Artful Aardvark) のサポートをやめまし"
+"た。"
+
+msgid "[WIP] Working on supporting MySQL 8."
+msgstr "[WIP] MySQL 8に対応中です。"
+
+msgid "The storage mode is almost done (JSON type doesn't work yet)."
+msgstr "ストレージモードはほぼ完了しています。（JSON型はまだ動きません）"
+
+msgid "The wrapper mode is in progress."
+msgstr "ラッパーモードは対応中です。"
+
+msgid ""
+"[storage] Fixed a bug that wrong result may be returned on multi range read. "
+"[GitHub#211][Reported by colt27]"
+msgstr ""
+"[ストレージモード] マルチレンジリードで誤った結果が返される場合がある問題を修"
+"正。[GitHub#211][colt27さんが報告]"
+
+msgid "colt27"
+msgstr "colt27さん"
+
+msgid "Release 8.03 - 2018-05-29"
+msgstr "8.03リリース - 2018-05-29"
+
+msgid "[:doc:`/install/docker`] Added quick start guide link to Docker Hub."
+msgstr ""
+"[:doc:`/install/docker`] Docker Hubへのクイックスタートガイドのリンクを追加し"
+"ました。"
+
+msgid "[:doc:`/install/centos`] Supported MariaDB 10.3.7."
+msgstr "[:doc:`/install/centos`] MariaDB 10.3.7をサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Supported MariaDB 10.2.15 (backported to 8.02)."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.2.15 をサポートしました（8.02にバックポー"
+"ト済み）。"
+
+msgid ""
+"[:doc:`/install/centos`] Supported MariaDB 10.1.33 (backported to 8.02)."
+msgstr ""
+"[:doc:`/install/centos`] MariaDB 10.1.33 をサポートしました（8.02にバックポー"
+"ト済み）。"
+
+msgid ""
+"[:doc:`/install/ubuntu`] Fixed install failure on Ubntu 14.04 LTS (Trusty) "
+"(backported to 8.02). [GitHub#202,#205][Reported by Masato Hirai]"
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubntu 14.04 LTS（Trusty）でインストールに失敗してい"
+"た問題を修正しました（8.02にバックポート済み）。[GitHub#202,#205][Masato "
+"Hiraiさんが報告]"
+
+msgid "Masato Hirai"
+msgstr "Masato Hiraiさん"
+
+msgid "Release 8.02 - 2018-04-29"
+msgstr "8.02リリース - 2018-04-29"
+
+msgid "[:doc:`/install/ubuntu`] Supported Ubuntu 18.04 LTS (Bionic Beaver)."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 18.04 LTS (Bionic Beaver)をサポートしました。"
+
+msgid "[:doc:`/install/debian`] Supported i386 for Jessie."
+msgstr "[:doc:`/install/debian`] Jessieでi386をサポートしました。"
+
+msgid "Suppress meaningless \"duplicated unique id\" error log. [GitHub#197]"
+msgstr ""
+"意味のない「duplicated unique id」というエラーログを表示しないようにしまし"
+"た。 [GitHub#197]"
+
+msgid "[developer][test] Supported `--record` option."
+msgstr "[developer][test] `--record` オプションをサポートしました。"
+
+msgid ""
+"[:doc:`/install/centos`] Use `groonga-release-latest` instead of `groonga-"
+"release-X.X.X`."
+msgstr ""
+"[:doc:`/install/centos`] `groonga-release-X.X.X` の代わりに `groonga-release-"
+"latest` を使うようにしました。"
+
+msgid "[:doc:`/tutorial/installation_check`] Added version check howto."
+msgstr ""
+"[:doc:`/tutorial/installation_check`] バージョンチェックの方法を追記しまし"
+"た。"
+
+msgid ""
+"[:doc:`/install/centos`][percona] Supported upgrading from \"< 5.6.34\" and "
+"\"< 5.7.21\". [groonga-dev,04599][Reported by Takashi Kinoshita][Looked into "
+"by Satoshi Mitani]"
+msgstr ""
+"[:doc:`/install/centos`][percona] 5.6.34未満と5.7.21未満からのアップグレード"
+"をサポートしました。 [groonga-dev,04599][木下崇さんが報告][三谷さんが調査]"
+
+msgid "[:doc:`/install/centos`] Supported MySQL 5.6.40 and 5.7.22."
+msgstr "[:doc:`/install/centos`] MySQL 5.6.40と5.7.22をサポートしました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.21-21."
+msgstr "[:doc:`/install/centos`] Percona Server 5.7.21-21をサポートしました。"
+
+msgid ""
+"Fixed a crash bug when some complex condition in `ORDER BY` such as `ORDER "
+"BY 1 + 1, id, content`."
+msgstr ""
+"`ORDER BY` の中に `ORDER BY 1 + 1, id, content` のような複雑な条件があるとク"
+"ラッシュするバグを修正しました。"
+
+msgid ""
+"Fixed a bug that `MATCH AGAINST` condition is ignored if SQL containing such "
+"as `AND (x = 1 OR x = 2)` when condition push down is enabled. [Gitter/"
+"ja:5ae014842b9dfdbc3ac7ce1f][Reported by colt27]"
+msgstr ""
+"コンディションプッシュダウンが有効になっているときに `AND (x = 1 OR x = 2)` "
+"などがSQLに含まれていると `MATCH AGAINST` 条件が無視されるバグを修正しまし"
+"た。 [Gitter/ja:5ae014842b9dfdbc3ac7ce1f][colt27さんが報告]"
+
+msgid "Fixed a memory leak for column caches."
+msgstr "カラムキャッシュのメモリリークを修正しました。"
+
+msgid "Takashi Kinoshita"
+msgstr "木下崇さん"
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+msgid "Satoshi Mitani"
+msgstr "三谷さん"
+
+msgid "Release 8.01 - 2018-03-29"
+msgstr "8.01リリース - 2018-03-29"
+
+msgid ""
+"In this version, MySQL will be automatically restarted if you had already "
+"installed Mroonga. This is because Mroonga requires newer version of Groonga "
+"(8.0.1) to fix bugs, but it will not reloaded until MySQL is restarted."
+msgstr ""
+"今回のリリースで、Mroongaをすでにインストールしている場合にはMySQLが自動的に"
+"再起動されます。これはMroongaが必要としている新しいバージョンのGroonga 8.0.1"
+"が、MySQLが再起動されるまで有効にならないためです。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.6.39. [Reported by @iiiiyyyy]"
+msgstr ""
+"[rpm][centos] Percona Server 5.6.39をサポートしました。 [@iiiiyyyyさんが報告]"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid "[rpm][centos] Supported Percona Server 5.7.21."
+msgstr "[rpm][centos] Percona Server 5.7.21をサポートしました。"
+
+msgid ""
+"[rpm][centos] Supported MariaDB 10.2.13. [GitHub#198] [Reported by shota "
+"suzuki]"
+msgstr ""
+"[rpm][centos] MariaDB 10.2.13をサポートしました。[GitHub#198] [Shota Suzukiさ"
+"んが報告]"
+
+msgid "[rpm][centos] Supported MariaDB 10.2.14."
+msgstr "[rpm][centos] MariaDB 10.2.14に対応しました。"
+
+msgid ""
+"Fixed a bug that wrong cache for other database is used. If you create "
+"multiple database and use `mroonga_command()` against one of them, wrong "
+"cache is returned unexpectedly. To fix this issue, Groonga 8.0.1 or later is "
+"required."
+msgstr ""
+"誤ったキャッシュが使われる不具合を修正しました。複数のデータベースを作成して"
+"いて、そのどれかに `mroonga_command()` 経由でアクセスしたときに意図せず誤った"
+"キャッシュが返る問題が発生します。問題を修正するにはGroonga 8.0.1以降が必要で"
+"す。"
+
+msgid ""
+"Fixed a bug that \"NOT IN\" query returns empty result. This bug occurs when "
+"\"NOT IN\" is used with multiple arguments such as \"NOT IN (xxx, xxx)\""
+msgstr ""
+"\"NOT IN\"クエリーが空の結果を返す不具合を修正しました。この不具合は \"NOT IN"
+"\"を複数の引数と一緒に使ったときに発生します。例えば \"NOT IN (xxx, xxx)\" な"
+"どです。"
+
+msgid ""
+"Fixed a bug that specified \"NOT IN\" can't exclude correctly when condition "
+"push down is enabled."
+msgstr ""
+"コンディションプッシュダウンが有効なときに\"NOT IN\"で結果から除外することが"
+"できない不具合を修正しました。"
+
+msgid ""
+"Fixed a bug that \"ORDER BY RAND()\" query returns wrong result. This bug "
+"occurs when \"ORDER BY RAND()\" and \"LIMIT\" is specified at the same time."
+msgstr ""
+"\"ORDER BY RAND()\" クエリーが誤った結果を返す不具合を修正しました。この不具"
+"合は \"ORDER BY RAND()\" と \"LIMIT\" を同時に指定したときに発生します。"
+
+msgid ""
+"Fixed a bug that \"fast order limit\" optimization is applied unexpectedly "
+"to \"ORDER BY function()\"."
+msgstr ""
+"ORDER LIMITの最適化が意図せずORDER BY function()にも適用されてしまう不具合を"
+"修正しました。"
+
+msgid "@iiiiyyyy"
+msgstr "@iiiiyyyyさん"
+
+msgid "shota suzuki"
+msgstr "Shota Suzukiさん"
+
+msgid "Release 8.00 - 2018-02-09"
+msgstr "8.00リリース - 2018-02-09"
+
+msgid ""
+"This is a major version up! But It keeps backward compatibility. You can "
+"upgrade to 8.0.0 without rebuilding database."
+msgstr ""
+"メジャーバージョンアップです! メジャーバージョンアップですが、互換性は壊れて"
+"いないので、データベースを再構築することなくアップグレードできます。"
+
+msgid "When create hash index, used tiny hash for reducing used resource."
+msgstr ""
+"ハッシュインデックスを作成する際に、使用するリソースを減らすために小さいハッ"
+"シュを使うようにしました。"
+
+msgid ""
+"[percona57] Added gap lock detection support. [GitHub#188][Reported by Iwo]"
+msgstr ""
+"[percona57] ギャップロック検出をサポートしました。 [GitHub#188][Iwoさんの報"
+"告]"
+
+msgid "Iwo"
+msgstr "Iwoさん"

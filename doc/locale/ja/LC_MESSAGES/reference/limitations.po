@@ -1,0 +1,127 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Limitations"
+msgstr ""
+
+msgid "There are some limitations in Mroonga storage engine."
+msgstr ""
+
+msgid "Limitations of table"
+msgstr ""
+
+msgid ""
+"A table has the following limitations. This limitation is derived from "
+"Groonga."
+msgstr ""
+
+msgid "The maximum one key size: 4KiB"
+msgstr ""
+
+msgid "The maximum total size of keys: 4GiB"
+msgstr ""
+
+msgid "The maximum number of records:"
+msgstr ""
+
+msgid "No primary key table: 1,073,741,815 (2 :sup:`30` - 9)"
+msgstr ""
+
+msgid ""
+"``PRIMARY KEY`` or ``PRIMARY KEY USING BTREE`` table: 1,073,741,823 (2 :sup:"
+"`30` - 1)"
+msgstr ""
+
+msgid "``PRIMARY KEY USING HASH`` table: 536,870,912 (2 :sup:`29`)"
+msgstr ""
+
+msgid "Keep in mind that these limitations may vary depending on conditions."
+msgstr ""
+
+msgid "Limitations of indexing"
+msgstr ""
+
+msgid ""
+"A full-text index has the following limitations. This limitation is derived "
+"from groonga and applied to each table."
+msgstr ""
+
+msgid ""
+"The maximum number of distinct terms: 268,435,455 (more than 268 million)"
+msgstr ""
+
+msgid "The maximum index size: 256GiB"
+msgstr ""
+
+msgid ""
+"Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
+"table data matches to this limitations."
+msgstr ""
+
+msgid "Limitations about the value of columns"
+msgstr ""
+
+msgid "There is a limitation about the value of column in storage mode."
+msgstr ""
+
+msgid ""
+"Mroonga storage engine executes automatic conversion against the value NULL."
+msgstr ""
+
+msgid ""
+"For example, if the value NULL is used in ``DATE`` or ``DATETIME`` columns, "
+"Mroonga storage engine automatically converts 0 into 1 as the value of month "
+"or date."
+msgstr ""
+
+msgid ""
+"Thus, the value 0 is treated as the 1st month (January) of the year or the "
+"1st date of the month."
+msgstr ""
+
+msgid ""
+"And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
+"00:00:00)."
+msgstr ""
+
+msgid ""
+"This kind of automatic conversion is not restricted to only ``DATE`` or "
+"``DATETIME`` types."
+msgstr ""
+
+msgid ""
+"The value NULL is converted into the default value of columns. In most "
+"cases, it will be converted into empty string for column which belongs to "
+"type of string, 0 for column which belongs to type of numeric."
+msgstr ""
+
+msgid "Here is an example to show behavior described above."
+msgstr ""
+
+msgid "Here is the results of execution example::"
+msgstr ""
+
+msgid "Limitations of column size"
+msgstr ""
+
+msgid "A column has the following limitation."
+msgstr ""
+
+msgid "The maximum stored data size of a column: 256GiB"
+msgstr ""

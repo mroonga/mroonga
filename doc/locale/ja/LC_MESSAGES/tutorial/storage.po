@@ -1,0 +1,743 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Storage mode"
+msgstr ""
+
+msgid "Here we explain how to use storage mode of Mroonga"
+msgstr ""
+
+msgid "How to use full text search"
+msgstr ""
+
+msgid ""
+"After confirming the installation, let's create a table. The important point "
+"is to specify Mroonga by ``ENGINE = Mroonga``:"
+msgstr ""
+
+msgid "We put data by INSERT:"
+msgstr ""
+
+msgid "Try full text search:"
+msgstr ""
+
+msgid "Yes, full text search works."
+msgstr ""
+
+msgid "How to get search score"
+msgstr ""
+
+msgid ""
+"In version 1.0.0 or before, Mroonga used a special column named ``_score`` "
+"to get search score. From version 1.0.0, it follows MySQL's standard way to "
+"get search score."
+msgstr ""
+
+msgid ""
+"We often want to display more relevant results first in full text search. We "
+"use search score in such case."
+msgstr ""
+
+msgid ""
+"We can get search score by MySQL's standard way [#score]_, i.e. we use "
+"MATCH...AGAINST in one of columns in SELECT or ORDER BY."
+msgstr ""
+
+msgid "Let's try:"
+msgstr ""
+
+msgid ""
+"The result having the search word ``fine`` more, i.e. ``id = 3`` message "
+"having the higher search score, is displayed first. And you also get search "
+"score by using MATCH AGAINST in SELECT phrase."
+msgstr ""
+
+msgid "You can use ``AS`` to change the attribute name:"
+msgstr ""
+
+msgid "How to specify the parser for full text search"
+msgstr ""
+
+msgid ""
+"MySQL has the following syntax to specify the parser [#parser]_ for full "
+"text search::"
+msgstr ""
+
+msgid ""
+"To use this syntax, you need to register all parsers in MySQL beforehand. On "
+"the other hand, Groonga can dynamically add a tokenizer, that is a parser in "
+"MySQL. So if use this syntax in Mroonga, tokenizers that are added in "
+"Groonga dynamically cannot be supported. We think that this limitation "
+"decreases the convenience, and we choose our own syntax using COMMENT like "
+"the following::"
+msgstr ""
+
+msgid ""
+"``COMMENT`` in ``FULLTEXT INDEX`` is only supported MySQL 5.5 or later. If "
+"you use MySQL 5.1, use ``mroonga_default_tokenizer`` variable described "
+"below."
+msgstr ""
+
+msgid ""
+"You can specify one of the following values as the tokenizer. \"tokenizer\" "
+"in Mroonga equals to \"parser\" in MySQL."
+msgstr ""
+
+msgid "Available tokenizers"
+msgstr ""
+
+msgid "Tokenizer"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "``off``"
+msgstr ""
+
+msgid ""
+"(``Deprecated``) It does not tokenize at all. Use ``off`` if you want to "
+"treat ``content`` as is. For example, this value is used for prefix search."
+msgstr ""
+
+msgid "``none``"
+msgstr ""
+
+msgid ""
+"It does not tokenize at all. Use ``none`` if you want to treat ``content`` "
+"as is. For example, this value is used for prefix search."
+msgstr ""
+
+msgid "``TokenBigram``"
+msgstr ""
+
+msgid ""
+"It tokenises in bigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 3 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+msgid "This is the default value."
+msgstr ""
+
+msgid "``TokenMecab``"
+msgstr ""
+
+msgid "It tokenises using MeCab. Groonga should be built with MeCab support."
+msgstr ""
+
+msgid "``TokenBigramSplitSymbol``"
+msgstr ""
+
+msgid ""
+"It tokenises in bigram. Unlike ``TokenBigram``, continuous symbols are not "
+"treated as a token, but tokenised in bigram."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramSplitSymbol`` instead of ``TokenBigram``, ``\"!?"
+"\"`` can match ``\"!?!?!?\"`` in ``\"Is it really!?!?!?\"``. But when you "
+"use ``TokenBigram``, only ``\"!?!?!?\"`` can match as well."
+msgstr ""
+
+msgid "``TokenBigramSplitSymbolAlpha``"
+msgstr ""
+
+msgid ""
+"It tokenise in bigram. In addition to ``TokenBigramSplitSymbol``, continuous "
+"alphabets are not treated as a token either, but tokenised in bigram."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramSplitSymbolAlpha`` instead of ``TokenBigram``, ``"
+"\"real\"`` can match ``\"Is it really?\"``. But when you use "
+"``TokenBigram``, only ``\"really\"`` can match as well."
+msgstr ""
+
+msgid "``TokenBigramSplitSymbolAlphaDigit``"
+msgstr ""
+
+msgid ""
+"It tokenise in bigram. In addition to ``TokenBigramSplitSymbolAlpha``, "
+"continuous numbers are not treated as a token either, but tokenised in "
+"bigram. So any kind of characters are treated equally in bigram."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramSplitSymbolAlphaDigit`` instead of "
+"``TokenBigram``, ``\"567\"`` can match ``\"090-0123-4567\"``. But when you "
+"use ``TokenBigram``, only ``\"4567\"`` can match as well."
+msgstr ""
+
+msgid "``TokenBigramIgnoreBlank``"
+msgstr ""
+
+msgid "It tokenise in bigram. Unlike ``TokenBigram``, it ignores white spaces."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramIgnoreBlank`` instead of ``TokenBigram``, ``\"みな"
+"さん\"`` can match ``\"み な さ ん 注 目\"``. But when you use "
+"``TokenBigram``, only ``\"み な さ ん\"`` can match as well."
+msgstr ""
+
+msgid "``TokenBigramIgnoreBlankSplitSymbol``"
+msgstr ""
+
+msgid ""
+"It tokenise in bigram. Unlike ``TokenBigramSplitSymbol``, it ignores white "
+"spaces."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramIgnoreBlankSplitSymbol`` instead of "
+"``TokenBigramSplitSymbol``, ``\"???\"`` can match ``\"! ? ???\"``. But when "
+"you use ``TokenBigramSplitSymbol``, only ``\"? ??\"`` can match as well."
+msgstr ""
+
+msgid "``TokenBigramIgnoreBlankSplitSymbolAlpha``"
+msgstr ""
+
+msgid ""
+"It tokenise in bigram. Unlike ``TokenBigramSplitSymbolAlpha``, it ignores "
+"white spaces."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramIgnoreBlankSplitSymbolAlpha`` instead of "
+"``TokenBigramSplitSymbolAlpha``, ``\"ama\"`` can match ``\"I am a pen.\"``. "
+"But when you use ``TokenBigramSplitSymbolAlpha``, only ``\"am a\"`` can "
+"match as well."
+msgstr ""
+
+msgid "``TokenBigramIgnoreBlankSplitSymbolAlphaDigit``"
+msgstr ""
+
+msgid ""
+"It tokenise in bigram. Unlike ``TokenBigramSplitSymbolAlphaDigit``, it "
+"ignores white spaces."
+msgstr ""
+
+msgid ""
+"When you use ``TokenBigramIgnoreBlankSplitSymbolAlphaDigit`` instead of "
+"``TokenBigramSplitSymbolAlphaDigit``, ``\"9001\"`` can match ``\"090 0123 "
+"4567\"``. But when you use ``TokenBigramSplitSymbolAlphaDigit``, only ``\"90 "
+"01\"`` can match as well."
+msgstr ""
+
+msgid "``TokenDelimit``"
+msgstr ""
+
+msgid "It tokenise by splitting with a white space."
+msgstr ""
+
+msgid ""
+"``\"movie horror topic\"`` will be tokenised as ``\"movie\"``, ``\"horror"
+"\"``, ``\"topic\"``."
+msgstr ""
+
+msgid "``TokenDelimitNull``"
+msgstr ""
+
+msgid "It tokenise by splitting with a null character (``\\\\0``)."
+msgstr ""
+
+msgid ""
+"``\"movie\\\\0horror\\\\0topic\"`` will be tokenised as ``\"movie\"``, ``"
+"\"horror\"``, ``\"topic\"``."
+msgstr ""
+
+msgid "``TokenUnigram``"
+msgstr ""
+
+msgid ""
+"It tokenises in unigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 2 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+msgid "``TokenTrigram``"
+msgstr ""
+
+msgid ""
+"It tokenises in trigram. But continuous alphabets, numbers or symbols are "
+"treated as a token. So there can exist tokes with 4 letters or more. It is "
+"to reduce noises."
+msgstr ""
+
+msgid ""
+"You can specify the default parser by passing ``--with-default-tokenizer`` "
+"option in ``configure`` when you build Mroonga::"
+msgstr ""
+
+msgid ""
+"Or you can set ``mroonga_default_tokenizer`` variable in ``my.cnf`` or by "
+"SQL. If you specify it in ``my.cnf``, the change will not be lost after "
+"restarting MySQL, but you need to restart MySQL to make it effective. On the "
+"other hand, if you set it in SQL, the change is effective immediately, but "
+"it will be lost when you restart MySQL."
+msgstr ""
+
+msgid "my.cnf::"
+msgstr ""
+
+msgid "SQL:"
+msgstr ""
+
+msgid "How to specify the normalizer"
+msgstr ""
+
+msgid ""
+"Mroonga uses normalizer corresponding to the encoding of document. It is "
+"used when tokenizing text and storing table key."
+msgstr ""
+
+msgid ""
+"It is used ``NormalizerMySQLGeneralCI`` normalizer when the encoding is "
+"``utf8_general_ci`` or ``utf8mb4_general_ci``."
+msgstr ""
+
+msgid ""
+"It is used ``NormalizerMySQLUnicodeCI`` normalizer when the encoding is "
+"``utf8_unicode_ci`` or ``utf8mb4_unicode_ci``."
+msgstr ""
+
+msgid "It isn't used normalizer when the encoding is ``utf8_bin``."
+msgstr ""
+
+msgid ""
+"Here is an example that uses ``NormalizerMySQLUnicodeCI`` normalizer by "
+"specifying ``utf8_unicode_ci``:"
+msgstr ""
+
+msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
+msgstr ""
+
+msgid ""
+"See `Groonga's documentation about normalizer <http://groonga.org/docs/"
+"reference/normalizers.html>`_ for more details."
+msgstr ""
+
+msgid "Here is an example that uses ``NormalizerAuto`` normalizer:"
+msgstr ""
+
+msgid "How to specify the token filters"
+msgstr ""
+
+msgid "Mroonga has the following syntax to specify Groonga's token filters.::"
+msgstr ""
+
+msgid "Here is an example that uses ``TokenFilterStem`` token filter:"
+msgstr ""
+
+msgid ""
+"See `Groonga's documentation about token filter documentation <http://"
+"groonga.org/docs/reference/token_filters.html>`_ for more details."
+msgstr ""
+
+msgid "Here is an example that uses ``TokenFilterStopWord`` token filter:"
+msgstr ""
+
+msgid "It's used that specifying the lexicon table for fulltext search."
+msgstr ""
+
+msgid "How to specify Groonga's column flags"
+msgstr ""
+
+msgid "Mroonga has the following syntax to specify Groonga's column flags::"
+msgstr ""
+
+msgid "Here is an example that uses ``COMPRESS_ZLIB`` flag:"
+msgstr ""
+
+msgid ""
+"See `Groonga's documentation about column flags <http://groonga.org/docs/"
+"reference/commands/column_create.html#parameters>`_ for more details."
+msgstr ""
+
+msgid "How to use geolocation search"
+msgstr ""
+
+msgid ""
+"In storage mode, you can use fast geolocation search in addition to full "
+"text search. But unlike MyISAM, you can only store POINT type data. You "
+"cannot store other types data like LINE. And fast search using index only "
+"supports MBRContains. It does not support MBRDisjoint."
+msgstr ""
+
+msgid ""
+"For the table definition for geolocation search, you need to define a POINT "
+"type column like in MyISAM and define SPATIAL INDEX for it.:"
+msgstr ""
+
+msgid ""
+"To store data, you create POINT type data by using geomFromText() function "
+"like in MyISAM:"
+msgstr ""
+
+msgid ""
+"If you want to find shops within the rectangle where Ikebukuro station "
+"(139.7101 35.7292) is the top-left point and Tokyo Station (139.7662 "
+"35.6815) is the bottom-right point, SELECT phrase is like the following:"
+msgstr ""
+
+msgid "Here you can search by geolocation!"
+msgstr ""
+
+msgid "How to get the record ID"
+msgstr ""
+
+msgid ""
+"Groonga assigns a unique number to identify the record when a record is "
+"added in the table."
+msgstr ""
+
+msgid ""
+"To make the development of applications easier, you can get this record ID "
+"by SQL in Mroonga"
+msgstr ""
+
+msgid ""
+"To get the record ID, you need to create a column named ``_id`` when you "
+"create a table:"
+msgstr ""
+
+msgid ""
+"Tye typo of ``_id`` column should be integer one (TINYINT, SMALLINT, "
+"MEDIUMINT, INT or BIGINT)."
+msgstr ""
+
+msgid "You can create an index for _id column, but it should be HASH type."
+msgstr ""
+
+msgid ""
+"Let's add records in the table by INSERT. Since _id column is implemented as "
+"a virtual column and its value is assigned by Groonga, you cannot specify "
+"the value when updating. So you need to exclude it from setting columns, or "
+"you need to use ``null`` as its value:"
+msgstr ""
+
+msgid "To get the record ID, you invoke SELECT with _id column:"
+msgstr ""
+
+msgid ""
+"By using last_insert_grn_id function, you can also get the record ID that is "
+"assigned by the last INSERT:"
+msgstr ""
+
+msgid ""
+"last_insert_grn_id function is included in Mroonga as a User-Defined "
+"Function (UDF), but if you have not yet register it in MySQL by CREATE "
+"FUNCTION, you need to invoke the following SQL for defining a function:"
+msgstr ""
+
+msgid ""
+"As you can see in the example above, you can get the record ID by _id column "
+"or last_insert_grn_id function. It will be useful to use this value in the "
+"ensuing SQL queries like UPDATE:"
+msgstr ""
+
+msgid "How to get snippet (Keyword in context)"
+msgstr ""
+
+msgid ""
+"Mroonga provides functionality to get keyword in context. It is implemented "
+"as :doc:`/reference/udf/mroonga_snippet` UDF."
+msgstr ""
+
+msgid "How to use similar search"
+msgstr ""
+
+msgid ""
+"Similar search is supported by specifying document itself instead of "
+"specifying keywords in query."
+msgstr ""
+
+msgid ""
+"It is useful if you want to find documents which is related to specific "
+"document."
+msgstr ""
+
+msgid "Here is the schema definition for execution examples:"
+msgstr ""
+
+msgid "Here is the sample data for execution examples:"
+msgstr ""
+
+msgid "Here is the example of similar search by content itself."
+msgstr ""
+
+msgid ""
+"Note that you need to specify an content of document in `AGAINST('...' IN "
+"NATURAL LANGUAGE MODE)`."
+msgstr ""
+
+msgid ""
+"To improve degree of similarity, you may need to use language specific "
+"tokenizer or use labeled data such as tag to get rid of some undesirable "
+"search results."
+msgstr ""
+
+msgid ""
+"For example, if you want to execute similar search against Japanese text, it "
+"is recommended to use language specific tokenizer - `TokenMecab`. Here is "
+"the schema definition to use `TokenMecab` tokenizer:"
+msgstr ""
+
+msgid "How to run Groonga command"
+msgstr ""
+
+msgid ""
+"In storage mode, Mroonga stores all your data into Groonga database. You can "
+"access Groonga database by SQL with Mroonga. SQL is very powerful but it is "
+"not good for some operations such as faceted search."
+msgstr ""
+
+msgid ""
+"Faceted search is popular recently. Many online shopping sites such as "
+"amazon.com and ebay.com support faceted search. Faceted search refines the "
+"current search by available search parameters before users refine their "
+"search. And faceted search shows refined searches. Users just select a "
+"refined search. Users benefit from faceted search:"
+msgstr ""
+
+msgid ""
+"Users don't need to think about how to refine their search. Users just "
+"select a showed refined search."
+msgstr ""
+
+msgid ""
+"Users don't get boared \"not match\" page. Faceted search showes only "
+"refined searches that has one or more matched items."
+msgstr ""
+
+msgid ""
+"Faceted search needs multiple ``GROUP BY`` operations against searched "
+"result set. To do faceted search by SQL, multiple ``SELECT`` requests are "
+"needed. It is not effective."
+msgstr ""
+
+msgid ""
+"Groonga can do faceted search by only one groonga command. It is effective. "
+"Groonga has the ``select`` command that can search records with faceted "
+"search. Faceted search is called as \"drilldown\" in Groonga. See `Groonga's "
+"documentation about select command <http://groonga.org/docs/reference/"
+"commands/select.html>`_ for more details."
+msgstr ""
+
+msgid ""
+"Mroonga provides ``mroonga_command()`` function. You can run Groonga command "
+"in SQL by the function. But you should use only ``select`` command. Other "
+"commands that change schema or data may break consistency."
+msgstr ""
+
+msgid ""
+"Each record has ``groonga`` or ``MySQL`` as ``tag``. Each record also has "
+"``year`` and ``year_month``. You can use ``tag``, ``year`` and "
+"``year_month`` as faceted search keys."
+msgstr ""
+
+msgid ""
+"Groonga calls faceted search as drilldown. So parameter key in Groonga is "
+"``--drilldown``. Groonga returns search result as JSON. So "
+"``mroonga_command()`` also returns search result as JSON. It is not SQL "
+"friendly. You need to parse search result JSON by yourself."
+msgstr ""
+
+msgid ""
+"Here is the example of faceted search by all available faceted search keys "
+"(result JSON is pretty printed):"
+msgstr ""
+
+msgid ""
+"The first element ``[[3], [[\"_id\",\"UInt32\"]]]`` is normal search result. "
+"It's not faceted search result."
+msgstr ""
+
+msgid "The second, third and forth elements are faceted search results:"
+msgstr ""
+
+msgid ""
+"The order of faceted search results is corresponding to the value of ``--"
+"drilldown``. In this example, we specified ``tag``, ``year`` and "
+"``year_month`` as ``--drilldown`` value. So the first faceted search result "
+"is for ``tag``, the second one is for ``year`` and the third one is for "
+"``year_month``."
+msgstr ""
+
+msgid ""
+"Each faceted search result uses the following format. This is the same as "
+"normal search result:"
+msgstr ""
+
+msgid ""
+"The ``_key`` column value in faceted search result shows faceted search key."
+msgstr ""
+
+msgid ""
+"For example, the first faceted search result (the faceted search result for "
+"``tag``) shows that matched records (all records in this case) have "
+"``groonga`` and ``MySQL`` as ``tag`` value:"
+msgstr ""
+
+msgid ""
+"The ``_nsubrecs`` column value in faceted search result shows the number of "
+"records that have the corresponding faceted search key."
+msgstr ""
+
+msgid ""
+"For example, the first faceted search result (the faceted search result for "
+"``tag``) shows that there are 1 record that has ``groonga`` as ``tag`` value "
+"and 2 records that have ``MySQL`` as ``tag`` value:"
+msgstr ""
+
+msgid ""
+"See `Groonga's documentation about select command <http://groonga.org/docs/"
+"reference/commands/select.html>`_ for more details."
+msgstr ""
+
+msgid "How to search by regular expression"
+msgstr ""
+
+msgid ""
+"In storage mode, you can use a Groonga's functionality from Mroonga as "
+"described above. Thus, you can search records by using a regular expression "
+"via Groonga's functionality."
+msgstr ""
+
+msgid "There are some conditions to use regular expression in Mroonga."
+msgstr ""
+
+msgid ""
+"Create an index with ``TokenRegexp`` tokenizer which is used in ``COMMENT``"
+msgstr ""
+
+msgid "Use ``*SS`` pragma and ``@~`` in ``WHERE MATCH ... AGAINST`` clause"
+msgstr ""
+
+msgid "Here is the example of search by regular expression."
+msgstr ""
+
+msgid ""
+"By using :ref:`boolean-mode-pragma-ss` pragma, you can search the records "
+"which matches ``/var/log/auth.log`` with ``content @~ \"\\\\\\\\A/var/log/"
+"auth\"``. ``@~`` is a Groonga's operator which executes a regular expression "
+"search, and ``\"\\\\\\\\A/var/log/auth\"`` executes prefix search, so it "
+"matches to only ``/var/log/auth.log``. ``/tmp/local/var/log/auth.log`` "
+"doesn't match because it doesn't begin with \"/var/log/auth\"."
+msgstr ""
+
+msgid ""
+"See `Groonga's regular expression document <http://groonga.org/docs/"
+"reference/regular_expression.html#syntax>`_ for more syntax details."
+msgstr ""
+
+msgid "Logging"
+msgstr ""
+
+msgid "Mroonga outputs the logs by default."
+msgstr ""
+
+msgid ""
+"Log files are located in MySQL's data directory with the filename  ``groonga."
+"log``."
+msgstr ""
+
+msgid "Here is the example of the log. ::"
+msgstr ""
+
+msgid ""
+"The default log level is NOTICE, i.e. we have important information only and "
+"we don't have debug information etc.)."
+msgstr ""
+
+msgid ""
+"You can get the log level by ``mroonga_log_level`` system variable, that is "
+"a global variable. You can also modify it dynamically by using SET phrase:"
+msgstr ""
+
+msgid "Available log levels are the followings."
+msgstr ""
+
+msgid "NONE"
+msgstr ""
+
+msgid "EMERG"
+msgstr ""
+
+msgid "ALERT"
+msgstr ""
+
+msgid "CRIT"
+msgstr ""
+
+msgid "ERROR"
+msgstr ""
+
+msgid "WARNING"
+msgstr ""
+
+msgid "NOTICE"
+msgstr ""
+
+msgid "INFO"
+msgstr ""
+
+msgid "DEBUG"
+msgstr ""
+
+msgid "DUMP"
+msgstr ""
+
+msgid "See :ref:`server-variable-mroonga-log-level` about details."
+msgstr ""
+
+msgid ""
+"You can reopen the log file by FLUSH LOGS. If you want to rotate the log "
+"file without stopping MySQL server, you can do in the following procedure."
+msgstr ""
+
+msgid ""
+"change the file name of ``groonga.log`` (by using OS's mv command etc.)."
+msgstr ""
+
+msgid ""
+"invoke \"FLUSH LOGS\" in MySQL server (by mysql command or mysqladmin "
+"command)."
+msgstr ""
+
+msgid "Next step"
+msgstr ""
+
+msgid ""
+"Now, you can use Mroonga as storage mode! If you want Mroonga to be faster, "
+"see also :doc:`/reference/optimizations`."
+msgstr ""
+
+msgid "Footnotes"
+msgstr ""
+
+msgid ""
+"`MySQL 5.1 Reference Manual :: 11 Functions and Operations :: 11.7 Full-Text "
+"Search Functions <http://dev.mysql.com/doc/refman/5.1/ja/fulltext-search."
+"html>`_"
+msgstr ""
+
+msgid "In Groonga, we call it a 'tokenizer'."
+msgstr ""

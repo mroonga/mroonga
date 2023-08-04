@@ -1,0 +1,899 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 2 series"
+msgstr "お知らせ - 2系"
+
+msgid "Release 2.10 - 2012/12/29"
+msgstr "2.10リリース - 2012/12/29"
+
+msgid ""
+"Supported to use ENABLE KEYS/DISABLE KEYS against table whose charset is "
+"different from system charset. [Reported by @kokoronavi]"
+msgstr ""
+"システムと異なる文字コードのテーブルでもENABLE KEYS/DISABLE KEYSを使えるよう"
+"にした。 [@kokoronaviさんが報告]"
+
+msgid "Improved to show the value of duplicated key on error message."
+msgstr ""
+"キーが重複している場合、エラーメッセージにそのキーの値を表示するように改善し"
+"た。"
+
+msgid "Supported MySQL 5.6.9-rc. [#1547] [#1548] [Reported by wing]"
+msgstr "MySQL 5.6.9-rcに対応。 [#1547] [#1548] [wingさんが報告]"
+
+msgid ""
+"[storage] Supported to use ``GROUP BY`` with index. This change improves "
+"search speed against ``GROUP BY``."
+msgstr ""
+"[ストレージモード] ``GROUP BY`` をインデックスを使っての検索できるようにし"
+"た。この変更で ``GROUP BY`` を使った検索速度を改善できます。"
+
+msgid "Dropped Ubuntu 11.04 (Natty Narwhal) support."
+msgstr "Ubuntu 11.04 (Natty Narwhal)のサポートを終了した。"
+
+msgid ""
+"[rpm][centos] Fixed to use MySQL 5.1.66-2 on CentOS 6. [Reported by "
+"@wakisuke.ua]"
+msgstr ""
+"[rpm][centos] CentOS6でMySQL 5.1.66-2を使うように修正した。[宮脇さんが報告]"
+
+msgid ""
+"Fixed a bug that ``MATCH AGAINST`` with ``INNER JOIN`` syntax causes an "
+"error. [Reported by ooshiro]"
+msgstr ""
+"``MATCH AGAINST`` を ``INNER JOIN`` と一緒に使うとエラーになる不具合を修正し"
+"た。 [大城さんが報告]"
+
+msgid "@kokoronavi"
+msgstr "@kokoronaviさん"
+
+msgid "@wakisuke.ua"
+msgstr "宮脇さん"
+
+msgid "wing"
+msgstr "wingさん"
+
+msgid "ooshiro"
+msgstr "大城さん"
+
+msgid "Release 2.09 - 2012/11/29"
+msgstr "2.09リリース - 2012/11/29"
+
+msgid ""
+"This release has backward incompatible changes against ``TIMESTAMP`` value "
+"and primary indexed char(N)."
+msgstr ""
+"今回のリリースには後方互換性のない変更が ``TIMESTAMP`` 型の値と 主キーに"
+"char(N)を使った場合にあります。"
+
+msgid ""
+"``TIMESTAMP`` value is changed to store as UTC timezone. If you have any "
+"table that uses ``TIMESTAMP`` column with no UTC timezone, please recreate "
+"(dump and restore) database."
+msgstr ""
+"このリリースには ``TIMESTAMP`` 型の値に関して後方互換性のない変更がありま"
+"す。 ``TIMESTAMP`` 型ではUTCタイムゾーンを保持するように変更しました。もし "
+"``TIMESTAMP`` 型のカラムを(UTCタイムゾーンでなく)使っているテーブルがあれば、"
+"データベースを再作成 (データベースのダンプおよびリストアを行ってください。"
+
+msgid ""
+"If you have any table that uses char(N) as primary key, please recreate "
+"index."
+msgstr ""
+"char(N)を主キーとして使用しているテーブルがあるなら、インデックスを再作成して"
+"ください。"
+
+msgid "Here is a procedure how to recreate database or recreate index."
+msgstr "データベースやインデックスを再作成する手順はこちら"
+
+msgid "Dump a database that uses mroonga::"
+msgstr "mroongaを使っているデータベースをダンプします::"
+
+msgid "Restore a database by modified dump file::"
+msgstr "修正したダンプファイルを使ってデータベースを復旧します::"
+
+msgid "Recreate a index::"
+msgstr "インデックスを作り直します::"
+
+msgid "[rpm][centos] Supported MySQL 5.5.28 on CentOS 5."
+msgstr "[rpm][centos] CentOS 5にてMySQL 5.5.28に対応。"
+
+msgid "[rpm][centos] Supported MySQL 5.1.61 on CentOS 6."
+msgstr "[rpm][centos] CentOS 6にてMySQL 5.1.61に対応。"
+
+msgid ""
+"[wrapper mode] Supported last_insert_id() [#1540] [Reported by @soundkitchen]"
+msgstr ""
+"[ラッパーモード] last_insert_id()関数をサポートした。[#1540] [@soundkitchenさ"
+"んが報告]"
+
+msgid ""
+"[mysql51] Fixed crash bug by checking existence of utf8mb4. MySQL 5.1 "
+"doesn't have utf8mb4. [groonga-dev,01069] [Reported by wakisuke]"
+msgstr ""
+"[mysql51] utf8mb4の存在チェックでクラッシュする不具合を修正。MySQL 5.1には"
+"utf8mb4がないのが原因でした。 [groonga-dev,01069] [Reported by wakisuke]"
+
+msgid ""
+"[storage mode] Fixed impossible deleting problem that matched records. "
+"[#1533] [Reported by @HANZUBON]"
+msgstr ""
+"[ストレージモード] 検索でマッチしているのに該当データを削除できない問題を修正"
+"した。 [#1533] [@HANZUBONさんが報告]"
+
+msgid ""
+"Fixed a bug that primary indexed char(N) can't be searched. This bug affects "
+"if any value of char(N) has M-length (M < N) string or it has one more "
+"spaces at the last and require index recreation."
+msgstr ""
+"主キーのインデックスがchar(N)のとき検索できないことがあるのを修正。この不具合"
+"はchar(N)に設定した値がNよりも短いか末尾に空白がある場合に発現します。この修"
+"正によりインデックスの再構築が必要になります。"
+
+msgid "Fixed a bug that content after NULL character is ignored for char(N)"
+msgstr ""
+"char(N)に設定した文字列でNULL文字を含んでいた場合、それ以降が無視されてしまう"
+"不具合を修正。"
+
+msgid ""
+"Fixed to store ``TIMESTAMP`` value as UTC timezone. This is backward "
+"incompatible change."
+msgstr ""
+"``TIMESTAMP`` 型の値をUTCで保持するようにしました。これは後方互換性のない変更"
+"です。"
+
+msgid "@soundkitchen"
+msgstr "@soundkitchenさん"
+
+msgid "wakisuke"
+msgstr "wakisukeさん"
+
+msgid "@HANZUBON"
+msgstr "@HANZUBONさん"
+
+msgid "Release 2.08 - 2012/10/29"
+msgstr "2.08リリース - 2012/10/29"
+
+msgid ""
+"This release has a backward incompatible change against multiple column "
+"index. If you have any tables that uses any multiple comlumn indexes against "
+"VARCHAR or CHAR, please recreate those indexes by ``ALTER TABLE DISABLE "
+"KEYS`` and ``ALTER TABLE ENBALE KEYS``::"
+msgstr ""
+"このリリースにはマルチカラムインデックスに関する後方互換性のない変更が1つあり"
+"ます。もし、 マルチカラムインデックスをVARCHARやCHAR型に対して使っている場合"
+"は  ``ALTER TABLE DISABLE KEYS`` と ``ALTER TABLE ENBALE KEYS`` を使ってイン"
+"デックスを作り直してください::"
+
+msgid ""
+"[storage mode] Supported ``INFORMATION_SCHEMA.TABLES.DATA_LENGTH``. "
+"[Suggested by @9m]"
+msgstr ""
+"[ストレージモード] ``INFORMATION_SCHEMA.TABLES.DATA_LENGTH`` をサポート。 "
+"[@9mさんが提案]"
+
+msgid "Supported utf8mb4. [groonga-dev,01049] [Reported by warp kawada]"
+msgstr "utf8mb4をサポート。 [groonga-dev,01049] [warp kawadaさんが報告]"
+
+msgid "Supported Ubuntu 12.10 (Quantal Quetzal)"
+msgstr "Ubuntu 12.10 Quantal Quetzalに対応。"
+
+msgid "[rpm][fedora] Supported MySQL 5.5.28."
+msgstr "[rpm][fedora] MySQL 5.5.28に対応。"
+
+msgid ""
+"[storage mode] Fixed unique judge problem of multiple column unique index "
+"with date column. [groonga-dev,01041] [#1495] [Reported by jd fonc]"
+msgstr ""
+"[ストレージモード] マルチカラムユニークインデックスをDATE型のカラムで使ったと"
+"きのユニーク判定不具合を修正。[groonga-dev,01041] [#1495] [jd foncさんが報告]"
+
+msgid ""
+"Fixed a bug that ``WHERE index < XXX ORDER BY DESC`` doesn't sort by "
+"descending. [Reported by @taro252]"
+msgstr ""
+"``WHERE index < XXX ORDER BY DESC`` で降順ソートが正しく行えない不具合を修"
+"正。 [@taro252さんが報告]"
+
+msgid ""
+"[rpm] Fixed missing ``DROP FUNCTION mroonga_snippet``. [Reported by @tokuhy]"
+msgstr ""
+"[rpm] ``DROP FUNCTION mroonga_snippet`` が抜けている問題を修正。[@tokuhyさん"
+"が報告]"
+
+msgid "Fixed range search by multi column index by int."
+msgstr ""
+"マルチカラムインデックスに指定したINT型のカラムで範囲検索が正しく行えない問題"
+"を修正。"
+
+msgid ""
+"[doc] Fixed wrong command line operation during build process. [groonga-"
+"dev,01061] [Reported by Kazuhiro Isobe]"
+msgstr ""
+"[doc] ビルド手順でコマンドライン操作の記述誤りを修正。 [groonga-dev,01061] "
+"[磯部和広さんが報告]"
+
+msgid "@9m"
+msgstr "@9mさん"
+
+msgid "warp kawada"
+msgstr "warp kawadaさん"
+
+msgid "jd fonc"
+msgstr "jd foncさん"
+
+msgid "@taro252"
+msgstr "@taro252さん"
+
+msgid "@tokuhy"
+msgstr "@tokuhyさん"
+
+msgid "Kazuhiro Isobe"
+msgstr "磯部和広さん"
+
+msgid "Release 2.07 - 2012/09/29"
+msgstr "2.07リリース - 2012/09/29"
+
+msgid "[deb] Enabled AppArmor configuration for MeCab. [Reported by @Qurage]"
+msgstr "[deb] MeCab向けにAppArmorの設定を有効にした。 [@Qurageさんが報告]"
+
+msgid "[storage mode][experimental] Added mroonga_snippet() function. [#1442]"
+msgstr "[ストレージモード][実験的] mroonga_snippet()関数を追加。 [#1442]"
+
+msgid ""
+"[rpm] Fixed ``groonga_required_version``. [groonga-dev,01033] [Reported by "
+"wing]"
+msgstr ""
+"[rpm] ``groonga_required_version`` を修正。 [groonga-dev,01033] [wingさんが報"
+"告]"
+
+msgid ""
+"Fixed datetime out of range problems. [groonga-dev,01035] [#1476] [Reported "
+"by Nakatani Munetaka]"
+msgstr ""
+"datetime型として保持できる値の範囲が狭く、意図しない値が設定される問題を修"
+"正。 [groonga-dev,01035] [#1476] [中谷宗嵩さんが報告]"
+
+msgid "@Qurage"
+msgstr "@Qurageさん"
+
+msgid "Nakatani Munetaka"
+msgstr "中谷宗嵩さん"
+
+msgid "Release 2.06 - 2012/08/29"
+msgstr "2.06リリース - 2012/08/29"
+
+msgid ""
+"This release has a backward compatibility about a database. But this release "
+"depends on new functionality introduced at groonga 2.0.6. Note that you must "
+"use mroonga 2.06 with groonga 2.0.6."
+msgstr ""
+"今回のリリースではデータベースの互換性があります。ただし、新たにgroonga 2.0.6"
+"で導入された機能を使っているので、groonga 2.0.6と一緒に使わないといけません。"
+
+msgid "Supported \"-WORD\" syntax in BOOLEAN MODE."
+msgstr "BOOLEAN MODEにて \"-WORD\" という構文をサポートしました。"
+
+msgid ""
+"Fixed nallowing records by \"order by\" clause with fulltext condition. "
+"[groonga-dev,00977] [#1422] [Reported by Nakatani Munetaka]"
+msgstr ""
+"全文検索条件の \"order by\" によって検索結果のレコードが少なくなる不具合を修"
+"正した。[groonga-dev,00977] [#1422] [中谷宗嵩さんが報告]"
+
+msgid "Removed needless build flags. [#1453] [Reported by @nabebeb]"
+msgstr "不要なビルドフラグを削除した。 [#1453] [@nabebebさんが報告]"
+
+msgid ""
+"[rpm][centos] Fixed missing mysql-devel BuildRequires. [groonga-dev,01009] "
+"[Reported by wing]"
+msgstr ""
+"[rpm][centos] BuildRequiresに抜けていたmysql-develの記述を修正した。 "
+"[groonga-dev,01009] [wingさんが報告]"
+
+msgid "@nabebeb"
+msgstr "@nabebebさん"
+
+msgid "Release 2.05 - 2012/07/29"
+msgstr "2.05リリース - 2012/07/29"
+
+msgid ""
+"This release has a backward incompatible change against SET column and ENUM. "
+"If you use SET column or ENUM that has the number of elements < 256 in :doc:"
+"`/tutorial/storage`, please recreate (dump and restore) database."
+msgstr ""
+"このリリースにはSETカラムとENUMに関して後方互換性のない変更があります。もし :"
+"doc:`/tutorial/storage` にてSETカラムもしくは要素数が256より少ないENUMを使用"
+"しているなら、データベースを再作成してください。"
+
+msgid "Here is upgrade sequence."
+msgstr "以下が更新手順です。"
+
+msgid "Drop the existing database::"
+msgstr "既存のデータベースを削除します::"
+
+msgid ""
+"You must upgrade to \"mroonga\" storage engine. Use ``apt-get`` on Debian "
+"GNU/Linux or Ubuntu and ``yum`` on CentOS or Fedora."
+msgstr ""
+"\"mroonga\"ストレージエンジンにアップグレードします。Debian GNU/LinuxやUbuntu"
+"では ``apt-get`` を使います。CentOSやFedoraでは ``yum`` を使います。"
+
+msgid "yum (upgrade from mroonga release prior to v2.02)::"
+msgstr "yum (v2.02以前からのアップグレード)::"
+
+msgid "yum (upgrade from mroonga release v2.03 or later)::"
+msgstr "yum (v2.03以降からのアップグレード)::"
+
+msgid ""
+"Don't forget to run ``yum remove`` before ``yum install`` if you upgrade "
+"mroonga prior to v2.02 release. If you forget to run ``yum remove``, we will "
+"break a MySQL's system table."
+msgstr ""
+"v2.02以前のリリースからアップグレードする場合、 ``yum install`` の前に ``yum "
+"remove`` を実行することを忘れてはいけません。もし、 ``yum remove`` を実行する"
+"ことを忘れると、MySQLのシステムテーブルを壊してしまうかもしれません。"
+
+msgid "Recreate a database::"
+msgstr "データベースを作り直します::"
+
+msgid "Now, we can use mroonga 2.05."
+msgstr "これで2.05を使うことができるようになりました。"
+
+msgid "[storage mode] Supported index for SET column."
+msgstr "[ストレージモード] SET カラムでインデックスをサポート。"
+
+msgid "[rpm] Supported MySQL 5.5.25a."
+msgstr "[rpm] MySQL 5.5.25aに対応。"
+
+msgid "Supported Fedora 17."
+msgstr "Fedora 17に対応。"
+
+msgid "Dropped Fedora 16 support."
+msgstr "Fedora 16対応をやめた。"
+
+msgid ""
+"[storage mode] Supported TINYINT UNSIGNED/SMALLINT UNSIGNED/ MEDIUMINT "
+"UNSIGNED/INT UNSIGNED/BIGINT UNSIGNED type."
+msgstr ""
+"[ストレージモード] TINYINT UNSIGNED/SMALLINT UNSIGNED/MEDIUMINT UNSIGNED/INT "
+"UNSIGNED/BIGINT UNSIGNED型をサポート。"
+
+msgid "[storage mode] Reduced storage size for ENUM."
+msgstr "[ストレージモード] ENUMを使うのに必要なストレージサイズを減らした。"
+
+msgid "Release 2.04 - 2012/06/29"
+msgstr "2.04リリース - 2012/06/29"
+
+msgid "[wrapper mode] Supported disable/enable keys in bulk insert. [#1311]"
+msgstr ""
+"[ラッパーモード] バルクインサートにてインデックスの有効/無効化をサポート。 "
+"[#1311]"
+
+msgid "Fixed to disable query cache with transaction. [#1384]"
+msgstr "トランザクション内でクエリキャッシュを無効化するように修正。 [#1384]"
+
+msgid "Disabled partition explicitly. [#1391]"
+msgstr "パーティションを明示的に無効化した。 [#1391]"
+
+msgid ""
+"[rpm][deb] Fixed to ensure deleting mroonga plugin from ``mysql.plugin`` "
+"table before install. [groonga-dev,00948] [Suggested by Kazuhiro Isobe]"
+msgstr ""
+"[rpm][deb] インストール前に ``mysql.plugin`` テーブルからmroongaプラグインを"
+"確実に削除するようにした。 [groonga-dev,00948] [磯部和広さんが提案]"
+
+msgid ""
+"Fixed a crash bug by setting nonexistent path to ``mroonga_log_file`` "
+"variable. [#1404] [Reported by @nabebeb]"
+msgstr ""
+"存在しないパスを ``mroonga_log_file`` 変数へと設定するとクラッシュする不具合"
+"を修正した。 [#1404] [@nabebebさんが報告]"
+
+msgid ""
+"[experimental] Supported mroonga related data path change. [groonga-"
+"dev,00914] [#1392] [Suggested by Kazuhiro Isobe]"
+msgstr ""
+"[実験的] mroonga関連のデータを配置するパスの変更をサポート。 [groonga-"
+"dev,00914] [#1392] [磯部和広さんが提案]"
+
+msgid "Release 2.03 - 2012/05/29"
+msgstr "2.03リリース - 2012/05/29"
+
+msgid ""
+"This release has a backward incompatible change against multiple column "
+"index. If you have any tables that uses :doc:`/tutorial/storage` and any "
+"multiple comlumn indexes, please recreate those indexes by ``ALTER TABLE "
+"DISABLE KEYS`` and ``ALTER TABLE ENBALE KEYS``::"
+msgstr ""
+"このリリースにはマルチカラムインデックスに関する後方互換性のない変更が1つあり"
+"ます。もし、 :doc:`/tutorial/storage` でマルチカラムインデックスをつかってい"
+"る場合は  ``ALTER TABLE DISABLE KEYS`` と ``ALTER TABLE ENBALE KEYS`` を使っ"
+"てインデックスを作り直してください::"
+
+msgid "[storage mode] Supported disable/enable keys in bulk insert. [#1310]"
+msgstr ""
+"[ストレージモード] バルクインサートにてインデックスの有効/無効化をサポート。 "
+"[#1310]"
+
+msgid "[rpm][centos] Supported MySQL 5.5.24."
+msgstr "[rpm][centos] MySQL 5.5.24に対応。"
+
+msgid "[rpm][fedora] Supported MySQL 5.5.23."
+msgstr "[rpm][fedora] MySQL 5.5.23に対応。"
+
+msgid ""
+"Added :ref:`server-variable-mroonga-match-escalation-threshold` system "
+"variable."
+msgstr ""
+":ref:`server-variable-mroonga-match-escalation-threshold` システム変数を追"
+"加。"
+
+msgid "Required groonga 2.0.3 or later."
+msgstr "groonga 2.0.3以降を必須にした。"
+
+msgid ""
+"[yum] Changed RPM package name that provides yum repository from groonga-"
+"repository to groonga-release to follow RPM package name convension such as "
+"centos-release and fedora-release."
+msgstr ""
+"[yum] groongaのyumリポジトリを提供するRPMパッケージ名をgroonga-repositoryから"
+"groonga-releaseへと変更し、RPMパッケージ命名規則をcentos-releaseやfedora-"
+"releaseに合わせた。"
+
+msgid ""
+"[mac os x] Supported installing by Homebrew. See :doc:`/install` about "
+"details."
+msgstr ""
+"[Mac OS X] Homebrewでインストールできるようになった。詳細はこちら: :doc:`/"
+"install`"
+
+msgid "Fixed build failure on Mac OS X."
+msgstr "Mac OS Xでビルドに失敗する問題を修正。"
+
+msgid ""
+"[wrapper mode] Fixed a bug that searching in transaction reports not found "
+"error. [#1322][groonga-dev,00746] [Reported by Takken Ishibashi]"
+msgstr ""
+"[ラッパーモード] トランザクション内の検索で見つからないというエラーが報告され"
+"る不具合を修正[#1322][groonga-dev,00746] [石橋卓見さんが報告]"
+
+msgid ""
+"[rpm] Fixed a bug that mroonga plugin is unregistered when upgrading. "
+"[groonga-dev,00810] [Reported by Takken Ishibashi] [Patch by Iwai, Masaharu]"
+msgstr ""
+"[rpm] mroongaプラグインがアップグレードのときに登録解除される不具合を修正。"
+"[groonga-dev,00810] [石橋卓見さんが報告][岩井さんがパッチ提供]"
+
+msgid ""
+"Fixed a bug that row based replication transfers wrong data on MySQL 5.5 or "
+"earlier. [#1379][groonga-dev,00902] [Reported by Kenji Doi]"
+msgstr ""
+"MySQL 5.5以前では行ベースのレプリケーションで間違ったデータが転送されてしまう"
+"不具合を修正。 [#1379][groonga-dev,00902] [土井健司さんが報告]"
+
+msgid "Takken Ishibashi"
+msgstr "石橋卓見さん"
+
+msgid "Iwai, Masaharu"
+msgstr "岩井さん"
+
+msgid "Kenji Doi"
+msgstr "土井健司さん"
+
+msgid "Release 2.02 - 2012/04/29"
+msgstr "2.02リリース - 2012/04/29"
+
+msgid ""
+"The package sign key is changed since this release. Import the new package "
+"sign key before updating groogna packages."
+msgstr ""
+"今回のリリースよりパッケージへ署名する鍵を変更しました。groongaパッケージを更"
+"新する前にパッケージ署名用の新しい鍵をインポートして下さい。"
+
+msgid "Debian/Ubuntu::"
+msgstr ""
+
+msgid "CentOS/Fedora::"
+msgstr ""
+
+msgid ""
+"This release breaks a backward compatibility for ``ENUM`` type. If you have "
+"``ENUM`` type and it has 256 or more values, you need to dump your table "
+"before upgrade and restore your table after upgrade."
+msgstr ""
+"このリリースは ``ENUM`` 型に関して後方互換性がありません。もし、256個以上の値"
+"を持つ ``ENUM`` 型を使っている場合はアップグレード前にデータベースをダンプ"
+"し、アップグレード後にリストアする必要があります。"
+
+msgid ""
+"This release breaks a backward compatibility for ``SET`` type. If you have "
+"``SET`` type and it has 32 or more values, you need to dump your table "
+"before upgrade and restore your table after upgrade."
+msgstr ""
+"このリリースは ``SET`` 型に関して後方互換性がありません。もし、32個以上の値を"
+"持つ ``SET`` 型を使っている場合はアップグレード前にデータベースをダンプし、"
+"アップグレード後にリストアする必要があります。"
+
+msgid ""
+"Added workaround for build for GCC 4.7 and MySQL 5.5.22. The combination "
+"makes build error with ``-Wdeprecated`` gcc option. [#1337] [Reported by "
+"Kazuhiko Shiozaki]"
+msgstr ""
+"GCC 4.7とMySQL 5.5.22の組み合わせでビルドするための一時的な対応を追加した。こ"
+"の組み合わせではgccの ``-Wdeprecated`` オプションを指定するとビルドに失敗しま"
+"す。 [#1337] [かずひこさんが報告]"
+
+msgid ""
+"[mariadb] Supported MariaDB 5.5.23. [#1339] [Reported by Kazuhiko Shiozaki] "
+"[Reported by Ryo Onodera]"
+msgstr ""
+"[mariadb] MariaDB 5.5.23をサポート。 [#1339] [かずひこさんが報告] [Ryo "
+"Onoderaさんが報告]"
+
+msgid ""
+"[storage mode] Stopped needless primary key truncated warning on ``REPLACE``."
+msgstr ""
+"[ストレージモード] ``REPLACE`` 時に、プライマリーキーを使わなかったという必要"
+"のない警告がでないようにした。"
+
+msgid ""
+"[storage mode] Supported search ``ENUM`` values by index. [#1336] [Suggested "
+"by @104yuki_n]"
+msgstr ""
+"[ストレージモード] インデックスを使った ``ENUM`` の検索をサポート。 "
+"[@104yuki_nさんが提案]"
+
+msgid ""
+"[incompatible] Changed groonga type for ``ENUM`` to unsigned 2bytes integer "
+"type from signed 2bytes integer type. ``ENUM`` column recreation is needed."
+msgstr ""
+"[非互換] ``ENUM`` 用のgroongaの型を符合付き2バイト整数型から符号なし2バイト整"
+"数型に変更した。 ``ENUM`` 型のカラムを作りなおす必要があります。"
+
+msgid ""
+"[incompatible] Changed groonga type for ``SET`` to unsigned 8bytes integer "
+"type from signed 8bytes integer type. ``SET`` column recreation is needed."
+msgstr ""
+"[非互換] ``SET`` 用のgroongaの型を符合付き8バイト整数型から符号なし8バイト整"
+"数型に変更した。 ``SET`` 型のカラムを作りなおす必要があります。"
+
+msgid "Supported MySQL 5.5.23."
+msgstr "MySQL 5.5.23に対応。"
+
+msgid "Required groonga 2.0.2 or later."
+msgstr "groonga 2.0.2以降を必須にした。"
+
+msgid ""
+"[incompatible][experimental] Changed to use similar search instead of phrase "
+"search for ``MATCH AGAINST IN NATURAL LANGUAGE MODE``."
+msgstr ""
+"[非互換][実験的] ``MATCH AGAINST IN NATURAL LANGUAGE MODE`` での検索方法をフ"
+"レーズ検索から類似検索に変更した。"
+
+msgid "[apt][yum] Changed package sign key."
+msgstr "[apt][yum] パッケージに署名する鍵を変更。"
+
+msgid "Supported Ubuntu 12.04 Precise Pangolin."
+msgstr "Ubuntu 12.04 Precise Pangolinに対応。"
+
+msgid "[storage mode] Fixed wrong key length is used."
+msgstr "[ストレージモード] キーの長さが間違っていた問題を修正。"
+
+msgid ""
+"Fixed a crash bug that is caused when searching with updaging very large "
+"inverted index. [#1321] [groonga-dev,00743] [Reported by Takashi Kawano] "
+"[groonga-dev,00746] [Reported by Takken Ishibashi]"
+msgstr ""
+"大きな転置索引を更新中に検索するとクラッシュする問題を修正。 [#1321] "
+"[groonga-dev,00743] [河野隆志さんが報告] [groonga-dev,00746] [石橋卓見さんが"
+"報告]"
+
+msgid ""
+"Fixed a bug that truncated table has invalid tokenizer and encoding. [#1335] "
+"[Reported by @boss_sato]"
+msgstr ""
+"``TRUNCATE`` したテーブルのトークナイザーとエンコーディングが壊れる問題を修"
+"正。 [#1335] [@boss_satoさんが報告]"
+
+msgid ""
+"Fixed a bug that the first insert is failed with Spider and mroonga "
+"combination. [#1319] [groonga-dev,00736] [Reported by Takayuki Honda]"
+msgstr ""
+"Spiderとmroongaを組み合わせたときに最初の ``INSERT`` が失敗する問題を修正。 "
+"[#1319] [groonga-dev,00736] [Takayuki Hondaさんが報告]"
+
+msgid "Takashi Kawano"
+msgstr "河野隆志さん"
+
+msgid "@boss_sato"
+msgstr "@boss_satoさん"
+
+msgid "Ryo Onodera"
+msgstr "Ryo Onoderaさん"
+
+msgid "@104yuki_n"
+msgstr "@104yuki_nさん"
+
+msgid "Takayuki Honda"
+msgstr "Takayuki Hondaさん"
+
+msgid "Release 2.01 - 2012/03/29"
+msgstr "2.01リリース - 2012/03/29"
+
+msgid "Supported MySQL 5.5.22."
+msgstr "MySQL 5.5.22に対応。"
+
+msgid "Supported MySQL 5.1.62."
+msgstr "MySQL 5.1.62に対応。"
+
+msgid "Required groonga 2.0.1 or later."
+msgstr "groonga 2.0.1以降を必須にした。"
+
+msgid "[rpm] Improved plugin uninstall on upgrade."
+msgstr "[rpm] アップグレード時のプラグインアンインストール処理を改良した。"
+
+msgid ""
+"[wrapper mode] Supported ``INSERT ON DUPLICATE KEY ERROR`` with MyISAM. "
+"[#1300] [Reported by @104yuki_n]"
+msgstr ""
+"[ラッパーモード] MyISAMと一緒に使ったときに ``INSERT ON DUPLICATE KEY "
+"ERROR`` を使えるようにした。 [#1300] [@104yuki_nさんが報告]"
+
+msgid ""
+"[wrapper mode] Used wrapped table's ``table_flags()`` correctly. [#1304]"
+msgstr ""
+"[ラッパーモード] ラップしているテーブルの ``table_flags()`` を使うようにし"
+"た。 [#1304]"
+
+msgid ""
+"Added ``--with-valgrind`` configure option for MySQL that enables Valgrind "
+"support."
+msgstr ""
+"MySQLがValgrindサポート付きでビルドされているとき用に ``--with-valgrind`` "
+"configureオプションを追加した。"
+
+msgid "[mariadb] Supported ``DATETIME`` type with fraction seconds."
+msgstr "[mariadb] 小数形式秒指定を使った ``DATETIME`` 型をサポートした。"
+
+msgid ""
+"Supported building without geometry support. [#1313] [Reported by Kazuhiko]"
+msgstr ""
+"位置情報サポートなしでのビルドをサポートした。 [#1313] [かずひこさんが報告]"
+
+msgid ""
+"[storage mode] Supported multiple column index with optimization build flags "
+"on i386 environment. [Reported by Kazuhiko]"
+msgstr ""
+"[ストレージモード] i386環境で最適化オプションを指定したときでもマルチカラムイ"
+"ンデックスが動くようにした。 [かずひこさんが報告]"
+
+msgid "[wrapper mode] Confirmed InnoDB tests are passed with wrapper mode."
+msgstr ""
+"[ラッパーモード] ラッパーモードでInnoDBを使って、InnoDBのテストが通ることを確"
+"認した。"
+
+msgid "[solaris] Supported build on Solaris 11. [Reported by Kazuhiko]"
+msgstr ""
+"[solaris] Solaris 11上でのビルドできるようにした。 [かずひこさんが報告]"
+
+msgid ""
+"[mariadb55] Supported ``mroonga_default_parser`` with MariaDB 5.5. [#1314] "
+"[Reported by Kazuhiko]"
+msgstr ""
+"[mariadb55] MariaDB 5.5で ``mroonga_default_parser`` が動くようにした。 "
+"[#1314] [かずひこさんが報告]"
+
+msgid ""
+"[mariadb55] Supported ``ORDER LIMIT`` optimization with MariaDB 5.5. [#1315] "
+"[Reported by Kazuhiko]"
+msgstr ""
+"[mariadb55] MariaDB 5.5で ``ORDER LIMIT`` 最適化が動くようにした。 [#1315] "
+"[かずひこさんが報告]"
+
+msgid "[doc] Added about MeCab."
+msgstr "[doc] MeCabについて追記した。"
+
+msgid ""
+"[storage mode] Supported index search for 0 value. [Reported by @104yuki_n]"
+msgstr ""
+"[ストレージモード] 値が0のレコードをインデックスを使って検索できるようにし"
+"た。 [@104yuki_nさんが報告]"
+
+msgid ""
+"[storage mode] Supported Ubuntu Hardy with optimize build flags. [Reported "
+"by Kazuhiko]"
+msgstr ""
+"[ストレージモード] 最適化ビルドフラグを指定してもUbuntu Hardy上で正しく動くよ"
+"うにした。 [かずひこさんが報告]"
+
+msgid "Added `logos <http://mroonga.github.com/logo/>`_ ."
+msgstr "`ロゴ <http://mroonga.github.com/ja/logo/>`_ を追加した。"
+
+msgid "Updated HTML design."
+msgstr "HTMLのデザインを更新した。"
+
+msgid "[storage mode] Fixed a memory leak."
+msgstr "[ストレージモード] メモリリークを修正。"
+
+msgid ""
+"[storage mode] Fixed a bug that search by multi column index may not return "
+"some found records. [#1300] [Reported by @ytaka5]"
+msgstr ""
+"[ストレージモード] マルチカラムインデックスを使って検索したときに見つかったの"
+"に結果が返されない問題を修正した。 [#1300] [@ytaka5さんが報告]"
+
+msgid ""
+"[storage mode] Fixed a bug that ``COUNT (*)`` isn't effective. [groonga-"
+"dev,00717] [Reported by Takayuki Honda]"
+msgstr ""
+"[ストレージモード] ``COUNT (*)`` の効果がなかった問題を修正した。 [groonga-"
+"dev,00717] [Takayuki Hondaさんが報告]"
+
+msgid "Fixed a memory leak on ``DROP DATABASE``."
+msgstr "``DROP DATABASE`` 時に発生していたメモリリークを修正した。"
+
+msgid ""
+"[storage mode] Fixed a bug that ``last_insert_grn_id()`` may return broken "
+"value on 32bit environment. [Reported by Kazuhiko]"
+msgstr ""
+"[ストレージモード] 32bit環境で ``last_insert_grn_id()`` が壊れた値を返すこと"
+"がある問題を修正した。 [かずひこさんが報告]"
+
+msgid ""
+"[storage mode] Fixed a bug that ``COUNT (*)`` may return 0. [groonga-"
+"dev,00736] [Reported by Takayuki Honda]"
+msgstr ""
+"[ストレージモード] ``COUNT (*)`` が0を返すことがある問題を修正した。 "
+"[groonga-dev,00736] [Takayuki Hondaさんが報告]"
+
+msgid "Release 2.00 - 2012/02/29"
+msgstr "2.00リリース - 2012/02/29"
+
+msgid "Supported all characters for database, table and column names."
+msgstr "データベース名、テーブル名、カラム名に任意の文字を使えるようにした。"
+
+msgid "Groonga's native time data type is used for ``YEAR`` type in MySQL."
+msgstr "MySQLの ``YEAR`` 型にgroongaが提供する時間型を使うようにした。"
+
+msgid "Here are upgrade sequence."
+msgstr "以下が更新手順です。"
+
+msgid "Now, we can use mroonga 2.00."
+msgstr "これで2.00を使うことができるようになりました。"
+
+msgid "Supported MySQL 5.5.21."
+msgstr "MySQL 5.5.21に対応。"
+
+msgid "Required groonga 2.0.0 or later."
+msgstr "groonga 2.0.0以降を必須にした。"
+
+msgid "Supported TIMESTAMP with fractional seconds on MySQL 5.6 and MariaDB."
+msgstr "MySQL 5.6とMariaDBで使える小数付きのTIMESTAMPに対応した。"
+
+msgid ""
+"[storage mode] Supported ``ORDER LIMIT`` optimization on no primary key."
+msgstr ""
+"[ストレージモード] 主キーがない場合でも ``ORDER LIMIT`` を最適化できるように"
+"した。"
+
+msgid ""
+"[storage mode] Supported ``ORDER LIMIT`` optimization with fulltext search "
+"and ``COLUMN = INT_VALUE``."
+msgstr ""
+"[ストレージモード] 全文検索と ``COLUMN = INT_VALUE`` を一緒に使った場合でも "
+"``ORDER LIMIT`` を最適化できるようにした。"
+
+msgid ""
+"[storage mode] Supported fulltext search in sub query. [Reported by @camyuy]"
+msgstr ""
+"[ストレージモード] サブクエリ内での全文検索に対応した。 [@camyuyさんが報告]"
+
+msgid ""
+"[incompatible] Mapped ``YEAR`` in MySQL to ``Time`` in groonga to improve "
+"groonga integration."
+msgstr ""
+"[非互換] groongaからデータを読めるように、MySQLの ``YEAR`` をgroongaの "
+"``Time`` に対応させるようにした。"
+
+msgid ""
+"[storage mode] Removed a needless write lock on update. [#1271] [Reported by "
+"Takahiro Nagai]"
+msgstr ""
+"[ストレージモード] 更新時の必要ない書き込みロックを削除した。 [#1271] "
+"[Takahiro Nagaiさんが報告]"
+
+msgid ""
+"Added ``mroonga_enable_optimization`` system variable to on/off "
+"optimization. It's useful for benchmark."
+msgstr ""
+"最適化のオン・オフを切り替える ``mroonga_enable_optimization`` システム変数を"
+"追加した。ベンチマーク時に便利。"
+
+msgid "[wrapper mode] Supported temporary table. [#1267]"
+msgstr "[ラッパーモード] 一時テーブルに対応した。 [#1267]"
+
+msgid "[incompatible] Supported ``/`` in database name. [#1281]"
+msgstr "[非互換] データベース名に ``/`` を使えるようにした。 [#1281]"
+
+msgid "Suppressed needless messages on ``INSERT ... ON DUPLICATE KEY UPDATE``."
+msgstr ""
+"``INSERT ... ON DUPLICATE KEY UPDATE`` のときに不必要なメッセージが表示されな"
+"いようにした。"
+
+msgid ""
+"Supported ``INSERT ... ON DUPLICATE KEY UPDATE`` with ``UNIQUE KEY``. "
+"[#1283] [Reported by @104yuki_n]"
+msgstr ""
+"``UNIQUE KEY`` を使った ``INSERT ... ON DUPLICATE KEY UPDATE`` に対応した。 "
+"[#1283] [@104yuki_nさんが報告]"
+
+msgid ""
+"Supported ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``, ``DECIMAL``, "
+"``YEAR`` for primary key."
+msgstr ""
+"主キーに ``DATETIME``, ``DATE``, ``TIMESTAMP``, ``TIME``, ``DECIMAL``, "
+"``YEAR`` を使えるようになった。"
+
+msgid ""
+"[incompatible] Supported all characters for database, table and column "
+"names. [#1284]"
+msgstr ""
+"[非互換] データベース名、テーブル名、カラム名にすべての文字を使えるようになっ"
+"た。 [#1284]"
+
+msgid "[wrapper mode] Supported 255 bytes over index. [#1282]"
+msgstr "[ラッパーモード] 255バイト以上のインデックスに対応した。 [#1282]"
+
+msgid "[wrapper mode] Supported updating primary key. [#1195]"
+msgstr "[ラッパーモード] 主キーの更新に対応した。 [#1195]"
+
+msgid "[wrapper mode] Supported error handling on ``ALTER TABLE``. [#1195]"
+msgstr ""
+"[ラッパーモード] ``ALTER TABLE`` でエラーが発生したときの処理を追加した。 "
+"[#1195]"
+
+msgid ""
+"[wrapper mode] Improved error message on unsupported geometry type like "
+"``LineString``. [#1195]"
+msgstr ""
+"[ラッパーモード] ``LineString`` のような未サポートの位置情報型を使った場合の"
+"エラーメッセージを改良した。 [#1195]"
+
+msgid ""
+"[wrapper mode] Supported ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS``. "
+"[#1195]"
+msgstr ""
+"[ラッパーモード] ``INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS`` に対応した。 "
+"[#1195]"
+
+msgid "[rpm] Changed to ensure re-install plugin."
+msgstr "[rpm] プラグインを再インストールするようにした。"
+
+msgid "[doc] Fixed wrong storage engine name. [Reported by Tomoatsu Shimada]"
+msgstr ""
+"[doc] ストレージエンジン名が間違っていた問題を修正。 [Tomoatsu Shimadaさんが"
+"報告]"
+
+msgid "@camyuy"
+msgstr "@camyuyさん"
+
+msgid "Tomoatsu Shimada"
+msgstr "Tomoatsu Shimadaさん"

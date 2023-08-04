@@ -1,0 +1,80 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_command()``"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid ""
+"``mroonga_command()`` UDF executes the given string as a Groonga command and "
+"returns result of the Groonga command. Groonga command will be faster than "
+"MySQL query."
+msgstr ""
+
+msgid ""
+"``mroonga_command()`` is an UDF for advanced users. Normally, you don't need "
+"to use this UDF."
+msgstr ""
+
+msgid "Syntax"
+msgstr ""
+
+msgid "``mroonga_command()`` has only one required parameter::"
+msgstr ""
+
+msgid "``command`` is a string value. It's a Groonga command to be executed."
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "TODO"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Required parameters"
+msgstr ""
+
+msgid "There is one required parameter, ``command``."
+msgstr ""
+
+msgid "``command``"
+msgstr ""
+
+msgid "It specifies a Groonga command to be executed."
+msgstr ""
+
+msgid "Return value"
+msgstr ""
+
+msgid ""
+"It returns an evaluated result of the given Groonga command as a string."
+msgstr ""
+
+msgid "See also"
+msgstr ""
+
+msgid ""
+"`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga "
+"document."
+msgstr ""
