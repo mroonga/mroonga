@@ -1,0 +1,79 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Ubuntu"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga related deb packages on "
+"Ubuntu. You can install them by ``apt``."
+msgstr ""
+"このセクションではUbuntu上でMroonga関連のdebパッケージをインストールする方法"
+"を説明します。これらのパッケージは ``apt`` でインストールできます。"
+
+msgid "PPA (Personal Package Archive)"
+msgstr ""
+
+msgid ""
+"The Mroonga APT repository for Ubuntu uses PPA (Personal Package Archive) on "
+"Launchpad. You can install Mroonga by APT from the PPA."
+msgstr ""
+"Ubuntu用のMroongaのAPTリポジトリーはLaunchpad上のPPA（Personal Package "
+"Archive）を使っています。このPPAからAPTでMroongaをインストールできます。"
+
+msgid "Here are supported Ubuntu versions:"
+msgstr "サポートしているUbuntuのバージョンは次の通りです。"
+
+msgid "20.04 Focal Fossa"
+msgstr ""
+
+msgid "22.04 Jammy Jellyfish"
+msgstr ""
+
+msgid "Here are Ubuntu versions that supports MySQL:"
+msgstr "MySQLをサポートしているUbuntuのバージョンは次の通りです。"
+
+msgid "Here are Ubuntu versions that supports MariaDB:"
+msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
+
+msgid ""
+"Enable the universe repository and the security update repository to install "
+"Mroonga::"
+msgstr ""
+"Mroongaをインストールするときは、universeリポジトリーとセキュリティアップデー"
+"トリポジトリを有効にしてください。::"
+
+msgid "Add the ``ppa:groonga/ppa`` PPA to your system::"
+msgstr "``ppa:groonga/ppa`` PPAをシステムに追加します::"
+
+msgid "Install Mroonga for MySQL::"
+msgstr "MySQL用のMroongaをインストール::"
+
+msgid "Install Mroonga for MariaDB::"
+msgstr "MariaDB用のMroongaをインストール::"
+
+msgid ""
+"If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a "
+"tokenizer, install groonga-tokenizer-mecab package."
+msgstr ""
+"トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい"
+"場合はgroonga-tokenizer-mecabをインストールしてください。"
+
+msgid "Install groonga-tokenizer-mecab package::"
+msgstr "groonga-tokenizer-mecabをインストール::"
