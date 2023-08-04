@@ -9,8 +9,6 @@ Mroonga binary for Windows is provided with MariaDB binary because
 <https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
 are needed for building Mroonga for Windows.
 
-.. include:: 32bit-note.inc
-
 Installer
 ---------
 
