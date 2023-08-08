@@ -388,6 +388,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
@@ -423,6 +424,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
@@ -458,6 +460,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
@@ -493,6 +496,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
@@ -528,6 +532,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
@@ -563,6 +568,7 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
 Install::
 
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
   % sudo dnf module -y disable mariadb
   % sudo dnf module -y disable mysql
