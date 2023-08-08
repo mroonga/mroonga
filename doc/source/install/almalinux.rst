@@ -390,11 +390,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.5-mroonga
+  % sudo dnf install -y mariadb-10.5-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -402,9 +400,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
 
 .. _almalinux-9-mariadb-10-6:
 
@@ -426,11 +422,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.6-mroonga
+  % sudo dnf install -y mariadb-10.6-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -438,9 +432,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
 
 .. _almalinux-9-mariadb-10-7:
 
@@ -462,11 +454,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.7-mroonga
+  % sudo dnf install -y mariadb-10.7-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -474,9 +464,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
 
 .. _almalinux-9-mariadb-10-8:
 
@@ -498,11 +486,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.8-mroonga
+  % sudo dnf install -y mariadb-10.8-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -510,9 +496,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
 
 .. _almalinux-9-mariadb-10-9:
 
@@ -534,11 +518,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.9-mroonga
+  % sudo dnf install -y mariadb-10.9-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -546,9 +528,7 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
 
 .. _almalinux-9-mariadb-10-10:
 
@@ -570,11 +550,9 @@ Install::
 
   % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
   % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.10-mroonga
+  % sudo dnf install -y mariadb-10.10-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
@@ -582,6 +560,4 @@ tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo dnf module -y enable mysql
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
