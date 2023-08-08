@@ -1,0 +1,27 @@
+require_relative "../mroonga-package-task"
+
+class SourceMroongaPackageTask < MroongaPackageTask
+
+  def initialize
+    super("")
+  end
+
+  def enable_source?
+    true
+  end
+
+  def source_dir
+    "source"
+  end
+
+  def source_targets_default
+    [
+      "mroonga-#{@version}.tar.gz",
+      "mroonga-#{@version}.zip",
+    ]
+  end
+
+end
+
+task = SourceMroongaPackageTask.new
+task.define

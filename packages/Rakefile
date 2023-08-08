@@ -30,12 +30,20 @@ end
   :apt,
   :ubuntu,
   :yum,
+  :source,
 ].each do |target|
   desc "Release #{target} packages"
   task target do
-    packages.each do |package|
-      cd(package) do
+    case target
+    when :source
+      cd("source") do
         ruby("-S", "rake", target.to_s)
+      end
+    else
+      packages.each do |package|
+        cd(package) do
+          ruby("-S", "rake", target.to_s)
+        end
       end
     end
   end
