@@ -65,41 +65,6 @@ Install groonga-tokenizer-mecab package::
 
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
-.. _almalinux-8-mariadb-10-3:
-
-AlmaLinux 8 (with MariaDB 10.3 package)
----------------------------------------
-
-You can use MariaDB's MariaDB packages version 10.3 on AlmaLinux 8 since
-Mroonga 11.10 release.
-
-Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
-
-  [mariadb]
-  name = MariaDB
-  baseurl = http://yum.mariadb.org/10.3/centos8-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
-
-Install::
-
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.3-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
-
-If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
-tokenizer, install groonga-tokenizer-mecab package.
-
-Install groonga-tokenizer-mecab package::
-
-  % sudo dnf module -y enable mysql
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
-
 .. _almalinux-8-mariadb-10-4:
 
 AlmaLinux 8 (with MariaDB 10.4 package)

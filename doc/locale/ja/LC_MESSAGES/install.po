@@ -99,19 +99,6 @@ msgstr ""
 "AlmaLinux 8では、Mroonga 11.10からPercona Server 8.0パッケージを利用できま"
 "す。"
 
-msgid "AlmaLinux 8 (with MariaDB 10.3 package)"
-msgstr "AlmaLinux 8（MariaDB 10.3のパッケージを利用）"
-
-msgid ""
-"You can use MariaDB's MariaDB packages version 10.3 on AlmaLinux 8 since "
-"Mroonga 11.10 release."
-msgstr ""
-"AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.3パッケージを利用で"
-"きます。"
-
-msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
-msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
-
 msgid "AlmaLinux 8 (with MariaDB 10.4 package)"
 msgstr "AlmaLinux 8（MariaDB 10.4のパッケージを利用）"
 
@@ -121,6 +108,9 @@ msgid ""
 msgstr ""
 "AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.4パッケージを利用で"
 "きます。"
+
+msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
+msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
 
 msgid "AlmaLinux 8 (with MariaDB 10.5 package)"
 msgstr "AlmaLinux 8（MariaDB 10.5のパッケージを利用）"
@@ -322,16 +312,6 @@ msgid ""
 "10.06 release."
 msgstr ""
 "CentOS 7では、Mroonga 10.06からPercona Server 8.0パッケージを利用できます。"
-
-msgid "CentOS 7 (with MariaDB 10.3 package)"
-msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
-
-msgid ""
-"You can use MariaDB's MariaDB packages version 10.3 on CentOS 7 since "
-"Mroonga 7.11 release."
-msgstr ""
-"CentOS 7では、Mroonga 7.11からMariaDB提供のMariaDB 10.3パッケージを利用できま"
-"す。"
 
 msgid "CentOS 7 (with MariaDB 10.4 package)"
 msgstr "CentOS 7（MariaDB 10.4のパッケージを利用）"
