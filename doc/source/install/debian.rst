@@ -17,7 +17,7 @@ Install::
   % wget https://packages.groonga.org/debian/groonga-apt-source-latest-bookworm.deb
   % sudo apt install -y -V ./groonga-apt-source-latest-bookworm.deb
   % sudo apt update
-  % sudo apt install -y -V mariadb-server-10.11-mroonga
+  % sudo apt install -y -V mariadb-10.11-mroonga
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
