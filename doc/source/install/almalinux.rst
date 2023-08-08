@@ -310,6 +310,41 @@ Install groonga-tokenizer-mecab package::
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
   % sudo dnf module -y disable mysql
 
+.. _almalinux-8-mariadb-10-11:
+
+AlmaLinux 8 (with MariaDB 10.11 package)
+----------------------------------------
+
+You can use MariaDB's MariaDB packages version 10.11 on AlmaLinux 8 since
+Mroonga 13.01 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.11/rhel8-amd64
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+Install::
+
+  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo systemctl start mariadb
+  % sudo dnf install -y --enablerepo=powertools mariadb-10.11-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf module -y enable mysql
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
+
 .. _almalinux-9-oracle-8-0:
 
 AlmaLinux 9 (with the Oracle MySQL 8.0 package)
@@ -553,6 +588,38 @@ Install::
   % sudo dnf install -y mariadb-server
   % sudo systemctl start mariadb
   % sudo dnf install -y mariadb-10.10-mroonga
+  (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
+.. _almalinux-9-mariadb-10-11:
+
+AlmaLinux 9 (with MariaDB 10.11 package)
+----------------------------------------
+
+You can use MariaDB's MariaDB packages version 10.11 on AlmaLinux 9 since
+Mroonga 13.01 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = http://yum.mariadb.org/10.11/rhel9-amd64
+  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck=1
+
+Install::
+
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+  % sudo dnf install -y mariadb-server
+  % sudo systemctl start mariadb
+  % sudo dnf install -y mariadb-10.11-mroonga
   (% sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
