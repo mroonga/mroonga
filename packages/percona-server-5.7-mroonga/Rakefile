@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class PerconaServer57MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("percona-server-5.7")
+    super("percona-server-5.7-mroonga")
   end
 
   def enable_apt?

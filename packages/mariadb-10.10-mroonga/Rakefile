@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class MariaDB1010MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mariadb-10.10")
+    super("mariadb-10.10-mroonga")
   end
 
   def enable_apt?

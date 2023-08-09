@@ -3,7 +3,7 @@ require_relative "../mroonga-package-task"
 class SourceMroongaPackageTask < MroongaPackageTask
 
   def initialize
-    super("")
+    super("mroonga")
   end
 
   def built_package_url(target_namespace, target)

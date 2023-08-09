@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class MariaDB106MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mariadb-10.6")
+    super("mariadb-10.6-mroonga")
   end
 
   def apt_targets_default

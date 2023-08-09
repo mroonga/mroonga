@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class MySQL80MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mysql-8.0")
+    super("mysql-8.0-mroonga")
   end
 
   def apt_targets_default

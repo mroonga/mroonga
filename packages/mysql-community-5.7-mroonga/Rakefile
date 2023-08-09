@@ -2,7 +2,7 @@ require_relative "../mroonga-package-task"
 
 class MySQLCommunity57MroongaPackageTask < MroongaPackageTask
   def initialize
-    super("mysql-community-5.7")
+    super("mysql-community-5.7-mroonga")
   end
 
   def enable_apt?
