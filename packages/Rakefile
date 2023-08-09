@@ -40,3 +40,10 @@ end
     end
   end
 end
+
+desc "Release source archives"
+task :source do
+  cd("source") do
+    ruby("-S", "rake", "source")
+  end
+end
