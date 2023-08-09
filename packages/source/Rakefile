@@ -16,7 +16,6 @@ class SourceMroongaPackageTask < MroongaPackageTask
       "mroonga-#{@version}.tar.gz",
     ]
   end
-
 end
 
 task = SourceMroongaPackageTask.new
