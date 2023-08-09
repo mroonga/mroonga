@@ -11,9 +11,14 @@ end
 require "#{groonga_repository}/packages/packages-groonga-org-package-task"
 
 class MroongaPackageTask < PackagesGroongaOrgPackageTask
-  def initialize(mysql_package)
-    @mysql_package = mysql_package
-    super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
+  def initialize(package_prefix)
+    if package_prefix == ""
+      @source_package = "mroonga"
+      super("#{@source_package}", detect_version, detect_release_time)
+    else
+      @mysql_package = package_prefix
+      super("#{@mysql_package}-mroonga", detect_version, detect_release_time)
+    end
     @original_archive_base_name = "mroonga-#{@version}"
     @original_archive_name = "#{@original_archive_base_name}.tar.gz"
   end
