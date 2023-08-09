@@ -5,6 +5,22 @@ class SourceMroongaPackageTask < MroongaPackageTask
     super("mroonga")
   end
 
+  def enable_apt?
+    false
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def enable_yum?
+    false
+  end
+
+  def enable_windows?
+    false
+  end
+
   def source_targets_default
     [
       "mroonga-#{@version}.tar.gz",
