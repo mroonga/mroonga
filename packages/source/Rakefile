@@ -6,12 +6,6 @@ class SourceMroongaPackageTask < MroongaPackageTask
     super("")
   end
 
-  def enable_source?
-    true
-  end
-
-  def source_dir
-    "source"
   end
 
   def source_targets_default
