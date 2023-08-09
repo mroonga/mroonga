@@ -5,12 +5,6 @@ class SourceMroongaPackageTask < MroongaPackageTask
     super("mroonga")
   end
 
-  def built_package_url(target_namespace, target)
-    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
-    url << "#{target}"
-    url
-  end
-
   def source_targets_default
     [
       "mroonga-#{@version}.tar.gz",

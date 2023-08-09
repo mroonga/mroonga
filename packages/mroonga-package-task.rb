@@ -214,10 +214,19 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     "ghcr.io/mroonga/package-#{super}"
   end
 
+  def download_url(file_name)
+    "https://github.com/mroonga/mroonga/releases/download/v#{@version}/#{file_name}"
+  end
+
   def built_package_url(target_namespace, target)
-    url = "https://github.com/mroonga/mroonga/releases/download/v#{@version}/"
-    url << "#{@package}-#{target}.tar.gz"
-    url
+    file_name = ""
+    case target_namespace
+    when :source
+      file_name = "#{target}"
+    else
+      file_name = "#{@package}-#{target}.tar.gz"
+    end
+    download_url(file_name)
   end
 
   def built_package_n_split_components
