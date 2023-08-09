@@ -41,7 +41,7 @@ end
   end
 end
 
-desc "Relase source archives"
+desc "Release source archives"
 task :source do
   cd("source") do
     ruby("-S", "rake", "source")
