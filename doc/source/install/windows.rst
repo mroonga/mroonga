@@ -9,25 +9,6 @@ Mroonga binary for Windows is provided with MariaDB binary because
 <https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
 are needed for building Mroonga for Windows.
 
-.. include:: 32bit-note.inc
-
-Installer
----------
-
-.. caution::
-
-   The following MSI files don't work yet. Please use zip files below
-   or help us to creating MSI files that work well.
-
-Download MSI file and execute it. You need to choose a MSI for your
-environment.
-
-Choose ``win32`` version for 32-bit environment, ``winx64`` version
-for 64-bit environment:
-
-  * `mariadb-10.0.10-with-mroonga-4.02-win32.msi <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-win32.msi>`_
-  * `mariadb-10.0.10-with-mroonga-4.02-winx64.msi <https://github.com/mroonga/mroonga/releases/download/v4.02/mariadb-10.0.10-with-mroonga-4.02-winx64.msi>`_
-
 Zip
 ---
 

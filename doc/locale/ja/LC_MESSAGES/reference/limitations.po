@@ -1,0 +1,138 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Limitations"
+msgstr "制限事項"
+
+msgid "There are some limitations in Mroonga storage engine."
+msgstr "Mroongaストレージエンジンにはいくつか制限があります。"
+
+msgid "Limitations of table"
+msgstr "テーブルの制限事項"
+
+msgid ""
+"A table has the following limitations. This limitation is derived from "
+"Groonga."
+msgstr "テーブルには以下の制限があります。この制限はGroongaに由来します。"
+
+msgid "The maximum one key size: 4KiB"
+msgstr "1つのキーの最大サイズ：4KiB"
+
+msgid "The maximum total size of keys: 4GiB"
+msgstr "キーのサイズを合計した上限値：4GiB"
+
+msgid "The maximum number of records:"
+msgstr "最大レコード数："
+
+msgid "No primary key table: 1,073,741,815 (2 :sup:`30` - 9)"
+msgstr "プライマリーキーがないテーブル：1,073,741,815 (2 :sup:`30` - 9)"
+
+msgid ""
+"``PRIMARY KEY`` or ``PRIMARY KEY USING BTREE`` table: 1,073,741,823 (2 :sup:"
+"`30` - 1)"
+msgstr ""
+"``PRIMARY KEY`` または ``PRIMARY KEY USING BTREE`` を指定したテーブル："
+"1,073,741,823 (2 :sup:`30` - 1)"
+
+msgid "``PRIMARY KEY USING HASH`` table: 536,870,912 (2 :sup:`29`)"
+msgstr ""
+"``PRIMARY KEY USING HASH`` を指定したテーブル：536,870,912 (2 :sup:`29`)"
+
+msgid "Keep in mind that these limitations may vary depending on conditions."
+msgstr "実際には他の諸条件の制約により上記の値まで到達しない場合もあります。"
+
+msgid "Limitations of indexing"
+msgstr "インデックスの制限事項"
+
+msgid ""
+"A full-text index has the following limitations. This limitation is derived "
+"from groonga and applied to each table."
+msgstr ""
+"1つのインデックスにおける論理上の上限値は以下のとおりです。テーブルごとに適用"
+"されるgroonga由来の制限です。"
+
+msgid ""
+"The maximum number of distinct terms: 268,435,455 (more than 268 million)"
+msgstr "最大語彙数: 268,435,455 (約2億6千万)"
+
+msgid "The maximum index size: 256GiB"
+msgstr "最大インデックスサイズ: 256GiB"
+
+msgid ""
+"Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your "
+"table data matches to this limitations."
+msgstr ""
+"テーブルがこの制限に該当するかは ``SHOW TABLE STATUS`` や ``SHOW INDEX "
+"FROM ...`` などで確認してください。"
+
+msgid "Limitations about the value of columns"
+msgstr "カラムの値に関する制限事項"
+
+msgid "There is a limitation about the value of column in storage mode."
+msgstr "ストレージモードにおいて、カラムの値には制限があります。"
+
+msgid ""
+"Mroonga storage engine executes automatic conversion against the value NULL."
+msgstr "MroongaストレージエンジンはNULL値を自動的に補正します。"
+
+msgid ""
+"For example, if the value NULL is used in ``DATE`` or ``DATETIME`` columns, "
+"Mroonga storage engine automatically converts 0 into 1 as the value of month "
+"or date."
+msgstr ""
+"例えば、 ``DATE`` 型や ``DATETIME`` 型に指定されたNULL値はMroongaストレージエ"
+"ンジンが日や月の値として0を1へと自動的に補正します。"
+
+msgid ""
+"Thus, the value 0 is treated as the 1st month (January) of the year or the "
+"1st date of the month."
+msgstr "つまり、0月は1月へ、0日は1日として扱います。"
+
+msgid ""
+"And more, the value NULL is treated as the value of UNIX time 0 (1970-01-01 "
+"00:00:00)."
+msgstr "そして、NULL値はUNIX時間の0秒 (1970-01-01)として扱います。"
+
+msgid ""
+"This kind of automatic conversion is not restricted to only ``DATE`` or "
+"``DATETIME`` types."
+msgstr "このような自動変換は ``DATE`` 型や ``DATETIME`` 型に限定されません。"
+
+msgid ""
+"The value NULL is converted into the default value of columns. In most "
+"cases, it will be converted into empty string for column which belongs to "
+"type of string, 0 for column which belongs to type of numeric."
+msgstr ""
+"NULL値はカラムのデフォルト値へと変換されます。多くの場合、文字列型であれば空"
+"文字列へ、数値型であれば0へと変換されます。"
+
+msgid "Here is an example to show behavior described above."
+msgstr "上記挙動を示す例はこちらです。"
+
+msgid "Here is the results of execution example::"
+msgstr "実行結果はこちらです。::"
+
+msgid "Limitations of column size"
+msgstr "カラムサイズの制限事項"
+
+msgid "A column has the following limitation."
+msgstr "1つのカラムにつき、次の制限があります。"
+
+msgid "The maximum stored data size of a column: 256GiB"
+msgstr "カラムに格納した値の合計サイズの上限値: 256GiB"

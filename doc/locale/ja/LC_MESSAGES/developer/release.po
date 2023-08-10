@@ -1,0 +1,441 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Release procedure"
+msgstr ""
+
+msgid "Requirements"
+msgstr "必要なもの"
+
+msgid "Here is the requirements about release procedure."
+msgstr "以下はリリース手順に必要なものです。"
+
+msgid "Debian GNU/Linux (sid)"
+msgstr ""
+
+msgid "Use zsh as user shell"
+msgstr "zshをユーザーシェルとして使います"
+
+msgid "Use the following working directories."
+msgstr "以下の作業ディレクトリを使います。"
+
+# 57c24decccf74c9bb9d514a57fec526f
+msgid "MROONGA_DIR=$HOME/work/mroonga"
+msgstr ""
+
+# 0e5d669a4ec843f987cbab0f8fe1a343
+msgid "MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean"
+msgstr ""
+
+# ec843d0394fc4bfe9343c26c8c2c7839
+msgid "MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com"
+msgstr ""
+
+# 509f37993d80456c99846d3287f28d62
+msgid "CUTTER_DIR=$HOME/work/cutter"
+msgstr ""
+
+# 930f47a2dba344a092170924069f37a8
+msgid "CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter"
+msgstr ""
+
+msgid "GROONGA_SOURCE_PATH=$HOME/work/groonga/groonga.clean"
+msgstr ""
+
+msgid "PACKAGES_GROONGA_ORG_REPOSITORY=$HOME/work/groonga/packages.groonga.org"
+msgstr ""
+
+msgid "Setup build environment"
+msgstr "ビルド環境をセットアップする"
+
+msgid "Install the following packages::"
+msgstr "以下のパッケージをインストールします::"
+
+msgid "Describe the changes"
+msgstr "変更点を記述する"
+
+msgid ""
+"Summarize recent changes since the previous release into ``doc/source/news."
+"txt``. This summary is also used in release note."
+msgstr ""
+"前回のリリース以降の最近の変更点を ``doc/source/news.rst`` へまとめます。この"
+"まとめはリリースノートでも使います。"
+
+msgid ""
+"Execute the following command to collect change logs since the previous "
+"version::"
+msgstr "以下のコマンドを前回のリリースからの変更点を収集するのに使います::"
+
+msgid "Search the logs by ``^commit``, and pick up collect remarkable changes."
+msgstr "``^commit`` でログを検索し、主な変更点を拾います。"
+
+msgid "Should be included"
+msgstr "含めるべきもの"
+
+msgid "The changes which affect to users"
+msgstr "ユーザーに影響のある変更点"
+
+msgid "The changes which broke compatibility"
+msgstr "互換性を壊すような変更点"
+
+msgid "Shoud not be included"
+msgstr "含めるべきでないもの"
+
+msgid ""
+"The changes which doesn't affect to users (Internal source code changes or "
+"refactoring)"
+msgstr "ユーザーに影響のない内部的な変更やリファクタリング"
+
+#, fuzzy
+msgid "Execute the following command to create HTML for news."
+msgstr "タグを打つために以下のコマンドを実行します::"
+
+msgid "% make update-files % make -C doc html"
+msgstr ""
+
+msgid "Generate configure script"
+msgstr "configureスクリプトの生成"
+
+msgid ""
+"Because of master branch doesn't include configure script, then it is "
+"required to generate configure script for building."
+msgstr ""
+"masterブランチはconfigureスクリプトを含んでいないのでビルドするのにconfigure"
+"スクリプトを生成する必要があります。"
+
+msgid "Execute ``autogen.sh`` with the following command::"
+msgstr "``autogen.sh`` を以下のコマンドで実行します::"
+
+msgid "It generates ``configure`` script."
+msgstr "``configure`` スクリプトを生成します。"
+
+msgid "Execute configure script"
+msgstr "configureスクリプトの実行"
+
+msgid "For generating ``Makefile``, execute the ``configure`` script."
+msgstr "``Makefile`` を生成するために、 ``configure`` スクリプトを実行します。"
+
+msgid "Execute with the following options for the release::"
+msgstr "リリース向けに以下のオプションとともに実行します。"
+
+msgid ""
+"See :doc:`/install/others`  for the details of ``--with-mysql-source`` "
+"option."
+msgstr ""
+"``--with-mysql-source`` の詳細については :doc:`/install/others`  を参照してく"
+"ださい。"
+
+msgid ""
+"We can not upload and override the same name packages to PPA repository. "
+"Therefore, we upload packages to a stable repository after confirming the "
+"successful build of they in the nightly repository."
+msgstr ""
+"PPAのリポジトリは、同名のパッケージを上書いてアップロードできないので、不安定"
+"版のリポジトリでビルドできることを確認してから、安定版のリポジトリへアップ"
+"ロードするようにしてください。"
+
+msgid "Check whether you can upload packages"
+msgstr "パッケージをアップロード可能か確認する"
+
+msgid "Check whether you can login to packages.groonga.org as packages user."
+msgstr "pacakgesユーザーでpackages.groonga.orgにログインできるかを確認します。"
+
+msgid "You can check with the following command whether you can login::"
+msgstr "ログインできるかどうかは以下のコマンドで確認できます。"
+
+msgid ""
+"If you can't login to packages.groonga.org, you must be registered ssh "
+"public key."
+msgstr ""
+"packages.groonga.orgにログインできないときは、sshの公開鍵を登録しておかないと"
+"いけません。"
+
+msgid "Execute make update-latest-release"
+msgstr "make update-latest-releaseを実行する"
+
+msgid ""
+"Execute ``make update-latest-release`` command with OLD_RELEASE_DATE, "
+"NEW_RELEASE_DATE."
+msgstr ""
+"``make update-latest-release`` を OLD_RELEASE_DATE や NEW_RELEASE_DATE ととも"
+"に実行します。"
+
+msgid "When 9.09 release, we executed the following command::"
+msgstr "9.09 のリリースの際は、以下のコマンドを実行しました。"
+
+msgid ""
+"This command updates some html files (which is used for web sites of Mroonga "
+"- index.html,ja/index.html) and the version of spec file or debian/changelog "
+"entry."
+msgstr ""
+"このコマンドはMroongaのサイトのHTMLファイルやspecやdebian/changelogファイルの"
+"バージョンを更新します。"
+
+msgid "Confirm the results of each test"
+msgstr "各テストの結果確認"
+
+msgid ""
+"We confirm the results of all the below tests before setting the tag to "
+"Mroonga. Because if we will find problems in Mroonga after setting the tag "
+"to it, we must release it again."
+msgstr ""
+"リリース用のタグを設定する前に、以下のテストが全てパスしているかを確認しま"
+"す。タグを設定してから問題が発覚すると、再度リリースすることになってしまうの"
+"で、タグを設定する前に問題がないか確認します。"
+
+msgid "`GitHub Actions <https://github.com/mroonga/mroonga/actions>`_"
+msgstr ""
+
+msgid "Tagging for release"
+msgstr "リリースのためのタグ打ち"
+
+msgid "Execute the following command for tagging::"
+msgstr "タグを打つために以下のコマンドを実行します::"
+
+msgid ""
+"After tagging for the release, execute ``configure`` script. This tag "
+"information is reflected when generating the documents."
+msgstr ""
+"リリースのためにタグを打ったら、``confiugre`` スクリプトを実行します。このタ"
+"グの情報はドキュメントを生成するときに反映されます。"
+
+msgid "Upload archive files"
+msgstr "アーカイブファイルのアップロード"
+
+msgid "Then, create archive file (``tar.gz``) for distribution::"
+msgstr "次に配布用のアーカイブファイル(``tar.gz``)を作成します::"
+
+msgid "Change working directory to ``packages/source``::"
+msgstr "作業ディレクトリを ``packages/source`` に変更します。"
+
+msgid "Execute ``make download`` for syncing with the upstream::"
+msgstr "``make download`` を実行し、同期します。"
+
+msgid "Execute ``make archive`` for generating source archive::"
+msgstr "ソースアーカイブを生成するために、 ``make archive`` を実行します::"
+
+msgid "Execute ``make upload`` for uploading archive file::"
+msgstr ""
+"アーカイブファイルをアップロードするために、``make upload`` を実行します::"
+
+msgid ""
+"As a result, ``tar.gz`` archive file is available from https://packages."
+"groonga.org/source/mroonga/."
+msgstr ""
+"結果として、 ``tar.gz`` アーカイブ・ファイルが https://packages.groonga.org/"
+"source/mroonga/から入手可能になります。"
+
+msgid "Create packages for the release"
+msgstr "リリース向けにパッケージを作成する"
+
+msgid "Create Linux and Windows packages."
+msgstr "LinuxとWindowsのパッケージを作成します。"
+
+msgid "Debian"
+msgstr ""
+
+msgid "Change working directory to ``packages``::"
+msgstr "作業ディレクトリを ``packages`` に変更します。"
+
+msgid "Execute the following command::"
+msgstr "以下のコマンドを実行します::"
+
+msgid ""
+"Now we finish build and upload packages to https://packages.groonga.org/. "
+"However, these packages are unsigned. We sign packages by executing the "
+"below commands::"
+msgstr ""
+"これで、パッケージのビルドと https://packages.groonga.org/ へのアップロードが"
+"完了しました。しかし、この段階ではビルドしたパッケージはまだ未署名なので、以"
+"下のコマンドでパッケージを署名します。"
+
+msgid "Debian derivatives(Ubuntu)"
+msgstr "Debian系(Ubuntu)"
+
+msgid "For Ubuntu, packages are provided by PPA on launchpad.net."
+msgstr "Ubuntuの場合、パッケージはlaunchpad.netのPPAで提供されます。"
+
+msgid ""
+"Change working directory to ``packages`` and execute ``rake ubuntu:upload`` "
+"command::"
+msgstr ""
+"作業ディレクトリを ``packages`` にし、``rake ubuntu:upload`` コマンドを実行し"
+"ます::"
+
+msgid ""
+"When upload packages was succeeded, package build process is executed on "
+"launchpad.net. Then build result is notified via E-mail. You can install "
+"packages via Groonga PPA on launchpad.net::"
+msgstr ""
+"パッケージのアップロードに成功すると、パッケージのビルドがlaunchpad.netにて行"
+"われます。アップロードに成功するとメールで通知が届きます。ビルドが成功すると"
+"パッケージをPPA経由でインストールできます。"
+
+msgid "Red Hat derivatives"
+msgstr "Red Hat系"
+
+msgid "Change working directory to ``packages`` ::"
+msgstr "作業ディレクトリを ``packages`` に変更します。"
+
+msgid "Windows"
+msgstr ""
+
+msgid ""
+"For windows packages, we use artifacts of `GitHub release page <https://"
+"github.com/mroonga/mroonga/releases>`_ ."
+msgstr ""
+"Windows向けには、 `GitHub release page <https://github.com/mroonga/mroonga/"
+"releases>`_ の成果物を使っています。"
+
+msgid "Update Docker images"
+msgstr ""
+
+msgid ""
+"We update Mroonga's Docker images of `Docker Hub <https://hub.docker.com/r/"
+"groonga/mroonga>`_ ."
+msgstr ""
+"`Docker Hub <https://hub.docker.com/r/groonga/mroonga>`_ のMroongaのDockerイ"
+"メージを更新します。"
+
+msgid ""
+"Clone `the Mroonga's Docker repository <https://github.com/mroonga/docker>`_ "
+"and update Dockerfiles in tha repository."
+msgstr ""
+"`MroongaのDockerリポジトリー <https://github.com/mroonga/docker>`_ をクローン"
+"し、リポジトリーの中のDockerfileを更新します。"
+
+msgid ""
+"Here is an example for the case that the MySQL version is ``5.7.26``, the "
+"Mroonga version is ``9.01``, the Groonga version is ``9.0.2``::"
+msgstr ""
+"以下は、MySQLのバージョンが ``5.7.26``、 Mroongaのバージョンが ``9.01``、"
+"Groongaのバージョンが ``9.0.2`` の場合の例です。::"
+
+msgid "You have to specify the latest versions."
+msgstr "作業時には最新のバージョンを指定してください。"
+
+msgid ""
+"After you check `GitHub Actions of the Mroonga's Docker repository <https://"
+"github.com/mroonga/docker/actions>`_ are succeeded, push tag to remote, push "
+"tag to remote.::"
+msgstr ""
+"`MroongaのDockerリポジトリーのGithub Actions <https://github.com/mroonga/"
+"docker/actions>`_ が成功しているのを確認してから、タグをpushします。::"
+
+msgid ""
+"GitHub Actions of the Mroonga's Docker repository automatically update the "
+"Mroonga's docker images of Docker Hub after you push the tag."
+msgstr ""
+"タグをpushすると、MroongaのDockerリポジトリーのGithub ActionsがDocker Hubの"
+"MroongaのDockerイメージを自動で更新します。"
+
+msgid "You have to execute this procedure for both MySQL 5.x.x and 8.x.x."
+msgstr "MySQL 5.x.x と 8.x.x の両方でこの手順を実行する必要があります。"
+
+msgid "Upload documents"
+msgstr "ドキュメントをアップロード"
+
+msgid "Clone mroonga.github.com repository"
+msgstr "mroonga.github.comリポジトリをcloneする"
+
+msgid "Execute ``make update-document`` as below in ``$MROONGA_CLONE_DIR``::"
+msgstr ""
+"以下のように ``make update-document`` を ``$MROONGA_CLONE_DIR`` 配下で実行す"
+"る"
+
+msgid "Commit changes in mroonga.github.com repository && push them"
+msgstr "Mroonga.github.comの変更点をcommit&&pushする"
+
+msgid "Update blog(Mroonga blog)"
+msgstr "Blog(Mroongaブログ)の更新"
+
+msgid "We update the below files."
+msgstr "以下のファイルを更新します。"
+
+msgid ""
+"``$MROONGA_GITHUB_COM_PATH/ja/_posts/(the date of release)-mroonga-(version)."
+"md``"
+msgstr ""
+
+msgid ""
+"``$MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version)."
+"md``"
+msgstr ""
+
+msgid "We can confirm contents of blog on Web browser by using Jekyll.::"
+msgstr "Jekyllを使ってWebブラウザー上でブログの内容を確認します::"
+
+msgid ""
+"We access http://localhost:4000 on our web browser for confirming contents."
+msgstr "Webブラウザーで http://localhost:4000 にアクセスして内容を確認します。"
+
+msgid ""
+"If we want private to blog contents, we set ``false`` on ``published:`` in "
+"``.md`` file.::"
+msgstr ""
+"ブログの内容を非公開にしたい場合は、 ``.md`` ファイル内の ``published:`` を "
+"``false`` に設定します。::"
+
+msgid "Announce release for mailing list"
+msgstr "リリースをメーリングリストで告知"
+
+msgid "Send release announce for each mailing list"
+msgstr "リリースアナウンスをそれぞれのメーリングリストに送ります"
+
+msgid "ml@mysql.gr.jp for Japanese"
+msgstr ""
+
+msgid "groonga-dev@lists.osdn.me for Japanese"
+msgstr ""
+
+msgid "groonga-talk@lists.sourceforge.net for English"
+msgstr ""
+
+msgid "Announce release for twitter"
+msgstr "リリースをTwitterで告知"
+
+msgid ""
+"Click Tweet link in Mrooga blog entry. You can share tweet about latest "
+"release. If you use tweet link, title of release announce and URL is "
+"embedded into your tweet."
+msgstr ""
+"Tweetリンクをクリックすると、最新のリリースについてツイートできます。タイトル"
+"やブログエントリのURLがツイートに含まれます。"
+
+msgid ""
+"Execute sharing tweet in Japanese and English version of blog entry. Note "
+"that this tweet should be done when logged in by ``groonga`` account."
+msgstr ""
+"ツイートは日本語と英語のブログエントリから行います。ツイートは ``groonga`` ア"
+"カウントでログインした状態で行ってください。"
+
+msgid "Announce release for Facebook"
+msgstr "リリースをFacebookで告知"
+
+msgid "We announce release from Mroonga group in Facebook."
+msgstr "FacebookのMroongaグループからリリースを告知します。"
+
+msgid "https://www.facebook.com/mroonga/"
+msgstr ""
+
+msgid "Bump version"
+msgstr "バージョンをあげる"
+
+msgid "Bump version to the latest release::"
+msgstr "最新のリリースへバージョンをあげる::"

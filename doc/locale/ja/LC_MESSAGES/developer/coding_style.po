@@ -1,0 +1,546 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "TODO: Translate."
+msgstr ""
+
+msgid "コーディングスタイル"
+msgstr ""
+
+msgid ""
+"一般的に1つのコードベースに複数のスタイルがまざっているとソースコードが読みづ"
+"らくなります。たとえ、それぞれのスタイル単独では読みやすいスタイルあっても、"
+"まざると読みづらくなります。そのため、Mroongaプロジェクトでもスタイルを統一し"
+"て、読みやすいソースコードになるようにします。"
+msgstr ""
+
+msgid "読みやすいソースコードにする理由は以下の通りです。"
+msgstr ""
+
+msgid "機能を拡張するときのコストを下げる。"
+msgstr ""
+
+msgid "問題を修正するときのコストを下げる。"
+msgstr ""
+
+msgid ""
+"どちらの場合も周辺のソースコードを読んで、それをベースにコードを追加・変更し"
+"ます。このとき、ソースコードが読みやすい状態だと周辺のソースコードの把握をス"
+"ムーズに行うことができ、スムーズにその後の作業に移れます。"
+msgstr ""
+
+msgid ""
+"TODO: 読みやすさの他にデバッグのしやすさ（gdbでの追いやすさ）も考慮に入れたほ"
+"うがよさそうだがどうしよう。"
+msgstr ""
+
+msgid "言語"
+msgstr ""
+
+msgid "基本的にすべてC++で記述します。よほどのことがない限りCは使いません。"
+msgstr ""
+
+msgid "よい例::"
+msgstr ""
+
+msgid "悪い例（C言語を使っている）::"
+msgstr ""
+
+msgid "ファイル名"
+msgstr ""
+
+msgid ""
+"ソースコードのファイル名は全て小文字にします。また、単語ごとに\"_\"で区切りま"
+"す。"
+msgstr ""
+
+msgid "悪い例（大文字を使っている）::"
+msgstr ""
+
+msgid "悪い例（単語を\"_\"で区切らずにくっつけている）::"
+msgstr ""
+
+msgid "悪い例（単語を\"-\"で区切っている）::"
+msgstr ""
+
+msgid "ソースコードの拡張子 ``.cpp`` にします。"
+msgstr ""
+
+msgid "悪い例（ ``.cc`` を使っている）::"
+msgstr ""
+
+msgid "ヘッダーファイルの拡張子は ``.hpp`` にします。"
+msgstr ""
+
+msgid "悪い例（ ``.h`` を使っている）:"
+msgstr ""
+
+msgid "ha_mroonga.h"
+msgstr ""
+
+msgid "名前空間"
+msgstr ""
+
+msgid ""
+"ヘッダーファイルでは ``using namespace`` を使わない。ソースコードでは "
+"``using namespace std`` であれば使ってもよい。他の名前空間は使ってはいけな"
+"い。"
+msgstr ""
+
+msgid "悪い例（ヘッダーファイル内で ``using namespace`` を使っている）::"
+msgstr ""
+
+msgid ""
+"悪い例（ ``std`` 以外の名前空間に対して ``using namespace`` を使っている）::"
+msgstr ""
+
+msgid "``include`` ガード"
+msgstr ""
+
+msgid ""
+"2重 ``include`` を防ぐためのマクロは、ヘッダーファイルの名前をすべて大文字に"
+"し、単語の区切りをアンダースコアにしたものにし、最後にアンダースコアをつけて "
+"``HEADER_FILE_NAME_HPP_`` という名前にする。"
+msgstr ""
+
+msgid "悪い例（小文字になっている）::"
+msgstr ""
+
+msgid "悪い例（アンダースコアが最後ではなく先頭についている）::"
+msgstr ""
+
+msgid "代入"
+msgstr ""
+
+msgid "``=`` の前後に1つスペースを入れる。"
+msgstr ""
+
+msgid "悪い例（スペースが入っていない）::"
+msgstr ""
+
+msgid "悪い例（2つスペースが入っている）::"
+msgstr ""
+
+msgid "文字列"
+msgstr ""
+
+msgid "文字列はポインタと長さで表現する。 ``\\0`` での終端を仮定しない。"
+msgstr ""
+
+msgid "よい例（本当はもっとすっきりした例がよいけど。。。）::"
+msgstr ""
+
+msgid "悪い例（無理やり ``\\0`` 終端にしている）::"
+msgstr ""
+
+msgid ""
+"ただし、ファイル名など ``\\0`` が前提であるものに関しては ``\\0`` 終端を仮定"
+"してよい。"
+msgstr ""
+
+msgid "悪い例（ ``\\0`` 終端を仮定せず、長さも管理している）::"
+msgstr ""
+
+msgid "``std::string`` は内部でメモリ確保などの処理が発生するので多用しない。"
+msgstr ""
+
+msgid "悪い例（最大サイズがわかっているのに ``std::string`` を使っている）::"
+msgstr ""
+
+msgid "バッファ"
+msgstr ""
+
+msgid "TODO: ちゃんと考える。"
+msgstr ""
+
+msgid ""
+"何度も繰り返し使う領域（バッファ）が必要な場合は ``GRN_BULK`` を使う。例え"
+"ば、カラムの値を取得する領域などである。"
+msgstr ""
+
+msgid "命名規則"
+msgstr ""
+
+msgid "クラス名"
+msgstr ""
+
+msgid "クラスの名前は ``UpperCamelCase`` とする。"
+msgstr ""
+
+msgid "悪い例（ ``snail_case`` である）::"
+msgstr ""
+
+msgid ""
+"ただし、 ``ha_mroonga`` などMySQLとのインターフェイスとなるクラスでかつ他の類"
+"似のモジュールに命名規則がある場合はそれに従う。"
+msgstr ""
+
+msgid "悪い例（ ``UpperCamelCase`` になっている）::"
+msgstr ""
+
+msgid "メンバー変数名"
+msgstr ""
+
+msgid ""
+"メンバー変数名は ``snail_case`` とし、末尾にアンダースコア（ ``_`` ）を付け"
+"る。"
+msgstr ""
+
+msgid "悪い例（ ``UpperCamelCase`` である）::"
+msgstr ""
+
+msgid "悪い例（末尾にアンダースコアがない）::"
+msgstr ""
+
+msgid "読み込み用アクセサ名"
+msgstr ""
+
+msgid ""
+"メンバー変数の値を読み込むメソッドの名前はメンバー変数名の末尾のアンダースコ"
+"アを除いたものにする。"
+msgstr ""
+
+msgid "悪い例（末尾にアンダースコアが残っている）::"
+msgstr ""
+
+msgid "悪い例（先頭に ``get_`` を付けている）::"
+msgstr ""
+
+msgid "書き込み用アクセサ名"
+msgstr ""
+
+msgid ""
+"メンバー変数の値を設定するメソッドの名前は、メンバー変数名の末尾のアンダース"
+"コアを除き、先頭に ``set_`` を加えたものにする。"
+msgstr ""
+
+msgid "悪い例（先頭に ``set_`` ではなく ``update_`` を付けている）::"
+msgstr ""
+
+msgid "コピーコンストラクター"
+msgstr ""
+
+msgid ""
+"基本的にコピーコンストラクターの使用を禁止する。よほどのことがなければ使用し"
+"ないこと。"
+msgstr ""
+
+msgid ""
+"コピーコンストラクターは暗黙的に無駄なコピーが発生する可能性があるためパ"
+"フォーマンス上の問題がある。コピーではなくポインターやリファレンスを用いるこ"
+"と。"
+msgstr ""
+
+msgid ""
+"また、デフォルトのコピーコンストラクター実装はメンバー変数のポインターの値を"
+"そのままコピーするため、デコンストラクターで二重に解放してしまう危険性があ"
+"る。そのため、明示的にコピーコンストラクターを定義しない場合は無効にする。"
+msgstr ""
+
+msgid "悪い例（コピーコンストラクターを禁止していない）::"
+msgstr ""
+
+msgid "悪い例（カスタムコピーコンストラクターを使っている）::"
+msgstr ""
+
+msgid "クラスの代入"
+msgstr ""
+
+msgid ""
+"基本的に定義したクラスの代入を禁止する。よほどのことがなければ使用しないこ"
+"と。"
+msgstr ""
+
+msgid ""
+"代入演算子は暗黙的に無駄なコピーが発生する可能性があるためパフォーマンス上の"
+"問題がある。コピーではなくポインターやリファレンスを用いること。"
+msgstr ""
+
+msgid ""
+"また、デフォルトの代入演算子の実装はメンバー変数のポインターの値をそのままコ"
+"ピーするため、デコンストラクターで二重に解放してしまう危険性がある。そのた"
+"め、明示的に代入演算子を定義しない場合は無効にする。"
+msgstr ""
+
+msgid "悪い例（代入を禁止していない）::"
+msgstr ""
+
+msgid "悪い例（代入を使っている）::"
+msgstr ""
+
+msgid "引数"
+msgstr ""
+
+msgid "voidを省略"
+msgstr ""
+
+msgid "引数がない場合は ``void`` を省略する。"
+msgstr ""
+
+msgid "悪い例（ ``void`` を省略していない）::"
+msgstr ""
+
+msgid "入力用引数にはconstを付ける"
+msgstr ""
+
+msgid ""
+"入力のみに用いる引数には ``const`` を付ける。これは、入力のみに用いる引数であ"
+"る事を明示するためと、間違って引数を変更してしまわないためである。"
+msgstr ""
+
+msgid "悪い例（入力のみに用いているのに ``const`` が付いていない）::"
+msgstr ""
+
+msgid "定数"
+msgstr ""
+
+msgid ""
+"フラグやサイズなどを示す定数には ``const`` オブジェクトを用いる。これはデバッ"
+"ガー上でプログラムを走らせているときに名前で値を参照できるようにするためであ"
+"る。"
+msgstr ""
+
+msgid "悪い例（ ``#define`` を用いている）::"
+msgstr ""
+
+msgid "真偽値"
+msgstr ""
+
+msgid "bool型を用いる"
+msgstr ""
+
+msgid "真偽値には ``bool`` 型を用いる。"
+msgstr ""
+
+msgid "悪い例（ ``int`` 型を用いている）::"
+msgstr ""
+
+msgid "真偽値のリテラルには ``true`` または ``false`` を用いる"
+msgstr ""
+
+msgid "真偽値の値として ``true`` と ``false`` はより完結で説明的だからである。"
+msgstr ""
+
+msgid "悪い例（ ``0`` 以外の値を真の値として用いている）::"
+msgstr ""
+
+msgid "条件式"
+msgstr ""
+
+msgid "真偽値は比較しない"
+msgstr ""
+
+msgid ""
+"真偽値の値は ``boolean_value == true`` などとせず、 ``boolean_value`` として"
+"条件式に使用する。すでに真偽値の値を真偽値のリテラルと比較することは重複した"
+"コードだからである。"
+msgstr ""
+
+msgid "悪い例（真偽値のリテラルと比較している）::"
+msgstr ""
+
+msgid "``NULL`` と比較しない"
+msgstr ""
+
+msgid ""
+"``NULL`` かどうかを条件式に使う場合は ``value == NULL`` ではなく ``!value`` "
+"というように書く。多くの言語で ``NULL`` に相当する値（たとえばLispの "
+"``nil`` ）は偽を表すため、明示的に ``NULL`` と比較しなくても意図は伝わるから"
+"である。"
+msgstr ""
+
+msgid "悪い例（ ``NULL`` と比較している）::"
+msgstr ""
+
+msgid "数値は比較する"
+msgstr ""
+
+msgid ""
+"CやC++では ``0`` は偽、 ``0`` 以外は真の値となるが、条件式に数値を使う場合は "
+"``strcmp(...) == 0`` などというように明示的に比較する。"
+msgstr ""
+
+msgid ""
+"C++では真偽値に ``bool`` を使うためこのような状況は発生しないが、C言語由来の"
+"APIでは ``int`` で真偽値を表現している場合が多い。しかし、 ``int`` だけでは真"
+"偽値として使っているか本当に数値として使っているかがわかりにくいため、 "
+"``int`` のときはすべて数値として扱う。"
+msgstr ""
+
+msgid "悪い例（ ``0`` を偽の値として扱っている）::"
+msgstr ""
+
+msgid "初期化"
+msgstr ""
+
+msgid "メンバー変数の初期化には初期化リストを用いる"
+msgstr ""
+
+msgid ""
+"無駄な処理を省くためにコンストラクターでのメンバー変数の初期化には初期化リス"
+"トを用いる。初期化リストを用いないとコンストラクターの処理とコピーコンストラ"
+"クター・代入処理が行われたりなど非効率である。（後述）"
+msgstr ""
+
+msgid ""
+"悪い例（ ``std::string(name)`` のところでコンストラクターが動き、 ``name_ "
+"= ...`` のところで代入演算子が動いて2回初期化している）::"
+msgstr ""
+
+msgid "変数宣言と同時に初期化する"
+msgstr ""
+
+msgid ""
+"変数を宣言したときに同時に初期化する。宣言時に初期化せずに代入して初期化する"
+"と、無駄な処理が発生する可能性があるため非効率である。（後述）"
+msgstr ""
+
+msgid ""
+"悪い例（ ``std::string()`` のところでコンストラクターが動き、 ``name = ...`` "
+"のところで代入演算子が動いて2回初期化している）::"
+msgstr ""
+
+msgid "インクリメント・デクリメント"
+msgstr ""
+
+msgid "前置形式を用いる"
+msgstr ""
+
+msgid ""
+"後置形式ではオブジェクトのコピーをしなければいけないため非効率である。そのた"
+"め、できるだけ前置形式を用いる。"
+msgstr ""
+
+msgid ""
+"よい例（ ``int`` だと効率は変わらないので本当はあんまりよい例ではない）::"
+msgstr ""
+
+msgid "悪い例（後置形式を用いている）::"
+msgstr ""
+
+msgid "キャスト"
+msgstr ""
+
+msgid "C++のスタイルを用いる"
+msgstr ""
+
+msgid ""
+"Cスタイルのキャストはなんでもキャストできてしまうため、意図しないキャストにも"
+"気付かない可能性がある。例えば、単に ``const`` を外したいだけなのに、間違って"
+"違う型に変換していても気付けない。C++のキャストでは ``const`` を外したいとき"
+"は ``const_cast`` を使用し、型を変換するときは ``static_cast`` を指定する。こ"
+"うすれば、 ``static_cast`` で間違って ``const`` を外してしまっている場合も気"
+"付ける。 ``reinterpret_cast`` はどうしても必要なときのみ注意して使う。"
+msgstr ""
+
+msgid "よい例（ ``const_cast`` を使っている）::"
+msgstr ""
+
+msgid "よい例（ ``static_cast`` を使っている）::"
+msgstr ""
+
+msgid ""
+"よい例（ ``static_cast`` では無理なので ``reinterpret_cast`` を使っている）::"
+msgstr ""
+
+msgid "悪い例（Cスタイルのキャストを使っている）::"
+msgstr ""
+
+msgid ""
+"悪い例（ ``static_cast`` で十分なのに ``reinterpret_cast`` を使っている）::"
+msgstr ""
+
+msgid "変数宣言"
+msgstr ""
+
+msgid "ポインタ型を示す ``*`` とリファレンス型を示す ``&`` は変数名に寄せる"
+msgstr ""
+
+msgid ""
+"Cと同様にポインタ型を示す ``*`` は型名ではなく変数名に寄せる。これは、以下の"
+"ように複数の変数を一度に宣言したときに一貫性がなくなるためである。2つめ以降の"
+"変数は近くに型名がないため ``*`` を寄せる場所がない。"
+msgstr ""
+
+msgid "例::"
+msgstr ""
+
+msgid "同様に、リファレンス型を示す ``&`` も変数名に寄せる。"
+msgstr ""
+
+msgid "なお、 ``*`` や ``&`` と型名の間にはスペースを入れない。"
+msgstr ""
+
+msgid "悪い例（型名に寄せている）::"
+msgstr ""
+
+msgid "その他"
+msgstr ""
+
+msgid ""
+"ここに書いていないものについては特にスタイルを定めないが、 プロジェクト内で常"
+"に一貫性のあるスタイルを使用すること。 同じような事をするときは同じような書き"
+"方にすること。 複数の書き方で同じようなことを実現している場合は1つの方法に合"
+"わせること。"
+msgstr ""
+
+msgid "以下、具体例が必要。"
+msgstr ""
+
+msgid "ビルド時にできることを実行時に延ばさない(静的チェックを活用)"
+msgstr ""
+
+msgid "なるべく局所的に変数を定義し、同時に初期化する"
+msgstr ""
+
+# 8174d2f0671a4d22802f6f73b7af8299
+msgid "長い関数や深いブロックのネストを避ける"
+msgstr ""
+
+# 4d5063749244465195e10bb7e4838521
+msgid ""
+"2つに分けた方がよさそう。あと目安があるといいかも。 100行以上は長いよねーとか"
+"3段以上はデンジャーとか。"
+msgstr ""
+
+msgid "必要以上にオブジェクトを複製しない"
+msgstr ""
+
+msgid "暗黙の型変換はなるべく避ける"
+msgstr ""
+
+msgid "assertを積極的に使う"
+msgstr ""
+
+msgid "メモ"
+msgstr ""
+
+msgid ""
+"動的テンプレートを使わない。（要追加情報。implicit template instantiationのこ"
+"とであれば、これはふつうに使わ れているものなので特に禁止しないんでいいんじゃ"
+"ない説？）"
+msgstr ""
+
+msgid "typeidを使わない。"
+msgstr ""
+
+msgid ""
+"例外はMySQLで問題がないようであればOK。Mroongaから外の世 界（MySQLの世界）に"
+"はださないようにする。"
+msgstr ""

@@ -4,10 +4,7 @@
 How to report a bug
 ===================
 
-There are two ways to report a bug:
-
-  * Submit a bug to the issue tracker
-  * Report a bug to the mailing list
+There are some ways to report a bug.
 
 You can use either way It makes no difference to us.
 
@@ -19,7 +16,7 @@ Mroonga project uses `GitHub issue tracker
 
 You can use English or Japanese to report a bug.
 
-Report a bug to the mailing list
+Report a bug with the other ways
 --------------------------------
 
 Mroonga project has :doc:`/community` for discussing about Mroonga.
@@ -41,6 +38,7 @@ For a reproducible bug report, it is better to report with the following informa
      - Description
    * - Environment information
      - Installed packages information to detect what version is used.
+
        rpm::
 
            rpm -qa > INSTALLED.txt

@@ -1,0 +1,132 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Windows"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga on Windows. You can install "
+"Mroogna by extracting a zip package."
+msgstr ""
+"このセクションではWindows上でMroongaをインストールする方法を説明します。"
+"Mroongaをインストールするにはzipパッケージを展開します。"
+
+msgid ""
+"Mroonga binary for Windows is provided with MariaDB binary because `some "
+"changes <https://github.com/mroonga/mroonga/tree/master/packages/source/"
+"patches>`_ are needed for building Mroonga for Windows."
+msgstr ""
+"MroongaのWindowsバイナリはMariaDBのバイナリと一緒に提供しています。これは、"
+"MroongaのWindows版をビルドするのに `MariaDB本体にいくつかの変更 <https://"
+"github.com/mroonga/mroonga/tree/master/packages/source/patches>`_ が必要だか"
+"らです。"
+
+msgid "Zip"
+msgstr ""
+
+msgid ""
+"Download zip file and extract it. You need to choose a zip for your "
+"environment:"
+msgstr ""
+"zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選"
+"ぶ必要があります"
+
+msgid "|mroonga_mariadb_windows_package_link|"
+msgstr ""
+
+msgid ""
+"Zip packages are pre-configured for easy to use, so no need to execute "
+"``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
+msgstr ""
+"ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE "
+"FUNCTION`` の実行は不要です。"
+
+msgid "Just start mysqld by following command::"
+msgstr "次のように単にmysqldを起動します::"
+
+msgid ""
+"Each zip package contains ini files (my-small.ini, my-medium.ini, my-large."
+"ini and so on), choose preferred ini file which meets on your demand."
+msgstr ""
+"それぞれのzipパッケージにはiniファイルが含まれています。(my-small.iniやmy-"
+"medium.ini、my-large.iniなど) 適切なiniファイルを選択してください。"
+
+msgid "Next connect to MariaDB by following command::"
+msgstr "MariaDBに次のコマンドで接続します::"
+
+msgid "Build from source with MariaDB"
+msgstr "MariaDBと一緒にソースからビルド"
+
+msgid ""
+"You need to use Mroonga bundled MariaDB source provided by the Mroonga "
+"project."
+msgstr ""
+"Mroongaプロジェクトが提供しているMroongaを含んだMariaDBのソースを使う必要があ"
+"ります。"
+
+msgid ""
+"You can find it in `<https://packages.groonga.org/source/mroonga/>`_. "
+"Mroonga bundled MariaDB source has ``mariadb-${MARIADB_VERSION}-with-mroonga-"
+"${MROONGA_VERSION}.zip`` file name."
+msgstr ""
+"このソースは `<https://packages.groonga.org/source/mroonga/>`_ にあります。"
+"Mroongaを含んだMariaDBのソースは ``mariadb-${MARIADB_VERSION}-with-mroonga-"
+"${MROONGA_VERSION}.zip`` というファイル名になっています。"
+
+msgid ""
+"You can build the source code with `the standard MariaDB build process "
+"<https://mariadb.com/kb/en/mariadb/documentation/getting-started/compiling-"
+"mariadb-from-source/Building_MariaDB_on_Windows/>`_."
+msgstr ""
+"このソースは `MariaDBの標準的なビルド方法 <https://mariadb.com/kb/en/mariadb/"
+"documentation/getting-started/compiling-mariadb-from-source/"
+"Building_MariaDB_on_Windows/>`_ でビルドできます。"
+
+msgid ""
+"You need to register Mroonga after building MariaDB. Use SQL at ``"
+"${MARIADB_BUILD_DIR}\\storage\\mroonga\\data\\install.sql`` to register "
+"Mroonga."
+msgstr ""
+"MariaDBをビルドしたらMroongaを登録する必要があります。 ``"
+"${MARIADB_BUILD_DIR}\\storage\\mroonga\\data\\install.sql`` にあるSQLを使って"
+"Mroongaを登録してください。"
+
+#~ msgid ""
+#~ "Choose ``win32`` version for 32-bit environment, ``winx64`` version for "
+#~ "64-bit environment:"
+#~ msgstr ""
+#~ "32-bit環境なら ``win32`` バージョンを選んでください。64-bit環境なら "
+#~ "``winx64`` を選んでください。"
+
+#~ msgid ""
+#~ "Download MSI file and execute it. You need to choose a MSI for your "
+#~ "environment."
+#~ msgstr ""
+#~ "MSIファイルをダウンロードして実行してください。環境に合わせてMSIを選んでく"
+#~ "ださい。"
+
+#~ msgid "Installer"
+#~ msgstr "インストーラー"
+
+#~ msgid ""
+#~ "The following MSI files don't work yet. Please use zip files below or "
+#~ "help us to creating MSI files that work well."
+#~ msgstr ""
+#~ "以下のMSIファイルは動きません。zipファイルを使うか、正常に動くMSIファイル"
+#~ "の作成に協力をお願いします。"

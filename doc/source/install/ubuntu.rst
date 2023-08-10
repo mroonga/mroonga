@@ -4,8 +4,6 @@ Ubuntu
 This section describes how to install Mroonga related deb packages on
 Ubuntu. You can install them by ``apt``.
 
-.. include:: 32bit-note.inc
-
 PPA (Personal Package Archive)
 ------------------------------
 

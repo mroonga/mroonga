@@ -1,0 +1,38 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "macOS"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga on macOS. You can install "
+"Mroonga by `Homebrew <https://brew.sh/>`_."
+msgstr ""
+"このセクションではmacOS上でMroongaをインストールする方法を説明します。 "
+"`Homebrew <https://brew.sh/>`_ を使ってインストールできます。"
+
+msgid "Homebrew"
+msgstr ""
+
+msgid ""
+"See `mroonga/homebrew-mroonga on GitHub <https://github.com/mroonga/homebrew-"
+"mroonga>`_ for details."
+msgstr ""
+"詳細は `mroonga/homebrew-mroonga on GitHub <https://github.com/mroonga/"
+"homebrew-mroonga>`_ を見てください。"

@@ -1,0 +1,87 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_command()``"
+msgstr ""
+
+msgid "Summary"
+msgstr "概要"
+
+msgid ""
+"``mroonga_command()`` UDF executes the given string as a Groonga command and "
+"returns result of the Groonga command. Groonga command will be faster than "
+"MySQL query."
+msgstr ""
+"``mroonga_command()`` UDFは与えられた文字列をGroongaコマンドとして実行し、"
+"Groongaコマンドの結果を返します。おそらく、Groongaコマンドは、MySQLのクエリー"
+"より高速です。"
+
+msgid ""
+"``mroonga_command()`` is an UDF for advanced users. Normally, you don't need "
+"to use this UDF."
+msgstr ""
+"``mroonga_command()`` は上級者向けのUDFです。通常このUDFを使う必要はありませ"
+"ん。"
+
+msgid "Syntax"
+msgstr "構文"
+
+msgid "``mroonga_command()`` has only one required parameter::"
+msgstr "``mroonga_command()`` の引数は1つで必須の引数です。::"
+
+msgid "``command`` is a string value. It's a Groonga command to be executed."
+msgstr "``command`` は文字列型の値です。実行するGroongaコマンドを指定します。"
+
+msgid "Usage"
+msgstr "使いかた"
+
+msgid "TODO"
+msgstr ""
+
+msgid "Parameters"
+msgstr "引数"
+
+msgid "Required parameters"
+msgstr "必須引数"
+
+msgid "There is one required parameter, ``command``."
+msgstr "必須引数は1つで ``command`` です。"
+
+msgid "``command``"
+msgstr ""
+
+msgid "It specifies a Groonga command to be executed."
+msgstr "実行するGroongaコマンドを指定します。"
+
+msgid "Return value"
+msgstr "返り値"
+
+msgid ""
+"It returns an evaluated result of the given Groonga command as a string."
+msgstr "指定されたGroongaコマンドを実行した結果を文字列として返します。"
+
+msgid "See also"
+msgstr "参照"
+
+msgid ""
+"`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga "
+"document."
+msgstr ""
+"Groongaのドキュメント内の `コマンド <http://groonga.org/ja/docs/reference/"
+"command.html>`_ 。"

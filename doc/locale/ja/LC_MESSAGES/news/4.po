@@ -1,0 +1,706 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 4 series"
+msgstr "お知らせ - 4系"
+
+msgid "Release 4.10 - 2015-01-29"
+msgstr "4.10リリース - 2015-01-29"
+
+# acdc379a48eb4d6182cb255d35ed399b
+msgid ""
+"This release has a bug fix for unique index. If you're using unique index in "
+"storage mode, your data may be broken. If you're using unique index in "
+"storage mode, we recommend to upgrade to this version and re-create your "
+"unique indexes."
+msgstr ""
+"このリリースにはユニークインデックスのバグ修正が含まれています。もし、スト"
+"レージモードでユニークインデックスを使っている場合はデータが壊れている可能性"
+"があります。ストレージモードでユニークインデックスを使っている場合はこのバー"
+"ジョンへアップグレードし、アップグレード後にユニークインデックスを再構築する"
+"ことをオススメします。"
+
+# dfa63413fca0441aac503ffde3787aae
+msgid ""
+"Here are SQL statements to re-create your indexes including unique indexes::"
+msgstr ""
+"ユニークインデックスを含むすべてのインデックスを再構築するSQL文は次の通りで"
+"す。::"
+
+# fc46e889fb8e46228e37f4b7b36f268b
+msgid ""
+"You may get \"duplicated record\" error on ``ENABLE KEYS``. If you get the "
+"error, please confirm your data carefully and fix the duplication."
+msgstr ""
+"``ENABLE KEYS`` をしたときに「レコードが重複している」というエラーがでるかも"
+"しれません。もし、このエラーがでた場合は、データを確認の上、重複を解消してく"
+"ださい。"
+
+# 6892213321104bd4aa075b3109cf9fe3
+msgid "Here are broken data scenario:"
+msgstr "次のようなケースがあった場合、前述のようにデータが壊れます。"
+
+# f574aa5f69b9481dbc1a9a7574b5ec09
+msgid "An unique index is created."
+msgstr "ユニークインデックスを作成する。"
+
+# 4a472fcf0ec14d2abe1df257356fb7ff
+msgid "Insert data."
+msgstr "データを挿入する。"
+
+# 7fb1fb760d5a425a94647262174ff838
+msgid "Insert duplicated data. It's reported as an error."
+msgstr "重複したデータを挿入する。エラーが報告される。"
+
+# 08a6196a61f949b79a3d8c10b3fec155
+msgid ""
+"Insert duplicated data again. It can be inserted. It breaks unique "
+"consistency."
+msgstr ""
+"再度重複したデータを挿入する。エラーなく重複したデータが挿入できてしまう。"
+
+msgid ""
+"[storage] Supported static index construction in FULLTEXT INDEX comment with "
+"``'table \"XXX\"'``. Execute ``DISABLE KEYS``, then ``ENABLE KEYS`` for "
+"static index construction. [Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] FULLTEXT INDEXのCOMMENTに参照テーブルが指定してあるとき"
+"に、オフラインインデックス構築ができるようになりました。 オフラインインデック"
+"ス構築には ``DISABLE KEYS`` を実行してから ``ENABLE KEYS`` を実行します。[村"
+"上さんが報告]"
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.6.22 on CentOS 7. [groonga-dev,03047] "
+"[Reported by Hiroshi Kagami]"
+msgstr ""
+"[rpm][centos] CentOS 7でMySQL 5.6.22向けにビルドするようにしました。[groonga-"
+"dev,03047] [各務さんが報告]"
+
+msgid "[rpm][centos] Built with MariaDB 5.5.40-2 on CentOS 7."
+msgstr ""
+"[rpm][centos] CentOS 7でMariaDB 5.5.40-2向けにビルドするようにしました。"
+
+msgid ""
+"[storage][mysql56] Supported to report duplicated error for ``ADD UNIQUE "
+"INDEX``. [Reported by kazeburo]"
+msgstr ""
+"[ストレージモード][mysql56] ``ADD UNIQUE INDEX`` で重複したときのエラーを報告"
+"するようにしました。[kazeburoさんが報告]"
+
+msgid ""
+"[storage] Fixed a bug that referenced table is accidentally removed on "
+"error. This means that index creation is failed for FULLTEXT INDEX comment "
+"with ``'table \"terms\"'``, \"terms\" table can be removed on error."
+msgstr ""
+"[ストレージモード] 参照テーブルがエラーで意図せず削除される不具合を修正しまし"
+"た。これはたとえば FULLTEXT INDEXのコメントに ``'table \"terms\"'`` が指定さ"
+"れていたら、「terms」テーブルのインデックスを作成しているときにエラーが発生す"
+"ると、「terms」テーブルが削除されてしまうということです。"
+
+msgid ""
+"[storage] Fixed a bug that duplicated entry is removed in unique index when "
+"duplicated error is occurred. This bug makes consistency of indexes broken, "
+"so recommended to recreate existing indexes again after upgrading Mroonga. "
+"[Reported by kazeburo]"
+msgstr ""
+"[ストレージモード] ユニークインデックスに対し重複したエントリを挿入しようとす"
+"ると、重複によるエラーでインデックスが削除されてしまう不具合を修正しました。"
+"この不具合でインデックスの一貫性が損なわれてしまうので、Mroongaをアップグレー"
+"ドしたあとにインデックスを再構築しなおしてください。[kazeburoさんが報告]"
+
+msgid ""
+"[storage] Fixed a bug that ``INSERT ON DUPLICATE KEY UPDATE`` is broken. "
+"This bug may change existing other records by executing update fallback when "
+"insert error occurred. [Reported by kazeburo]"
+msgstr ""
+"[ストレージモード] ``INSERT ON DUPLICATE KEY UPDATE`` が機能していなかった問"
+"題を修正しました。この不具合には挿入に失敗したあとの更新処理で既存の他のレ"
+"コードを変更してしまう可能性があります。[kazeburoさんが報告]"
+
+msgid "Hiroshi Kagami"
+msgstr "各務さん"
+
+msgid "kazeburo"
+msgstr "kazeburoさん"
+
+msgid "Release 4.09 - 2014-12-29"
+msgstr "4.09リリース - 2014-12-29"
+
+msgid "[rpm] Supported MySQL 5.6.22 on CentOS 6. [Reported by @oreradio]"
+msgstr ""
+"[rpm] CentOS 6用のパッケージがMySQL 5.6.22に対応しました。 [@oreradioさんが報"
+"告]"
+
+msgid ""
+"Added :ref:`server-variable-mroonga-boolean-mode-syntax-flags` that custom "
+"syntax in ``MATCH () AGAINST ('...' IN BOOLEAN MODE)``."
+msgstr ""
+"``MATCH () AGAINST ('...' IN BOOLEAN MODE)`` の構文をカスタマイズする :ref:"
+"`server-variable-mroonga-boolean-mode-syntax-flags` を追加しました。"
+
+msgid ""
+"Supported no normalizer ``FULLTEXT INDEX`` by specifying ``none`` as "
+"normalizer such as ``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'``."
+msgstr ""
+"``FULLTEXT INDEX (...) COMMENT 'normalizer \"none\"'`` というようにノーマライ"
+"ザーとして ``none`` を指定することでノーマライザーなしの ``FULLTEXT INDEX`` "
+"を作れるようにしました。"
+
+msgid "Supported referencing primary key value of auto created records."
+msgstr ""
+"自動で作られたレコードでもプライマリーキーの値を参照できるようになりました。"
+
+msgid "@oreradio"
+msgstr "@oreradioさん"
+
+msgid "Release 4.08 - 2014/11/29"
+msgstr "4.08リリース - 2014/11/29"
+
+msgid "[deb] Supported Ubuntu 12.04 again for Travis-CI."
+msgstr "[deb] Ubuntu 12.04をTravis-CI向けに再度サポートしました。"
+
+msgid ""
+"[test] Added script which checks performance schema. [Patch by Elena "
+"Stepanova]"
+msgstr ""
+"[test] パフォーマンススキーマをチェックするスクリプトを追加しました。 [Elena "
+"Stepanovaさんがパッチ提供]"
+
+msgid ""
+"[rpm] Supported MySQL 5.5.40 on CentOS 6 and 7. [groonga-dev,02955] "
+"[Reported Noboru Nishiyama]"
+msgstr ""
+"[rpm] MySQL 5.5.40 をCentOS 6と7でサポートしました。 [groonga-dev,02955] [西"
+"山さんが報告]"
+
+msgid "[doc] Added :doc:`/reference/limitations` about column size."
+msgstr ""
+"[doc] カラムサイズに関する :doc:`/reference/limitations` を追記しました。"
+
+msgid ""
+"[storage] Added missing primary key check when primary key is required to "
+"specify. [groonga-dev,02963] [Reported by kashihara]"
+msgstr ""
+"[ストレージモード] 主キーの指定が必要なクエリに主キーが指定されていなかったと"
+"きのチェック漏れを修正しました。[groonga-dev,02963] [lkashiharaさんが報告]"
+
+msgid ""
+"[doc] Fixed nonexistent MySQL version. [groonga-dev,02899] [Reported by GMO "
+"Media, Inc.]"
+msgstr ""
+"[doc] 存在しないMySQLバージョンの記述を削除しました。[groonga-dev,02899] [GMO"
+"メディア株式会社さんが報告]"
+
+msgid "[doc] Removed needless SCL related install description for CentOS 5."
+msgstr "[doc] CentOS 5のインストール手順で不要なSCL関連の記述を削除しました。"
+
+msgid "[doc] Use ``service`` command to start MySQL on CentOS 5 and 6."
+msgstr ""
+"[doc] CentOS 5と6では ``service`` コマンドをMySQLの起動に使うようにしました。"
+
+msgid "[doc] Use ``systemctl`` command to start MySQL on CentOS 7."
+msgstr ""
+"[doc] CentOS 7では ``systemctl`` コマンドをMySQLの起動に使うようにしました。"
+
+# d8986144d4454b8dbfd7cf12c8877b8c
+msgid "GMO Media, Inc."
+msgstr "GMOメディア株式会社さん"
+
+# 256875cb4d8340a5b75754690347bfe2
+msgid "Elena Stepanova"
+msgstr "Elena Stepanovaさん"
+
+msgid "Noboru Nishiyama"
+msgstr "西山さん"
+
+msgid "kashihara"
+msgstr "kashiharaさん"
+
+msgid "Release 4.07 - 2014/10/29"
+msgstr "4.07リリース - 2014/10/29"
+
+# 5d200c1c668246b5a109032cccef7054
+msgid ""
+"[storage] Changed to treat deprecated ``INSERT DELAYED`` as error. "
+"[GitHub#20] [MDEV#6837] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ] 非推奨である ``INSERT DELAYED`` をエラーとして扱うようにしまし"
+"た。 [GitHub#20] [MDEV#6837] [Elena Stepanovaさんが報告]"
+
+# 7afcd2dbc12d4876be38f5676e249eda
+msgid ""
+"[storage][mariadb10] Added proper error message for duplicated entries on "
+"adding an unique index. [GitHub#19] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ][mariadb10] ユニークインデックスを追加するときに重複がある場合、"
+"適切なエラーメッセージを表示するようにしました。 [GitHub#19] [Elena Stepanova"
+"さんが報告]"
+
+# 9a6aa947940e4e65b47b0812a431d776
+msgid ""
+"[cmake] Removed needless status message for compiler flag checks [GitHub#22]"
+msgstr ""
+"[cmake] 不要なコンパイラフラグのチェックメッセージを表示しないようにしまし"
+"た。 [GitHub#22]"
+
+# 6de47e09490f4f2d8481a2f865ff6aa5
+msgid ""
+"Supported token filter in table/index comment for wrapper/storage mode. "
+"[GitHub#25] [Patch by Naoya Murakami]"
+msgstr ""
+"トークンフィルターをテーブルもしくはインデックスのコメントに指定できるように"
+"しました。 [GitHub#25] [村上さんがパッチ提供]"
+
+# 2f8527099f0e4ecea32ee795af02fd7f
+msgid ""
+"[mroonga_command] Improved to need not to know whether Groonga database "
+"already exists before executing mroonga_command. In the previous versions, "
+"you must prepare table which use Mroonga."
+msgstr ""
+"[mroonga_command] mroonga_commandを使うときにすでにGroongaのデータベースの有"
+"無を気にしなくてもよくなりました。以前はMroongaを使ったテーブルが存在している"
+"必要がありました。"
+
+msgid ""
+"[storage] Supported to specify normalizer in table comment. [GitHub#27] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+"[storage] テーブルのコメントにノーマライザーを指定できるようにしました。 "
+"[GitHub#27] [村上さんがパッチ提供]"
+
+# 0cca5ec6871b4c40b89dfb548289f913
+msgid ""
+"[storage] Supported column compression flag (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``). [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+"[ストレージ] カラムの圧縮フラグをサポートしました。 (``COMPRESS_LZ4``, "
+"``COMPRESS_ZLIB``) [GitHub#32] [村上さんがパッチ提供]"
+
+# c2f193ff56e24d088e4f9ff62a1a6c63
+msgid ""
+"Added :ref:`server-variable-mroonga-libgroonga-support-lz4` and :ref:`server-"
+"variable-mroonga-libgroonga-support-zlib` system variables. [GitHub#33,#34,"
+"#35] [Patch by Naoya Murakami]"
+msgstr ""
+":ref:`server-variable-mroonga-libgroonga-support-lz4` と :ref:`server-"
+"variable-mroonga-libgroonga-support-zlib`  システム変数を追加しました。 "
+"[GitHub#33,#34,#35] [村上さんがパッチ提供]"
+
+msgid "Dropped MySQL 5.1 support."
+msgstr "MySQL 5.1対応をやめました。"
+
+# 8b349af0517248819e1ebb81f4e3326b
+msgid ""
+"[storage][mariadb10] Fixed a crash bug that it doesn't properly locked. "
+"[GitHub#18] [Reported by Elena Stepanova]"
+msgstr ""
+"[ストレージ][mariadb10] 不適切なロックのせいでクラッシュする不具合を修正しま"
+"した。 [GitHub#18] [Elena Stepanovaさんが報告]"
+
+# 625b32025d074d95a5101df9520e359b
+msgid "[storage] Fixed overflow about signed tinyint. [GitHub#29]"
+msgstr ""
+"[ストレージ] signed tinyintでオーバーフローしていた問題を修正しました。 "
+"[GitHub#29]"
+
+msgid ""
+"[doc] Fixed markups about normalizer. [GitHub#32] [Patch by Naoya Murakami]"
+msgstr ""
+"[doc] ノーマライザーに関するマークアップを修正しました。 [GitHub#32] [村上さ"
+"んがパッチ提供]"
+
+msgid "Release 4.06 - 2014/09/29"
+msgstr "4.06リリース - 2014/09/29"
+
+msgid "[doc] Added more details about Groonga's development package."
+msgstr "[doc] Groongaの開発パッケージについて説明を追加しました。"
+
+msgid "[doc] Changed to recommend GitHub issue tracker."
+msgstr "[doc] GitHub issue trackerの使用を推奨するようにしました。"
+
+msgid "[deb] Dropped Debian jessie and sid support."
+msgstr "[deb] Debian jessieとsidのサポートを終了しました。"
+
+msgid ""
+"[storage] Fixed a bug that no record returns with multiple column index. "
+"This bug occurs when it meets two conditions. First, columns indexed by "
+"multiple column index are used in order and WHERE clause. Second, a column "
+"indexed by multiple column index but it's no the first column is used in "
+"ORDER by clause. [#2651] [Reported by foamcentime, Naoya Murakami]"
+msgstr ""
+"[ストレージモード] マルチカラムインデックスを使った検索で空のレコードが返って"
+"くる不具合を修正しました。この不具合は次の2つの条件を満たすと発生します。1つ"
+"めは、カラムがマルチカラムインデックスによってインデックスが作成されており、"
+"ORDERとWHERE句に指定されていること。2つめが、マルチカラムインデックスに指定し"
+"た最初のカラムがORDERで使われていないことです。[#2651] [foamcentime, 村上さん"
+"が報告]"
+
+msgid "foamcentime"
+msgstr "foamcentimeさん"
+
+msgid "Release 4.05 - 2014/08/29"
+msgstr "4.05リリース - 2014/08/29"
+
+msgid "Dropped Ubuntu 13.10 Saucy Salamander support."
+msgstr "Ubuntu 13.10 (Saucy Salamander)のサポートをやめました。"
+
+msgid ""
+"Added new variable :ref:`server-variable-mroonga-vector-column-delimiter`.  "
+"It is used to change delimiter of vector column. [GitHub#16] [Patch by Naoya "
+"Murakami]"
+msgstr ""
+"サーバー変数として :ref:`server-variable-mroonga-vector-column-delimiter` を"
+"追加しました。ベクターカラムのデリミタを変更するのに使います。[GitHub#16] [村"
+"上さんがパッチ提供]"
+
+msgid ""
+"[rpm][centos] Supported MySQL 5.6 official repository packages on CentOS "
+"6/7. Use mysql56-community-mroonga package. [Patch by miko]"
+msgstr ""
+"[rpm][centos] CentOS 6/7にて公式リポジトリにあるMySQL 5.6をサポートしました。"
+"mysql56-community-mroongaパッケージを使ってください。[mikoさんがパッチ提供]"
+
+msgid ""
+"[doc] Moved document about upgrading which is included in install document. "
+"Now, you can refer it as :doc:`/upgrade`."
+msgstr ""
+"[doc] インストール手順に含めていたアップグレードガイドを移動しました。:doc:`/"
+"upgrade` として参照できます。"
+
+msgid "Supported MariaDB 10.0.13."
+msgstr "MariaDB 10.0.13に対応しました。"
+
+msgid ""
+"[rpm][centos] Supported CentOS 7 as mariadb-mroonga package. It uses the "
+"bundled MariaDB. [groonga-dev,02604] [Tested by Miyawaki][Tested by Kawada]"
+msgstr ""
+"[rpm][centos] CentOS 7をサポートしました。mariadb-mroongaパッケージを提供して"
+"います。このパッケージはバンドルされているMariaDBを使います。 [groonga-"
+"dev,02604] [宮脇さんがテスト協力][河田さんがテスト協力]"
+
+msgid ""
+"[doc] Fixed wrong MySQL version about news of Mroonga 4.04. [Reported by "
+"_so4]"
+msgstr ""
+"[doc] Mroonga 4.04のリリースエントリでMySQLのバージョンが間違っていたのを修正"
+"しました。[_so4さんが報告]"
+
+msgid ""
+"[doc] Removed needless explicit install procedure for groonga-normalizer-"
+"mysql package."
+msgstr ""
+"[doc] インストール手順で明示的にインストールする必要のなくなったgroonga-"
+"normalizer-mysqlパッケージについて削除しました。"
+
+msgid ""
+"[storage] Fixed a bug that value remains in unique index on duplicated "
+"primary key error. [groonga-dev,02633] [Reported by 6elz]"
+msgstr ""
+"[ストレージモード] uniqueインデックスが残ったままで、プライマリーキーの"
+"duplicateエラーが発生する不具合を修正しました。[groonga-dev,02633] [6elzさん"
+"が報告]"
+
+msgid ""
+"[doc] Fixed a bug that building document in other directory fails. [groonga-"
+"dev,02652] [Reported by cosmo0920]"
+msgstr ""
+"[doc] 別のディレクトリでドキュメントをビルドできない不具合を修正しました。"
+"[groonga-dev,02652] [cosmo0920さんが報告]"
+
+msgid "Changed to use \"Mroonga\" form for engine name."
+msgstr "ストレージエンジンの表記に\"Mroonga\"を使うようにしました。"
+
+msgid ""
+"[storage] Fixed a bug that table specified index (``COMMENT 'table \"XXX"
+"\"'``) can't be removed. [groonga-dev,02677] [Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] テーブルを参照するインデックスがコメントで指定(``COMMENT "
+"'table \"XXX\"'``)されていると削除できない不具合を修正しました。[groonga-"
+"dev,02677] [村上さんが報告]"
+
+msgid "_so4"
+msgstr "_so4さん"
+
+msgid "miko"
+msgstr "mikoさん"
+
+msgid "6elz"
+msgstr "6elzさん"
+
+# d5a1476d11a34a9cb63ba48497653e81
+msgid "cosmo0920"
+msgstr "cosmo0920さん"
+
+msgid "Miyawaki"
+msgstr "宮脇さん"
+
+msgid "Kawada"
+msgstr "河田さん"
+
+msgid "Release 4.04 - 2014/07/29"
+msgstr "4.04リリース - 2014/07/29"
+
+msgid ""
+"Removed Groonga and groonga-normalizer-mysql specific test files for MariaDB "
+"bundled version on Windows. There is too long file name issue. [groonga-"
+"dev,02391] [Reported by Masafumi Yokoyama]"
+msgstr ""
+"Groongaとgroonga-normalizer-mysql特有のテストファイルをMariaDBバンドル版には"
+"含めないようにしました。これはファイル名が長すぎる問題があるためです。 "
+"[groonga-dev,02391] [横山昌史さんが報告]"
+
+msgid "[doc] Updated :doc:`/developer`."
+msgstr "[doc] :doc:`/developer` を更新しました。"
+
+msgid ""
+"Added overflow/underflow check whether valid time to find errors on 32-bit "
+"environment. [Patch by Toshihisa Tashiro]"
+msgstr ""
+"妥当な日時であるかのチェックを32-bit環境で追加しました。[Tashiroさんがパッチ"
+"提供]"
+
+msgid ""
+"[storage] Supproted INPLACE ALTER TABLE for adding/dropping columns. [#2277] "
+"[GitHub#12] [Patch by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] INPLACE ALTER TABLEでカラムを追加削除できるようになりまし"
+"た。[#2277] [GitHub#12] [村上さんがパッチ提供]"
+
+msgid ""
+"[rpm][centos] Built with MySQL 5.5.37 on CentOS. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[rpm][centos] CentOSでMySQL 5.5.37でビルドするようにしました。[吉田さんが報"
+"告]"
+
+msgid ""
+"Fixed to use lowercase for table name to avoid  lower/upper-case specific "
+"issue on Mac OS. [Patch by Toshihisa Tashiro]"
+msgstr ""
+"Mac OSでの大文字/小文字特有の問題を回避するためにテストのテーブル名は小文字を"
+"使うようにしました。[Tashiroさんがパッチ提供]"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "Fixed build error for VC++ 2013 [GitHub#10] [Patch by cosmo0920]"
+msgstr ""
+"VC++ 2013でのビルドエラーを修正しました。[GitHub#10] [cosmo0920さんがパッチ提"
+"供]"
+
+msgid ""
+"[doc] Added missing quote for install procedure on CentOS6 SCL. [GitHub#11] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+"[doc] CentOS6 SCLでのインストール手順で二重引用符が抜けているのを修正しまし"
+"た。[GitHub#11] [村上さんがパッチ提供]"
+
+msgid ""
+"[storage] Fixed a bug that renaming column by ALTER TABLE CHANGE causes "
+"crash. [#2637]"
+msgstr ""
+"[ストレージモード] ALTER TABLE CHANGEでカラムを変更しようとするとクラッシュす"
+"る問題を修正しました。[#2637]"
+
+msgid "Masafumi Yokoyama"
+msgstr "横山昌史さん"
+
+msgid "Toshihisa Tashiro"
+msgstr "Toshihisa Tashiroさん"
+
+msgid "Release 4.03 - 2014/05/29"
+msgstr "4.03リリース - 2014/05/29"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "[doc] Updated MariaDB version. [Patch by cosmo0920]"
+msgstr "[doc] MariaDBのバージョンを更新しました。 [cosmo0920さんがパッチ提供]"
+
+msgid "Supported daylight saving time. [#2385]"
+msgstr "夏時間をサポートしました。 [#2385]"
+
+msgid ""
+"Migrated Ubuntu package distribution site to PPA on Launchpad. See :doc:`/"
+"install` for details."
+msgstr ""
+"Ubuntuパッケージの配布サイトをLaunchpadのPPAに移行しました。詳細は :doc:`/"
+"install` を参照してください。"
+
+msgid ""
+"[doc] Fixed command line in :doc:`/install`. [Reported by YOSHIDA Mitsuo]"
+msgstr ""
+"[doc] :doc:`/install` の間違ったコマンドラインを修正しました。 [吉田光男さん"
+"が報告]"
+
+msgid "Release 4.02 - 2014/04/29"
+msgstr "4.02リリース - 2014/04/29"
+
+msgid "Supported MariaDB 10.0.10 [#2460] [Reported by Kazuhiko Shiozaki]"
+msgstr "MariaDB 10.0.10に対応しました。 [#2460] [かずひこさんが報告]"
+
+msgid "Supported MySQL 5.6.17."
+msgstr "MySQL 5.6.17に対応しました。"
+
+msgid "Supported Ubuntu 14.04 LTS Trusty Tahr."
+msgstr "Ubuntu 14.04 LTS Trusty Tahrに対応しました。"
+
+# e263d3fcc2a0480ca0555bfd3ae50666
+msgid "Enabled MariaDB bundled build."
+msgstr "MariaDBにバンドルした状態でビルドできるようにしました。"
+
+msgid "Dropped Ubuntu 12.10 Quantal Quetzal support."
+msgstr "Ubuntu 12.10 Quantal Quetzalの対応をやめました。"
+
+# ec63a4d13b2d4142a5a3adf97c655e8b
+msgid "[doc] Updated MySQL version. [GitHub#8] [Patch by cosmo0920]"
+msgstr ""
+"[doc] MySQLのバージョンを更新しました。 [GitHub#8] [cosmo0920さんがパッチ提"
+"供]"
+
+# 039ac26d70124f408431a222bd6a344f
+msgid ""
+"[storage] Stopped to use truncate for ``DELETE FROM table``. [groonga-"
+"dev,02222] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] ``DELETE FROM table`` のときにtruncateを使わないようにしま"
+"した。 [groonga-dev,02222] [GMOメディア株式会社さんが報告]"
+
+# 76c1ceb69dc2430d93a80383ee3f2ecf
+msgid "[wrapper] Stopped to use truncate for ``DELETE FROM table``."
+msgstr ""
+"[ラッパーモード] ``DELETE FROM table`` のときにtruncateを使わないようにしまし"
+"た。"
+
+msgid ""
+"[storage] Fixed a bug that inplace alter table with no primary key crashes. "
+"[groonga-dev,02227] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] プライマリーキーがないテーブルをinplate alter tableすると"
+"クラッシュする問題を修正しました。 [groonga-dev,02227] [GMOメディア株式会社さ"
+"んが報告]"
+
+msgid ""
+"[storage] Fixed a bug that ``ORDER BY function(vector_reference_column)`` "
+"doesn't work. [groonga-dev,02234] [Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] ``ORDER BY function(vector_reference_column)`` が動かない"
+"問題を修正しました。 [groonga-dev,02234] [村上さんが報告]"
+
+# e4cc783f9b624548954e8881c0df6f52
+msgid ""
+"Fixed a bug that setting the current value to ``mroonga_default_parser`` or "
+"``mroonga_log_file`` crash. [GitHub#6] [Patch by Satoshi MITANI]"
+msgstr ""
+"``mroonga_default_parser`` あるいは ``mroonga_log_file`` に現在の値と同じ値を"
+"設定するとクラッシュする問題を修正しました。 [GitHub#6] [Satoshi MITANIさんが"
+"パッチ提供]"
+
+# 90e7e3f2277049ecbd4b6315455d7d03
+msgid ""
+"Fixed a bug that ``mroonga_lock_timeout`` in my.cnf or command line option "
+"is ignored. [GitHub#7] [Patch by GMO Media, Inc.]"
+msgstr ""
+"my.cnfやコマンドラインオプションで ``mroonga_lock_timeout`` を指定しても無視"
+"される問題を修正しました。 [GitHub#7] [GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"Fixed a bug that deleting by primary key doesn't update unique index. "
+"[groonga-dev,02244] [Reported by Akihiro Tsukui]"
+msgstr ""
+"プライマリーキーを指定してレコードを削除するとユニークインデックスが更新され"
+"ない問題を修正しました。 [groonga-dev,02244] [津久井玲宏さんが報告]"
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+msgid "Satoshi MITANI"
+msgstr "Satoshi MITANIさん"
+
+# 0683aa1c35d44a35b1b31601d00fbd9a
+msgid "Akihiro Tsukui"
+msgstr "津久井玲宏さん"
+
+msgid "Release 4.01 - 2014/03/29"
+msgstr "4.01リリース - 2014/03/29"
+
+msgid "Supported MariaDB 10.0.9 [#2387] [Reported by Kazuhiko Shiozaki]"
+msgstr "MariaDB 10.0.9に対応しました。 [#2387] [かずひこさんが報告]"
+
+msgid ""
+"Supported ten or more sections in W pragma [#2348] [groonga-dev,02138] "
+"[Reported by yoku0825]"
+msgstr ""
+"10以上のセクションをWプラグマで扱えるようにしました。[#2348] [groonga-"
+"dev,02138] [yoku0825さんが報告]"
+
+msgid "[rpm][centos] Supported SCL MySQL package on CentOS 6."
+msgstr "[rpm][centos] CentOS 6にてSCLのMySQLパッケージに対応しました。"
+
+msgid ""
+"[storage] Fixed a bug that ALTER TABLE with fulltext index which refer to "
+"table causes mysqld crash. [#2327] [groonga-dev,02130] [Reported by Naoya "
+"Murakami]"
+msgstr ""
+"[ストレージモード] テーブル参照型のフルテキストインデックスをALTER TABLEしよ"
+"うとするとmysqldがクラッシュする問題を修正しました。 [#2327] [groonga-"
+"dev,02130] [村上さんが報告]"
+
+msgid ""
+"[doc] Fixed to use Mroonga/Groonga (capitalized notation) in characteristics "
+"document. [GitHub#5] [Patch by Naoya Murakami]"
+msgstr ""
+"[doc] \"Mroongaの特徴\"でMroonga/Groongaを大文字表記するようにしました。"
+"[GitHub#5] [村上さんがパッチ提供]"
+
+msgid "yoku0825"
+msgstr "yokuさん"
+
+msgid "Release 4.00 - 2014/02/09"
+msgstr "4.00リリース - 2014/02/29"
+
+msgid ""
+"Bump version to 4.00! We recommend to upgrade because crash bug and updating "
+"issue are fixed now!"
+msgstr ""
+"バージョン4.00になりました。クラッシュする不具合や更新時の不具合が修正された"
+"のでアップグレードをおすすめします。"
+
+msgid "Dropped Ubuntu 13.04 (Raring Ringtail) support."
+msgstr "Ubuntu 13.04 Raring Ringtailのサポートをやめました。"
+
+msgid ""
+"[storage] Supported to search with empty string. [#2214] [groonga-dev,02052] "
+"[Reported by Naoya Murakami]"
+msgstr ""
+"[ストレージモード] 空の文字列でも検索できるようにしました。 [#2214] [groonga-"
+"dev,02052] [村上さんが報告]"
+
+msgid ""
+"Fixed a crash bug that bulk inserting null value into geometry column which "
+"has NOT NULL constraint. [#2281] [groonga-dev,02095] [Reported by yoku]"
+msgstr ""
+"NULL値をNOT NULL制約のあるgeometryカラムに対してインサートしようとするとク"
+"ラッシュする不具合を修正しました。 [#2281] [groonga-dev,02095] [yokuさんが報"
+"告]"
+
+msgid ""
+"[storage] Fixed a bug that existing records may be unexectedlly removed by "
+"ON DUPLICATE KEY UPDATE. In the previous versions, such a query can't update "
+"the value of column correctly. [#2263] [Reported Masahiro Nagano]"
+msgstr ""
+"[ストレージモード] ON DUPLICATE KEY UPDATEにより、既存のレコードが意図せず削"
+"除される不具合を修正しました。以前のバージョンではカラムの値を正しく更新でき"
+"ていませんでした。 [#2263] [長野雅広さんが報告]"
+
+msgid "Masahiro Nagano"
+msgstr "長野雅広さん"

@@ -1,0 +1,774 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 5 series"
+msgstr "お知らせ - 5系"
+
+msgid "Release 5.12 - 2016-01-29"
+msgstr "5.12リリース - 2016-01-29"
+
+msgid ""
+"[storage] Fixed a bug that no records may be returned for range search when "
+"you have many deleted or updated records. [groonga-dev,03802][Reported by "
+"Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 大量のレコード削除・更新した後に範囲検索をすると検索結果が"
+"0件になるかもしれない問題を修正しました。 [groonga-dev,03802][各務さんが報告]"
+
+msgid ""
+"[:doc:`/reference/udf`] Fixed a bug that wrong value may be returned on "
+"``JOIN``. [Reported by teamsky]"
+msgstr ""
+"[:doc:`/reference/udf`] ``JOIN`` と一緒に使ったときに間違った値を返す問題を修"
+"正しました。 [teamskyさんが報告]"
+
+msgid "teamsky"
+msgstr "teamskyさん"
+
+msgid "Release 5.11 - 2015-12-29"
+msgstr "5.11リリース - 2015-12-29"
+
+msgid ""
+"[rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.28. [Reported "
+"by @stealthinu]"
+msgstr ""
+"[rpm][mysql56-community-mroonga] ビルド対象のMySQLを5.6.28に更新しました。 "
+"[@stealthinuさんが報告]"
+
+msgid ""
+"[rpm][mysql57-community-mroonga] Updated target MySQL to 5.7.10. [Reported "
+"by @stealthinu]"
+msgstr ""
+"[rpm][mysql57-community-mroonga] ビルド対象のMySQLを5.7.10に更新しました。 "
+"[@stealthinuさんが報告]"
+
+msgid ""
+"Stopped to use ``-`` character in internal lexicon name. Because ``-`` "
+"character can't be used symbol name in query syntax in Groonga. It's "
+"inconvenient in :doc:`/reference/udf/mroonga_command`. ``#`` character that "
+"can be used symbol name is used instead of ``-`` character since this "
+"release. [groonga-dev,03714] [Reported by keizi murakami]"
+msgstr ""
+"内部の語彙表の名前の一部に ``-`` を使うことをやめました。理由は、 ``-`` は"
+"Groongaのクエリー構文でシンボル名に使えない文字だからです。シンボル名に使えな"
+"い文字があると :doc:`/reference/udf/mroonga_command` で不便です。このリリース"
+"からは ``-`` の代わりに、シンボル名でも使える文字 ``#`` を使うようにしまし"
+"た。 [groonga-dev,03714] [keizi murakamiさんが報告]"
+
+msgid ""
+"This change doesn't break backward compatibility. The latest Mroonga can use "
+"databases created by old Mroonga without any changes."
+msgstr ""
+"この変更は後方互換性を壊しません。最新のMroongaは古いMroongaで作ったデータ"
+"ベースを変更せずにそのまま使えます。"
+
+msgid ""
+"[rpm] Suppressed a confusing error message when root password check. "
+"[GitHub#90] [Patch by Larry Kim]"
+msgstr ""
+
+msgid ""
+"[rpm][mariadb-mroonga] Rebuilt for CentOS 7.2. [GitHub#91] [Reported by "
+"Larry Kim]"
+msgstr ""
+"[rpm][mariadb-mroonga] CentOS 7.2用にビルドしなおしました。 [GitHub#91] "
+"[Larry Kimさんが報告]"
+
+msgid ""
+"[UDF][:doc:`/reference/udf/mroonga_normalize`] Added a new UDF that "
+"normalizes a string. [GitHub#89][GitHub#92] [Patch by Naoya Murakami]"
+msgstr ""
+"[UDF][:doc:`/reference/udf/mroonga_normalize`] 文字列を正規化する新しいUDFを"
+"追加しました。 [GitHub#89][GitHub#92] [村上さんがパッチ提供]"
+
+msgid ""
+"[wrapper] Fixed a bug that ``CHECK TABLE FOR UPGRADE`` drops other tables. "
+"[groonga-dev,03699] [Reported by Tomohiro KATO]"
+msgstr ""
+"[ラッパーモード] ``CHECK TABLE FOR UPGRADE`` が古いテーブルを削除する問題を修"
+"正しました。 [groonga-dev,03699] [かとうさんが報告]"
+
+msgid "@stealthinu"
+msgstr "@stealthinuさん"
+
+msgid "keizi murakami"
+msgstr "keizi murakamiさん"
+
+msgid "Larry Kim"
+msgstr "Larry Kimさん"
+
+msgid "Release 5.10 - 2015-11-29"
+msgstr "5.10リリース - 2015-11-29"
+
+msgid ""
+"[rpm][mysql57-community-mroonga] Supported auto Mroonga registration. "
+"[GitHub#78] [Patch by GMO Media, Inc.]"
+msgstr ""
+"[rpm][mysql57-community-mroonga] 自動でMroongaを登録するようになりました。 "
+"[GitHub#78] [GMOメディア株式会社さんがパッチ提供]"
+
+msgid "[rpm][mysql57-community-mroonga] Supported CentOS 7."
+msgstr ""
+"[rpm][mysql57-community-mroonga] CentOS 7用パッケージの提供をはじめました。"
+
+msgid ""
+"[wrapper] Supported ``CHECK TABLE FOR UPGRADE``. [groonga-dev,03688] "
+"[Reported by Tomohiro KATO]"
+msgstr ""
+"[ラッパーモード] ``CHECK TABLE FOR UPGRADE`` に対応しました。 [groonga-"
+"dev,03688] [かとうさんが報告]"
+
+msgid ""
+"[storage] Fixed a bug that auto repair may cause crash. [groonga-dev,03608] "
+"[Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 自動復旧機能が原因でクラッシュすることがある問題を修正しま"
+"した。 [groonga-dev,03608] [各務さんが報告]"
+
+msgid ""
+"Fixed a crash bug when you use UDF concurrency. [groonga-dev,03640] "
+"[Reported by Hironori Matsubara]"
+msgstr ""
+"同時にUDFを使うとクラッシュする問題を修正しました。 [groonga-dev,03640] [松原"
+"さんが報告]"
+
+msgid ""
+"[wrapper] Fixed a bug that ``DROP TABLE`` may keep files. [groonga-"
+"dev,03673] [Reported by Tomohiro KATO]"
+msgstr ""
+"[ラッパーモード] ``DROP TABLE`` でファイルが残ってしまうかもしれない問題を修"
+"正しました。 [groonga-dev,03673] [かとうさんが報告]"
+
+msgid "Hironori Matsubara"
+msgstr "松原さん"
+
+msgid "Release 5.09 - 2015-10-29"
+msgstr "5.09リリース - 2015-10-29"
+
+msgid ""
+"[rpm][mysql56-community-mroonga] Updated target MySQL to 5.6.27. [Reported "
+"by @star_orihime]"
+msgstr ""
+"[rpm][mysql56-community-mroonga] ビルド対象のMySQLを5.6.27に更新しました。 "
+"[@star_orihimeさんが報告]"
+
+msgid ""
+"[UDF][``mroonga_snippet_html``] Added a new UDF that returns snippet for "
+"HTML output."
+msgstr ""
+"[UDF][``mroonga_snippet_html``] HTML出力用のスニペットを返す新しいUDFを追加し"
+"ました。"
+
+msgid "[Windows] Bundled MeCab."
+msgstr "[Windows] MeCabをバンドルしました。"
+
+msgid "[Windows] Updated base MariaDB to 10.1.8."
+msgstr "[Windows] ベースにしているMariaDBを10.1.8にアップデートしました。"
+
+msgid "[MariaDB 10.1] Supported MariaDB 10.1.8."
+msgstr "[MariaDB 10.1] MariaDB 10.1.8に対応しました。"
+
+msgid ""
+"Supported auto repair on crash. [groonga-dev,03515][Suggested by Hiroshi "
+"Kagami]"
+msgstr ""
+"クラッシュ時に自動で復旧する機能を追加しました。 [groonga-dev,03515][各務さん"
+"が提案]"
+
+msgid "[MySQL 5.7] Supported MySQL 5.7.9."
+msgstr "[MySQL 5.7] MySQL 5.7.9に対応しました。"
+
+msgid "[MySQL 5.7] Supported JSON type."
+msgstr "[MySQL 5.7] JSON型に対応しました。"
+
+msgid "[:doc:`/install/ubuntu`] Added Ubuntu 15.10 Wily Werewolf support."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 15.10 Wily Werewolfのパッケージを追加しまし"
+"た。"
+
+msgid ""
+"[:doc:`/install/centos`] Added MySQL 5.7 package provided by Oracle support "
+"on CentOS 6."
+msgstr ""
+"[:doc:`/install/centos`] Oracle提供のMySQL 5.7用パッケージをサポートしまし"
+"た。CentOS 6向けだけです。"
+
+msgid ""
+"Fixed a bug that ``MRBContains()`` doesn't use index. [GitHub#73] [Reported "
+"by Petri Rautiainen]"
+msgstr ""
+"``MRBContains()`` がインデックスを使わない問題を修正しました。 [GitHub#73] "
+"[Petri Rautiainenさんが報告]"
+
+msgid "@star_orihime"
+msgstr "@star_orihimeさん"
+
+msgid "Petri Rautiainen"
+msgstr "Petri Rautiainenさん"
+
+msgid "Release 5.08 - 2015-09-29"
+msgstr "5.08リリース - 2015-09-29"
+
+msgid "[CMake][MariaDB 10.1] Supported ``PLUGIN_MROONGA=NO``."
+msgstr "[CMake][MariaDB 10.1] ``PLUGIN_MROONGA=NO`` に対応しました。"
+
+msgid ""
+"[UDF] Supported ``grn_ctx`` pool. It improves performance for calling UDF "
+"because Mroonga can reduce ``grn_ctx`` initialize cost."
+msgstr ""
+"[UDF] ``grn_ctx`` プールを実装しました。 ``grn_ctx`` を毎回初期化しなくても済"
+"むようになるのでUDF呼び出しが速くなります。"
+
+msgid ""
+"Fixed a memory leak when ``ORDER BY LIMIT`` is used with multiple ``MATCH "
+"AGAINST``. [groonga-dev,03496] [Reported by Gosuke Yasufuku]"
+msgstr ""
+"複数の ``MATCH AGAINST`` を使いながら ``ORDER BY LIMIT`` を指定したときにメモ"
+"リーリークする問題を修正しました。 [groonga-dev,03496] [安福剛介さんが報告]"
+
+msgid ""
+"Fixed a bug that ``ORDER BY LIMIT`` and multiple ``MATCH AGAINST`` returns "
+"wrong result. [groonga-dev,03496] [Reported by Gosuke Yasufuku]"
+msgstr ""
+"複数の ``MATCH AGAINST`` を使いながら ``ORDER BY LIMIT`` を指定したときに間"
+"違った結果を返す問題を修正しました。 [groonga-dev,03496] [安福剛介さんが報告]"
+
+msgid "Gosuke Yasufuku"
+msgstr "安福剛介さん"
+
+msgid "Release 5.06 - 2015-08-31"
+msgstr "5.06リリース - 2015-08-31"
+
+msgid ""
+"Supported MariaDB 10.1 that is built as embedded server. [MDEV-8508]"
+"[GitHub#66] [Reported by Sergei Golubchik]"
+msgstr ""
+"埋め込みサーバーとしてビルドされたMariaDB 10.1にも対応しました。 [MDEV-8508]"
+"[GitHub#66] [Sergei Golubchikさんが報告]"
+
+msgid ""
+"[rpm][mysql55-mroonga] Updated build target MySQL version. [groonga-"
+"dev,03421] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[rpm][mysql55-mroonga] ビルド対象のMySQLのバージョンを更新しました。 "
+"[groonga-dev,03421] [各務さんが報告]"
+
+msgid ""
+"[rpm][percona-server-56-mroonga] Fixed a crash bug. [GitHub#70] [Patch by "
+"GMO Media, Inc.]"
+msgstr ""
+"[rpm][percona-server-56-mroonga] クラッシュバグを修正しました。 [GitHub#70] "
+"[GMOメディア株式会社さんがパッチ提供]"
+
+msgid ""
+"Fixed a crash bug when any opening table exists on shutdown. [GitHub#71] "
+"[Reported by GMO Media, Inc.]"
+msgstr ""
+"シャットダウン時に開いているテーブルがあるとクラッシュする問題を修正しまし"
+"た。 [GitHub#71] [GMOメディア株式会社さんが報告]"
+
+# 22607774878349e3a2ba0a9bef7a10cc
+msgid "Sergei Golubchik"
+msgstr "Sergei Golubchikさん"
+
+msgid "Release 5.05 - 2015/07/29"
+msgstr "5.05リリース - 2015/07/29"
+
+# 04cb89376f9347f59c9bb744d03a7c73
+msgid ""
+"[:doc:`/install/ubuntu`] Dropped Ubuntu 14.10 (Utopic Unicorn) support. It "
+"had been End of Life on July 23, 2015."
+msgstr ""
+"[:doc:`/install/ubuntu`] Ubuntu 14.10（Utopic Unicorn）のサポートをやめまし"
+"た。2015年7月23日でサポートが切れた（EOLになった）ためです。"
+
+msgid ""
+"[rpm][:doc:`/install/centos`] Updated to the latest MySQL 5.6 (5.6.26-2) on "
+"CentOS 6/7."
+msgstr ""
+"[rpm][:doc:`/install/centos`] CentOS 6/7向けパッケージのMySQL 5.6のバージョン"
+"を現在の最新版（5.6.26-2）に更新しました。"
+
+# 2cf79c00c0ec4896b9beffee50c10cc1
+msgid ""
+"[rpm][:doc:`/install/centos`] Updated to the latest Percona Server 5.6 "
+"(5.6.25-rel73.1) on CentOS 6."
+msgstr ""
+"[rpm][:doc:`/install/centos`] CentOS 6向けパッケージのPercona Server 5.6の"
+"バージョンを現在の最新版（5.6.25-rel73.1）に更新しました。"
+
+# 7a4f12591d0146f7a6e2bbe548bce7a8
+msgid ""
+"Fixed a bug that search results are reduced for multiple column index with "
+"range condition (e.g. ``<`` in ``WHERE date < '2015-07-01'``). [`groonga-"
+"dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-"
+"July/003334.html>`_] [GitHub#65] [Reported by foamcentime]"
+msgstr ""
+"マルチカラムインデックスで範囲検索（例: ``WHERE date < '2015-07-01'`` 内の "
+"``<`` ）を使った場合に検索結果が減る場合がある不具合を修正しました。"
+"[`groonga-dev,03332 <http://osdn.jp/projects/groonga/lists/archive/dev/2015-"
+"July/003334.html>`_] [GitHub#65] [foamcentimeさんが報告]"
+
+# 775541bacaac4d9e9629a1883531a4f6
+msgid ""
+"[storage] Fixed memory leaks. [`MDEV-8520 <https://mariadb.atlassian.net/"
+"browse/MDEV-8520>`_] [Report by Elena Stepanova]"
+msgstr ""
+"[ストレージモード] メモリーリークを修正しました。[`MDEV-8520 <https://"
+"mariadb.atlassian.net/browse/MDEV-8520>`_] [Elena Stepanovaさんが報告]"
+
+msgid "Release 5.04 - 2015/06/29"
+msgstr "5.04リリース - 2015/06/29"
+
+# e7d5a1f45c5e42599c1d6c96807d5b71
+msgid ""
+"[rpm][mysql56-community-mroonga][percona-server-56-mroonga] Start mysqld "
+"when mysqld is not running within rpm-installation. (This topic is at "
+"5.03-2) [GitHub#58] [Patch by GMO Media, Inc.]"
+msgstr ""
+"[rpm][mysql56-community-mroonga][percona-server-56-mroonga] インストール時に"
+"mysqldが動いていない場合は起動するようにしました。(これは5.03-2で入った変更で"
+"す） [GitHub#58] [GMOメディア株式会社さんがパッチ提供]"
+
+# a55cfca57516434d8908497c69694210
+msgid "[mariadb10.1] Followed recent API changes."
+msgstr "[mariadb10.1] APIの変更に追従しました。"
+
+# 82157e3feea040b09930647c0b048c60
+msgid ""
+"[mariadb] Supported custom parameters in DDL. This feature can be used only "
+"with MariaDB."
+msgstr ""
+"[mariadb] DDL内でカスタムパラメーターをサポートしました。この機能はMariaDBで"
+"のみ使うことができます。"
+
+# 544fa1c8dd4d44dc9c7440332b15c5c1
+msgid "Supported ``TOKENIZER`` parameter for ``FULLTEXT IDNEX`` ::"
+msgstr "``FULLTEXT IDNEX`` で ``TOKENIZER`` パラメーターをサポート::"
+
+# 59060f1065e64551a4fd4b1e85fd3ea1
+msgid ""
+"Supported ``NORMALIZER`` parameter for ``FULLTEXT IDNEX`` and normal "
+"``INDEX`` ::"
+msgstr ""
+"``FULLTEXT IDNEX`` と通常の ``INDEX`` で ``NORMALIZER`` パラメーターをサポー"
+"ト::"
+
+# 46870a35c5e14276a7a3ab4deb33377a
+msgid "Supported ``TOKEN_FILTERS`` parameter for ``FULLTEXT IDNEX`` ::"
+msgstr "``FULLTEXT IDNEX`` で ``TOKEN_FILTERS`` パラメーターをサポート::"
+
+# 257b2eee17c24286aa7b4eb7c6a60409
+msgid ""
+"Supported ``FLAGS`` parameter for ``FULLTEXT INDEX`` and normal ``INDEX`` ::"
+msgstr ""
+"``FULLTEXT IDNEX`` と通常の ``INDEX`` で ``FLAGS`` パラメーターをサポート::"
+
+# f2cc14f0bf54479bb5a829e7ebfd4ec6
+msgid "Supported ``GROONGA_TYPE`` parameter for field ::"
+msgstr "フィールドで ``GROONGA_TYPE`` パラメーターをサポート::"
+
+# 039ac26d70124f408431a222bd6a344f
+msgid ""
+"[storage] Report error for invalid datetime related value on "
+"``STRICT_TRANS_TABLES``. [groonga-dev,03299] [Suggested by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード] ``STRICT_TRANS_TABLES`` のときに、不正な日付をエラーにする"
+"ようにしました。 [groonga-dev,03299] [GMOメディア株式会社さんが提案]"
+
+# 063bbea2287a48b4be407fe7302ae482
+msgid "It's backward incompatible change. For example:"
+msgstr "これは後方互換性のない変更です。例::"
+
+# 36f13bfc400042cea272fa01c598444e
+msgid "Prepare (common) ::"
+msgstr "準備（共通）::"
+
+# a7e2e60fbbda4f8d8b0ed64f0a74f905
+msgid "Before (5.03 or earlier) ::"
+msgstr "変更前（5.03以前）::"
+
+# 77f6d64b5faf410dbf3a787ca7b86112
+msgid "After (5.04 or later) ::"
+msgstr "変更後（5.04以降）::"
+
+# 13f0a09d89d645f08189114affa934aa
+msgid ""
+"Changed keyword to use custom tokenizer to ``tokenizer`` from ``parser``."
+msgstr ""
+"カスタムトークナイザー使用時のキーワードを ``parser`` から ``tokenizer`` へ変"
+"更しました。"
+
+# bda343b1fb8140ab9bbe77958685f59b
+msgid "In index comment: ``parser`` -> ``tokenizer``."
+msgstr "インデックスコメント: ``parser`` -> ``tokenizer``"
+
+# 5e0b54aced09488e9475137cf7aaf6d4
+msgid ""
+"Server variable: ``mroonga_default_parser`` -> ``mroonga_default_tokenizer``."
+msgstr ""
+"サーバー変数: ``mroonga_default_parser`` -> ``mroonga_default_tokenizer``"
+
+# 1cb22ecf10ea4aa1a1c5b4313f527d4f
+msgid ""
+"``parser`` and ``mroonga_default_parser`` are deprecated but they are "
+"available at least Mroonga 6.XX."
+msgstr ""
+"``parser`` と ``mroonga_default_parser`` は非推奨ですが、Mroonga 6.XXまでは使"
+"うことができます。"
+
+# e815afe449574c8d8fc0ceceae7043d8
+msgid "Renamed parameter name for flags of index column."
+msgstr "インデックスカラムのflagsのパラメーター名を変更しました。"
+
+# 9961ff8b44e649ad85941706b779a9fe
+msgid "``index_flags`` -> ``flags``."
+msgstr "``index_flags`` -> ``flags``"
+
+# d3376a9479c3461ea4fbf51336669391
+msgid ""
+"``index_flags`` is deprecated but it will be usable on Mroonga 6.XX. It may "
+"be removed at Mroonga 7.00."
+msgstr ""
+"``index_flags`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。"
+"Mroonga 7.00で削除される予定です。"
+
+# 13654211d4bf4a5f9235339302439f5e
+msgid ""
+"[storage] Show error message when nonexistent Groonga type is specified to "
+"column."
+msgstr ""
+"[ストレージモード] カラムに対してGroongaに存在しない型を指定した場合にエラー"
+"メッセージを表示するようにしました。"
+
+# 33368b5db2994f2f9fc40115be372d39
+msgid "[storage] Renamed parameter name for column's Groonga type."
+msgstr "Groongaのカラムの型のパラメーター名を変更しました。"
+
+# 52a59c8ecfc740009d3c00298bb1c6b6
+msgid "``type`` -> ``groonga_type``."
+msgstr "``type`` -> ``groonga_type``"
+
+# fd0cda16064c42bd9d53a18386559d19
+msgid ""
+"``type`` is deprecated but it will be usable on Mroonga 6.XX. It may be "
+"removed at Mroonga 7.00."
+msgstr ""
+"``type`` は非推奨ですが、Mroonga 6.XXまでは使うことができます。Mroonga 7.00で"
+"削除される予定です。"
+
+msgid "Release 5.03 - 2015/05/29"
+msgstr "5.03リリース - 2015/05/29"
+
+# a55cfca57516434d8908497c69694210
+msgid "mariadb10.1: Followed recent API changes."
+msgstr "mariadb10.1: APIの変更に追従しました。"
+
+# ea64c3c7f747402a982eba85e681493e
+msgid ""
+"Supported ``FT_SORTED`` flag which is internally used in MySQL. It improves "
+"compatibility with MySQL and can reduces redundant sorting in MySQL."
+msgstr ""
+"MySQLの内部で使われている ``FT_SORTED`` フラグに対応しました。これにより、全"
+"文検索時のMySQLとの互換性が向上し、MySQLで行っていた冗長なソート処理を減らせ"
+"る可能性があります。"
+
+# 2077275f62ef4db2ac23e2ad3e1c9d42
+msgid "mysql57: Followed recent API changes."
+msgstr "mysql57: APIの変更に追従しました。"
+
+msgid ""
+"[storage] Fixed a bug that unique index doesn't work for invalid datetime. "
+"This bug is occurred when invalid datetime is inserted. The unique index is "
+"created for invalid datetime instead of actual truncated datetime. [groonga-"
+"dev,03219] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 不正なdatetimeに対してユニークインデックスが正しく機能しな"
+"い不具合を修正しました。この不具合は不正なdatetimeを挿入したときに発生しま"
+"す。ユニークインデックスが実際に挿入される値ではなく、補正前の不正な値で作成"
+"されてしまうためです。 [groonga-dev,03219] [各務さんが報告]"
+
+# 6a0c3769037a45f88296c51353fbe665
+msgid ""
+"[multiple column key] Fixed a potential bug that decoding value is broken. "
+"This bug may occurs because proper byte order conversion between network and "
+"host is missing on decoding."
+msgstr ""
+"[マルチカラムキー] デコードした値が壊れるかもしれない潜在的な不具合を修正しま"
+"した。この不具合はバイトオーダーの変換をデコードのときにしていないことが起因"
+"で発生する可能性があります。"
+
+# f28793795024410cb672862f84c84754
+msgid ""
+"[windows] Fixed a bug that needless groonga-normalizer-mysql plugin search "
+"is ran when it is embedded into Mroonga. [GitHub#53] [Reported by torinky]"
+msgstr ""
+"[windows] Mroongaに groonga-normalizer-mysql が組込まれていると、不必要な "
+"groonga-normalizer-mysql プラグインの検索が実行される不具合を修正しました。 "
+"[GitHub#53] [torinkyさんが報告]"
+
+msgid ""
+"Fixed wrong keyword length when query includes :ref:`boolean-mode-pragma`. "
+"This bug causes that it doesn't hit expected search results. [GitHub#54] "
+"[Patch by Naoya Murakami]"
+msgstr ""
+"クエリに :ref:`boolean-mode-pragma` が含まれているときに、キーワードの長さを"
+"間違えてしまい、正しく検索できない不具合を修正しました。 [GitHub#54] [村上さ"
+"んがパッチ提供]"
+
+msgid ""
+"[storage] Fixed a bug that unique check is ignored for multiple connections. "
+"[groonga-dev,03243] [Reported by Hiroshi Kagami]"
+msgstr ""
+"[ストレージモード] 複数接続時にユニーク制約が無視されてしまう不具合を修正しま"
+"した。 [groonga-dev,03243] [各務さんが報告]"
+
+# 58c01265b23a4438bd4df2d910acf3b2
+msgid "torinky"
+msgstr "torinkyさん"
+
+msgid "Release 5.02 - 2015/04/29"
+msgstr "5.02リリース - 2015/04/29"
+
+msgid "[doc] Updated :doc:`/developer/release` procedure documentation"
+msgstr "[doc] :doc:`/developer/release` を更新しました。"
+
+# 7a2b466cd6de47aaac56e0e610891cdb
+msgid ""
+"[storage] Improved performance to estimate the number of records in range. "
+"In the previous versions, Mroonga counts real the number of records in "
+"range. There is a performance penalty if huge number of records exists. Note "
+"that it requires Groonga 5.0.2 or later. [groonga-dev,03150] [Reported by "
+"Masato Shimada]"
+msgstr ""
+"[ストレージ] 範囲指定のレコード数を見積もる際のパフォーマンスを改善しました。"
+"以前のバージョンでは、Mroongaは実際のレコード数をカウントします。そのため、レ"
+"コード数が増えるとパフォーマンスに影響していました。この恩恵を受けるには"
+"Groonga 5.0.2以降が必要です。 [groonga-dev,03150] [嶋田さんが報告]"
+
+# 5e3b67ea7b0b4ea8be1187a4caa200bc
+msgid ""
+"[experimental] Added :ref:`server-variable-mroonga-max-n-records-for-"
+"estimate` variable to limit the max number of records to estimate. It "
+"reduces the estimation cost when there are many target records."
+msgstr ""
+"[実験的] :ref:`server-variable-mroonga-max-n-records-for-estimate` サーバー変"
+"数を追加しました。この変数はレコード数を見積る際の最大レコード数を制限するの"
+"に使います。対象となるレコードが多いときでも、見積もる際のコストを抑えること"
+"ができます。"
+
+msgid "[rpm][centos] Updated to build against the latest MySQL 5.6."
+msgstr "[rpm][centos] 最新のMySQL 5.6でビルドするようにしました。"
+
+# dc3fe9b0aa2c4b7282d4439338eee062
+msgid ""
+"[wrapper] Supported fast order by limit optimization for primary key sort. "
+"[Reported by Tsugunori Nashiro]"
+msgstr ""
+"[ラッパーモード] Mroongaの ``ORDER BY LIMIT`` 最適化で主キーのソートに対応し"
+"ました。 [Tsugunori Nashiroさんが報告]"
+
+msgid "Supported Debian 8.0 (Jessie)"
+msgstr "Debian 8.0 (Jessie)に対応しました。"
+
+msgid "Supported Ubuntu 15.04 (Vivid Vervet)"
+msgstr "Ubuntu 15.04 Vivid Vervetに対応しました。"
+
+# 0c5a19df6fea4b5a917430142484fafc
+msgid "[doc] Fixed old links to Windows package [Reported by METAL_GEAR_mkII]"
+msgstr ""
+"[doc] Windows版パッケージへのリンクが古いのを修正しました。 [METAL_GEAR_mkII"
+"さんが報告]"
+
+# e013e68ebb8a41f7852fbb4655fbf92a
+msgid ""
+"[storage][mysql56] Fixed a crash bug by duplicated ``ORDER BY`` columns.  "
+"It's occurred when \"fast order limit\" optimization is detected with "
+"duplicated ``ORDER BY`` columns in SQL. Note that this bug doesn't affect to "
+"MySQL 5.5. [GitHub#50] [Reported by GMO Media, Inc.]"
+msgstr ""
+"[ストレージモード][mysql56] ``ORDER BY`` のカラム指定が重複しているときにク"
+"ラッシュする問題を修正しました。 ``ORDER BY LIMIT`` の最適化を適用するケース"
+"でSQLの ``ORDER BY`` カラム指定が重複しているときに発生します。この問題は"
+"MySQL 5.5には影響しません。 [GitHub#50] [GMOメディア株式会社さんが報告]"
+
+msgid "Masato Shimada"
+msgstr "嶋田さん"
+
+# 81a49c452bfa4b7285ac033083db3db3
+msgid "Tsugunori Nashiro"
+msgstr "Tsugunori Nashiroさん"
+
+# 72df334f70654c06b04965f4929b7259
+msgid "METAL_GEAR_mkII"
+msgstr "METAL_GEAR_mkIIさん"
+
+msgid "Release 5.01 - 2015/03/29"
+msgstr "5.01リリース - 2015/03/29"
+
+# ac8dde922cd54fb3ac7face4314ceb45
+msgid ""
+"[storage] Supported ``PARTITION BY RANGE``. Note that this feature is not "
+"supported on MariaDB 10. This limitation is derived from MariaDB 10 "
+"architecture about removing .par file."
+msgstr ""
+"[ストレージモード] ``PARTITION BY RANGE`` をサポートしました。この機能は "
+"MariaDB 10.xではサポートしていません。これはMariaDB 10.xが.parファイルを削除"
+"する仕様に由来する制限です。"
+
+# 14260e9af0984345823317a7fba6384a
+msgid ""
+"[mysql56] Disabled in-place ``ALTER TABLE`` for ``PRIMARY KEY``. This change "
+"is derived from Groonga's limitation because Groonga doesn't support to "
+"change table key type. [Reported by Hiromitsu KATO]"
+msgstr ""
+"[mysql56] ``PRIMARY KEY`` に対してコピーせずに ``ALTER TABLE`` できなくしまし"
+"た。この変更はGroongaの制限によるものです。Groongaではテーブルのキーの変更を"
+"サポートしていません。 [加藤さんが報告]"
+
+# d4f551037b4644a3ac10f18940f4a154
+msgid ""
+"Dropped Visual Studio 2010 and Visual Studio 2012 support. Use Visual Studio "
+"2013 or later to build Mroonga. [GitHub#45]"
+msgstr ""
+"Visual Studio 2010 と Visual Studio 2012 のサポートをやめました。Visual "
+"Studio 2013 以降をMroongaのビルドに使ってください。 [GitHub#45]"
+
+msgid "[windows] Added Visual Studio 2015 build support."
+msgstr "[windows] Visual Studio 2015でビルドできるようにしました。"
+
+msgid ""
+"Supported to specify options by table comment when primary key is using hash "
+"by ``PRIMARY KEY (...) USING HASH``. [GitHub#46] [Patch by Naoya Murakami]"
+msgstr ""
+"プライマリーキーに ``PRIMARY KEY (...) USING HASH`` を指定しているときに、そ"
+"のテーブルのコメントにオプションを指定できるようにしました。[GitHub#46] [村上"
+"さんがパッチ提供]"
+
+# 39e127f6d7984ea3ac2945bce3f92a19
+msgid ""
+"Supported index column flags by index comment. You can specify ``NONE``, "
+"``WITH_POSITION``, ``WITH_SECTION`` and ``WITH_WEIGHT`` as index column "
+"flags. Use ``FULLTEXT INDEX (...) COMMENT 'index_flags \"WITH_POSITION|"
+"WITH_SECTION\"'`` for example. [GitHub#47] [Patch by Naoya Murakami]"
+msgstr ""
+"インデックスカラムのフラグをインデックスのコメントに指定できるようにしまし"
+"た。 ``NONE`` や ``WITH_POSITION`` 、 ``WITH_SECTION``  や ``WITH_WEIGHT`` が"
+"インデックスカラムのフラグとして使えます。[GitHub#47] [村上さんがパッチ提供]"
+
+msgid "Supported to build with MySQL 5.7."
+msgstr "MySQL 5.7でビルドできるようになりました。"
+
+msgid ""
+"[rpm][centos] Supported Percona Server 5.6.x on CentOS 6/7. [Tested on "
+"CentOS 6 by Yoshino]"
+msgstr ""
+"[rpm][centos] CentOS 6とCentOS 7でPercona Server 5.6.xをサポートしました。[吉"
+"野さんがCentOS 6でテスト]"
+
+msgid ""
+"Supported ``utf8_unicode_520_ci`` and ``utf8mb4_unicode_520_ci``. To support "
+"these collations, Mroonga now requires `groonga-normalizer-mysql <https://"
+"github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9."
+msgstr ""
+"``utf8_unicode_520_ci`` と ``utf8mb4_unicode_520_ci`` をサポートしました。こ"
+"れらの照合順序をサポートするために、Mroongaは `groonga-normalizer-mysql "
+"<https://github.com/groonga/groonga-normalizer-mysql>`_ 1.0.9 以降を必要とす"
+"るようになりました。"
+
+# cbf8032b2f594b88b3d90bc39b2f66d7
+msgid ""
+"Changed to store score in float. This backward incompatible change is "
+"derived from the Groonga DB API change in Groonga 5.0.1. There may be a case "
+"the value of score is different."
+msgstr ""
+"スコアを浮動小数点で保持するように変更しました。この変更は非互換な変更で、"
+"GroongaのDB APIがGroonga 5.0.1で変更されたことに伴います。スコアの値がこれま"
+"でと違ってしまうことがあるかも知れません。"
+
+# d2ea943bd3b440aca9b764e72da6dca5
+msgid ""
+"Added missing error check when failed to create multiple column index in in-"
+"place ``ALTER TABLE``."
+msgstr ""
+"``ALTER TABLE`` で複数のカラムインデックスを作成するのに失敗したときのエラー"
+"チェックがなかったので追加しました。"
+
+# 13a79e73841a470c878bb4db86f86d32
+msgid ""
+"[mariadb] Fixed crash bug when ``SET`` variable is used. This bug depends on "
+"MariaDB version. (<= 5.5.41 and <= 10.0.16)"
+msgstr ""
+"[mariadb] ``SET`` variableしたときにクラッシュする不具合を修正しました。この"
+"不具合はMariaDBのバージョンに依存します。 (<= 5.5.41 \n"
+"と <= 10.0.16)"
+
+msgid ""
+"[rpm][centos] Fixed release number for CentOS 7. [GitHub#44] [Reported by "
+"CharAz]"
+msgstr ""
+"[rpm][centos] CentOS 7でパッケージのリリースバージョンを修正しました。"
+"[GitHub#44] [CharAzさんが報告]"
+
+# ce3075441bac49428b06d1dc0034a4ed
+msgid ""
+"[mariadb55] Fixed install failure after installing and uninstalling Mroonga."
+msgstr ""
+"[mariadb55] インストール、アンインストールしてから再度インストールしようとす"
+"ると失敗するのを修正しました。"
+
+# 7147a76b729a4fc78fef8c2ad92aa41d
+msgid "Hiromitsu KATO"
+msgstr "加藤さん"
+
+msgid "Yoshino"
+msgstr "吉野さん"
+
+# e709fda4a2834d7b9c51d55d092ba7dd
+msgid "CharAz"
+msgstr "CharAzさん"
+
+msgid "Release 5.00 - 2015/02/09"
+msgstr "5.00リリース - 2015/02/09"
+
+msgid "Bump version to 5.00!"
+msgstr "5.00になりました！"
+
+msgid ""
+"[appveyor] Supported Windows CI on `AppVeyor <http://www.appveyor.com/>`_. "
+"We can get notification about build failure on Windows at once. Subscribe to "
+"groonga-mysql-commit@lists.sourceforge.jp if you want build status."
+msgstr ""
+"[appveyor] WindowsでのCIを `AppVeyor <http://www.appveyor.com/>`_ で行うよう"
+"になりました。Windowsでビルドに失敗したのがすぐにわかるようになりました。"
+"groonga-mysql-commit@lists.sourceforge.jpを購読するとビルドの状態を知ることが"
+"できます。"
+
+msgid ""
+"[rpm][centos] Build against MySQL 5.6.23-2 on MySQL yum repository. [groonga-"
+"dev,03083][Reported by Kohei Aochi]"
+msgstr ""
+"[rpm][centos] CentOS 7でMySQL 5.6.23向けにビルドするようにしました。[groonga-"
+"dev,03083] [青地さんが報告]"
+
+msgid "[cmake] Disabled big endian support explicitly."
+msgstr "[cmake] ビッグエンディアンのサポートを明示的に無効にしました。"
+
+msgid "Kohei Aochi"
+msgstr "青地さん"

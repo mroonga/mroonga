@@ -1,0 +1,52 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_last_insert_grn_id()``"
+msgstr ""
+
+msgid "Summary"
+msgstr "概要"
+
+msgid ""
+"``mroonga_last_insert_grn_id()`` UDF provides functionality to get id of "
+"last inserted record."
+msgstr ""
+"``mroonga_last_insert_grn_id()`` UDF は、最後に挿入されたレコードのIDを取得す"
+"る機能を提供します。"
+
+msgid "This id is unique in Groonga."
+msgstr "このIDにはGroonga内で一意なIDです。"
+
+msgid "Syntax"
+msgstr "構文"
+
+msgid "Usage"
+msgstr "使い方"
+
+msgid "Parameters"
+msgstr "引数"
+
+msgid "Required parameters"
+msgstr "必須引数"
+
+msgid "Return value"
+msgstr "返り値"
+
+msgid "It returns id of last inserted record."
+msgstr "最後に挿入したレコードのIDを返します。"

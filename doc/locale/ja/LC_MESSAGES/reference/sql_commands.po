@@ -1,0 +1,531 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "SQL commands"
+msgstr "SQLコマンド"
+
+msgid ""
+"This section describes avaiable SQL commands and unavailable SQL commands."
+msgstr ""
+"このセクションでは、利用可能なSQLコマンドと利用できないSQLコマンドを記載して"
+"います。"
+
+msgid "List of available SQL commands"
+msgstr "利用可能なSQLコマンドの一覧"
+
+msgid "``ALTER TABLE table_name ADD COLUMN column_name TEXT``"
+msgstr ""
+
+msgid "``ALTER TABLE table_name ADD FULLTEXT INDEX index_name (column_name)``"
+msgstr ""
+
+msgid ""
+"``ALTER TABLE table_name ADD SPATIAL KEY index_name (geometry_column_name)``"
+msgstr ""
+
+msgid "``ALTER TABLE table_name ENGINE = mroonga``"
+msgstr ""
+
+msgid "``ALTER TABLE table_name RENAME new_table_name``"
+msgstr ""
+
+msgid "``COMMIT``"
+msgstr ""
+
+msgid "``CREATE FULLTEXT INDEX index_name ON table_name(column_name)``"
+msgstr ""
+
+msgid "``CREATE FULLTEXT INDEX index_name ON table_name(column_name, ...)``"
+msgstr ""
+
+msgid "``CREATE TABLE IF NOT EXISTS table_name (...)``"
+msgstr ""
+
+msgid "``CREATE TABLE \\`table-name-with-hyphen\\` (...)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
+"COMMENT 'tokenizer \"TokenMecab\"')``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
+"COMMENT 'normalizer "
+"\"NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark\"')``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name) "
+"COMMENT 'tokenizer \"TokenDelimit\", normalizer "
+"\"NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark\"')``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name (column_name))``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (... FULLTEXT INDEX index_name "
+"(column_name, ...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (... INDEX (column_name))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (... INDEX (column_name, ...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (... INDEX USING BTREE (column_name))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (... PRIMARY KEY (column_name))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET ASCII``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET BINARY``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET CP932``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET EUCJPMS``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET KOI8R``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET LATIN1``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET SJIS``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET UJIS``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET UTF8``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) CHARSET UTF8MB4``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (...) ENGINE=mroonga COMMENT = 'ENGINE \"InnoDB"
+"\"'``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (...) ENGINE=mroonga``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (\\`_id\\` INT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (\\`_id\\` INT, KEY(_id) USING HASH)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name BIGINT UNSIGNED)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name BIGINT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name BINARY(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name BIT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name BLOB)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name CHAR(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DATE)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DATETIME)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DECIMAL)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DOUBLE)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name ENUM(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name FLOAT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name GEOMETRY NOT NULL)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name INT UNSIGNED)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name INT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name LONGBLOB)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name LONGTEXT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name MEDIUMBLOB)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name MEDIUMINT UNSIGNED)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name MEDIUMINT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name MEDIUMTEXT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name SET(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name SMALLINT UNSIGNED)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name SMALLINT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TEXT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TIME)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TIMESTAMP)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TINYBLOB)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TINYINT UNSIGNED)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TINYINT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TINYTEXT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name VARBINARY(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name VARCHAR(...))``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name YEAR)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name INT AUTO_INCREMENT)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name INT PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DATE PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DATETIME PRIMARY KEY)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name "
+"DATETIME(fractional_seconds_precision) PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name DECIMAL PRIMARY KEY)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name DECIMAL(maximum_number_digits, "
+"fractional_seconds_precision) PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TIME PRIMARY KEY)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name TIME(fractional_seconds_precision) "
+"PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name TIMESTAMP PRIMARY KEY)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name "
+"TIMESTAMP(fractional_seconds_precision) PRIMARY KEY)``"
+msgstr ""
+
+msgid "``CREATE TABLE table_name (column_name YEAR PRIMARY KEY)``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name1 INT, column_name2 ..., KEY "
+"(column_name1, column_name2))``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name1 DOUBLE, column_name2 ..., KEY "
+"(column_name1, column_name2))``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name1 FLOAT, column_name2 ..., KEY "
+"(column_name1, column_name2))``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name1 CHAR(...), column_name2 ..., KEY "
+"(column_name1, column_name2))``"
+msgstr ""
+
+msgid ""
+"``CREATE TABLE table_name (column_name1 VARCHAR(...), column_name2 ..., KEY "
+"(column_name1, column_name2))``"
+msgstr ""
+
+msgid "``CREATE TEMPORARY TABLE table_name (...)``"
+msgstr ""
+
+msgid "``DELETE FROM table_name WHERE ...``"
+msgstr ""
+
+msgid "``DROP INDEX column_name ON table_name``"
+msgstr ""
+
+msgid "``DROP TABLE IF EXISTS table_name, ...``"
+msgstr ""
+
+msgid "``DROP TABLE \\`table-name-with-hyphen\\`, ...``"
+msgstr ""
+
+msgid "``DROP TABLE table_name, ...``"
+msgstr ""
+
+msgid "``DROP TEMPORARY TABLE table_name``"
+msgstr ""
+
+msgid "``FLUSH LOGS``"
+msgstr ""
+
+msgid "``FLUSH TABLES``"
+msgstr ""
+
+msgid ""
+"``INSERT INTO (geometry_column_name) VALUES (GeomFromText('POINT(...)'))``"
+msgstr ""
+
+msgid "``INSERT INTO ... VALUES ...``"
+msgstr ""
+
+msgid ""
+"``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``PRIMARY "
+"KEY``)"
+msgstr ""
+
+msgid ""
+"``INSERT INTO ... VALUES ... ON DUPLICATE KEY UPDATE ...`` (for ``UNIQUE "
+"KEY``)"
+msgstr ""
+
+msgid ""
+"``INSERT INTO table_name (column_name, ...) SELECT ... FROM "
+"other_table_name``"
+msgstr ""
+
+msgid "``REPLACE INTO table_name SELECT ... FROM other_table_name ...``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM information_schema.plugins WHERE plugin_name = \"mroonga\"``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name FORCE INDEX(index_name) WHERE ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name ORDER BY column_name ASC LIMIT ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name ORDER BY column_name ASC``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name ORDER BY column_name DESC LIMIT ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name ORDER BY column_name DESC``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name ORDER BY column_name``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D+ word ...\" "
+"IN BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*D- word ...\" "
+"IN BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*DOR word ..."
+"\" IN BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"*W word ...\" "
+"IN BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"+word ...\" IN "
+"BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name) AGAINST(\"...\" IN "
+"BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE MATCH(column_name, ...) AGAINST(\"...\" IN "
+"BOOLEAN MODE)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE "
+"MBRContains(GeomFromText('LineString(...)'), geometry_column_name)``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE NOT MATCH(column_name) AGAINST(\"...\" IN "
+"BOOLEAN MODE)``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name < ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name <= ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name = ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name > ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name >= ...``"
+msgstr ""
+
+msgid "``SELECT * FROM table_name WHERE column_name BETWEEN ... AND ...``"
+msgstr ""
+
+msgid ""
+"``SELECT * FROM table_name WHERE column_name IN (SELECT sub_column_name FROM "
+"sub_table_name WHERE MATCH(sub_text_column_name) AGAINST(\"...\"))``"
+msgstr ""
+
+msgid ""
+"``SELECT *, MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE) FROM "
+"table_name WHERE MATCH(column_name) AGAINST(\"...\" IN BOOLEAN MODE)``"
+msgstr ""
+
+msgid "``SELECT FOUND_ROWS()``"
+msgstr ""
+
+msgid ""
+"``SELECT SQL_CALC_FOUND_ROWS * FROM table_name WHERE MATCH(...) AGAINST(\"..."
+"\" IN BOOLEAN MODE) ORDER BY column_name LIMIT start,n_records``"
+msgstr ""
+
+msgid "``SELECT last_insert_grn_id()``"
+msgstr ""
+
+msgid "``SET binlog_format=\"MIXED\"``"
+msgstr ""
+
+msgid "``SET binlog_format=\"ROW\"``"
+msgstr ""
+
+msgid "``SET binlog_format=\"STATEMENT\"``"
+msgstr ""
+
+msgid "``TRUNCATE TABLE table_name``"
+msgstr ""
+
+msgid "``UPDATE table_name SET column_name = ...``"
+msgstr ""
+
+msgid "List of unavailable SQL commands"
+msgstr "利用できないSQLコマンドの一覧"
+
+msgid "``CREATE TABLE (...) CHARSET not_listed_charset_above``"
+msgstr "``CREATE TABLE (...) CHARSET 上記にないキャラクタセット``"
+
+msgid ""
+"``INSERT INTO (geometry_column_name) VALUES "
+"(GeomFromText('LineString(...)'))``"
+msgstr ""
+
+msgid "``INSERT INTO (...) VALUES (null)``"
+msgstr ""
+
+msgid "``START TRANSACTION``"
+msgstr ""
+
+msgid ""
+"Basically, The character set which Groonga supports (EUC-JP/UTF-8/SJIS/"
+"LATIN1/KOI8R) is also supported in Mroonga."
+msgstr ""
+"基本的には、Groongaがサポートしているキャラクタセット(EUC-JP/UTF-8/SJIS/"
+"LATIN1/KOI8R)はMroongaでもサポートされています。"
+
+msgid "I found an unlisted SQL command"
+msgstr "リストにないSQLコマンドを見つけました"
+
+msgid ""
+"If you find unlisted SQL command and confirm whether the SQL command works "
+"well or not, we want to list it. Please mail it to `us <http://groonga.org/"
+"docs/community.html>`_ or send a patch against `the source file <https://"
+"github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ by pull "
+"request system on GitHub."
+msgstr ""
+"もし、あなたがリストにないSQLコマンドを見つけて、そのSQLコマンドが動くかどう"
+"かを確認した場合は、そのSQLコマンドをこのリストに追加させてください。そのSQL"
+"コマンドを `開発チーム <http://groonga.org/ja/docs/community.html>`_ に連絡し"
+"てもらうか、 `ソースファイル <https://github.com/mroonga/mroonga/blob/master/"
+"doc/source/reference.rst>`_ に対するパッチをGitHubでpull requestしてくれれば"
+"取り込みます！"

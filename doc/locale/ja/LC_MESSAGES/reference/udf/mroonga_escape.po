@@ -1,0 +1,82 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "``mroonga_escape()``"
+msgstr ""
+
+msgid "Summary"
+msgstr "概要"
+
+msgid ""
+"``mroonga_escape`` UDF provides functionality to escape given string. It "
+"also accepts parameter what character should be escaped."
+msgstr ""
+"``mroonga_escape`` UDF は与えられた文字列をエスケープする機能を提供します。そ"
+"してまたエスケープすべき文字を引数として受け取ります。"
+
+msgid "Syntax"
+msgstr "構文"
+
+msgid "``mroonga_escape()`` has required parameter and optional parameter::"
+msgstr "``mroonga_escape()`` には必須引数と省略可能引数とがあります。::"
+
+msgid "Usage"
+msgstr "使いかた"
+
+msgid "Here is the example query which use special characters to be escaped::"
+msgstr "エスケープされた特殊文字を使うクエリーの例です。::"
+
+msgid "Here is the example about special characters which is escaped::"
+msgstr "特殊文字のエスケープ例です。::"
+
+msgid "Parameters"
+msgstr "引数"
+
+msgid "Required parameters"
+msgstr "必須引数"
+
+msgid "There is one required parameter, ``string``."
+msgstr "必須引数は ``string`` です。"
+
+msgid "``string``"
+msgstr ""
+
+msgid "It specifies text which you want to escape."
+msgstr "エスケープしたいテキストを指定します。"
+
+msgid "Optional parameters"
+msgstr "省略可能引数"
+
+msgid "There is one optional parameter, ``special_characters``."
+msgstr "``special_characters`` は省略可能な引数です。"
+
+msgid "``special_characters``"
+msgstr ""
+
+msgid "It specifies characters to escape."
+msgstr "エスケープする文字を指定します。"
+
+msgid "The default value is ``+-<>~*()\"\\\\:``."
+msgstr "デフォルト値は ``+-<>~*()\"\\\\:`` です。"
+
+msgid "Return value"
+msgstr "返り値"
+
+msgid "It returns escaped string."
+msgstr "エスケープされた文字列を返します。"

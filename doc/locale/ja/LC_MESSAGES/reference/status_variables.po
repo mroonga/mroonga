@@ -1,0 +1,78 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Status variables"
+msgstr "ステータス変数の一覧"
+
+msgid ""
+"Here are the explanations of status variables that are introduced by Mroonga."
+msgstr "独自に追加されたステータス変数を説明します。"
+
+msgid "``Mroonga_count_skip``"
+msgstr ""
+
+msgid ""
+"This value is increased when 'fast line count feature' is used. You can use "
+"this value to check if the feature is working when you enable it."
+msgstr ""
+"行カウント高速化機能が動作する度にカウントアップされます。スキーマ/SQLチュー"
+"ニングを行って行カウント高速化機能を利用できるようにした際の動作確認に利用で"
+"きます。"
+
+msgid "Here is an example how to check it::"
+msgstr "確認例です::"
+
+msgid "``Mroonga_fast_order_limit``"
+msgstr ""
+
+msgid ""
+"This value is increased when 'fast ORDER BY LIMIT feature' is used. You can "
+"use this value to check if the feature is working when you enable it."
+msgstr ""
+"ORDER BY LIMIT 高速化機能が動作する度にカウントアップされます。スキーマ/SQL"
+"チューニングを行って ORDER BY LIMIT 高速化機能を利用できるようにした際の動作"
+"確認に利用できます。"
+
+msgid "``Mroonga_condition_push_down``"
+msgstr ""
+
+msgid ""
+"This value is increased when condition push down is used. You can use this "
+"value to check whether condition push down is used or not."
+msgstr ""
+"コンディションプッシュダウンを使う度にカウントアップします。コンディション"
+"プッシュダウンが使われたかどうかを確認するために利用できます。"
+
+msgid "``Mroonga_n_pooling_contexts``"
+msgstr ""
+
+msgid ""
+"This value shows the number of pooling contexts for :doc:`udf/"
+"mroonga_command`. These contexts are reused from multiple :doc:`udf/"
+"mroonga_command` calls. So, it's not increased continually."
+msgstr ""
+":doc:`udf/mroonga_command` 用にプールしているコンテキストの数を示します。この"
+"コンテキストは複数の :doc:`udf/mroonga_command` 呼び出しで再利用します。その"
+"ため、継続的に増え続けるということはありません。"
+
+msgid "``Mroonga_memory_map_size``"
+msgstr ""
+
+msgid "This value shows the currently memory mapped size in bytes."
+msgstr "この値は、現在のメモリーマップサイズをバイトで表しています。"

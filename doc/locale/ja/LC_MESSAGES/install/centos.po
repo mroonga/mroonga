@@ -1,0 +1,163 @@
+# -*- po -*-
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2023, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga mrn_version\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2023-07-27 16:42+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "CentOS"
+msgstr ""
+
+msgid ""
+"This section describes how to install Mroonga related RPM packages on "
+"CentOS. You can install them by ``yum``."
+msgstr ""
+"このセクションではCentOS上でMroonga関連のRPMパッケージをインストールする方法"
+"を説明します。これらのパッケージは ``yum`` でインストールできます。"
+
+msgid "CentOS 7 (with the Oracle MySQL 5.7 package)"
+msgstr "CentOS 7（OracleのMySQL 5.7パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 5.7 on CentOS 7 since Mroonga "
+"5.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 5.09からOracleのMySQL 5.7パッケージを利用できます。"
+
+msgid "CentOS 7 (with the Oracle MySQL 8.0 package)"
+msgstr "CentOS 7（OracleのMySQL 8.0パッケージを利用）"
+
+msgid ""
+"You can use Oracle's MySQL packages version 8.0 on CentOS 7 since Mroonga "
+"9.04 release."
+msgstr ""
+"CentOS 7では、Mroonga 9.04からOracleのMySQL 8.0パッケージを利用できます。"
+
+msgid ":doc:`/tutorial/storage` `JSON` data type is not supported yet"
+msgstr ":doc:`/tutorial/storage` `JSON` データ型は未対応です。"
+
+msgid "CentOS 7 (with Percona Server 5.7 package)"
+msgstr "CentOS 7（Percona Server 5.7パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 5.7 on CentOS 7 since Mroonga "
+"6.02 release."
+msgstr ""
+"CentOS 7では、Mroonga 6.02からPercona Server 5.7パッケージを利用できます。"
+
+msgid "CentOS 7 (with Percona Server 8.0 package)"
+msgstr "CentOS 7（Percona Server 8.0パッケージを利用）"
+
+msgid ""
+"You can use Percona Server packages version 8.0 on CentOS 7 since Mroonga "
+"10.06 release."
+msgstr ""
+"CentOS 7では、Mroonga 10.06からPercona Server 8.0パッケージを利用できます。"
+
+msgid "CentOS 7 (with MariaDB 10.3 package)"
+msgstr "CentOS 7（MariaDB 10.3のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.3 on CentOS 7 since "
+"Mroonga 7.11 release."
+msgstr ""
+"CentOS 7では、Mroonga 7.11からMariaDB提供のMariaDB 10.3パッケージを利用できま"
+"す。"
+
+msgid "CentOS 7 (with MariaDB 10.4 package)"
+msgstr "CentOS 7（MariaDB 10.4のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.4 on CentOS 7 since "
+"Mroonga 9.07 release."
+msgstr ""
+"CentOS 7では、Mroonga 9.07からMariaDB提供のMariaDB 10.4パッケージを利用できま"
+"す。"
+
+msgid "CentOS 7 (with MariaDB 10.5 package)"
+msgstr "CentOS 7（MariaDB 10.5のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.5 on CentOS 7 since "
+"Mroonga 10.06 release."
+msgstr ""
+"CentOS 7では、Mroonga 10.06からMariaDB提供のMariaDB 10.5パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.6 package)"
+msgstr "CentOS 7（MariaDB 10.6のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.6 on CentOS 7 since "
+"Mroonga 11.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 11.09からMariaDB提供のMariaDB 10.6パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.7 package)"
+msgstr "CentOS 7（MariaDB 10.7のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.7 on CentOS 7 since "
+"Mroonga 12.02 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.02からMariaDB提供のMariaDB 10.7パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.8 package)"
+msgstr "CentOS 7（MariaDB 10.8のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.8 on CentOS 7 since "
+"Mroonga 12.06 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.06からMariaDB提供のMariaDB 10.8パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.9 package)"
+msgstr "CentOS 7（MariaDB 10.9のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.9 on CentOS 7 since "
+"Mroonga 12.09 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.09からMariaDB提供のMariaDB 10.9パッケージを利用でき"
+"ます。"
+
+msgid "CentOS 7 (with MariaDB 10.10 package)"
+msgstr "CentOS 7（MariaDB 10.10のパッケージを利用）"
+
+msgid ""
+"You can use MariaDB's MariaDB packages version 10.10 on CentOS 7 since "
+"Mroonga 12.11 release."
+msgstr ""
+"CentOS 7では、Mroonga 12.11からMariaDB提供のMariaDB 10.10パッケージを利用でき"
+"ます。"
+
+msgid "Install::"
+msgstr "インストール"
+
+msgid ""
+"If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a "
+"tokenizer, install groonga-tokenizer-mecab package."
+msgstr ""
+"トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい"
+"場合はgroonga-tokenizer-mecabをインストールしてください。"
+
+msgid "Install groonga-tokenizer-mecab package::"
+msgstr "groonga-tokenizer-mecabをインストール::"
+
+msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
+msgstr "次の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作ります::"
