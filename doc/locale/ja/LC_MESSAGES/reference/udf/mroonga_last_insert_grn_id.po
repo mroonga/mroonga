@@ -21,30 +21,32 @@ msgid "``mroonga_last_insert_grn_id()``"
 msgstr ""
 
 msgid "Summary"
-msgstr ""
+msgstr "概要"
 
 msgid ""
 "``mroonga_last_insert_grn_id()`` UDF provides functionality to get id of "
 "last inserted record."
 msgstr ""
+"``mroonga_last_insert_grn_id()`` UDF は、最後に挿入されたレコードのIDを取得す"
+"る機能を提供します。"
 
 msgid "This id is unique in Groonga."
-msgstr ""
+msgstr "このIDにはGroonga内で一意なIDです。"
 
 msgid "Syntax"
-msgstr ""
+msgstr "構文"
 
 msgid "Usage"
-msgstr ""
+msgstr "使い方"
 
 msgid "Parameters"
-msgstr ""
+msgstr "引数"
 
 msgid "Required parameters"
-msgstr ""
+msgstr "必須引数"
 
 msgid "Return value"
-msgstr ""
+msgstr "返り値"
 
 msgid "It returns id of last inserted record."
-msgstr ""
+msgstr "最後に挿入したレコードのIDを返します。"

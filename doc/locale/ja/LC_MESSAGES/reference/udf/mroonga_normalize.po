@@ -21,63 +21,68 @@ msgid "``mroonga_normalize()``"
 msgstr ""
 
 msgid "Summary"
-msgstr ""
+msgstr "概要"
 
 msgid "``mroonga_normalize()`` UDF normalizes text by Groonga's normalizer."
 msgstr ""
+"``mroonga_normalize()`` UDFはGroongaのノーマライザーによってテキストをノーマ"
+"ライズします。"
 
 msgid "Syntax"
-msgstr ""
+msgstr "構文"
 
 msgid "``mroonga_normalize()`` has required parameter and optional parameter::"
-msgstr ""
+msgstr "``mroonga_normalize()`` には必須引数と省略可能引数とがあります。::"
 
 msgid "Usage"
-msgstr ""
+msgstr "使いかた"
 
 msgid ""
 "Here is the example query which use Groonga's ``NormalizerAuto`` normalizer "
 "to be normalized::"
 msgstr ""
+"Groongaの ``NormalizerAuto`` ノーマライザーを使用した実行例はこちらです"
 
 msgid ""
 "Here is the example query which use Groonga's "
 "``NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark`` normalizer "
 "to be normalized::"
 msgstr ""
+"Groongaの ``NormalizerMySQLUnicodeCIExceptKanaCIKanaWithVoicedSoundMark`` "
+"ノーマライザーを使用した実行例はこちらです"
 
 msgid "Parameters"
-msgstr ""
+msgstr "引数"
 
 msgid "Required parameters"
-msgstr ""
+msgstr "必須引数"
 
 msgid "There is one required parameter, ``string``."
-msgstr ""
+msgstr "必須引数は ``string`` です。"
 
 msgid "``string``"
 msgstr ""
 
 msgid "It specifies text which you want to normalize."
-msgstr ""
+msgstr "ノーマライズしたいテキストを指定します。"
 
 msgid "Optional parameters"
-msgstr ""
+msgstr "省略可能引数"
 
 msgid "There is one optional parameter, ``normalizer_name``."
-msgstr ""
+msgstr "``normalizer_name`` は省略可能な引数です。"
 
 msgid "``normalizer_name``"
 msgstr ""
 
 msgid "It specifies Groonga's normalizer name to normalize."
-msgstr ""
+msgstr "Groongaのノーラマイザー名を指定します。"
 
 msgid "The default value is ``NormalizerAuto``."
-msgstr ""
+msgstr "デフォルト値は ``NormalizerAuto`` です。"
 
 msgid "Return value"
-msgstr ""
+msgstr "返り値"
 
 msgid "It returns normalized string."
-msgstr ""
+msgstr "ノーマライズされた文字列を返します。"

@@ -11,85 +11,93 @@ msgstr ""
 "PO-Revision-Date: 2023-07-27 16:42+0900\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "``mroonga_snippet()``"
 msgstr ""
 
 msgid "Summary"
-msgstr ""
+msgstr "概要"
 
 msgid ""
 "``mroonga_snippet()`` UDF provides functionality to get keyword in context."
-msgstr ""
-
-msgid ""
-"This feature is in experimental stage. So, the required arguments or value "
-"is changed without notice in the future."
-msgstr ""
+msgstr "``mroonga_snippet()`` UDFは文脈付き索引を取得する機能を提供します。"
 
 msgid "Syntax"
-msgstr ""
+msgstr "構文"
 
 msgid "``mroonga_snippet()`` has required parameter and optional parameter::"
-msgstr ""
+msgstr "``mroonga_snippet()`` には必須引数と省略可能引数とがあります。::"
 
 msgid "Usage"
-msgstr ""
+msgstr "使いかた"
 
 msgid ""
 "There is a case that you want to extract keyword and surrounding text as a "
 "search results."
-msgstr ""
+msgstr "キーワードと周辺のテキストを検索結果として取得したいことがあります。"
 
 msgid ""
 "Snippet means 'keyword and surrounding text'. It is called 'Keyword in "
 "context'."
 msgstr ""
+"スニペットは「キーワードと関連するテキスト」という意味です。「文脈付き索引」"
+"ともいいます。"
 
 msgid ""
 "``mroonga_snippet()`` function provides the way to get snippet from search "
 "results."
 msgstr ""
+"``mroonga_snippet()`` 関数は検索結果からスニペットを取得する方法を提供しま"
+"す。"
 
 msgid "You can use ``mroonga_snippet()`` UDF in storage mode and wrapper mode."
 msgstr ""
+"``mroonga_snippet()`` UDFはストレージモードとラッパーモードいずれでも使\n"
+"えます。"
 
 msgid ""
 "``mroonga_snippet()`` function is included in Mroonga as a User-Defined "
 "Function (UDF), but if you have not yet register it in MySQL by CREATE "
 "FUNCTION, you need to invoke the following SQL for defining a function. ::"
 msgstr ""
+"``mroonga_snippet()`` 関数はユーザ定義関数(UDF)としてMroongaに含まれています"
+"が、インストール時にCREATE FUNCTIONでMySQLに追加していない場合には、以下の関"
+"数定義DDLを実行しておく必要があります。"
 
 msgid ""
 "``mroonga_snippet()`` function is useful for searching the text which "
 "contains keyword and associated one by using MATCH .. AGAINST syntax."
 msgstr ""
+"``mroonga_snippet()`` 関数は MATCH ... AGAINST構文とともに使用して、テキスト"
+"に含まれるキーワードとその関連語句を検索するのに便利です。"
 
 msgid ""
 "Imagine searching the document which contains 'fulltext' as a keyword. "
 "Assume that some keyword such as 'MySQL' and 'search' are associated with "
 "'fulltext'."
 msgstr ""
+"'fulltext'というキーワードと'MySQL'と'search'という関連語を含む文書の検索をし"
+"てみましょう。"
 
 msgid "``mroonga_snippet()`` function meets above."
-msgstr ""
+msgstr "``mroonga_snippet()`` 関数は上記のことができます。"
 
 msgid "Here is the schema definition for execution examples(storage mode)::"
-msgstr ""
+msgstr "実行例のスキーマ定義(ストレージモード)はこちらです::"
 
 msgid "Here is the schema definition for execution examples(wrapper mode)::"
-msgstr ""
+msgstr "実行例(ラッパーモード)のスキーマ定義はこちらです。::"
 
 msgid "Here is the sample data for execution examples::"
 msgstr ""
 
 msgid "Here is the results of execution examples::"
-msgstr ""
+msgstr "実行結果がこちらです。"
 
 msgid ""
 "The keyword 'fulltext' and associated keyword 'MySQL' and 'search' has been "
@@ -97,31 +105,31 @@ msgid ""
 msgstr ""
 
 msgid "Parameters"
-msgstr ""
+msgstr "引数"
 
 msgid "Required parameters"
-msgstr ""
+msgstr "必須引数"
 
 msgid "There are many required parameters."
-msgstr ""
+msgstr "多くの必須引数があります。"
 
 msgid "``document``"
 msgstr ""
 
 msgid "The column name or string value is required."
-msgstr ""
+msgstr "カラム名もしくは文字列が必要です。"
 
 msgid "``max_length``"
 msgstr ""
 
 msgid "The max length of snippet (bytes) is required."
-msgstr ""
+msgstr "スニペットの最大長(バイト単位)が必要です。"
 
 msgid "``max_count``"
 msgstr ""
 
 msgid "The max elements of snippets (N word) is required."
-msgstr ""
+msgstr "スニペットの最大要素数Nが必要です。"
 
 msgid "``encoding``"
 msgstr ""
@@ -131,6 +139,9 @@ msgid ""
 "such as 'ascii_general_ci', 'cp932_japanese_ci', 'eucjpms_japanese_ci' and "
 "so on."
 msgstr ""
+"文書のエンコーティング(照合順序)を指定します。エンコーディングとして\n"
+"'ascii_general_ci'や'cp932_japanese_ci'、'eucjpms_japanese_ci'などが指\n"
+"定できます。"
 
 msgid "``skip_leading_spaces``"
 msgstr ""
@@ -138,7 +149,7 @@ msgstr ""
 msgid ""
 "Specify whether skip leading spaces or not. Specify the value 1 for skipping "
 "leading spaces, 0 for not."
-msgstr ""
+msgstr "先頭の空白を無視するかを指定します。1なら無視し、0なら無視しません。"
 
 msgid "``html_escape``"
 msgstr ""
@@ -147,46 +158,49 @@ msgid ""
 "HTML escape is enabled or not. Specify the value 1 for enabling HTML escape, "
 "0 for not."
 msgstr ""
+"HTMLのエスケープを行うかを指定します。1ならエスケープし、0ならそのまま\n"
+"出力します。"
 
 msgid "``prefix``"
 msgstr ""
 
 msgid "The start text of snippet."
-msgstr ""
+msgstr "スニペットの開始テキストを指定します。"
 
 msgid "``suffix``"
 msgstr ""
 
 msgid "The end text of snippet."
-msgstr ""
+msgstr "スニペットの終了テキストを指定します。"
 
 msgid "Optional parameters"
-msgstr ""
+msgstr "省略可能引数"
 
 msgid ""
 "There is one optional group parameter, ``wordN`` related prefix and suffix."
 msgstr ""
+"省略可能な引数として ``wordN`` と開始テキスト、終了テキストがあります。"
 
 msgid "``wordN``"
 msgstr ""
 
 msgid "Specify any word."
-msgstr ""
+msgstr "任意の単語指定します。"
 
 msgid "``wordN_prefix``"
 msgstr ""
 
 msgid "It is the start text of wordN."
-msgstr ""
+msgstr "N番目の単語の開始テキストを指定します。"
 
 msgid "``wordN_suffix``"
 msgstr ""
 
 msgid "It is the end text of wordN."
-msgstr ""
+msgstr "N番目の単語の終了テキストを指定します。"
 
 msgid "Return value"
-msgstr ""
+msgstr "返り値"
 
 msgid "It returns snippet string."
-msgstr ""
+msgstr "スニペット文字列を返します。"

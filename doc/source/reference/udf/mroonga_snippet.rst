@@ -9,12 +9,6 @@ Summary
 ``mroonga_snippet()`` UDF provides functionality to get keyword
 in context.
 
-.. note::
-
-   This feature is in experimental stage.
-   So, the required arguments or value is changed without notice in the
-   future.
-
 Syntax
 ------
 

@@ -18,8 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "UDF (User Defined Functions)"
-msgstr ""
+msgstr "UDF (ユーザ定義関数)"
 
 msgid ""
 "Mroonga provides some useful functionality as UDF (User Defined Functions)."
 msgstr ""
+"Mroongaではいくつか便利な機能をUDF (ユーザ定義関数)として提供しています。"
