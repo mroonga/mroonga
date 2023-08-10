@@ -19,15 +19,18 @@ case "${variant}" in
     service_name=mysqld
     variant_label=MySQL
     may_have_auto_generated_password=yes
+    mysql_command=$(which mysql)
     ;;
   mariadb)
     service_name=mariadb
     variant_label=MariaDB
+    mysql_command=$(which mariadb)
     ;;
   percona)
     service_name=mysqld
     variant_label="Percona Server"
     may_have_auto_generated_password=yes
+    mysql_command=$(which mysql)
     ;;
 esac
 
@@ -69,7 +72,6 @@ update_sql=${data_dir}/mroonga/update.sql
 
 need_password_expire=no
 if [ "${try_auto_prepare}" = "yes" ]; then
-  mysql_command=$(which mysql)
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
     if "${mysql_command}" \
