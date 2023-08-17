@@ -1,4 +1,4 @@
-mysql-community-8.0-mroonga (13.05-2) unstable; urgency=low
+mysql-8.0-mroonga (13.05-2) unstable; urgency=low
 
   * Rebuilt against MySQL 8.0.34.
 
