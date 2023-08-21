@@ -53,7 +53,7 @@ Install::
   % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
   % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
   % sudo percona-release setup ps80
-  % sudo dnf install -y --enablerepo=epel percona-server-8.0-mroonga
+  % sudo dnf install -y --enablerepo=epel,powertools percona-server-8.0-mroonga
   (% sudo systemctl start mysqld)
   (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
   (% sudo mysqladmin -u root --password="${tmp_password}" password)
