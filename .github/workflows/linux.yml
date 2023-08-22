@@ -235,11 +235,6 @@ jobs:
             package-type: apt
             package: mysql-8.0
 
-          # MySQL community 5.7
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-5.7
-
           # MySQL community 8.0
           - os: almalinux-8
             package-type: yum
@@ -480,11 +475,6 @@ jobs:
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-8.0
-
-          # MySQL community 5.7
-          - os: centos-7
-            package-type: yum
-            package: mysql-community-5.7
 
           # MySQL community 8.0
           - os: almalinux-8
