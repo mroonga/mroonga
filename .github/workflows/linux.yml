@@ -264,11 +264,6 @@ jobs:
             package-type: yum
             package: mysql-community-minimal-8.0
 
-          # Percona Server 5.7
-          - os: centos-7
-            package-type: yum
-            package: percona-server-5.7
-
           # Percona Server 8.0
           - os: almalinux-8
             package-type: yum
@@ -502,11 +497,6 @@ jobs:
             package-type: yum
             package: mysql-community-minimal-8.0
             target-os: oracle-linux-8
-
-          # Percona Server 5.7
-          - os: centos-7
-            package-type: yum
-            package: percona-server-5.7
 
           # Percona Server 8.0
           - os: almalinux-8
