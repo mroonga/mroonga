@@ -111,10 +111,6 @@ REPO
              https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
         ;;
     esac
-    if [ "${major_version}" = "7" ] && [ "${mysql_version}" = "5.7" ]; then
-      sudo yum-config-manager --disable mysql80-community
-      sudo yum-config-manager --enable mysql57-community
-    fi
     ;;
   percona-*)
     service_name=mysqld
