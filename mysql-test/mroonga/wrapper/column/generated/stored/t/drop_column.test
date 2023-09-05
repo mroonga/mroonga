@@ -16,7 +16,6 @@
 
 --source ../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 --source ../../../../../include/mroonga/have_innodb.inc
---source ../../../../../include/mroonga/skip_mariadb_10_1.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
