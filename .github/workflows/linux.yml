@@ -30,12 +30,12 @@ jobs:
     name: Source
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: cutter
           repository: clear-code/cutter
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: mroonga.github.com
           repository: mroonga/mroonga.github.com
@@ -276,8 +276,8 @@ jobs:
             package: percona-server-8.0
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: groonga
           repository: groonga/groonga
@@ -510,7 +510,7 @@ jobs:
             package: percona-server-8.0
     runs-on: macos-12
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v3
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
