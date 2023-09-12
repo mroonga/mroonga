@@ -33,7 +33,6 @@ jobs:
           - mariadb-release: "10.4"
           - mariadb-release: "10.5"
           - mariadb-release: "10.6"
-          - mariadb-release: "10.10"
           - mariadb-release: "10.11"
           - mariadb-release: "10.11"
             use-master: "yes"
@@ -117,7 +116,7 @@ jobs:
           ridk exec tar xzf "${mariadbTarGz}"
           Move-Item mariadb-${Env:MARIADB_VERSION} ..\source
           cd ..\source
-          if ("${Env:MARIADB_VERSION}" -match "^10\.5|^10\.6|^10\.10|^10\.11") {
+          if ("${Env:MARIADB_VERSION}" -match "^10\.5|^10\.6|^10\.11") {
             ridk exec patch -p1 -i `
               ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
