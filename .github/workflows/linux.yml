@@ -172,39 +172,6 @@ jobs:
             package-type: apt
             package: mariadb-10.6
 
-          # MariaDB 10.7
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.7
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.7
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.7
-
-          # MariaDB 10.8
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.8
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.8
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.8
-
-          # MariaDB 10.9
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.9
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.9
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.9
-
           # MariaDB 10.10
           - os: almalinux-8
             package-type: yum
@@ -407,39 +374,6 @@ jobs:
           - os: ubuntu-jammy
             package-type: apt
             package: mariadb-10.6
-
-          # MariaDB 10.7
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.7
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.7
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.7
-
-          # MariaDB 10.8
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.8
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.8
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.8
-
-          # MariaDB 10.9
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.9
-          - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.9
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.9
 
           # MariaDB 10.10
           - os: almalinux-8
