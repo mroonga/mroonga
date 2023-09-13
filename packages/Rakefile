@@ -2,7 +2,6 @@ packages = [
   "mariadb-10.4-mroonga",
   "mariadb-10.5-mroonga",
   "mariadb-10.6-mroonga",
-  "mariadb-10.10-mroonga",
   "mariadb-10.11-mroonga",
   "mysql-8.0-mroonga",
   "mysql-community-8.0-mroonga",
