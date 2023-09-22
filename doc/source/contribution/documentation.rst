@@ -74,8 +74,8 @@ Follow the upstream
 Mroonga本家の最新状態に追従して、作業がかぶらないようにします。::
 
   % git fetch --all
-  % git checkout master
-  % git rebase upstream/master
+  % git checkout main
+  % git rebase upstream/main
 
 最新の状態に追従できたら、「ファイルごとにやること」へと進みます。
 

@@ -6,7 +6,7 @@ install Mroogna by extracting a zip package.
 
 Mroonga binary for Windows is provided with MariaDB binary because
 `some changes
-<https://github.com/mroonga/mroonga/tree/master/packages/source/patches>`_
+<https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_
 are needed for building Mroonga for Windows.
 
 Zip

@@ -2,7 +2,7 @@ name: Windows
 on:
   push:
     branches:
-      - master
+      - main
       - "maintenance/**"
     tags:
       - "*"
@@ -35,9 +35,9 @@ jobs:
           - mariadb-release: "10.6"
           - mariadb-release: "10.11"
           - mariadb-release: "10.11"
-            use-master: "yes"
+            use-main: "yes"
           - mariadb-release: "10.11"
-            use-master: "yes"
+            use-main: "yes"
             embed: "ON"
     env:
       PACKAGE_PLATFORM: "winx64"
@@ -73,8 +73,8 @@ jobs:
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           $mroongaVersion = "$(Get-Content version_full)"
           $artifactName = "mariadb-${mariaDBVersion}-with-mroonga-${mroongaVersion}"
-          if ("${{ matrix.use-master }}" -eq "yes") {
-            $artifactName += "-with-groonga-master"
+          if ("${{ matrix.use-main }}" -eq "yes") {
+            $artifactName += "-with-groonga-main"
           }
           if ("${{ matrix.embed }}" -eq "ON") {
             $artifactName += "-embed"
@@ -126,7 +126,7 @@ jobs:
       - name: Prepare Groonga
         run: |
           cd ..\source
-          if ("${{ matrix.use-master }}" -eq "yes") {
+          if ("${{ matrix.use-main }}" -eq "yes") {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga.git `
               extra\groonga
@@ -152,7 +152,7 @@ jobs:
           cd ..\source
           # TODO: Remove " -Or $true" when we release
           # groonga-normalizer-mysql 1.2.2.
-          if ("${{ matrix.use-master }}" -eq "yes" -Or $true) {
+          if ("${{ matrix.use-main }}" -eq "yes" -Or $true) {
             git clone --quiet --depth 1 --recursive `
               https://github.com/groonga/groonga-normalizer-mysql.git `
               extra\groonga-normalizer-mysql
@@ -229,7 +229,7 @@ jobs:
       # Release
       - name: Upload the artifact to release
         if: |
-          matrix.use-master != 'yes' && startsWith(github.ref, 'refs/tags/')
+          matrix.use-main != 'yes' && startsWith(github.ref, 'refs/tags/')
         run: |
           gh release upload ${Env:GITHUB_REF_NAME} `
             "${Env:ARTIFACT_NAME}.zip"

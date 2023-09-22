@@ -152,4 +152,4 @@ Basically, The character set which Groonga supports (EUC-JP/UTF-8/SJIS/LATIN1/KO
 I found an unlisted SQL command
 -------------------------------
 
-If you find unlisted SQL command and confirm whether the SQL command works well or not, we want to list it. Please mail it to `us <http://groonga.org/docs/community.html>`_ or send a patch against `the source file <https://github.com/mroonga/mroonga/blob/master/doc/source/reference.rst>`_ by pull request system on GitHub.
+If you find unlisted SQL command and confirm whether the SQL command works well or not, we want to list it. Please mail it to `us <http://groonga.org/docs/community.html>`_ or send a patch against `the source file <https://github.com/mroonga/mroonga/blob/main/doc/source/reference.rst>`_ by pull request system on GitHub.

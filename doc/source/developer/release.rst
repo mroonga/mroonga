@@ -56,7 +56,7 @@ Execute the following command to create HTML for news.
 Generate configure script
 -------------------------
 
-Because of master branch doesn't include configure script, then it is required to generate configure script for building.
+Because of main branch doesn't include configure script, then it is required to generate configure script for building.
 
 Execute ``autogen.sh`` with the following command::
 
