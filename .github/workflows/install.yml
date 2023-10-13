@@ -25,6 +25,7 @@ jobs:
             package: mysql
     steps:
       - uses: actions/checkout@v4
+      - uses: canonical/setup-lxd@v0.1.1
       - name: Install Mroonga
         run: |
           set -x
