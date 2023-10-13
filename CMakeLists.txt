@@ -70,6 +70,7 @@ if(MSVC)
       message(FATAL_ERROR ${MRN_OLD_MSVC_MESSAGE})
     endif()
   endif()
+  enable_language(C CXX ASM)
 endif()
 
 set(MRN_BUNDLED_GROONGA_RELATIVE_DIR "../../extra/groonga")
