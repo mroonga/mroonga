@@ -9,28 +9,26 @@ concurrency:
 jobs:
   install:
     name: Install to Ubuntu
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-focal
+          - image: "ubuntu:20.04"
             package: mariadb
-          - os: ubuntu-focal
+          - image: "ubuntu:20.04"
             package: mysql
-          - os: ubuntu-jammy
+          - image: "ubuntu:22.04"
             package: mariadb
-          - os: ubuntu-jammy
+          - image: "ubuntu:22.04"
             package: mysql
-    runs-on: macos-12
     steps:
       - uses: actions/checkout@v4
-      - name: Run VM
-        run: |
-          vagrant up ${{ matrix.os }}
       - name: Install Mroonga
         run: |
-          vagrant \
-            ssh ${{ matrix.os }} \
-            -- \
-            /vagrant/packages/apt/install_test.sh \
-            ${{ matrix.package }}-mroonga
+          set -x
+          lxc launch ${{ matrix.image }} target
+          lxc config device add target host disk source=$PWD path=/host
+          lxc exec target -- /host/packages/apt/install_test.sh ${{ matrix.package }}-mroonga
+          lxc stop target
+          lxc delete target
