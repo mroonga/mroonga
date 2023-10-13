@@ -45,7 +45,7 @@ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 project(mroonga
   VERSION "${VERSION}"
   DESCRIPTION "CJK-ready fulltext search, column store"
-  LANGUAGES C CXX)
+  LANGUAGES C CXX ASM)
 
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
@@ -70,7 +70,6 @@ if(MSVC)
       message(FATAL_ERROR ${MRN_OLD_MSVC_MESSAGE})
     endif()
   endif()
-  enable_language(C CXX ASM)
 endif()
 
 set(MRN_BUNDLED_GROONGA_RELATIVE_DIR "../../extra/groonga")
