@@ -45,8 +45,9 @@ file(READ ${CMAKE_CURRENT_SOURCE_DIR}/plugin_version MRN_PLUGIN_VERSION)
 project(mroonga
   VERSION "${VERSION}"
   DESCRIPTION "CJK-ready fulltext search, column store"
-  LANGUAGES C CXX ASM)
+  LANGUAGES C CXX)
 
+enable_language(C CXX ASM ASM_MASM)
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
