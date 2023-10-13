@@ -70,11 +70,8 @@ msgstr ""
 "[:doc:`/install/centos`][:doc:`/install/almalinux`] 新しく、MariaDB 10.10をサ"
 "ポートしました。"
 
-msgid ""
-"[:doc:`/install/amazon-linux`] Added support for MariaDB 10.5.10-2.amzn2.0.2."
-msgstr ""
-"[:doc:`/install/amazon-linux`] MariaDB 10.5.10-2.amzn2.0.2をサポートしまし"
-"た。"
+msgid "[Amazon Linux] Added support for MariaDB 10.5.10-2.amzn2.0.2."
+msgstr "[Amazon Linux] MariaDB 10.5.10-2.amzn2.0.2をサポートしました。"
 
 msgid ""
 "[:doc:`/reference/server_variables`] Added a new status variable "

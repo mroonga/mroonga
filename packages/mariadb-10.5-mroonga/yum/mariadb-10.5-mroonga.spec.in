@@ -1,29 +1,16 @@
 # -*- sh-shell: rpm -*-
 
-%define _amzn %{?amzn:%{amzn}}%{!?amzn:0}
-%define is_amazon_linux (%{_amzn} != 0)
-
-%if %{is_amazon_linux}
-  %define mariadb_package mariadb
-  %define mariadb_client_package mariadb
-  %define mariadb_epoch_default   3
-  %define mariadb_version_default 10.5.18
-  %define mariadb_release_default 1
-  %define mariadb_dist_default    amzn2
-  %define plugin_dir %{_libdir}/mariadb/plugin
+%define mariadb_package MariaDB
+%define mariadb_client_package %{mariadb_package}-client
+#%%define mariadb_epoch_default
+%define mariadb_version_default 10.5.22
+%define mariadb_release_default 1
+%if %{rhel} == 7
+  %define mariadb_dist_default    el%{rhel}.centos
 %else
-  %define mariadb_package MariaDB
-  %define mariadb_client_package %{mariadb_package}-client
-  #%%define mariadb_epoch_default
-  %define mariadb_version_default 10.5.22
-  %define mariadb_release_default 1
-  %if %{rhel} == 7
-    %define mariadb_dist_default    el%{rhel}.centos
-  %else
-    %define mariadb_dist_default    el%{rhel}
-  %endif
-  %define plugin_dir %{_libdir}/mysql/plugin
+  %define mariadb_dist_default    el%{rhel}
 %endif
+%define plugin_dir %{_libdir}/mysql/plugin
 
 %define _mariadb_epoch_with_suffix %{?mariadb_epoch:%{mariadb_epoch}:}%{!?mariadb_epoch:%{?mariadb_epoch_default:%{mariadb_epoch_default}:}}
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
@@ -90,9 +77,6 @@ if ! cp /%{mariadb_package}-*.src.rpm ./; then
 fi
 rpm -Uvh %{mariadb_package}-*.src.rpm
 required_components="perfschema"
-%if %{is_amazon_linux}
-  required_components="${required_components} mysqlservices"
-%endif
 sed \
   -i'' \
   -e "s/^make /make ${required_components} /" \
