@@ -27,6 +27,7 @@ case ${major_version} in
     else
       DNF="dnf --enablerepo=powertools"
     fi
+    sudo ${DNF} update -y
     sudo dnf module -y disable mariadb
     sudo dnf module -y disable mysql
     ;;
