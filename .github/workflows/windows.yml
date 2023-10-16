@@ -147,6 +147,14 @@ jobs:
             Move-Item groonga-* extra\groonga
           }
           Remove-Item extra\groonga\test -Recurse -Force
+      - name: Display Groonga revision
+        run: |
+          cd ..\source
+          if ("${{ matrix.use-main }}" -eq "yes") {
+            pushd extra\groonga
+            git describe --abbrev=7 HEAD
+            popd
+          }
       - name: Prepare groonga-normalizer-mysql
         run: |
           cd ..\source
