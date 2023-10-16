@@ -123,13 +123,16 @@ jobs:
           Remove-Item storage\mroonga -Recurse -Force
           Copy-Item ..\mroonga storage\mroonga -Recurse
           Copy-Item ..\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
+      - uses: actions/checkout@v4
+        if: |
+          matrix.use-main == "yes"
+        with:
+          path: ../source/extra/groonga
+          repository: groonga/groonga
+          submodules: recursive
       - name: Prepare Groonga
         run: |
           cd ..\source
-          if ("${{ matrix.use-main }}" -eq "yes") {
-            git clone --quiet --depth 1 --recursive `
-              https://github.com/groonga/groonga.git `
-              extra\groonga
             pushd extra\groonga\vendor
             ruby download_lz4.rb
             ruby download_mecab.rb
