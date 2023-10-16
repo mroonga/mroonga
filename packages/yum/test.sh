@@ -143,7 +143,7 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
 
-repositories_dir=/vagrant/packages/${package}/yum/repositories
+repositories_dir=/host/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
@@ -181,7 +181,7 @@ else
   sudo rm -rf plugin
 fi
 sudo mkdir -p plugin
-sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
+sudo cp -a /host/mysql-test/mroonga/ plugin/
 sed -i'' -e "s/ha_mroonga\\.so/${ha_mroonga_so}/g" \
   plugin/mroonga/include/mroonga/check_ha_mroonga_so.inc
 sed -i'' -e "s/\$HA_MROONGA_SO/${ha_mroonga_so}/g" \

@@ -447,19 +447,16 @@ jobs:
       - name: Run test
         run: |
           set -x
-
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
           os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
           cp -a ${os_type} "${repositories_dir}"
           os=${{ matrix.target-os }}
           : ${os:=${{ matrix.os }}}
-
           lxc launch ${{ matrix.image }} target
           lxc config device add target host disk source=$PWD path=/host
           lxc exec target -- /host/packages/${{ matrix.package-type }}/test.sh \
           ${{ matrix.package }}-mroonga
-
           lxc stop target
           lxc delete target
         timeout-minutes: 20
