@@ -156,7 +156,8 @@ jobs:
           cd ..\source
           if ("${{ matrix.use-main }}" -eq "yes") {
             pushd extra\groonga
-            git describe --abbrev=7 HEAD
+            $groonga_revision = git describe --abbrev=7 HEAD
+            Write-Output $groonga_revision
             popd
           }
       - name: Prepare groonga-normalizer-mysql
