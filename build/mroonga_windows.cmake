@@ -14,3 +14,7 @@ foreach(lang C CXX)
       "${CMAKE_${lang}_FLAGS${flag_suffix}}")
   endforeach()
 endforeach()
+
+# XXX: Zstandard requires ASM. So we want to enable ASM in top-level.
+# I don't know why "project(zstd LANGUAGES C ASM CXX)" doesn't work...
+enable_language(ASM)
