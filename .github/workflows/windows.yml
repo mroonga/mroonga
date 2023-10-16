@@ -125,7 +125,7 @@ jobs:
           Copy-Item ..\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
       - uses: actions/checkout@v4
         if: |
-          matrix.use-main == "yes"
+          matrix.use-main == 'yes'
         with:
           path: ../source/extra/groonga
           repository: groonga/groonga
