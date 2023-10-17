@@ -112,7 +112,7 @@ sudo gpg \
   --import keys
 
 sudo apt install -V -y reprepro
-repositories_dir=/vagrant/packages/${package}/apt/repositories
+repositories_dir=/host/packages/${package}/apt/repositories
 pushd /tmp/
 mkdir -p conf/
 cat <<DISTRIBUTIONS > conf/distributions
@@ -142,7 +142,7 @@ sudo apt install -V -y \
 pushd ${mysql_test_dir}
 sudo rm -rf plugin/mroonga
 sudo mkdir -p plugin
-sudo cp -a /vagrant/mysql-test/mroonga/ plugin/
+sudo cp -a /host/mysql-test/mroonga/ plugin/
 
 case ${package} in
   mysql-8.*)

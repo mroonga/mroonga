@@ -324,70 +324,89 @@ jobs:
         include:
           # MariaDB 10.4
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mariadb-10.4
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.4
 
           # MariaDB 10.5
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mariadb-10.5
           - os: almalinux-9
+            image: "images:almalinux/9"
             package-type: yum
             package: mariadb-10.5
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.5
           - os: debian-bullseye
+            image: "images:debian/11"
             package-type: apt
             package: mariadb-10.5
 
           # MariaDB 10.6
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mariadb-10.6
           - os: almalinux-9
+            image: "images:almalinux/9"
             package-type: yum
             package: mariadb-10.6
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.6
           - os: ubuntu-jammy
+            image: "ubuntu:22.04"
             package-type: apt
             package: mariadb-10.6
 
           # MariaDB 10.11
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mariadb-10.11
           - os: almalinux-9
+            image: "images:almalinux/9"
             package-type: yum
             package: mariadb-10.11
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.11
           - os: debian-bookworm
+            image: "images:debian/12"
             package-type: apt
             package: mariadb-10.11
 
           # MySQL 8.0
           - os: ubuntu-jammy
+            image: "ubuntu:22.04"
             package-type: apt
             package: mysql-8.0
 
           # MySQL community 8.0
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mysql-community-8.0
           - os: almalinux-9
+            image: "images:almalinux/9"
             package-type: yum
             package: mysql-community-8.0
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bullseye
+            image: "images:debian/11"
             package-type: apt
             package: mysql-community-8.0
 # Currently, the source of MySQL Community Server for Debian 12 doesn't exist
@@ -400,42 +419,45 @@ jobs:
 
           # MySQL community minimal 8.0
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: mysql-community-minimal-8.0
             target-os: oracle-linux-8
 
           # Percona Server 8.0
           - os: almalinux-8
+            image: "images:almalinux/8"
             package-type: yum
             package: percona-server-8.0
           - os: almalinux-9
+            image: "images:almalinux/9"
             package-type: yum
             package: percona-server-8.0
           - os: centos-7
+            image: "images:centos/7"
             package-type: yum
             package: percona-server-8.0
-    runs-on: macos-12
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
+      - uses: canonical/setup-lxd@v0.1.1
       - uses: actions/download-artifact@v3
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-      - name: Run VM
-        run: |
-          os=${{ matrix.target-os }}
-          : ${os:=${{ matrix.os }}}
-          vagrant up ${os}
       - name: Run test
         run: |
+          set -x
           repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
           os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
           cp -a ${os_type} "${repositories_dir}"
           os=${{ matrix.target-os }}
           : ${os:=${{ matrix.os }}}
-          vagrant \
-            ssh ${os} \
-            -- \
-            /vagrant/packages/${{ matrix.package-type }}/test.sh \
-            ${{ matrix.package }}-mroonga
+          lxc launch ${{ matrix.image }} target
+          sleep 5
+          lxc config device add target host disk source=$PWD path=/host
+          lxc exec target -- /host/packages/${{ matrix.package-type }}/test.sh \
+          ${{ matrix.package }}-mroonga
+          lxc stop target
+          lxc delete target
         timeout-minutes: 20
