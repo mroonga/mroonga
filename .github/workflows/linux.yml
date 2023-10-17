@@ -437,7 +437,7 @@ jobs:
             image: "images:centos/7"
             package-type: yum
             package: percona-server-8.0
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
       - uses: canonical/setup-lxd@v0.1.1
