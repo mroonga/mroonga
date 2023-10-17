@@ -454,6 +454,7 @@ jobs:
           os=${{ matrix.target-os }}
           : ${os:=${{ matrix.os }}}
           lxc launch ${{ matrix.image }} target
+          sleep 5
           lxc config device add target host disk source=$PWD path=/host
           lxc exec target -- /host/packages/${{ matrix.package-type }}/test.sh \
           ${{ matrix.package }}-mroonga
