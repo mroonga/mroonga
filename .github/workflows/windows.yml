@@ -55,9 +55,6 @@ jobs:
         run: |
           Set-TimeZone -Id "Tokyo Standard Time"
       - uses: actions/setup-ruby@v1
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - name: Set environment variables
         run: |
           $releasesResponse = `
@@ -103,7 +100,7 @@ jobs:
         with:
           path: download/
           key: download-mariadb-${{ env.MARIADB_VERSION }}
-      - name: Prepare MariaDB
+      - name: Download MariaDB
         run: |
           $mariadbTarGz = "download\mariadb-${Env:MARIADB_VERSION}.tar.gz"
           if (-not(Test-Path -Path ${mariadbTarGz})) {
@@ -114,25 +111,30 @@ jobs:
               -Verbose
           }
           ridk exec tar xzf "${mariadbTarGz}"
-          Move-Item mariadb-${Env:MARIADB_VERSION} ..\source
-          cd ..\source
+          Move-Item mariadb-${Env:MARIADB_VERSION} mariadb
+          Remove-Item mariadb\storage\mroonga -Recurse -Force
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/storage/mroonga
+          submodules: recursive
+      - name: Prepare MariaDB
+        run: |
+          cd mariadb
           if ("${Env:MARIADB_VERSION}" -match "^10\.5|^10\.6|^10\.11") {
             ridk exec patch -p1 -i `
-              ..\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
+              storage\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           }
-          Remove-Item storage\mroonga -Recurse -Force
-          Copy-Item ..\mroonga storage\mroonga -Recurse
-          Copy-Item ..\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
+          Copy-Item storage\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
       - uses: actions/checkout@v4
         if: |
           matrix.use-main == 'yes'
         with:
-          path: ../source/extra/groonga
+          path: mariadb/extra/groonga
           repository: groonga/groonga
           submodules: recursive
       - name: Prepare Groonga
         run: |
-          cd ..\source
+          cd mariadb
           if ("${{ matrix.use-main }}" -eq "yes") {
             pushd extra\groonga\vendor
             ruby download_lz4.rb
@@ -151,33 +153,30 @@ jobs:
             Move-Item groonga-* extra\groonga
           }
           Remove-Item extra\groonga\test -Recurse -Force
-      - name: Display Groonga revision
+      - uses: actions/checkout@v4
+        # TODO: Remove " || true" when we release
+        # groonga-normalizer-mysql 1.2.3.
+        if: |
+          matrix.use-main == 'yes' || true
+        with:
+          path: mariadb/extra/groonga-normalizer-mysql
+          repository: groonga/groonga-normalizer-mysql
+          submodules: recursive
+      - name: Download groonga-normalizer-mysql latest
+        # TODO: Remove " -Or $true" when we release
+        # groonga-normalizer-mysql 1.2.3.
+        if: |
+          !(matrix.use-main == 'yes' || true)
         run: |
-          cd ..\source
-          if ("${{ matrix.use-main }}" -eq "yes") {
-            pushd extra\groonga
-            git rev-parse HEAD
-            popd
-          }
-      - name: Prepare groonga-normalizer-mysql
-        run: |
-          cd ..\source
-          # TODO: Remove " -Or $true" when we release
-          # groonga-normalizer-mysql 1.2.2.
-          if ("${{ matrix.use-main }}" -eq "yes" -Or $true) {
-            git clone --quiet --depth 1 --recursive `
-              https://github.com/groonga/groonga-normalizer-mysql.git `
-              extra\groonga-normalizer-mysql
-          } else {
-            Invoke-WebRequest `
-              -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
-              -OutFile groonga-normalizer-mysql-latest.zip
-            Expand-Archive groonga-normalizer-mysql-latest.zip .
-            Remove-Item groonga-normalizer-mysql-latest.zip
-            Move-Item `
-              groonga-normalizer-mysql-* `
-              extra\groonga-normalizer-mysql
-          }
+          cd mariadb
+          Invoke-WebRequest `
+            -Uri "https://packages.groonga.org/source/groonga-normalizer-mysql/groonga-normalizer-mysql-latest.zip" `
+            -OutFile groonga-normalizer-mysql-latest.zip
+          Expand-Archive groonga-normalizer-mysql-latest.zip .
+          Remove-Item groonga-normalizer-mysql-latest.zip
+          Move-Item `
+            groonga-normalizer-mysql-* `
+            extra\groonga-normalizer-mysql
       - name: Run CMake
         shell: cmd
         run: |
