@@ -184,11 +184,11 @@ jobs:
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           cmake ^
-            -S ..\source ^
-            -B ..\build ^
+            -S mariadb ^
+            -B build ^
             -G "Ninja" ^
             -DBUILD_CONFIG=mroonga_windows ^
-            -DCMAKE_INSTALL_PREFIX=..\install ^
+            -DCMAKE_INSTALL_PREFIX=install ^
             -DCONNECT_WITH_LIBXML2=OFF ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
@@ -200,7 +200,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
-            --build ..\build ^
+            --build build ^
             --config RelWithDebInfo ^
             --target install ^
             --verbose || exit /B
@@ -211,14 +211,14 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
-            --build ..\build ^
+            --build build ^
             --config RelWithDebInfo ^
             --target package ^
             --verbose || exit /B
           ccache --show-stats --verbose
       - name: Prepare package
         run: |
-          pushd ..\build
+          pushd build
           Expand-Archive `
             mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM}.zip `
             .
@@ -227,7 +227,7 @@ jobs:
           popd
           Move-Item `
             mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM} `
-            ..\mroonga\
+            ..\
           popd
           Compress-Archive `
             -Path mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM} `
@@ -251,7 +251,7 @@ jobs:
 
       - name: Test
         run: |
-          cd ..\install\mysql-test
+          cd install\mysql-test
           $suites = `
             Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
               Split-Path -Parent | `
@@ -265,7 +265,7 @@ jobs:
 
       - name: "Test: reference count"
         run: |
-          cd ..\install\mysql-test
+          cd install\mysql-test
           $suites = `
             Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
               Split-Path -Parent | `
