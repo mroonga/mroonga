@@ -64,7 +64,7 @@ uninstall_sql=${data_dir}/mroonga/uninstall.sql
 
 need_password_expire=no
 if [ "${try_auto_uninstall}" = "yes" ]; then
-  mysql_command=$(which mysql)
+  mysql_command=mysql
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
     if "${mysql_command}" \
