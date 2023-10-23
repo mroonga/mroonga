@@ -69,7 +69,7 @@ update_sql=${data_dir}/mroonga/update.sql
 
 need_password_expire=no
 if [ "${try_auto_prepare}" = "yes" ]; then
-  mysql_command=$(which mysql)
+  mysql_command=mysql
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
     if "${mysql_command}" \
