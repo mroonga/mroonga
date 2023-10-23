@@ -33,6 +33,7 @@ case ${major_version} in
     ;;
 esac
 
+sudo ${DNF} install -y which
 sudo ${DNF} install -y \
   https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
 
