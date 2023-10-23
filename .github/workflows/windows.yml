@@ -55,7 +55,7 @@ jobs:
         run: |
           Set-TimeZone -Id "Tokyo Standard Time"
       - uses: actions/setup-ruby@v1
-      - name: Set environment variables
+      - name: Detect MariaDB version
         run: |
           $releasesResponse = `
             Invoke-WebRequest `
@@ -67,33 +67,6 @@ jobs:
                               Sort-Object -Property {[Version]$_})[-1]
           $mariaDBVersion = $latestRelease
           Write-Output "MARIADB_VERSION=${mariaDBVersion}" | `
-            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-          $mroongaVersion = "$(Get-Content version_full)"
-          $artifactName = "mariadb-${mariaDBVersion}-with-mroonga-${mroongaVersion}"
-          if ("${{ matrix.use-main }}" -eq "yes") {
-            $artifactName += "-with-groonga-main"
-          }
-          if ("${{ matrix.embed }}" -eq "ON") {
-            $artifactName += "-embed"
-          }
-          $artifactName += "-${Env:PACKAGE_PLATFORM}"
-          Write-Output "MROONGA_VERSION=${mroongaVersion}" | `
-            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-          Write-Output "ARTIFACT_NAME=${artifactName}" | `
-            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-      - uses: actions/cache@v3
-        with:
-          path: |
-            ~\AppData\Roaming\ccache
-          key: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
-          restore-keys: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-
-      - name: Prepare ccache
-        run: |
-          choco install ccache
-          ccache --show-stats --verbose
-          Write-Output "CMAKE_C_COMPILER_LAUNCHER=ccache" | `
-            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-          Write-Output "CMAKE_CXX_COMPILER_LAUNCHER=ccache" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
       - name: Cache MariaDB archive
         uses: actions/cache@v3
@@ -117,6 +90,35 @@ jobs:
         with:
           path: mariadb/storage/mroonga
           submodules: recursive
+      - name: Set environment variables
+        run: |
+          $mroongaVersion = "$(Get-Content mariadb\storage\mroonga\version_full)"
+          $artifactName = "mariadb-${mariaDBVersion}-with-mroonga-${mroongaVersion}"
+          if ("${{ matrix.use-main }}" -eq "yes") {
+            $artifactName += "-with-groonga-main"
+          }
+          if ("${{ matrix.embed }}" -eq "ON") {
+            $artifactName += "-embed"
+          }
+          $artifactName += "-${Env:PACKAGE_PLATFORM}"
+          Write-Output "MROONGA_VERSION=${mroongaVersion}" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
+          Write-Output "ARTIFACT_NAME=${artifactName}" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~\AppData\Roaming\ccache
+          key: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-${{ hashFiles('mariadb/storage/mroonga/**.{cpp,hpp,h}') }}
+          restore-keys: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-
+      - name: Prepare ccache
+        run: |
+          choco install ccache
+          ccache --show-stats --verbose
+          Write-Output "CMAKE_C_COMPILER_LAUNCHER=ccache" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
+          Write-Output "CMAKE_CXX_COMPILER_LAUNCHER=ccache" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
       - name: Prepare MariaDB
         run: |
           cd mariadb
