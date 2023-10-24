@@ -100,10 +100,6 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100510
-#  define MRN_HAVE_HA_EXTRA_FAKE_START_STMT
-#endif
-
 #if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100600)
 #  define MRN_HAVE_HA_EXTRA_IGNORE_INSERT
 #endif
