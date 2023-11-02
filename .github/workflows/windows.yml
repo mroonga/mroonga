@@ -164,7 +164,7 @@ jobs:
           submodules: recursive
       - name: Download groonga-normalizer-mysql latest
         if: |
-          !(matrix.use-main == 'yes')
+          matrix.use-main != 'yes'
         run: |
           cd mariadb
           Invoke-WebRequest `
