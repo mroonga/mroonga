@@ -156,19 +156,15 @@ jobs:
           }
           Remove-Item extra\groonga\test -Recurse -Force
       - uses: actions/checkout@v4
-        # TODO: Remove " || true" when we release
-        # groonga-normalizer-mysql 1.2.3.
         if: |
-          matrix.use-main == 'yes' || true
+          matrix.use-main == 'yes'
         with:
           path: mariadb/extra/groonga-normalizer-mysql
           repository: groonga/groonga-normalizer-mysql
           submodules: recursive
       - name: Download groonga-normalizer-mysql latest
-        # TODO: Remove " -Or $true" when we release
-        # groonga-normalizer-mysql 1.2.3.
         if: |
-          !(matrix.use-main == 'yes' || true)
+          matrix.use-main != 'yes'
         run: |
           cd mariadb
           Invoke-WebRequest `
