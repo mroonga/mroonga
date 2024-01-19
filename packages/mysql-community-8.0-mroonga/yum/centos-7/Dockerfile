@@ -12,7 +12,7 @@ RUN \
   yum install -y ${quiet} \
     centos-release-scl-rh \
     https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm && \
+    https://repo.mysql.com/mysql80-community-release-el7.rpm && \
   yum-config-manager --enable centos-sclo-rh-testing && \
   yum-builddep -y ${quiet} mysql-community && \
   yumdownloader -y ${quiet} --source mysql-community && \
