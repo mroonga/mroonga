@@ -261,7 +261,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache ccache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/build/${{ matrix.os }}/ccache
           key: package-${{ matrix.os }}-${{ matrix.package }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
