@@ -406,6 +406,7 @@ jobs:
             package-type: apt
             package: mysql-community-8.0
           - os: debian-bookworm
+            image: "images:debian/12"
             package-type: apt
             package: mysql-community-8.0
 
