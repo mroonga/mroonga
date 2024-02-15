@@ -43,6 +43,7 @@ jobs:
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
     runs-on: windows-2019
+    timeout-minutes: 45
     steps:
       - name: Disable crash dialog
         run: |
