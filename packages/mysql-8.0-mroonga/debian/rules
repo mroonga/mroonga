@@ -13,7 +13,7 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-server-8.0 | grep Version |
 	dh $@
 
 override_dh_auto_configure:
-	archive_base=mysql-8.0-$(MYSQL_VERSION);				\
+	archive_base=mysql-8.0-$(MYSQL_VERSION);			\
 	archive=mysql-8.0_$(MYSQL_VERSION).orig.tar.gz;			\
 	debian=mysql-8.0_$(MYSQL_VERSION_FULL).debian.tar.xz;		\
 	dsc=mysql-8.0_$(MYSQL_VERSION_FULL).dsc;			\
@@ -25,14 +25,15 @@ override_dh_auto_configure:
 	  base_url=http://ftp.debian.org/debian/pool;			\
 	  security_base_url=http://security.debian.org/pool/updates;	\
 	fi;								\
-	wget $${security_base_url}/$${path}/$${archive} ||		\
-	  wget $${base_url}/$${path}/$${archive} &&			\
-	wget $${security_base_url}/$${path}/$${archive}.asc ||		\
-	  wget $${base_url}/$${path}/$${archive}.asc &&			\
-	wget $${security_base_url}/$${path}/$${debian} ||		\
-	  wget $${base_url}/$${path}/$${debian} &&			\
-	wget $${security_base_url}/$${path}/$${dsc} ||			\
-	  wget $${base_url}/$${path}/$${dsc} &&				\
+	wget="wget --no-verbose";					\
+	$${wget} $${security_base_url}/$${path}/$${archive} ||		\
+	  $${wget} $${base_url}/$${path}/$${archive} &&			\
+	$${wget} $${security_base_url}/$${path}/$${archive}.asc ||	\
+	  $${wget} $${base_url}/$${path}/$${archive}.asc &&		\
+	$${wget} $${security_base_url}/$${path}/$${debian} ||		\
+	  $${wget} $${base_url}/$${path}/$${debian} &&			\
+	$${wget}  $${security_base_url}/$${path}/$${dsc} ||		\
+	  $${wget}  $${base_url}/$${path}/$${dsc} &&			\
 	dpkg-source --extract $${dsc} &&				\
 	(cd $${archive_base} &&						\
 	  debian/rules override_dh_auto_configure) &&			\
