@@ -27,6 +27,8 @@ override_dh_auto_configure:
 	fi;								\
 	wget $${security_base_url}/$${path}/$${archive} ||		\
 	  wget $${base_url}/$${path}/$${archive} &&			\
+	wget $${security_base_url}/$${path}/$${archive}.asc ||		\
+	  wget $${base_url}/$${path}/$${archive}.asc &&			\
 	wget $${security_base_url}/$${path}/$${debian} ||		\
 	  wget $${base_url}/$${path}/$${debian} &&			\
 	wget $${security_base_url}/$${path}/$${dsc} ||			\
