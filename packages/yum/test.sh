@@ -78,20 +78,8 @@ REPO
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=mysql${mysql_package_version}-community-mroonga
-    case ${major_version} in
-      7)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el7-5.noarch.rpm
-        ;;
-      8)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
-        ;;
-      *)
-        sudo ${DNF} install -y \
-             https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
-        ;;
-    esac
+    sudo ${DNF} install -y \
+         https://repo.mysql.com/mysql80-community-release-el${major_version}.rpm
     ;;
   percona-*)
     service_name=mysqld
