@@ -78,7 +78,7 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=${package}
-    wget https://repo.mysql.com/mysql-apt-config_0.8.24-1_all.deb
+    wget https://repo.mysql.com/mysql-apt-config_0.8.29-1_all.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
