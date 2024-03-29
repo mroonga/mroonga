@@ -14,3 +14,5 @@ sudo add-apt-repository -y ppa:groonga/ppa
 sudo apt update
 
 sudo apt install -V -y ${package}
+
+sudo mysql -e "SHOW ENGINES" | grep Mroonga
