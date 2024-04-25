@@ -193,7 +193,7 @@ jobs:
             -DGRN_WITH_H3=no ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
--           -DGRN_WITH_XSIMD=no || exit /B
+            -DGRN_WITH_XSIMD=no || exit /B
       - name: Install
         shell: cmd
         run: |
