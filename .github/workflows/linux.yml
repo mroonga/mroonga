@@ -145,9 +145,6 @@ jobs:
           - os: almalinux-9
             package-type: yum
             package: mariadb-10.5
-          - os: debian-bullseye
-            package-type: apt
-            package: mariadb-10.5
 
           # MariaDB 10.6
           - os: almalinux-8
@@ -182,9 +179,6 @@ jobs:
             package: mysql-community-8.0
           - os: almalinux-9
             package-type: yum
-            package: mysql-community-8.0
-          - os: debian-bullseye
-            package-type: apt
             package: mysql-community-8.0
 # Currently, the source of MySQL Community Server for Debian 12 doesn't exist
 # in MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/)
@@ -319,10 +313,6 @@ jobs:
             image: "images:almalinux/9"
             package-type: yum
             package: mariadb-10.5
-          - os: debian-bullseye
-            image: "images:debian/11"
-            package-type: apt
-            package: mariadb-10.5
 
           # MariaDB 10.6
           - os: almalinux-8
@@ -366,10 +356,6 @@ jobs:
           - os: almalinux-9
             image: "images:almalinux/9"
             package-type: yum
-            package: mysql-community-8.0
-          - os: debian-bullseye
-            image: "images:debian/11"
-            package-type: apt
             package: mysql-community-8.0
 # Currently, the source of MySQL Community Server for Debian 12 doesn't exist
 # in MySQL APT Repository(https://repo.mysql.com/apt/debian/dists/)

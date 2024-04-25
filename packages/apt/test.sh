@@ -35,7 +35,7 @@ wget \
 sudo apt install -V -y ./groonga-apt-source-latest-${code_name}.deb
 
 case ${distribution}-${code_name} in
-  debian-bullseye|ubuntu-*)
+  ubuntu-*)
     :
     ;;
   *)

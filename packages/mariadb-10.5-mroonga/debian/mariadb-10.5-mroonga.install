@@ -1,3 +1,0 @@
-usr/lib/mysql//plugin/ha_mroonga.so*
-usr/share/mroonga/*
-debian/apparmor/mariadb-10.5-mroonga etc/apparmor.d/abstractions/

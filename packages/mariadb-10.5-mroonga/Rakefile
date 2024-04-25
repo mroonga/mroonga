@@ -5,10 +5,8 @@ class MariaDB105MroongaPackageTask < MroongaPackageTask
     super("mariadb-10.5-mroonga")
   end
 
-  def apt_targets_default
-    [
-      "debian-bullseye",
-    ]
+  def enable_apt?
+    false
   end
 
   def enable_ubuntu?

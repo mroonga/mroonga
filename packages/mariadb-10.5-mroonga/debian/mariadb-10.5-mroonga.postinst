@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -e
-
-/usr/share/mroonga/deb/postinst.sh mariadb-10.5-mroonga "$@"
-
-#DEBHELPER#
