@@ -28,7 +28,7 @@ concurrency:
 jobs:
   source:
     name: Source
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -437,12 +437,10 @@ jobs:
             image: "images:centos/7"
             package-type: yum
             package: percona-server-8.0
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Incus
-        run: |
-      - name: Install test dependencies
         run: |
           # We can use the official Ubuntu APT repository when
           # ubuntu-latest is Ubuntu 24.04.
