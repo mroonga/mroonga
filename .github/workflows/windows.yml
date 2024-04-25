@@ -95,7 +95,7 @@ jobs:
       - name: Set environment variables
         run: |
           $mroongaVersion = "$(Get-Content mariadb\storage\mroonga\version_full)"
-          $artifactName = "mariadb-${mariaDBVersion}-with-mroonga-${mroongaVersion}"
+          $artifactName = "mariadb-${Env:MARIADB_VERSION}-with-mroonga-${mroongaVersion}"
           if ("${{ matrix.use-main }}" -eq "yes") {
             $artifactName += "-with-groonga-main"
           }
