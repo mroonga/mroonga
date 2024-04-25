@@ -187,7 +187,6 @@ jobs:
             -B build ^
             -G "Ninja" ^
             -DBUILD_CONFIG=mroonga_windows ^
-            -DCMAKE_CXX_STANDARD=17 ^
             -DCMAKE_INSTALL_PREFIX=install ^
             -DCONNECT_WITH_LIBXML2=OFF ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^

@@ -47,6 +47,10 @@ project(mroonga
   DESCRIPTION "CJK-ready fulltext search, column store"
   LANGUAGES C CXX)
 
+if(NOT DEFINED CMAKE_CXX_STANDARD OR CMAKE_CXX_STANDARD LESS 17)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
