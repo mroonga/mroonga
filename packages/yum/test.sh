@@ -10,9 +10,6 @@ os=$(cut -d: -f4 /etc/system-release-cpe)
 
 major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
 case ${major_version} in
-  7)
-    DNF=yum
-    ;;
   9)
     DNF="dnf --enablerepo=crb"
     sudo ${DNF} install -y \

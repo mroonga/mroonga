@@ -16,7 +16,6 @@ don't worry. There is a document about building Mroonga from source.
    install/ubuntu
    install/almalinux
    install/oracle-linux
-   install/centos
    install/fedora
    install/docker
    install/others

@@ -137,18 +137,12 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.4
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.4
 
           # MariaDB 10.5
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.5
           - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.5
-          - os: centos-7
             package-type: yum
             package: mariadb-10.5
           - os: debian-bullseye
@@ -162,9 +156,6 @@ jobs:
           - os: almalinux-9
             package-type: yum
             package: mariadb-10.6
-          - os: centos-7
-            package-type: yum
-            package: mariadb-10.6
           - os: ubuntu-jammy
             package-type: apt
             package: mariadb-10.6
@@ -174,9 +165,6 @@ jobs:
             package-type: yum
             package: mariadb-10.11
           - os: almalinux-9
-            package-type: yum
-            package: mariadb-10.11
-          - os: centos-7
             package-type: yum
             package: mariadb-10.11
           - os: debian-bookworm
@@ -193,9 +181,6 @@ jobs:
             package-type: yum
             package: mysql-community-8.0
           - os: almalinux-9
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-7
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bullseye
@@ -222,9 +207,6 @@ jobs:
             package-type: yum
             package: percona-server-8.0
           - os: almalinux-9
-            package-type: yum
-            package: percona-server-8.0
-          - os: centos-7
             package-type: yum
             package: percona-server-8.0
     runs-on: ubuntu-latest
@@ -327,10 +309,6 @@ jobs:
             image: "images:almalinux/8"
             package-type: yum
             package: mariadb-10.4
-          - os: centos-7
-            image: "images:centos/7"
-            package-type: yum
-            package: mariadb-10.4
 
           # MariaDB 10.5
           - os: almalinux-8
@@ -339,10 +317,6 @@ jobs:
             package: mariadb-10.5
           - os: almalinux-9
             image: "images:almalinux/9"
-            package-type: yum
-            package: mariadb-10.5
-          - os: centos-7
-            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.5
           - os: debian-bullseye
@@ -359,10 +333,6 @@ jobs:
             image: "images:almalinux/9"
             package-type: yum
             package: mariadb-10.6
-          - os: centos-7
-            image: "images:centos/7"
-            package-type: yum
-            package: mariadb-10.6
           - os: ubuntu-jammy
             image: "ubuntu:22.04"
             package-type: apt
@@ -375,10 +345,6 @@ jobs:
             package: mariadb-10.11
           - os: almalinux-9
             image: "images:almalinux/9"
-            package-type: yum
-            package: mariadb-10.11
-          - os: centos-7
-            image: "images:centos/7"
             package-type: yum
             package: mariadb-10.11
           - os: debian-bookworm
@@ -399,10 +365,6 @@ jobs:
             package: mysql-community-8.0
           - os: almalinux-9
             image: "images:almalinux/9"
-            package-type: yum
-            package: mysql-community-8.0
-          - os: centos-7
-            image: "images:centos/7"
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bullseye
@@ -431,10 +393,6 @@ jobs:
             package: percona-server-8.0
           - os: almalinux-9
             image: "images:almalinux/9"
-            package-type: yum
-            package: percona-server-8.0
-          - os: centos-7
-            image: "images:centos/7"
             package-type: yum
             package: percona-server-8.0
     runs-on: ubuntu-latest

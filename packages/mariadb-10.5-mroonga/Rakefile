@@ -19,7 +19,6 @@ class MariaDB105MroongaPackageTask < MroongaPackageTask
     [
       "almalinux-8",
       "almalinux-9",
-      "centos-7",
     ]
   end
 end
