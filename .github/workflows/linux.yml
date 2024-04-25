@@ -313,7 +313,7 @@ jobs:
             package-type: yum
             package: mariadb-10.6
           - os: ubuntu-jammy
-            image: "ubuntu:22.04"
+            image: "images:ubuntu/22.04"
             package-type: apt
             package: mariadb-10.6
 
@@ -333,7 +333,7 @@ jobs:
 
           # MySQL 8.0
           - os: ubuntu-jammy
-            image: "ubuntu:22.04"
+            image: "images:ubuntu/22.04"
             package-type: apt
             package: mysql-8.0
 
