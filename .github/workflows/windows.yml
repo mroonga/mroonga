@@ -84,7 +84,9 @@ jobs:
               -OutFile ${mariadbTarGz} `
               -Verbose
           }
-          ridk exec tar xzf "${mariadbTarGz}"
+          # Worrkaround for: https://jira.mariadb.org/browse/MDEV-33493
+          ridk exec tar xzf "${mariadbTarGz}" `
+            --exclude=storage/spider/mysql-test/spider/bugfix/r/udf_mysql_func_early_init_file.result
           Move-Item mariadb-${Env:MARIADB_VERSION} mariadb
           Remove-Item mariadb\storage\mroonga -Recurse -Force
       - uses: actions/checkout@v4
