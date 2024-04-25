@@ -83,7 +83,7 @@ jobs:
               -OutFile ${mariadbTarGz} `
               -Verbose
           }
-          # Worrkaround for: https://jira.mariadb.org/browse/MDEV-33493
+          # Workaround for: https://jira.mariadb.org/browse/MDEV-33493
           ridk exec tar xzf "${mariadbTarGz}" `
             --exclude=storage/spider/mysql-test/spider/bugfix/r/udf_mysql_func_early_init_file.result
           Move-Item mariadb-${Env:MARIADB_VERSION} mariadb
@@ -192,8 +192,7 @@ jobs:
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_H3=no ^
             -DGRN_WITH_MRUBY=ON ^
-            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
-            -DGRN_WITH_XSIMD=no || exit /B
+            -DGRN_WITH_WINDOWS_BACK_TRACE=OFF || exit /B
       - name: Install
         shell: cmd
         run: |
