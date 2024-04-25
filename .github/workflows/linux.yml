@@ -133,11 +133,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # MariaDB 10.4
-          - os: almalinux-8
-            package-type: yum
-            package: mariadb-10.4
-
           # MariaDB 10.5
           - os: almalinux-8
             package-type: yum
@@ -298,12 +293,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # MariaDB 10.4
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mariadb-10.4
-
           # MariaDB 10.5
           - os: almalinux-8
             image: "images:almalinux/8"
