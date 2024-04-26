@@ -110,6 +110,7 @@ namespace mrn {
 
     ~SlotData() {
       clear();
+      associated_grn_ctxs.clear();
     }
 
     void clear() {
