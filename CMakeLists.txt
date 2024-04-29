@@ -174,12 +174,20 @@ if(MRN_GROONGA_BUNDLED)
     set(GROONGA_NORMALIZER_MYSQL_EMBED ON)
   endif()
 
-  add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
-  if(GROONGA_NORMALIZER_MYSQL_FOUND AND
-      MRN_BUNDLED_GROONGA_NORMALIZER_MYSQL_RELATIVE_DIR)
-    add_subdirectory("${MRN_BUNDLED_GROONGA_NORMALIZER_MYSQL_RELATIVE_DIR}"
-      groonga-normalizer-mysql)
-  endif()
+  function(mrn_build_groonga)
+    if(MSVC)
+      # Disable warning as errors defined in MariaDB
+      string(APPEND CMAKE_C_FLAGS " /wd4700 /wd4311 /wd4477 /wd4302 /wd4090")
+      string(APPEND CMAKE_CXX_FLAGS " /wd4099 /wd4700 /wd4311 /wd4477 /wd4302 /wd4090")
+    endif()
+    add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
+    if(GROONGA_NORMALIZER_MYSQL_FOUND AND
+        MRN_BUNDLED_GROONGA_NORMALIZER_MYSQL_RELATIVE_DIR)
+      add_subdirectory("${MRN_BUNDLED_GROONGA_NORMALIZER_MYSQL_RELATIVE_DIR}"
+        groonga-normalizer-mysql)
+    endif()
+  endfunction()
+  mrn_build_groonga()
 else()
   set(MRN_GROONGA_EMBED OFF)
 
