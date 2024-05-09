@@ -1,6 +1,6 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.0.36
+%define mysql_version_default 8.0.37
 %define mysql_release_default 1
 %define mysql_dist_default    el%{rhel}
 %define mysql_spec_file_default mysql.spec
@@ -16,7 +16,7 @@
 
 Name:		mysql-community-minimal-8.0-mroonga
 Version:	@VERSION@
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -98,6 +98,9 @@ This is a trnsitional package. This can safely be removed.
 %doc README COPYING
 
 %changelog
+* Thu May 09 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-4
+- build against MySQL 8.0.37.
+
 * Fri Jan 19 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-3
 - build against MySQL 8.0.36.
 
