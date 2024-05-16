@@ -102,7 +102,7 @@ extern "C" {
 
 #if (defined(MRN_MARIADB_P) &&                                      \
      ((MYSQL_VERSION_ID >= 100600 && MYSQL_VERSION_ID < 100616)     \
-      || (MYSQL_VERSION_ID >= 101100 && MYSQL_VERSION_ID < 101106))
+      || (MYSQL_VERSION_ID >= 101100 && MYSQL_VERSION_ID < 101106)))
 #  define MRN_HAVE_HA_EXTRA_IGNORE_INSERT
 #endif
 
