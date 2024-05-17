@@ -883,16 +883,11 @@ typedef uint mrn_srid;
     bitmap_init((map), (buf), (n_bits))
 #  define mrn_bitmap_free(map) \
     bitmap_free((map))
-#elif defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100700
+#elif defined(MRN_MARIADB_P)
 #  define mrn_bitmap_init(map, buf, n_bits) \
     my_bitmap_init((map), (buf), (n_bits))
 #  define mrn_bitmap_free(map) \
     my_bitmap_free((map))
-#else
-#  define mrn_bitmap_init(map, buf, n_bits) \
-    bitmap_init((map), (buf), (n_bits), false)
-#  define mrn_bitmap_free(map) \
-    bitmap_free((map))
 #endif
 
 #ifdef MRN_MARIADB_P
