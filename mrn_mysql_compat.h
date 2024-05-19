@@ -894,6 +894,14 @@ typedef uint mrn_srid;
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
 
+#if defined(MRN_MARIADB_P) &&                                                  \
+    ((MYSQL_VERSION_ID >= 100525 && MYSQL_VERSION_ID < 100600) ||              \
+     (MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||              \
+     (MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200))
+#  define MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
+#  define MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
+#endif
+
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100603)
 #  define MRN_CHARSET_CSNAME(charset) \
   ((charset)->cs_name.str)

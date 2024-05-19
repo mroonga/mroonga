@@ -723,8 +723,16 @@ public:
   bool is_crashed() const;
   bool auto_repair(int error) const;
   bool auto_repair() const;
+#ifdef MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int disable_indexes(key_map map, bool persist);
+#else
   int disable_indexes(uint mode);
+#endif //MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
+#ifdef MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int enable_indexes(key_map map, bool persist);
+#else
   int enable_indexes(uint mode);
+#endif //MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
   int check(THD* thd, HA_CHECK_OPT* check_opt);
   int repair(THD* thd, HA_CHECK_OPT* check_opt);
   bool check_and_repair(THD *thd);
@@ -1627,15 +1635,33 @@ private:
   bool storage_auto_repair(int error) const;
   int generic_disable_index(int i, KEY *key_info);
 #ifdef MRN_ENABLE_WRAPPER_MODE
+#  ifdef MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int wrapper_disable_indexes_mroonga(key_map map, bool persist);
+  int wrapper_disable_indexes(key_map map, bool persist);
+#  else
   int wrapper_disable_indexes_mroonga(uint mode);
   int wrapper_disable_indexes(uint mode);
+#  endif //MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
 #endif
+#ifdef MRN_DISABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int storage_disable_indexes(key_map map, bool persist);
+#else
   int storage_disable_indexes(uint mode);
+#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
+#  ifdef MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int wrapper_enable_indexes_mroonga(key_map map, bool persist);
+  int wrapper_enable_indexes(key_map map, bool persist);
+#  else
   int wrapper_enable_indexes_mroonga(uint mode);
   int wrapper_enable_indexes(uint mode);
+#  endif //MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
 #endif
+#ifdef MRN_ENABLE_INDEXES_HAVE_MAP_AND_PERSIST
+  int storage_enable_indexes(key_map map, bool persist);
+#else
   int storage_enable_indexes(uint mode);
+#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);
 #endif
