@@ -389,6 +389,49 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
 #endif
 
+#if defined(MRN_MARIADB_P) &&                                                  \
+    ((MYSQL_VERSION_ID >= 100525 && MYSQL_VERSION_ID < 100600) ||              \
+     (MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||              \
+     (MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200))
+#  define MRN_HANDLER_ENABLE_INDEXES_PARAMETERS key_map map, bool persist
+#  define MRN_HANDLER_DISABLE_INDEXES_PARAMETERS key_map map, bool persist
+#  define MRN_HANDLER_ENABLE_INDEXES_ALL_ARGS key_map(table->s->keys), false
+#  define MRN_HANDLER_DISABLE_INDEXES_ALL_ARGS key_map(table->s->keys), false
+#  define MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS map, persist
+#  define MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS map, persist
+#  define MRN_HANDLER_ENABLE_INDEXES_NEED_TO_EXECUTE (true)
+#  define MRN_HANDLER_DISABLE_INDEXES_NEED_TO_EXECUTE (true)
+   // keys_in_use excludes keys disabled by ALTER TABLE ... DISABLE KEYS.
+   // ALTER TABLE ... DISABLE KEYS can not disable unique keys.
+   // If keys_in_use.is_clear_all() is false, keys_in_use includes unique
+   // keys. So we need to skip unique keys explicitly.
+#  define MRN_HANDLER_ENABLE_INDEXES_SKIP_UNIQUE_KEY \
+     (!table->s->keys_in_use.is_clear_all())
+#  define MRN_HANDLER_ENABLE_INDEXES_IS_TARGET_KEY(skip_unique_key, key_info, i) \
+     (map.is_set(i))
+#  define MRN_HANDLER_DISABLE_INDEXES_IS_TARGET_KEY(key_info, i) \
+     !(map.is_set(i))
+#else
+#  define MRN_HANDLER_ENABLE_INDEXES_PARAMETERS uint mode
+#  define MRN_HANDLER_DISABLE_INDEXES_PARAMETERS uint mode
+#  define MRN_HANDLER_ENABLE_INDEXES_ALL_ARGS HA_KEY_SWITCH_ALL
+#  define MRN_HANDLER_DISABLE_INDEXES_ALL_ARGS HA_KEY_SWITCH_ALL
+#  define MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS mode
+#  define MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS mode
+#  define MRN_HANDLER_ENABLE_INDEXES_NEED_TO_EXECUTE \
+     (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL)
+#  define MRN_HANDLER_DISABLE_INDEXES_NEED_TO_EXECUTE \
+     (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL)
+#  define MRN_HANDLER_ENABLE_INDEXES_SKIP_UNIQUE_KEY \
+     (mode == HA_KEY_SWITCH_NONUNIQ_SAVE)
+#  define MRN_HANDLER_DISABLE_INDEXES_SKIP_UNIQUE_KEY \
+     (mode == HA_KEY_SWITCH_NONUNIQ_SAVE)
+#  define MRN_HANDLER_ENABLE_INDEXES_IS_TARGET_KEY(skip_unique_key, key_info, i) \
+     !(skip_unique_key && (key_info[i].flags & HA_NOSAME))
+#  define MRN_HANDLER_DISABLE_INDEXES_IS_TARGET_KEY(key_info, i) \
+     !(MRN_HANDLER_DISABLE_INDEXES_SKIP_UNIQUE_KEY && (key_info[i].flags & HA_NOSAME))
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -723,8 +766,8 @@ public:
   bool is_crashed() const;
   bool auto_repair(int error) const;
   bool auto_repair() const;
-  int disable_indexes(uint mode);
-  int enable_indexes(uint mode);
+  int disable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS);
+  int enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS);
   int check(THD* thd, HA_CHECK_OPT* check_opt);
   int repair(THD* thd, HA_CHECK_OPT* check_opt);
   bool check_and_repair(THD *thd);
@@ -1627,15 +1670,15 @@ private:
   bool storage_auto_repair(int error) const;
   int generic_disable_index(int i, KEY *key_info);
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  int wrapper_disable_indexes_mroonga(uint mode);
-  int wrapper_disable_indexes(uint mode);
+  int wrapper_disable_indexes_mroonga(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS);
+  int wrapper_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS);
 #endif
-  int storage_disable_indexes(uint mode);
+  int storage_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS);
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  int wrapper_enable_indexes_mroonga(uint mode);
-  int wrapper_enable_indexes(uint mode);
+  int wrapper_enable_indexes_mroonga(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS);
+  int wrapper_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS);
 #endif
-  int storage_enable_indexes(uint mode);
+  int storage_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_check(THD* thd, HA_CHECK_OPT* check_opt);
 #endif

@@ -5290,9 +5290,9 @@ int ha_mroonga::wrapper_open(const char *name,
             // TODO: implemented by "reindex" instead of "remove and recreate".
             // Because "remove and recreate" invalidates opened indexes by
             // other threads.
-            error = wrapper_disable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+            error = wrapper_disable_indexes_mroonga(MRN_HANDLER_DISABLE_INDEXES_ALL_ARGS);
             if (!error) {
-              error = wrapper_enable_indexes_mroonga(HA_KEY_SWITCH_ALL);
+              error = wrapper_enable_indexes_mroonga(MRN_HANDLER_ENABLE_INDEXES_ALL_ARGS);
             }
           }
         }
@@ -15718,11 +15718,11 @@ int ha_mroonga::generic_disable_index(int i, KEY *key_info)
 }
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
-int ha_mroonga::wrapper_disable_indexes_mroonga(uint mode)
+int ha_mroonga::wrapper_disable_indexes_mroonga(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL) {
+  if (MRN_HANDLER_DISABLE_INDEXES_NEED_TO_EXECUTE) {
     uint i;
     for (i = 0; i < table_share->keys; i++) {
       if (i == table->s->primary_key) {
@@ -15754,30 +15754,30 @@ int ha_mroonga::wrapper_disable_indexes_mroonga(uint mode)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_disable_indexes(uint mode)
+int ha_mroonga::wrapper_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_disable_indexes(mode);
+  error = wrap_handler->ha_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   if (error == HA_ERR_WRONG_COMMAND) {
     error = 0;
   }
   if (!error) {
-    error = wrapper_disable_indexes_mroonga(mode);
+    error = wrapper_disable_indexes_mroonga(MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS);
   }
   DBUG_RETURN(error);
 }
 #endif
 
-int ha_mroonga::storage_disable_indexes(uint mode)
+int ha_mroonga::storage_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL) {
+  if (MRN_HANDLER_DISABLE_INDEXES_NEED_TO_EXECUTE) {
     uint i;
     for (i = 0; i < table_share->keys; i++) {
       if (i == table->s->primary_key) {
@@ -15792,13 +15792,12 @@ int ha_mroonga::storage_disable_indexes(uint mode)
       if (i == table->s->primary_key) {
         continue;
       }
-      KEY *key_info = &(table_share->key_info[i]);
-      if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE &&
-          (key_info->flags & HA_NOSAME)) {
+      KEY *key_info = table_share->key_info;
+      if (!MRN_HANDLER_DISABLE_INDEXES_IS_TARGET_KEY(key_info, i)) {
         continue;
       }
 
-      int sub_error = generic_disable_index(i, key_info);
+      int sub_error = generic_disable_index(i, &(key_info[i]));
       if (error != 0 && sub_error != 0) {
         error = sub_error;
       }
@@ -15809,17 +15808,17 @@ int ha_mroonga::storage_disable_indexes(uint mode)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::disable_indexes(uint mode)
+int ha_mroonga::disable_indexes(MRN_HANDLER_DISABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode)
   {
-    error = wrapper_disable_indexes(mode);
+    error = wrapper_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS);
   } else {
 #endif
-    error = storage_disable_indexes(mode);
+    error = storage_disable_indexes(MRN_HANDLER_DISABLE_INDEXES_FORWARD_ARGS);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #endif
@@ -15827,11 +15826,11 @@ int ha_mroonga::disable_indexes(uint mode)
 }
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
-int ha_mroonga::wrapper_enable_indexes_mroonga(uint mode)
+int ha_mroonga::wrapper_enable_indexes_mroonga(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL) {
+  if (MRN_HANDLER_ENABLE_INDEXES_NEED_TO_EXECUTE) {
     uint i, j;
     for (i = 0; i < table_share->keys; i++) {
       if (i == table->s->primary_key) {
@@ -15899,16 +15898,16 @@ int ha_mroonga::wrapper_enable_indexes_mroonga(uint mode)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::wrapper_enable_indexes(uint mode)
+int ha_mroonga::wrapper_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
 
-  int mroonga_error = wrapper_enable_indexes_mroonga(mode);
+  int mroonga_error = wrapper_enable_indexes_mroonga(MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS);
 
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  error = wrap_handler->ha_enable_indexes(mode);
+  error = wrap_handler->ha_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   if (error == HA_ERR_WRONG_COMMAND) {
@@ -15918,18 +15917,18 @@ int ha_mroonga::wrapper_enable_indexes(uint mode)
 }
 #endif
 
-int ha_mroonga::storage_enable_indexes(uint mode)
+int ha_mroonga::storage_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   uint n_keys = table_share->keys;
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables, n_keys);
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_columns, n_keys);
   bool have_multiple_column_index = false;
-  bool skip_unique_key = (mode == HA_KEY_SWITCH_NONUNIQ_SAVE);
+  bool skip_unique_key = MRN_HANDLER_ENABLE_INDEXES_SKIP_UNIQUE_KEY;
   MRN_DBUG_ENTER_METHOD();
-  if (mode == HA_KEY_SWITCH_NONUNIQ_SAVE || mode == HA_KEY_SWITCH_ALL) {
+  if (MRN_HANDLER_ENABLE_INDEXES_NEED_TO_EXECUTE) {
     uint i;
-    for (i = 0; i < table_share->keys; i++) {
+    for (i = 0; i < n_keys; i++) {
       if (i == table->s->primary_key) {
         continue;
       }
@@ -15950,7 +15949,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
       if (i == table->s->primary_key) {
         continue;
       }
-      if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
+      if (!MRN_HANDLER_ENABLE_INDEXES_IS_TARGET_KEY(skip_unique_key, key_info, i)) {
         continue;
       }
 
@@ -15993,7 +15992,7 @@ int ha_mroonga::storage_enable_indexes(uint mode)
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::enable_indexes(uint mode)
+int ha_mroonga::enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
@@ -16001,10 +16000,10 @@ int ha_mroonga::enable_indexes(uint mode)
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode)
   {
-    error = wrapper_enable_indexes(mode);
+    error = wrapper_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS);
   } else {
 #endif
-    error = storage_enable_indexes(mode);
+    error = storage_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_FORWARD_ARGS);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #endif
