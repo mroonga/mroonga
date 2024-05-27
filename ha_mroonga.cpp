@@ -15952,6 +15952,7 @@ int ha_mroonga::storage_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
       if (!MRN_HANDLER_ENABLE_INDEXES_IS_TARGET_KEY(skip_unique_key, key_info, i)) {
         continue;
       }
+
       index_tables[i] = NULL;
       if (!grn_index_columns[i]) {
         if ((error = storage_create_index(table, mapper.table_name(), grn_table,
