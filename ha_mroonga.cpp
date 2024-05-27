@@ -5894,7 +5894,7 @@ int ha_mroonga::open(const char *name,
     DBUG_RETURN(error);
   thr_lock_data_init(&share->lock,&thr_lock_data,NULL);
 
-  if (mrn_bitmap_init(&multiple_column_key_bitmap, NULL, table->s->fields, false))
+  if (mrn_bitmap_init(&multiple_column_key_bitmap, NULL, table->s->fields))
   {
     mrn_free_share(share);
     share = NULL;
@@ -17314,8 +17314,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
       MY_BITMAP generated_column_bitmap;
       if (mrn_bitmap_init(&generated_column_bitmap,
                           NULL,
-                          altered_table->s->fields,
-                          false)) {
+                          altered_table->s->fields)) {
         error = HA_ERR_OUT_OF_MEM;
         my_message(ER_OUTOFMEMORY,
                    "mroonga: storage: "
