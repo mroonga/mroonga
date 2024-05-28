@@ -12,7 +12,11 @@ RUN \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
-    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
+    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm && \
+  dnf install -y ${quiet} https://repo.mysql.com/mysql80-community-release-el8.rpm && \
+  dnf install --disablerepo=appstream -y ${quiet} \
+    mysql-community-devel && \
+  dnf install --enablerepo=powertools -y ${quiet} \
     https://repo.mysql.com/mysql-community-minimal-release-el8.rpm && \
   dnf builddep --enablerepo=mysql80-community-minimal-source,powertools -y ${quiet} mysql-community-minimal && \
   dnf download --enablerepo=mysql80-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
@@ -30,9 +34,6 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf install -y ${quiet} https://repo.mysql.com/mysql80-community-release-el8.rpm && \
-  dnf install --disablerepo=appstream -y ${quiet} \
-    mysql-community-devel && \
   dnf clean ${quiet} all
 
 # Workaround: We can remove this once redhat-rpm-config uses "annobin"
