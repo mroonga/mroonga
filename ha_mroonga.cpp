@@ -16761,8 +16761,13 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   MRN_SET_BASE_ALTER_KEY(this, ha_alter_info);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  if (result_mroonga > result)
+  if (result_mroonga > result) {
+    if (result == HA_ALTER_INPLACE_NOT_SUPPORTED) {
+      my_free(alter_key_info_buffer);
+      alter_key_info_buffer = NULL;
+    }
     DBUG_RETURN(result);
+  }
   DBUG_RETURN(result_mroonga);
 }
 #endif
