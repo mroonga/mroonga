@@ -157,6 +157,11 @@ jobs:
             Move-Item groonga-* extra\groonga
           }
           Remove-Item extra\groonga\test -Recurse -Force
+          cd extra\groonga\vendor\mruby-source
+          Invoke-WebRequest `
+            -Uri "https://github.com/mruby/mruby/pull/6279.patch" `
+            -OutFile 6279.patch
+          ridk exec patch -p1 -i 6279.patch
       - uses: actions/checkout@v4
         if: |
           matrix.use-main == 'yes'
