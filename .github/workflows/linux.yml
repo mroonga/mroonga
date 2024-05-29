@@ -167,6 +167,9 @@ jobs:
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-8.0
+          - os: ubuntu-noble
+            package-type: apt
+            package: mysql-8.0
 
           # MySQL community 8.0
           - os: almalinux-8
@@ -334,6 +337,10 @@ jobs:
           # MySQL 8.0
           - os: ubuntu-jammy
             image: "images:ubuntu/22.04"
+            package-type: apt
+            package: mysql-8.0
+          - os: ubuntu-noble
+            image: "images:ubuntu/24.04"
             package-type: apt
             package: mysql-8.0
 
