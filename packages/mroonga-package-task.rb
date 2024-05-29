@@ -45,6 +45,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_version_oracle(distribution, code_name)
     repository_name = @mysql_package.gsub(/-community/, "")
+    unless repository_name == "mysql-8.0"
+      repository_name += "-lts"
+    end
     sources_gz_url =
       "https://repo.mysql.com/apt/#{distribution}/dists/#{code_name}/" +
       "#{repository_name}/source/Sources.gz"

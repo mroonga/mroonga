@@ -1,0 +1,29 @@
+require_relative "../mroonga-package-task"
+
+class MySQLCommunity84MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-community-8.4-mroonga")
+  end
+
+  def apt_targets_default
+    [
+      "debian-bookworm",
+      "ubuntu-jammy",
+      "ubuntu-noble",
+    ]
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "almalinux-8",
+      "almalinux-9",
+    ]
+  end
+end
+
+task = MySQLCommunity84MroongaPackageTask.new
+task.define

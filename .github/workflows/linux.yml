@@ -2,6 +2,7 @@ name: Linux
 on:
   push:
     branches:
+      - mysql-8.4
       - main
       - "maintenance/**"
     tags:
@@ -190,6 +191,24 @@ jobs:
           #   package-type: apt
           #   package: mysql-community-8.0
 
+          # MySQL community 8.4
+          - os: almalinux-8
+            package-type: yum
+            package: mysql-community-8.4
+          - os: almalinux-9
+            package-type: yum
+            package: mysql-community-8.4
+          - os: debian-bookworm
+            package-type: apt
+            package: mysql-community-8.4
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mysql-community-8.4
+          # Source isn't available yet.
+          # - os: ubuntu-noble
+          #   package-type: apt
+          #   package: mysql-community-8.4
+
           # MySQL community minimal 8.0
           - os: almalinux-8
             package-type: yum
@@ -368,6 +387,29 @@ jobs:
           #   image: "images:ubuntu/24.04"
           #   package-type: apt
           #   package: mysql-community-8.0
+
+          # MySQL community 8.4
+          - os: almalinux-8
+            image: "images:almalinux/8"
+            package-type: yum
+            package: mysql-community-8.4
+          - os: almalinux-9
+            image: "images:almalinux/9"
+            package-type: yum
+            package: mysql-community-8.4
+          - os: debian-bookworm
+            image: "images:debian/12"
+            package-type: apt
+            package: mysql-community-8.4
+          - os: ubuntu-jammy
+            image: "images:ubuntu/22.04"
+            package-type: apt
+            package: mysql-community-8.4
+          # Source isn't available yet.
+          # - os: ubuntu-noble
+          #   image: "images:ubuntu/24.04"
+          #   package-type: apt
+          #   package: mysql-community-8.4
 
           # MySQL community minimal 8.0
           - os: almalinux-8
