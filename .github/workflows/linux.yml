@@ -354,6 +354,9 @@ jobs:
           - os: debian-bookworm
             package-type: apt
             package: mysql-community-8.0
+          - os: ubuntu-jammy
+            package-type: apt
+            package: mysql-community-8.0
 
           # MySQL community minimal 8.0
           - os: almalinux-8
