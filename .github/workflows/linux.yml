@@ -29,6 +29,7 @@ jobs:
   source:
     name: Source
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -292,6 +293,7 @@ jobs:
   test:
     name: Test
     needs: build
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -423,4 +425,3 @@ jobs:
               ${{ matrix.package }}-mroonga
           sudo incus stop target
           sudo incus delete target
-        timeout-minutes: 20
