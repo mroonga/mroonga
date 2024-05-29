@@ -9,6 +9,7 @@ class MySQLCommunity80MroongaPackageTask < MroongaPackageTask
     [
       "debian-bookworm",
       "ubuntu-jammy",
+      "ubuntu-noble",
     ]
   end
 

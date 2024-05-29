@@ -185,6 +185,9 @@ jobs:
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-community-8.0
+          - os: ubuntu-noble
+            package-type: apt
+            package: mysql-community-8.0
 
           # MySQL community minimal 8.0
           - os: almalinux-8
@@ -352,9 +355,15 @@ jobs:
             package-type: yum
             package: mysql-community-8.0
           - os: debian-bookworm
+            image: "images:debian/12"
             package-type: apt
             package: mysql-community-8.0
           - os: ubuntu-jammy
+            image: "images:ubuntu/22.04"
+            package-type: apt
+            package: mysql-community-8.0
+          - os: ubuntu-noble
+            image: "images:ubuntu/24.04"
             package-type: apt
             package: mysql-community-8.0
 
