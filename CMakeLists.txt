@@ -385,6 +385,7 @@ if(NOT MRN_BUNDLED)
   target_include_directories(mroonga AFTER PRIVATE
     "${MYSQL_BUILD_DIR}/include"
     "${MYSQL_SOURCE_DIR}/sql"
+    "${MYSQL_SOURCE_DIR}/libs"
     "${MYSQL_SOURCE_DIR}/include")
   if(${MYSQL_VARIANT} STREQUAL "MySQL")
     target_include_directories(mroonga AFTER PRIVATE "${MYSQL_SOURCE_DIR}")
