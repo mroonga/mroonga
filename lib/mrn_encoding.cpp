@@ -23,18 +23,18 @@
 
 namespace mrn {
   namespace encoding {
-    const CHARSET_INFO *mrn_charset_utf8 = NULL;
-    const CHARSET_INFO *mrn_charset_utf8mb3 = NULL;
-    const CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
-    const CHARSET_INFO *mrn_charset_binary = NULL;
-    const CHARSET_INFO *mrn_charset_ascii = NULL;
-    const CHARSET_INFO *mrn_charset_latin1_1 = NULL;
-    const CHARSET_INFO *mrn_charset_latin1_2 = NULL;
-    const CHARSET_INFO *mrn_charset_cp932 = NULL;
-    const CHARSET_INFO *mrn_charset_sjis = NULL;
-    const CHARSET_INFO *mrn_charset_eucjpms = NULL;
-    const CHARSET_INFO *mrn_charset_ujis = NULL;
-    const CHARSET_INFO *mrn_charset_koi8r = NULL;
+    const CHARSET_INFO *mrn_charset_utf8 = nullptr;
+    const CHARSET_INFO *mrn_charset_utf8mb3 = nullptr;
+    const CHARSET_INFO *mrn_charset_utf8mb4 = nullptr;
+    const CHARSET_INFO *mrn_charset_binary = nullptr;
+    const CHARSET_INFO *mrn_charset_ascii = nullptr;
+    const CHARSET_INFO *mrn_charset_latin1_1 = nullptr;
+    const CHARSET_INFO *mrn_charset_latin1_2 = nullptr;
+    const CHARSET_INFO *mrn_charset_cp932 = nullptr;
+    const CHARSET_INFO *mrn_charset_sjis = nullptr;
+    const CHARSET_INFO *mrn_charset_eucjpms = nullptr;
+    const CHARSET_INFO *mrn_charset_ujis = nullptr;
+    const CHARSET_INFO *mrn_charset_koi8r = nullptr;
 
     void init(void) {
       MRN_DBUG_ENTER_FUNCTION();
