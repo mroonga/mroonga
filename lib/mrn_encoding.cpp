@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2011-2013  Kentoku SHIBA
-  Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2013-2024  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,23 +23,22 @@
 
 namespace mrn {
   namespace encoding {
-    CHARSET_INFO *mrn_charset_utf8 = NULL;
-    CHARSET_INFO *mrn_charset_utf8mb3 = NULL;
-    CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
-    CHARSET_INFO *mrn_charset_binary = NULL;
-    CHARSET_INFO *mrn_charset_ascii = NULL;
-    CHARSET_INFO *mrn_charset_latin1_1 = NULL;
-    CHARSET_INFO *mrn_charset_latin1_2 = NULL;
-    CHARSET_INFO *mrn_charset_cp932 = NULL;
-    CHARSET_INFO *mrn_charset_sjis = NULL;
-    CHARSET_INFO *mrn_charset_eucjpms = NULL;
-    CHARSET_INFO *mrn_charset_ujis = NULL;
-    CHARSET_INFO *mrn_charset_koi8r = NULL;
+    const CHARSET_INFO *mrn_charset_utf8 = NULL;
+    const CHARSET_INFO *mrn_charset_utf8mb3 = NULL;
+    const CHARSET_INFO *mrn_charset_utf8mb4 = NULL;
+    const CHARSET_INFO *mrn_charset_binary = NULL;
+    const CHARSET_INFO *mrn_charset_ascii = NULL;
+    const CHARSET_INFO *mrn_charset_latin1_1 = NULL;
+    const CHARSET_INFO *mrn_charset_latin1_2 = NULL;
+    const CHARSET_INFO *mrn_charset_cp932 = NULL;
+    const CHARSET_INFO *mrn_charset_sjis = NULL;
+    const CHARSET_INFO *mrn_charset_eucjpms = NULL;
+    const CHARSET_INFO *mrn_charset_ujis = NULL;
+    const CHARSET_INFO *mrn_charset_koi8r = NULL;
 
     void init(void) {
-      CHARSET_INFO **cs;
       MRN_DBUG_ENTER_FUNCTION();
-      for (cs = all_charsets; cs < all_charsets + MY_ALL_CHARSETS_SIZE; cs++)
+      for (auto cs = all_charsets; cs < all_charsets + MY_ALL_CHARSETS_SIZE; cs++)
       {
         if (!cs[0])
           continue;
