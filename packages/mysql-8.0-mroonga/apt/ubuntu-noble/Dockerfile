@@ -9,8 +9,10 @@ ARG DEBUG
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "-qq") && \
-  grep '^deb ' /etc/apt/sources.list | \
-    sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list && \
+  sed \
+    -e 's/^Types: deb/Types: deb-src/' \
+    /etc/apt/sources.list.d/ubuntu.sources > \
+    /etc/apt/sources.list.d/ubuntu-sources.sources && \
   apt update ${quiet} && \
   apt build-dep -y mysql-server && \
   apt install -y -V ${quiet} \
