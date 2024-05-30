@@ -32,7 +32,14 @@ init-locale:
 	done
 
 EXTRA_DIST =					\
-	images.mk
+	CMakeLists.txt				\
+	deploy.rb				\
+	files.cmake				\
+	images.mk				\
+	requirements.txt			\
+	update-edit-po.rb			\
+	update-files.rb				\
+	update-po.rb
 
 $(source_files_relative_from_doc_dir): html
 
