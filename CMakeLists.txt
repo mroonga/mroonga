@@ -1,6 +1,6 @@
 # -*- indent-tabs-mode: nil -*-
 #
-# Copyright(C) 2012-2023  Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2012-2024  Sutou Kouhei <kou@clear-code.com>
 # Copyright(C) 2013  Kentoku SHIBA
 #
 # This library is free software; you can redistribute it and/or
@@ -550,4 +550,11 @@ if(MSVC)
   install(FILES $<TARGET_PDB_FILE:mroonga>
     DESTINATION "${MYSQL_PLUGIN_DIR}"
     OPTIONAL)
+endif()
+
+if(NOT MRN_BUNDLED)
+  option(MRN_WITH_DOC "build document" OFF)
+  if(MRN_WITH_DOC)
+    add_subdirectory(doc)
+  endif()
 endif()

@@ -53,6 +53,7 @@
 /doc/locale/*/man/
 /doc/locale/en/LC_MESSAGES/*.po
 /doc/locale/en/LC_MESSAGES/*/*.po
+/doc/locale/en/LC_MESSAGES/*/*/*.po
 /install-sh
 /install_manifest.txt
 /libmroonga.a
