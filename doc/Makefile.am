@@ -32,7 +32,6 @@ init-locale:
 	done
 
 EXTRA_DIST =					\
-	$(theme_files_relative_from_doc_dir)	\
 	images.mk
 
 $(source_files_relative_from_doc_dir): html

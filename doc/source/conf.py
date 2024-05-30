@@ -138,29 +138,62 @@ rst_epilog = '''
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'mroonga'
+html_theme = "pydata_sphinx_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+if language == "en":
+  language_prefix = "/"
+  switcher_version = "english"
+  use_edit_page_button = True
+else:
+  language_prefix = f"/{language}/"
+  switcher_version = "japanese"
+  use_edit_page_button = False
+
 html_theme_options = {
-  'rightsidebar': 'true',
-  'stickysidebar': 'true',
-#  'relbarbgcolor': '#ED4517',
-#  'relbartextcolor': 'white',
-#  'relbarlinkcolor': '#F8F0FF',
-#  'footerbgcolor': '#ED4517',
-#  'footertextcolor': 'white',
-#  'sidebarbgcolor': '#FFd587',
-#  'sidebartextcolor': '#ED4517',
-#  'sidebarlinkcolor': '#666666',
-  'bodyfont': '#666666',
+  "logo": {
+    "link": f"https://mroonga.org{language_prefix}",
+  },
+  "github_url": "https://github.com/mroonga/mroonga",
+  "twitter_url": "https://twitter.com/groonga",
+  "icon_links": [
+    {
+      "name": "Blog",
+      "url": f"{language_prefix}blog",
+      "icon": "fas fa-blog",
+    },
+  ],
+  "switcher": {
+    # "json_url": "/_static/switcher.json",
+    "json_url": "https://mroonga.org/docs/_static/switcher.json",
+    "version_match": switcher_version,
+  },
+  "navbar_center": [
+  ],
+  "navbar_end": [
+    "theme-switcher.html",
+    "navbar-icon-links.html",
+    "version-switcher.html",
+  ],
+  "use_edit_page_button": use_edit_page_button,
+  "analytics": {
+    "google_analytics_id": "UA-7532323-1"
+  },
+  "show_nav_level": 2,
 }
 
-html_context = {"language": language}
+html_context = {
+  "language": language,
+  "github_user": "mroonga",
+  "github_repo": "mroonga",
+  "github_version": "main",
+  "doc_path": "doc/source",
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ["../themes"]
+#html_theme_path = []
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -173,17 +206,17 @@ html_title = html_title_format % {"project": str(project),
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = "_static/mroonga.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = "_static/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
+html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.

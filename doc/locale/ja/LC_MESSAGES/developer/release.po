@@ -93,6 +93,9 @@ msgstr "含めるべきでないもの"
 msgid "The changes which doesn't affect to users (Internal source code changes or refactoring)"
 msgstr "ユーザーに影響のない内部的な変更やリファクタリング"
 
+msgid "Execute the following command to create HTML for news."
+msgstr ""
+
 msgid "% make update-files % make -C doc html"
 msgstr ""
 

@@ -1,0 +1,12 @@
+[
+    {
+        "name": "English",
+        "url": "https://mroonga.org/docs/",
+        "version": "english"
+    },
+    {
+        "name": "日本語",
+        "url": "https://mroonga.org/ja/docs/",
+        "version": "japanese"
+    }
+]

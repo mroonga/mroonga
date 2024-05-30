@@ -18,18 +18,9 @@ find "source" -type f -not -name '*.pyc' | \
     sed -e 's,^,$(top_srcdir)/doc/,g' | \
     list_paths "absolute_source_files"
 
-## absolute theme file path list.
-find "themes" -type f | \
-    sed -e 's,^,$(top_srcdir)/doc/,g' | \
-    list_paths "absolute_theme_files"
-
 ## source file path list from doc/.
 find "source" -type f -not -name '*.pyc' | \
     list_paths "source_files_relative_from_doc_dir"
-
-## theme file path list from doc/.
-find "themes" -type f | \
-    list_paths "theme_files_relative_from_doc_dir"
 
 # gettext related
 ## po file base paths

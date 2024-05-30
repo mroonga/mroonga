@@ -1,4 +1,7 @@
 absolute_source_files = \
+	$(top_srcdir)/doc/source/_static/favicon.ico \
+	$(top_srcdir)/doc/source/_static/mroonga.png \
+	$(top_srcdir)/doc/source/_static/switcher.json \
 	$(top_srcdir)/doc/source/characteristic.rst \
 	$(top_srcdir)/doc/source/community.rst \
 	$(top_srcdir)/doc/source/conf.py \
@@ -70,16 +73,10 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/upgrade.rst \
 	$(NULL)
 
-absolute_theme_files = \
-	$(top_srcdir)/doc/themes/mroonga/layout.html \
-	$(top_srcdir)/doc/themes/mroonga/static/favicon.ico \
-	$(top_srcdir)/doc/themes/mroonga/static/logo.png \
-	$(top_srcdir)/doc/themes/mroonga/static/mroonga.css_t \
-	$(top_srcdir)/doc/themes/mroonga/static/navigation-bar.png \
-	$(top_srcdir)/doc/themes/mroonga/theme.conf \
-	$(NULL)
-
 source_files_relative_from_doc_dir = \
+	source/_static/favicon.ico \
+	source/_static/mroonga.png \
+	source/_static/switcher.json \
 	source/characteristic.rst \
 	source/community.rst \
 	source/conf.py \
@@ -149,15 +146,6 @@ source_files_relative_from_doc_dir = \
 	source/tutorial/tokenizer-list.inc \
 	source/tutorial/wrapper.rst \
 	source/upgrade.rst \
-	$(NULL)
-
-theme_files_relative_from_doc_dir = \
-	themes/mroonga/layout.html \
-	themes/mroonga/static/favicon.ico \
-	themes/mroonga/static/logo.png \
-	themes/mroonga/static/mroonga.css_t \
-	themes/mroonga/static/navigation-bar.png \
-	themes/mroonga/theme.conf \
 	$(NULL)
 
 po_files = \
@@ -553,14 +541,36 @@ html_files_relative_from_locale_dir = \
 	html/_static/favicon.ico \
 	html/_static/file.png \
 	html/_static/language_data.js \
-	html/_static/logo.png \
 	html/_static/minus.png \
-	html/_static/mroonga.css \
-	html/_static/navigation-bar.png \
+	html/_static/mroonga.png \
 	html/_static/plus.png \
 	html/_static/pygments.css \
+	html/_static/scripts/bootstrap.js \
+	html/_static/scripts/bootstrap.js.LICENSE.txt \
+	html/_static/scripts/bootstrap.js.map \
+	html/_static/scripts/pydata-sphinx-theme.js \
+	html/_static/scripts/pydata-sphinx-theme.js.map \
 	html/_static/searchtools.js \
 	html/_static/sphinx_highlight.js \
+	html/_static/styles/bootstrap.css \
+	html/_static/styles/bootstrap.css.map \
+	html/_static/styles/pydata-sphinx-theme.css \
+	html/_static/styles/pydata-sphinx-theme.css.map \
+	html/_static/styles/theme.css \
+	html/_static/switcher.json \
+	html/_static/vendor/fontawesome/6.5.2/LICENSE.txt \
+	html/_static/vendor/fontawesome/6.5.2/css/all.min.css \
+	html/_static/vendor/fontawesome/6.5.2/js/all.min.js \
+	html/_static/vendor/fontawesome/6.5.2/js/all.min.js.LICENSE.txt \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.ttf \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2 \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.ttf \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2 \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.ttf \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2 \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-v4compatibility.ttf \
+	html/_static/vendor/fontawesome/6.5.2/webfonts/fa-v4compatibility.woff2 \
+	html/_static/webpack-macros.html \
 	html/characteristic.html \
 	html/community.html \
 	html/contribution.html \
