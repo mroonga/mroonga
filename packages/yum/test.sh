@@ -4,6 +4,8 @@ set -exu
 
 package=$1
 
+echo "::group::Prepare repository"
+
 mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
 os=$(cut -d: -f4 /etc/system-release-cpe)
@@ -32,6 +34,11 @@ esac
 
 sudo ${DNF} install -y \
   https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
+
+echo "::endgroup::"
+
+
+echo "::group::Prepare MySQL/MariaDB"
 
 ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
@@ -92,8 +99,11 @@ REPO
     ;;
 esac
 
+echo "::endgroup::"
 
-# Install
+
+echo "::group::Install"
+
 function mroonga_is_registered() {
   sudo systemctl start ${service_name}
   mysql="mysql -u root"
@@ -148,7 +158,11 @@ case ${package} in
     ;;
 esac
 
-# Run test
+echo "::endgroup::"
+
+
+echo "::group::Prepare test"
+
 sudo ${DNF} install -y \
   ${test_package_name} \
   gdb \
@@ -197,6 +211,11 @@ for test_suite_name in $(find plugin/mroonga -type d '!' -name '[tr]'); do
 done
 set -x
 
+echo "::endgroup::"
+
+
+echo "::group::Test"
+
 sudo \
   ./mtr \
   --force \
@@ -206,6 +225,11 @@ sudo \
   --parallel=${parallel} \
   --retry=3 \
   --suite="${test_suite_names}"
+
+echo "::endgroup::"
+
+
+echo "::group::Test with binary protocol"
 
 case ${package} in
   mariadb-*)
@@ -222,12 +246,21 @@ case ${package} in
     ;;
 esac
 
+echo "::endgroup::"
+
+
+echo "::group::Postpare test"
+
 sudo rm -rf plugin
 if [ -d plugin.backup ]; then
   sudo mv plugin.backup plugin
 fi
 
-# Upgrade
+echo "::endgroup::"
+
+
+echo "::group::Upgrade"
+
 sudo ${DNF} erase -y \
   ${package} \
   "${mysql_package_prefix}-*"
@@ -238,3 +271,5 @@ sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
 mroonga_is_registered
+
+echo "::endgroup::"
