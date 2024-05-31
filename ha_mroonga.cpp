@@ -1542,9 +1542,9 @@ static void mrn_hton_kill_query(handlerton *hton,
   auto slot_data = mrn_get_slot_data(thd, false);
   if (slot_data) {
     // TODO: Reduce log level when we fix a crash problem.
-    GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE, "mroonga: kill: slot-data: %p", slot_data);
+    GRN_LOG(&mrn_ctx, GRN_LOG_INFO, "mroonga: kill: slot-data: %p", slot_data);
     for (auto ctx : slot_data->associated_grn_ctxs) {
-      GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE,
+      GRN_LOG(&mrn_ctx, GRN_LOG_INFO,
               "mroonga: kill: associated-context: %p", ctx);
       if (ctx->rc == GRN_SUCCESS) {
         ctx->rc = GRN_CANCEL;
@@ -1561,9 +1561,9 @@ static void mrn_hton_kill_connection(handlerton *hton, THD *thd)
   MRN_DBUG_ENTER_FUNCTION();
   auto slot_data = mrn_get_slot_data(thd, false);
   if (slot_data) {
-    GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE, "mroonga: kill: slot-data: %p", slot_data);
+    GRN_LOG(&mrn_ctx, GRN_LOG_INFO, "mroonga: kill: slot-data: %p", slot_data);
     for (auto ctx : slot_data->associated_grn_ctxs) {
-      GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE,
+      GRN_LOG(&mrn_ctx, GRN_LOG_INFO,
               "mroonga: kill: associated-context: %p", ctx);
       if (ctx->rc == GRN_SUCCESS) {
         ctx->rc = GRN_CANCEL;
@@ -3185,7 +3185,7 @@ ha_mroonga::ha_mroonga(handlerton *hton, TABLE_SHARE *share_arg)
   grn_ctx_use(ctx, mrn_db);
   mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), true);
   if (slot_data) {
-    GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE,
+    GRN_LOG(&mrn_ctx, GRN_LOG_INFO,
             "mroonga: associated-context: add: %p:%p", slot_data, ctx);
     slot_data->add_associated_grn_ctx(ctx);
   }
@@ -3229,7 +3229,7 @@ ha_mroonga::~ha_mroonga()
   grn_obj_unlink(ctx, &new_value_buffer);
   mrn::SlotData *slot_data = mrn_get_slot_data(ha_thd(), false);
   if (slot_data) {
-    GRN_LOG(&mrn_ctx, GRN_LOG_NOTICE,
+    GRN_LOG(&mrn_ctx, GRN_LOG_INFO,
             "mroonga: associated-context: remove: %p:%p", slot_data, ctx);
     slot_data->remove_associated_grn_ctx(ctx);
   }
