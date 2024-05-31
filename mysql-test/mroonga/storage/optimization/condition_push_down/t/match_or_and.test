@@ -1,4 +1,4 @@
-# Copyright(C) 2019 Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2019-2024  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,6 +14,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+# MySQL doesn't use condition push down with test case.
+# qep_tab->type() is JT_FT in make_join_readinfo().
+--source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
