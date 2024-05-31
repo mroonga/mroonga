@@ -36,11 +36,13 @@ CREATE TABLE memos (
 INSERT INTO memos
   VALUES ('Mroonga and Groonga', 'Mroonga uses Groonga internally');
 
+--disable_ps2_protocol
 SELECT *
   FROM memos
   WHERE (MATCH(title) AGAINST('+Mroonga' IN BOOLEAN MODE) OR
          MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE)) AND
          MATCH(title) AGAINST('+Groonga' IN BOOLEAN MODE);
+--enable_ps2_protocol
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 

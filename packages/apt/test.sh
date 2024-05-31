@@ -211,10 +211,10 @@ sudo ./mtr "${mtr_args[@]}"
 echo "::endgroup::"
 
 
-echo "::group::Run test with binary protocol"
+echo "::group::Run test with prepared statement protocol"
 case ${package} in
   mariadb-*)
-    # Test with binary protocol
+    # Test with prepared statement protocol
     sudo ./mtr "${mtr_args[@]}" --ps-protocol
     ;;
 esac
