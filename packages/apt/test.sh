@@ -172,8 +172,7 @@ case ${package} in
       echo "/usr/lib/mysql-test/var/ r,"; \
       echo "/usr/lib/mysql-test/var/** rwk,"; \
     ) | sudo tee --append /etc/apparmor.d/local/usr.sbin.mysqld
-    sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-    sudo apparmor_parser /etc/apparmor.d/usr.sbin.mysqld
+    sudo apparmor_parser --replace --skip-cache /etc/apparmor.d/usr.sbin.mysqld
     ;;
 esac
 
