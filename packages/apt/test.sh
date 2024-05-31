@@ -99,13 +99,8 @@ mysql_community_install_mysql_apt_config() {
   sudo \
     env DEBIAN_FRONTEND=noninteractive \
         MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-      apt install -V -y ./mysql-apt-config_*_all.deb
+      apt install -V -y ./mysql-apt-config.deb
   sudo apt update
-  # Ensure using the latest mysql-apt-config
-  sudo \
-    env DEBIAN_FRONTEND=noninteractive \
-        MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-      apt upgrade -V -y
 }
 
 case ${package} in
@@ -122,7 +117,7 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=${package}
-    wget https://repo.mysql.com/mysql-apt-config_0.8.24-1_all.deb
+    wget https://repo.mysql.com/mysql-apt-config.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
