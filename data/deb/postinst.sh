@@ -80,8 +80,11 @@ install_mroonga() {
     else
       db_input high ${package}/root-password || :
       db_go
-      db_get ${package}/root-password
-      password="${RET}"
+      if db_get ${package}/root-password; then
+        password="${RET}"
+      else
+        password=""
+      fi
       db_set ${package}/root-password ""
       if [ -z "${password}" ]; then
         password_options="-u root"
