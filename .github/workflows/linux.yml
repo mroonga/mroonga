@@ -316,7 +316,7 @@ jobs:
         if: |
           startsWith(github.ref, 'refs/tags/')
         run: |
-          mv \
+          cp -a \
             packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/ \
             repositories
           tar czf \
@@ -356,10 +356,6 @@ jobs:
       - name: Prepare container
         run: |
           set -x
-          repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
-          mkdir -p "${repositories_dir}"
-          os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
-          cp -a ${os_type} "${repositories_dir}"
           sudo incus admin init --auto
           sudo incus launch ${{ matrix.test-image }} target
           sudo incus config device add target host disk source=$PWD path=/host
