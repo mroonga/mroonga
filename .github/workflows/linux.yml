@@ -2,7 +2,6 @@ name: Linux
 on:
   push:
     branches:
-      - mysql-8.4
       - main
       - "maintenance/**"
     tags:
