@@ -138,88 +138,111 @@ jobs:
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.5
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: mariadb-10.5
+            test-image: "images:almalinux/9"
 
           # MariaDB 10.6
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.6
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: mariadb-10.6
+            test-image: "images:almalinux/9"
           - os: ubuntu-jammy
             package-type: apt
             package: mariadb-10.6
+            test-image: "images:ubuntu/22.04"
 
           # MariaDB 10.11
           - os: almalinux-8
             package-type: yum
             package: mariadb-10.11
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: mariadb-10.11
+            test-image: "images:almalinux/9"
           - os: debian-bookworm
             package-type: apt
             package: mariadb-10.11
+            test-image: "images:debian/12"
 
           # MySQL 8.0
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-8.0
+            test-image: "images:ubuntu/22.04"
           - os: ubuntu-noble
             package-type: apt
             package: mysql-8.0
+            test-image: "images:ubuntu/24.04"
 
           # MySQL community 8.0
           - os: almalinux-8
             package-type: yum
             package: mysql-community-8.0
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: mysql-community-8.0
+            test-image: "images:almalinux/9"
           - os: debian-bookworm
             package-type: apt
             package: mysql-community-8.0
+            test-image: "images:debian/12"
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-community-8.0
+            test-image: "images:ubuntu/22.04"
           # Source isn't available yet.
           # - os: ubuntu-noble
           #   package-type: apt
           #   package: mysql-community-8.0
+          #   test-image: "images:ubuntu/24.04"
 
           # MySQL community 8.4
           - os: almalinux-8
             package-type: yum
             package: mysql-community-8.4
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: mysql-community-8.4
+            test-image: "images:almalinux/9"
           - os: debian-bookworm
             package-type: apt
             package: mysql-community-8.4
+            test-image: "images:debian/12"
           - os: ubuntu-jammy
             package-type: apt
             package: mysql-community-8.4
+            test-image: "images:ubuntu/22.04"
           # Source isn't available yet.
           # - os: ubuntu-noble
           #   package-type: apt
           #   package: mysql-community-8.4
+          #   test-image: "images:ubuntu/24.04"
 
           # MySQL community minimal 8.0
           - os: almalinux-8
             package-type: yum
             package: mysql-community-minimal-8.0
+            test-image: "images:almalinux/8"
 
           # Percona Server 8.0
           - os: almalinux-8
             package-type: yum
             package: percona-server-8.0
+            test-image: "images:almalinux/8"
           - os: almalinux-9
             package-type: yum
             package: percona-server-8.0
+            test-image: "images:almalinux/9"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -308,127 +331,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  test:
-    name: Test
-    needs: build
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # MariaDB 10.5
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mariadb-10.5
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: mariadb-10.5
-
-          # MariaDB 10.6
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mariadb-10.6
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: mariadb-10.6
-          - os: ubuntu-jammy
-            image: "images:ubuntu/22.04"
-            package-type: apt
-            package: mariadb-10.6
-
-          # MariaDB 10.11
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mariadb-10.11
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: mariadb-10.11
-          - os: debian-bookworm
-            image: "images:debian/12"
-            package-type: apt
-            package: mariadb-10.11
-
-          # MySQL 8.0
-          - os: ubuntu-jammy
-            image: "images:ubuntu/22.04"
-            package-type: apt
-            package: mysql-8.0
-          - os: ubuntu-noble
-            image: "images:ubuntu/24.04"
-            package-type: apt
-            package: mysql-8.0
-
-          # MySQL community 8.0
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mysql-community-8.0
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: mysql-community-8.0
-          - os: debian-bookworm
-            image: "images:debian/12"
-            package-type: apt
-            package: mysql-community-8.0
-          - os: ubuntu-jammy
-            image: "images:ubuntu/22.04"
-            package-type: apt
-            package: mysql-community-8.0
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   image: "images:ubuntu/24.04"
-          #   package-type: apt
-          #   package: mysql-community-8.0
-
-          # MySQL community 8.4
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mysql-community-8.4
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: mysql-community-8.4
-          - os: debian-bookworm
-            image: "images:debian/12"
-            package-type: apt
-            package: mysql-community-8.4
-          - os: ubuntu-jammy
-            image: "images:ubuntu/22.04"
-            package-type: apt
-            package: mysql-community-8.4
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   image: "images:ubuntu/24.04"
-          #   package-type: apt
-          #   package: mysql-community-8.4
-
-          # MySQL community minimal 8.0
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: mysql-community-minimal-8.0
-            target-os: oracle-linux-8
-
-          # Percona Server 8.0
-          - os: almalinux-8
-            image: "images:almalinux/8"
-            package-type: yum
-            package: percona-server-8.0
-          - os: almalinux-9
-            image: "images:almalinux/9"
-            package-type: yum
-            package: percona-server-8.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - name: Install Incus
         run: |
           # We can use the official Ubuntu APT repository when
@@ -451,9 +353,6 @@ jobs:
         run: |
           sudo iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
           sudo iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-      - uses: actions/download-artifact@v4
-        with:
-          name: packages-${{ matrix.package }}-${{ matrix.os }}
       - name: Prepare container
         run: |
           set -x
@@ -461,7 +360,7 @@ jobs:
           os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
           cp -a ${os_type} "${repositories_dir}"
           sudo incus admin init --auto
-          sudo incus launch ${{ matrix.image }} target
+          sudo incus launch ${{ matrix.test-image }} target
           sudo incus config device add target host disk source=$PWD path=/host
           # Ideally, we would use systemctl is-system-running --wait to ensure all services are fully operational.
           # However, this option doesn't work in AlmaLinux 8 and results in an error.
