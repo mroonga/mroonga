@@ -4,6 +4,8 @@ set -exu
 
 package=$1
 
+echo "::group::Prepare repository"
+
 mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
 echo "debconf debconf/frontend select Noninteractive" | \
@@ -47,6 +49,48 @@ case ${distribution}-${code_name} in
 esac
 
 sudo apt update
+
+echo "::endgroup::"
+
+
+echo "::group::Prepare local repository"
+
+(echo "Key-Type: RSA"; \
+ echo "Key-Length: 4096"; \
+ echo "Name-Real: Test"; \
+ echo "Name-Email: test@example.com"; \
+ echo "%no-protection") | \
+  gpg --full-generate-key --batch
+GPG_KEY_ID=$(gpg --list-keys --with-colon test@example.com | grep fpr | cut -d: -f10)
+gpg --export --armor test@example.com > keys
+sudo gpg \
+  --no-default-keyring \
+  --keyring /usr/share/keyrings/${package}.gpg \
+  --import keys
+
+sudo apt install -V -y reprepro
+repositories_dir=/host/packages/${package}/apt/repositories
+pushd /tmp/
+mkdir -p conf/
+cat <<DISTRIBUTIONS > conf/distributions
+Codename: ${code_name}
+Components: main
+Architectures: amd64 source
+SignWith: ${GPG_KEY_ID}
+DISTRIBUTIONS
+reprepro includedeb ${code_name} \
+  ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
+cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
+deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
+APT_SOURCES
+popd
+
+sudo apt update
+
+echo "::endgroup::"
+
+
+echo "::group::Install package"
 
 mysql_community_install_mysql_apt_config() {
   # We need to specify DEBIAN_FRONTEND=noninteractive explicitly
@@ -98,40 +142,14 @@ case ${package} in
     ;;
 esac
 
-(echo "Key-Type: RSA"; \
- echo "Key-Length: 4096"; \
- echo "Name-Real: Test"; \
- echo "Name-Email: test@example.com"; \
- echo "%no-protection") | \
-  gpg --full-generate-key --batch
-GPG_KEY_ID=$(gpg --list-keys --with-colon test@example.com | grep fpr | cut -d: -f10)
-gpg --export --armor test@example.com > keys
-sudo gpg \
-  --no-default-keyring \
-  --keyring /usr/share/keyrings/${package}.gpg \
-  --import keys
-
-sudo apt install -V -y reprepro
-repositories_dir=/host/packages/${package}/apt/repositories
-pushd /tmp/
-mkdir -p conf/
-cat <<DISTRIBUTIONS > conf/distributions
-Codename: ${code_name}
-Components: main
-Architectures: amd64 source
-SignWith: ${GPG_KEY_ID}
-DISTRIBUTIONS
-reprepro includedeb ${code_name} \
-  ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
-cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
-deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
-APT_SOURCES
-popd
-
-sudo apt update
 sudo apt install -V -y ${package}
 
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
+
+echo "::endgroup::"
+
+
+echo "::group::Prepare test"
 
 sudo apt install -V -y \
   gdb \
@@ -187,7 +205,16 @@ mtr_args+=(--suite="${test_suite_names}")
 if [ -d "${mysql_test_dir}/bin" ]; then
   mtr_args+=(--client-bindir="${mysql_test_dir}/bin")
 fi
+
+echo "::endgroup::"
+
+
+echo "::group::Run test"
 sudo ./mtr "${mtr_args[@]}"
+echo "::endgroup::"
+
+
+echo "::group::Run test with binary protocol"
 case ${package} in
   mariadb-*)
     # Test with binary protocol
@@ -195,8 +222,10 @@ case ${package} in
     ;;
 esac
 popd
+echo "::endgroup::"
 
-# Upgrade
+
+echo "::group::Upgrade test"
 if [ -n "${old_package}" ]; then
   sudo apt purge -V -y \
     ${package} \
@@ -223,3 +252,4 @@ if [ -n "${old_package}" ]; then
   sudo apt upgrade -V -y
   sudo mysql -e "SHOW ENGINES" | grep Mroonga
 fi
+echo "::endgroup::"
