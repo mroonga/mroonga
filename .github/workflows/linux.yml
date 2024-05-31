@@ -356,6 +356,7 @@ jobs:
       - name: Prepare container
         run: |
           set -x
+          repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
           os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
           cp -a ${os_type} "${repositories_dir}"
