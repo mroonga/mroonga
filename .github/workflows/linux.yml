@@ -454,15 +454,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-      - name: Run test
+      - name: Prepare container
         run: |
           set -x
-          repositories_dir=packages/${{ matrix.package }}-mroonga/${{ matrix.package-type }}/repositories/
           mkdir -p "${repositories_dir}"
           os_type=$(echo "${{ matrix.os }}" | grep -o '^[^-]*')
           cp -a ${os_type} "${repositories_dir}"
-          os=${{ matrix.target-os }}
-          : ${os:=${{ matrix.os }}}
           sudo incus admin init --auto
           sudo incus launch ${{ matrix.image }} target
           sudo incus config device add target host disk source=$PWD path=/host
@@ -472,9 +469,13 @@ jobs:
           # preventing DNS resolution errors when attempting to dnf install command.
           # ref: https://discuss.linuxcontainers.org/t/network-issue-with-almalinux-8-9-on-github-actions-using-incus/20046
           sleep 10
+      - name: Run test
+        run: |
           sudo incus exec target \
             -- \
             /host/packages/${{ matrix.package-type }}/test.sh \
               ${{ matrix.package }}-mroonga
+      - name: Delete container
+        run: |
           sudo incus stop target
           sudo incus delete target
