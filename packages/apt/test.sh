@@ -101,11 +101,6 @@ mysql_community_install_mysql_apt_config() {
         MYSQL_SERVER_VERSION=mysql-${mysql_version} \
       apt install -V -y ./mysql-apt-config.deb
   sudo apt update
-  # Ensure using the latest mysql-apt-config
-  sudo \
-    env DEBIAN_FRONTEND=noninteractive \
-        MYSQL_SERVER_VERSION=mysql-${mysql_version} \
-      apt upgrade -V -y
 }
 
 case ${package} in
