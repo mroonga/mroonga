@@ -26,6 +26,12 @@ case ${major_version} in
     else
       DNF="dnf --enablerepo=powertools"
     fi
+    # Ideally, we would use systemctl is-system-running --wait to ensure all services are fully operational.
+    # However, this option doesn't work in AlmaLinux 8 and results in an error.
+    # As a workaround, we introduced a 10-second sleep delay to allow network services time to stabilize,
+    # preventing DNS resolution errors when attempting to dnf install command.
+    # ref: https://discuss.linuxcontainers.org/t/network-issue-with-almalinux-8-9-on-github-actions-using-incus/20046
+    sleep 10
     sudo ${DNF} update -y
     sudo dnf module -y disable mariadb
     sudo dnf module -y disable mysql
