@@ -111,8 +111,8 @@ mysql_community_install_mysql_apt_config() {
 case ${package} in
   mariadb-*)
     old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
-    # TODO: Remove this after we release a package for ubuntu-jammy on pckages.groonga.org.
-    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+    # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
+    if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
       old_package=
     fi
     mysql_package_prefix=mariadb
@@ -131,8 +131,8 @@ case ${package} in
     ;;
   mysql-*)
     old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
-    # TODO: Remove this after we release a package for ubuntu-jammy on pckages.groonga.org.
-    if [ "${distribution}-${code_name}" = "ubuntu-jammy" ]; then
+    # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
+    if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
       old_package=
     fi
     mysql_package_prefix=mysql
@@ -231,13 +231,6 @@ if [ -n "${old_package}" ]; then
     ${package} \
     "${mysql_package_prefix}-*"
   sudo rm -rf /var/lib/mysql
-
-  # Disable upgrade test for first time packages.
-  case ${code_name} in
-    bookworm) # TODO: Remove this after 13.04 release.
-      exit
-      ;;
-  esac
 
   sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
   case ${package} in
