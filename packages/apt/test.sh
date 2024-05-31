@@ -96,9 +96,18 @@ mysql_community_install_mysql_apt_config() {
   # We need to specify DEBIAN_FRONTEND=noninteractive explicitly
   # because the mysql-apt-config's config script refers the
   # DEBIAN_FRONTEND environment variable directly. :<
+  local mysql_server_version="mysql-${mysql_version}"
+  case "${mysql_version}" in
+    8.0)
+      :
+      ;;
+    *)
+      mysql_server_version+="-lts"
+      ;;
+  esac
   sudo \
     env DEBIAN_FRONTEND=noninteractive \
-        MYSQL_SERVER_VERSION=mysql-${mysql_version} \
+        MYSQL_SERVER_VERSION=${mysql_server_version} \
       apt install -V -y ./mysql-apt-config.deb
   sudo apt update
 }
