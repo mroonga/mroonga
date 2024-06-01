@@ -114,7 +114,7 @@ mysql_community_install_mysql_apt_config() {
 
 case ${package} in
   mariadb-*)
-    old_package=$(echo ${package} | sed -e 's/mariadb-/mariadb-server-/')
+    old_package=${package}
     # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
     if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
       old_package=
@@ -134,7 +134,7 @@ case ${package} in
     mysql_test_dir=/usr/lib/mysql-test
     ;;
   mysql-*)
-    old_package=$(echo ${package} | sed -e 's/mysql-/mysql-server-/')
+    old_package=${package}
     # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
     if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
       old_package=
