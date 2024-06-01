@@ -266,7 +266,7 @@ jobs:
       - name: Cache ccache
         uses: actions/cache@v4
         with:
-          path: packages/${{ matrix.package }}-mroonga/${PACKAGE_TYPE}/build/${{ matrix.os }}/ccache
+          path: packages/${{ matrix.package }}-mroonga/${{ env.PACKAGE_TYPE }}/build/${{ matrix.os }}/ccache
           key: package-${{ matrix.os }}-${{ matrix.package }}-ccache-${{ hashFiles('*.cpp', '*.hpp', '*.h', 'lib/*.cpp', 'lib/*.hpp') }}
           restore-keys: package-${{ matrix.os }}-${{ matrix.package }}-ccache-
       - name: Build with Docker
@@ -296,7 +296,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
-          path: packages/${{ matrix.package }}-mroonga/${PACKAGE_TYPE}/repositories/
+          path: packages/${{ matrix.package }}-mroonga/${{ env.PACKAGE_TYPE }}/repositories/
 
       # Release
       - name: Create assets
