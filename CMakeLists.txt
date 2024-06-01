@@ -546,11 +546,11 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")
-install(FILES
+install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/data/deb/postinst.sh"
   "${PROJECT_SOURCE_DIR}/data/deb/prerm.sh"
   DESTINATION "${MRN_DATA_DIR}/deb/")
-install(FILES
+install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/data/rpm/post.sh"
   "${PROJECT_SOURCE_DIR}/data/rpm/preun.sh"
   DESTINATION "${MRN_DATA_DIR}/rpm/")
