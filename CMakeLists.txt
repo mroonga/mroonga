@@ -546,6 +546,14 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/data/uninstall.sql"
   "${PROJECT_BINARY_DIR}/data/update.sql"
   DESTINATION "${MRN_DATA_DIR}/")
+install(FILES
+  "${PROJECT_SOURCE_DIR}/deb/postinst.sh"
+  "${PROJECT_SOURCE_DIR}/deb/prerm.sh"
+  DESTINATION "${MRN_DATA_DIR}/deb/")
+install(FILES
+  "${PROJECT_SOURCE_DIR}/rpm/post.sh"
+  "${PROJECT_SOURCE_DIR}/rpm/preun.sh"
+  DESTINATION "${MRN_DATA_DIR}/rpm/")
 if(MSVC)
   install(FILES $<TARGET_PDB_FILE:mroonga>
     DESTINATION "${MYSQL_PLUGIN_DIR}"
