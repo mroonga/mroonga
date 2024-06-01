@@ -136,7 +136,10 @@ case ${package} in
     case "${distribution}-${code_name}" in
       # TODO: Remove debian-bookworm after we release a package for
       # debian-bookworm on pckages.groonga.org.
-      debian-bookworm)
+      #
+      # TODO: Remove ubuntu-noble after we release a package for
+      # ubuntu-noble on pckages.groonga.org.
+      debian-bookworm|ubuntu-noble)
         old_package=
         ;;
     esac
