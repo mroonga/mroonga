@@ -36,12 +36,12 @@ CREATE TABLE ids (
 
 INSERT INTO ids VALUES (1, 'first');
 
---source ../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT * FROM ids
         WHERE MATCH(text) AGAINST('+first' IN BOOLEAN MODE)
      ORDER BY id, id
         LIMIT 1;
---source ../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 

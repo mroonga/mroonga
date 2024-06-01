@@ -44,12 +44,12 @@ INSERT INTO mroonga_releases (release_title, release_year)
 INSERT INTO mroonga_releases (release_title, release_year)
        VALUES ("Mroonga 4.0 will be released", "2014");
 
---source ../../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT * FROM mroonga_releases
          WHERE release_year BETWEEN "11" AND "2015" AND
                MATCH(release_title) AGAINST("Mroonga" IN BOOLEAN MODE)
          ORDER BY id DESC LIMIT 1,2;
---source ../../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 

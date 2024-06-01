@@ -37,12 +37,12 @@ INSERT INTO memos VALUES (2017, 'Fast embeddable full text search engine');
 INSERT INTO memos VALUES (2018, 'Mroonga is fast');
 INSERT INTO memos VALUES (2018, 'Groonga + MySQL');
 
---source ../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT *
   FROM memos
   WHERE MATCH(content) AGAINST('+Groonga' IN BOOLEAN MODE) AND
         year = 2018;
---source ../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 

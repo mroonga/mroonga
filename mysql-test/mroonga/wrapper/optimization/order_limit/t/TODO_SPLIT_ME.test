@@ -37,27 +37,27 @@ insert into t1 values(3,30,"ii si ii se ii");
 insert into t1 values(4,40,"ta ti tu te to");
 insert into t1 values(5,50,"aa ii uu ii oo");
 
---source ../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 select c3, match(c3) against("ii") from t1
   where match(c3) against("ii") order by match(c3) against("ii") desc;
---source ../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 show status like 'mroonga_fast_order_limit';
 
---source ../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 select c3, match(c3) against("ii") from t1
   where match(c3) against("ii") order by match(c3) against("ii");
---source ../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 show status like 'mroonga_fast_order_limit';
 
---source ../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 select c3, match(c3) against("ii") from t1
   where match(c3) against("ii") order by match(c3) against("ii") limit 1;
---source ../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 show status like 'mroonga_fast_order_limit';
 
---source ../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 select count(*) from t1 where match(c3) against("ii") limit 1;
---source ../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 show status like 'mroonga_fast_order_limit';
 
 drop table t1;

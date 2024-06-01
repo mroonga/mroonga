@@ -20,7 +20,7 @@
 --source ../../include/mroonga/check_version.inc
 --source ../../include/mroonga/check_mariadb.inc
 
-disable_query_log;
+--disable_query_log
 
 let have_mroonga_storage_engine=`SELECT 1 FROM information_schema.plugins WHERE plugin_name = "mroonga"`;
 if (!$have_mroonga_storage_engine) {
@@ -44,4 +44,4 @@ if ($have_default_tmp_storage_engine_variable) {
   set default_tmp_storage_engine=Mroonga;
 }
 
-enable_query_log;
+--enable_query_log

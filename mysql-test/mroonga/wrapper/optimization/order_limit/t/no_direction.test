@@ -38,13 +38,13 @@ INSERT INTO memos VALUES(5, "Mroonga is great");
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 
---source ../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT id, content
   FROM memos
  WHERE MATCH(content) AGAINST("+Mroonga" IN BOOLEAN MODE)
  ORDER BY id
  LIMIT 2;
---source ../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 

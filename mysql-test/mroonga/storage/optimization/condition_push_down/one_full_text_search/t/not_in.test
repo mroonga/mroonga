@@ -38,12 +38,12 @@ INSERT INTO memos VALUES(2, "Mroonga is Groonga + MySQL.");
 INSERT INTO memos VALUES(3, "Mroonga can work with MariaDB.");
 INSERT INTO memos VALUES(4, "Groonga is great!");
 
---source ../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT * FROM memos
  WHERE MATCH(content) AGAINST("+Groonga" IN BOOLEAN MODE) AND
        id NOT IN (1, 2)
  ORDER BY id;
---source ../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 

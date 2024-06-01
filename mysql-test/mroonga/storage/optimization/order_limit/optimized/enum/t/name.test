@@ -40,12 +40,12 @@ INSERT INTO memos VALUES(2, 'Mroonga', 'Mroonga is great!');
 INSERT INTO memos VALUES(3, 'Mroonga', 'Mroonga is a MySQL storage engine.');
 INSERT INTO memos VALUES(4, 'Mroonga', 'Mroonga is based on Groonga.');
 
---source ../../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT * FROM memos
          WHERE MATCH(content) AGAINST("+Groonga" IN BOOLEAN MODE) AND
                tag = 'Mroonga'
          ORDER BY id LIMIT 1;
---source ../../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 
 SHOW STATUS LIKE 'mroonga_fast_order_limit';
 

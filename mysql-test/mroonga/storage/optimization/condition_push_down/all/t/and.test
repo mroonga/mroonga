@@ -42,11 +42,11 @@ INSERT INTO months VALUES (8, 2018, 11);
 INSERT INTO months VALUES (9, 2018, 12);
 
 SET mroonga_condition_push_down_type = ALL;
---source ../../../../../include/mroonga/disable_ps2_protocol.inc
+--disable_ps_protocol
 SELECT *
   FROM months
   WHERE year < 2018 AND month = 11;
---source ../../../../../include/mroonga/enable_ps2_protocol.inc
+--enable_ps_protocol
 SET mroonga_condition_push_down_type = DEFAULT;
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
