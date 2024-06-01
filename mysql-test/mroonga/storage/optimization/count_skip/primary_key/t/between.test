@@ -36,9 +36,9 @@ INSERT INTO users (id) VALUES (7);
 INSERT INTO users (id) VALUES (8);
 INSERT INTO users (id) VALUES (9);
 
---disable_ps2_protocol
+--source ../../../../../include/mroonga/disable_ps2_protocol.inc
 SELECT COUNT(*) FROM users WHERE id BETWEEN 2 AND 4;
---enable_ps2_protocol
+--source ../../../../../include/mroonga/enable_ps2_protocol.inc
 
 SHOW STATUS LIKE 'mroonga_count_skip';
 

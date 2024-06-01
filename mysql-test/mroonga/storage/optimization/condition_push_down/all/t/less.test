@@ -37,11 +37,11 @@ INSERT INTO years VALUES (4, 2016);
 INSERT INTO years VALUES (5, 2017);
 
 SET mroonga_condition_push_down_type = ALL;
---disable_ps2_protocol
+--source ../../../../../include/mroonga/disable_ps2_protocol.inc
 SELECT *
   FROM years
   WHERE year < 2018;
---enable_ps2_protocol
+--source ../../../../../include/mroonga/enable_ps2_protocol.inc
 SET mroonga_condition_push_down_type = DEFAULT;
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';

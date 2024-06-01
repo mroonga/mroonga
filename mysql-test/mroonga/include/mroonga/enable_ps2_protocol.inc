@@ -1,4 +1,4 @@
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2024  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,30 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/have_mroonga.inc
+# Caller must include check_mariadb.inc.
 
---disable_warnings
-DROP TABLE IF EXISTS users;
---enable_warnings
-
-FLUSH STATUS;
-
-CREATE TABLE users (
-  id INT PRIMARY KEY
-) DEFAULT CHARSET=UTF8MB4;
-
-INSERT INTO users (id) VALUES (1);
-INSERT INTO users (id) VALUES (2);
-INSERT INTO users (id) VALUES (3);
-INSERT INTO users (id) VALUES (4);
-INSERT INTO users (id) VALUES (5);
-
---source ../../../../../include/mroonga/disable_ps2_protocol.inc
-SELECT COUNT(*) FROM users WHERE id < 3;
---source ../../../../../include/mroonga/enable_ps2_protocol.inc
-
-SHOW STATUS LIKE 'mroonga_count_skip';
-
-DROP TABLE users;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+if ($mariadb) {
+  --enable_ps2_protocol
+}

@@ -35,12 +35,12 @@ CREATE TABLE memos (
 INSERT INTO memos VALUES (1, 'Groonga');
 INSERT INTO memos VALUES (2, 'Mroonga');
 
---disable_ps2_protocol
+--source ../../../../include/mroonga/disable_ps2_protocol.inc
 SELECT *
   FROM memos
   WHERE title = 'mroonga'
   ORDER BY id;
---enable_ps2_protocol
+--source ../../../../include/mroonga/enable_ps2_protocol.inc
 
 SHOW STATUS LIKE 'mroonga_condition_push_down';
 

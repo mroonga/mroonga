@@ -201,11 +201,6 @@ parallel=$(nproc)
 case ${package} in
   mysql-8.*|mysql-community-8.*|percona-server-8.*)
     parallel=1
-    # {enable,disable}_ps2_protocol mysqltest commands aren't
-    # available.
-    find plugin/mroonga \
-         -name '*.test' \
-         -exec sed -i -E -e '/^--(enable|disable)_ps2_protocol/d' '{}' ';'
     ;;
 esac
 
