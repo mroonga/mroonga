@@ -107,13 +107,21 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     source_names.each do |source_name|
       all_packages_url =
         "https://packages.ubuntu.com/#{source_name}/allpackages?format=txt.gz"
-      URI.open(all_packages_url) do |all_packages|
-        all_packages.each_line do |line|
-          case line
-          when /\A#{Regexp.escape(ubuntu_package_name)} \((.+?)[\s)]/o
-            version = $1
+      n_remained_tries = 3
+      begin
+        URI.open(all_packages_url) do |all_packages|
+          all_packages.each_line do |line|
+            case line
+            when /\A#{Regexp.escape(ubuntu_package_name)} \((.+?)[\s)]/o
+              version = $1
+            end
           end
         end
+      rescue OpenURI::HTTPError => error
+        raise if error.io.status[0] != "500"
+        n_remained_tries -= 1
+        raise if n_remained_tries.zero?
+        retry
       end
     end
     if version.nil?
