@@ -264,6 +264,9 @@ echo "::endgroup::"
 
 echo "::group::Upgrade"
 if [ -n "${old_package}" ]; then
+  # TODO: Remove this after we release a new version. Old Mroonga package
+  # requires "which" in rpm/post.sh.
+  sudo ${DNF} install -y which
   sudo ${DNF} erase -y \
        ${package} \
        "${mysql_package_prefix}-*"
