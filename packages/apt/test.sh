@@ -115,10 +115,17 @@ mysql_community_install_mysql_apt_config() {
 case ${package} in
   mariadb-*)
     old_package=${package}
-    # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
-    if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
-      old_package=
-    fi
+    case "${distribution}-${code_name}" in
+      # TODO: Remove debian-bookworm after we release a new
+      # version. We can't do upgrade test because the previous Mroonga
+      # requires old MariaDB that isn't provided by Debian.
+      #
+      # TODO: Remove ubuntu-noble after we release a package for
+      # ubuntu-noble on pckages.groonga.org.
+      debian-bookworm|ubuntu-noble)
+        old_package=
+        ;;
+    esac
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test
@@ -126,6 +133,13 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=${package}
+    case "${distribution}-${code_name}" in
+      # TODO: Remove debian-bookworm after we release a package for
+      # debian-bookworm on pckages.groonga.org.
+      debian-bookworm)
+        old_package=
+        ;;
+    esac
     # TODO: Remove this after we release packages for
     # mysql-community-8.4 on pckages.groonga.org.
     if [ "${mysql_version}" = "8.4" ]; then
