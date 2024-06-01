@@ -219,6 +219,12 @@ set -x
 
 mtr_args=()
 mtr_args+=(--force)
+case ${package} in
+  mysql-8.*|mysql-community-8.*|percona-server-8.*)
+    mtr_args+=(--mysqld=--loose-plugin-load-add=ha_mroonga.so)
+    mtr_args+=(--mysqld=--loose-plugin-mroonga=ON)
+    ;;
+esac
 mtr_args+=(--no-check-testcases)
 mtr_args+=(--parallel=${parallel})
 mtr_args+=(--retry=3)
