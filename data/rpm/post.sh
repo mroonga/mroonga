@@ -138,5 +138,5 @@ fi
 
 if [ "${need_manual_update}" = "yes" ]; then
   echo "Run the following command lines to update Mroonga:"
-  echo "  ${mysql} < ${update}"
+  echo "  ${mysql} < ${update_sql}"
 fi
