@@ -126,6 +126,10 @@ case ${package} in
     ;;
   mysql-community-*)
     old_package=${package}
+    # TODO: Remove this after we release a package for debian-bookworm on pckages.groonga.org.
+     [ "${distribution}-${code_name}" = "debian-bookworm" ]; then
+      old_package=
+    fi
     wget https://repo.mysql.com/mysql-apt-config.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
