@@ -137,17 +137,15 @@ case ${package} in
       # TODO: Remove debian-bookworm after we release a package for
       # debian-bookworm on pckages.groonga.org.
       #
+      # TODO: Remove ubuntu-jammy after we release a package for
+      # ubuntu-jammy on pckages.groonga.org.
+      #
       # TODO: Remove ubuntu-noble after we release a package for
       # ubuntu-noble on pckages.groonga.org.
-      debian-bookworm|ubuntu-noble)
+      debian-bookworm|ubuntu-jammy|ubuntu-noble)
         old_package=
         ;;
     esac
-    # TODO: Remove this after we release packages for
-    # mysql-community-8.4 on pckages.groonga.org.
-    if [ "${mysql_version}" = "8.4" ]; then
-      old_package=
-    fi
     wget https://repo.mysql.com/mysql-apt-config.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
