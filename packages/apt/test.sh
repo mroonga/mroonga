@@ -194,7 +194,9 @@ case ${package} in
       echo "/usr/lib/mysql-test/var/ r,"; \
       echo "/usr/lib/mysql-test/var/** rwk,"; \
     ) | sudo tee --append /etc/apparmor.d/local/usr.sbin.mysqld
-    sudo apparmor_parser --replace --skip-cache /etc/apparmor.d/usr.sbin.mysqld
+    if [ -f /etc/apparmor.d/usr.sbin.mysqld ]; then
+      sudo apparmor_parser --replace --skip-cache /etc/apparmor.d/usr.sbin.mysqld
+    fi
     ;;
 esac
 
