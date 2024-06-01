@@ -12,6 +12,12 @@ RUN \
   grep '^deb ' /etc/apt/sources.list | \
     sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list && \
   apt update ${quiet} && \
+  apt install -y -V --no-install-recommends ${quiet} \
+    ca-certificates \
+    lsb-release \
+    software-properties-common \
+    wget && \
+  add-apt-repository -y ppa:groonga/ppa && \
   apt build-dep -y mysql-server && \
   apt install -y -V ${quiet} \
     autoconf-archive \
