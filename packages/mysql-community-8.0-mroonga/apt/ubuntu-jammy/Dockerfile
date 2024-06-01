@@ -16,6 +16,7 @@ RUN \
   apt update ${quiet} && \
   apt install -y -V --no-install-recommends ${quiet} \
     ca-certificates \
+    gpg-agent \
     lsb-release \
     software-properties-common \
     wget && \
