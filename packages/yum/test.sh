@@ -73,7 +73,7 @@ REPO
   mysql-community-minimal-*)
     mysql_package_prefix=mysql-community-minimal
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=mysql${mysql_package_version}-community-minimal-mroonga
+    old_package=${package}
 
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
@@ -86,7 +86,7 @@ REPO
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=mysql${mysql_package_version}-community-mroonga
+    old_package=${package}
     # TODO: Remove this after we release packages for
     # mysql-community-8.4 on pckages.groonga.org.
     if [ "${mysql_version}" = "8.4" ]; then
@@ -101,7 +101,7 @@ REPO
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=percona-server-${percona_package_version}-mroonga
+    old_package=${package}
     sudo percona-release setup ps${percona_package_version}
     mysql_package_prefix=percona-server
     test_package_name=percona-server-test
