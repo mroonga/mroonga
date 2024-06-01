@@ -44,7 +44,12 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
-    old_package=${package}
+    # TODO: We can enable this after we release Mroonga 14.04. It
+    # seems that MariaDB's Yum repository removes old MariaDB packages.
+    # And Mroonga wasn't released in about a year. So we can't install
+    # the previous Mroonga that depends on old MariaDB.
+    # old_package=${package}
+    old_package=
     mysql_package_prefix=MariaDB
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
@@ -253,16 +258,16 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
+if [ -n "${old_package}" ]; then
+  sudo ${DNF} erase -y \
+       ${package} \
+       "${mysql_package_prefix}-*"
+  sudo rm -rf /var/lib/mysql
 
-sudo ${DNF} erase -y \
-  ${package} \
-  "${mysql_package_prefix}-*"
-sudo rm -rf /var/lib/mysql
+  sudo ${DNF} install -y ${old_package}
+  sudo ${DNF} install -y \
+       ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
-sudo ${DNF} install -y ${old_package}
-sudo ${DNF} install -y \
-  ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
-
-mroonga_is_registered
-
+  mroonga_is_registered
+fi
 echo "::endgroup::"
