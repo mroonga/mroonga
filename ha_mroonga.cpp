@@ -21,6 +21,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include "mrn.hpp"
 #include "mrn_mysql.h"
 #include "mrn_mysql_compat.h"
 
@@ -449,6 +450,7 @@ static PSI_mutex_info mrn_mutexes[] =
 #endif
 
 /* global variables */
+bool mrn_initialized = false;
 grn_ctx mrn_ctx;
 handlerton *mrn_hton_ptr;
 grn_hash *mrn_open_tables;
@@ -2499,6 +2501,8 @@ static int mrn_init(void *p)
     mrn_libgroonga_support_mecab = true;
   }
 
+  mrn_initialized = true;
+
   return 0;
 
 error_allocated_long_term_shares_init:
@@ -2535,6 +2539,8 @@ static int mrn_deinit(void *p)
 {
   THD *thd = current_thd;
   grn_ctx *ctx = &mrn_ctx;
+
+  mrn_initialized = false;
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s deinit", MRN_PACKAGE_STRING);
 

@@ -19,6 +19,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <mrn.hpp>
 #include <mrn_mysql.h>
 #include <mrn_windows.hpp>
 #include <mrn_table.hpp>
@@ -33,6 +34,14 @@ mrn_bool init_general(UDF_INIT *init,
                      char *message,
                      const char *context)
 {
+  if (!mrn_initialized)
+  {
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
+             "%s(): Mroonga isn't initialized", context);
+    return 1;
+  }
+
   if (args->arg_count != 0) {
     snprintf(message, MYSQL_ERRMSG_SIZE,
              "%s must not have arguments", context);

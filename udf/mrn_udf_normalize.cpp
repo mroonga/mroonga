@@ -18,6 +18,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <mrn.hpp>
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
 #include <mrn_encoding.hpp>
@@ -52,6 +53,15 @@ MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
   st_mrn_normalize_info *info = NULL;
 
   init->ptr = NULL;
+
+  if (!mrn_initialized)
+  {
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
+             "mroonga_normalize(): Mroonga isn't initialized");
+    goto error;
+  }
+
   if (!(1 <= args->arg_count && args->arg_count <= 2)) {
     sprintf(message,
             "mroonga_normalize(): Incorrect number of arguments: %u for 1..2",

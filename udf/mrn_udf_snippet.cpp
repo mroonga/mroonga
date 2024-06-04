@@ -19,6 +19,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <mrn.hpp>
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
 #include <mrn_err.h>
@@ -133,6 +134,13 @@ MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *mess
   st_mrn_snip_info *snip_info = NULL;
   bool can_open_snippet = true;
   init->ptr = NULL;
+  if (!mrn_initialized)
+  {
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
+             "mroonga_snippet(): Mroonga isn't initialized");
+    goto error;
+  }
   if (args->arg_count < 11 || (args->arg_count - 11) % 3)
   {
     sprintf(message, "Incorrect number of arguments for mroonga_snippet(): %u",
