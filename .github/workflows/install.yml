@@ -1,5 +1,9 @@
 name: Install to Ubuntu
 on:
+  # TODO: Added to verify that the CI works. We will delete it after verification.
+  pull_request:
+    paths:
+      - ".github/workflows/install.yml"
   schedule:
     - cron: |
         0 0 * * *
