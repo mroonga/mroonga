@@ -155,10 +155,6 @@ case ${package} in
     ;;
   mysql-*)
     old_package=${package}
-    # TODO: Remove this after we release a package for ubuntu-noble on pckages.groonga.org.
-    if [ "${distribution}-${code_name}" = "ubuntu-noble" ]; then
-      old_package=
-    fi
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
     test_package=mysql-testsuite
@@ -251,23 +247,26 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade test"
-if [ -n "${old_package}" ]; then
-  sudo apt purge -V -y \
-    ${package} \
-    "${mysql_package_prefix}-*"
-  sudo rm -rf /var/lib/mysql
+sudo apt purge -V -y \
+  ${package} \
+  "${mysql_package_prefix}-*"
+sudo rm -rf /var/lib/mysql
 
-  sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
-  case ${package} in
-    mysql-community-8.*)
-      mysql_community_install_mysql_apt_config
-      ;;
-  esac
-  sudo apt update
+sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
+case ${package} in
+  mysql-community-8.*)
+    mysql_community_install_mysql_apt_config
+    ;;
+esac
+
+sudo apt update
+if apt show ${old_package} > /dev/null 2>&1; then
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
   sudo apt upgrade -V -y
   sudo mysql -e "SHOW ENGINES" | grep Mroonga
+else
+  echo "Skip because ${old_package} hasn't been released yet."
 fi
 echo "::endgroup::"
