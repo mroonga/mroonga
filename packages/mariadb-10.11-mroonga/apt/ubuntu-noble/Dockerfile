@@ -20,7 +20,6 @@ RUN \
     software-properties-common \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
-  wget https://packages.groonga.org/$(lsb_release --id --short | tr 'A-Z' 'a-z')/groonga-apt-source-latest-$(lsb_release --codename --short).deb && \
   apt build-dep -y mariadb-server-10.11 && \
   apt install -y -V ${quiet} \
     autoconf-archive \
