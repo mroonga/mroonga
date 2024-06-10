@@ -41,6 +41,9 @@ jobs:
           sudo incus admin init --auto
           sudo incus launch ${{ matrix.image }} target
           sudo incus config device add target host disk source=$PWD path=/host
+          # Wait for network services stabilizing
+          sleep 1 # Wait for systemd ready
+          sudo incus exec target -- sudo systemctl is-system-running --wait
       - name: Install Mroonga
         run: |
           sudo incus exec target \
