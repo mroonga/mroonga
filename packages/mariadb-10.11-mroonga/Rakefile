@@ -11,8 +11,10 @@ class MariaDB1011MroongaPackageTask < MroongaPackageTask
     ]
   end
 
-  def enable_ubuntu?
-    false
+  def ubuntu_targets_default
+    [
+      ["noble", "24.04"],
+    ]
   end
 
   def yum_targets_default
