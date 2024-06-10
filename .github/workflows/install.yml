@@ -9,25 +9,44 @@ concurrency:
 jobs:
   install:
     name: Install to Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - image: "ubuntu:20.04"
+          - image: "images:ubuntu/20.04"
             package: mysql
-          - image: "ubuntu:22.04"
+          - image: "images:ubuntu/22.04"
             package: mariadb
-          - image: "ubuntu:22.04"
+          - image: "images:ubuntu/22.04"
             package: mysql
     steps:
       - uses: actions/checkout@v4
-      - uses: canonical/setup-lxd@v0.1.1
-      - name: Install Mroonga
+      - name: Install Incus
+        run: |
+          sudo apt update
+          sudo apt install -y -V incus
+      - name: Allow egress network traffic flows for Incus
+        # https://linuxcontainers.org/incus/docs/main/howto/network_bridge_firewalld/#prevent-connectivity-issues-with-incus-and-docker
+        run: |
+          sudo iptables -I DOCKER-USER -i incusbr0 -j ACCEPT
+          sudo iptables -I DOCKER-USER -o incusbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+      - name: Prepare container
         run: |
           set -x
-          lxc launch ${{ matrix.image }} target
-          lxc config device add target host disk source=$PWD path=/host
-          lxc exec target -- /host/packages/apt/install_test.sh ${{ matrix.package }}-mroonga
-          lxc stop target
-          lxc delete target
+          sudo incus admin init --auto
+          sudo incus launch ${{ matrix.image }} target
+          sudo incus config device add target host disk source=$PWD path=/host
+          # Wait for network services stabilizing
+          sleep 1 # Wait for systemd ready
+          sudo incus exec target -- sudo systemctl is-system-running --wait
+      - name: Install Mroonga
+        run: |
+          sudo incus exec target \
+            -- \
+            /host/packages/apt/install_test.sh \
+              ${{ matrix.package }}-mroonga
+      - name: Delete container
+        run: |
+          sudo incus stop target
+          sudo incus delete target
