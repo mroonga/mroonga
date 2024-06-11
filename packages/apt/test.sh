@@ -253,13 +253,13 @@ sudo apt purge -V -y \
 sudo rm -rf /var/lib/mysql
 
 sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
+sudo apt update
 case ${package} in
   mysql-community-8.*)
     mysql_community_install_mysql_apt_config
     ;;
 esac
 
-sudo apt update
 if apt show ${old_package} > /dev/null 2>&1; then
   sudo apt install -V -y ${old_package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
