@@ -237,7 +237,7 @@ if [[ "${package}" == mariadb-* && "${distribution}-${code_name}" == "debian-boo
   # TODO: Remove debian-bookworm after we release a new
   # version. We can't do upgrade test because the previous Mroonga
   # requires old MariaDB that isn't provided by Debian.
-  echo "Skipping upgrade test for Debian Bookworm."
+  echo "Skipping upgrade test about mariadb package for Debian Bookworm."
 elif apt show ${package} > /dev/null 2>&1; then
   sudo apt install -V -y ${package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
