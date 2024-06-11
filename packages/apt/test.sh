@@ -114,14 +114,12 @@ mysql_community_install_mysql_apt_config() {
 
 case ${package} in
   mariadb-*)
-    old_package=${package}
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
-    old_package=${package}
     wget https://repo.mysql.com/mysql-apt-config.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
@@ -130,7 +128,6 @@ case ${package} in
     mysql_test_dir=/usr/lib/mysql-test
     ;;
   mysql-*)
-    old_package=${package}
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
     test_package=mysql-testsuite
@@ -241,13 +238,13 @@ if [[ "${package}" == mariadb-* && "${distribution}-${code_name}" == "debian-boo
   # version. We can't do upgrade test because the previous Mroonga
   # requires old MariaDB that isn't provided by Debian.
   echo "Skipping upgrade test for Debian Bookworm."
-elif apt show ${old_package} > /dev/null 2>&1; then
-  sudo apt install -V -y ${old_package}
+elif apt show ${package} > /dev/null 2>&1; then
+  sudo apt install -V -y ${package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
   sudo apt upgrade -V -y
   sudo mysql -e "SHOW ENGINES" | grep Mroonga
 else
-  echo "Skip because ${old_package} hasn't been released yet."
+  echo "Skip because ${package} hasn't been released yet."
 fi
 echo "::endgroup::"
