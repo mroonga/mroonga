@@ -220,6 +220,8 @@ jobs:
           - os: almalinux-9
             package: percona-server-8.0
             test-image: "images:almalinux/9"
+    env:
+      APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
     runs-on: ubuntu-latest
     steps:
       - name: Prepare environment variables
@@ -238,6 +240,10 @@ jobs:
           path: groonga
           repository: groonga/groonga
           submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          path: apache-arrow
+          repository: apache/arrow
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
