@@ -23,7 +23,7 @@ def env_var(name, default=nil)
 end
 
 def version
-  ENV["VERSION"] || File.read("version_full")
+  env_var("VERSION", File.read("version_full"))
 end
 
 namespace :release do
