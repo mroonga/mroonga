@@ -22,7 +22,7 @@ end
 class MarkdownEnArticleGenerator < MroongaArticleGenerator
   def initialize(release_date, version, previous_version, mroonga_org_repository)
     super(release_date, version, previous_version, mroonga_org_repository)
-    @input_file_path = "./locale/en/markdown/news.md"
+    @input_file_path = "./locale/en/markdown/news/#{version.split(".")[0]}.md"
     @release_headline_regexp_pattern = /^## Release.+$/
   end
 
@@ -57,7 +57,7 @@ end
 class MarkdownJaArticleGenerator < MroongaArticleGenerator
   def initialize(release_date, version, previous_version, mroonga_org_repository)
     super(release_date, version, previous_version, mroonga_org_repository)
-    @input_file_path = "./locale/ja/markdown/news.md"
+    @input_file_path = "./locale/ja/markdown/news/#{version.split(".")[0]}.md"
     @release_headline_regexp_pattern = /^## .*リリース.+$/
   end
 
@@ -163,7 +163,7 @@ end
 class FacebookEnArticleGenerator < FacebookArticleGenerator
   def initialize(release_date, version, previous_version, mroonga_org_repository)
     super(release_date, version, previous_version, mroonga_org_repository)
-    @input_file_path = "./locale/en/text/news.txt"
+    @input_file_path = "./locale/en/text/news/#{version.split(".")[0]}.txt"
     @output_file_path = "./tmp/facebook-en-#{release_date}-mroonga-#{version}.txt"
     @release_headline_regexp_pattern = /^Release.*\n=.+$/
     @link_prefix = "https://mroonga.org/docs"
@@ -204,7 +204,7 @@ end
 class FacebookJaArticleGenerator < FacebookArticleGenerator
   def initialize(release_date, version, previous_version, mroonga_org_repository)
     super(release_date, version, previous_version, mroonga_org_repository)
-    @input_file_path = "./locale/ja/text/news.txt"
+    @input_file_path = "./locale/ja/text/news/#{version.split(".")[0]}.txt"
     @output_file_path = "./tmp/facebook-ja-#{release_date}-mroonga-#{version}.txt"
     @release_headline_regexp_pattern = /^.*リリース.+\n=.+/
     @link_prefix = "https://mroonga.org/ja/docs"
@@ -264,7 +264,7 @@ end
 class MySQLMailingListJaArticleGenerator < MroongaArticleGenerator
   def initialize(release_date, version, previous_version, mroonga_org_repository)
     super(release_date, version, previous_version, mroonga_org_repository)
-    @input_file_path = "./locale/ja/text/news.txt"
+    @input_file_path = "./locale/ja/text/news/#{version.split(".")[0]}.txt"
     @output_file_path = "./tmp/mysql-mailinglist-ja-#{release_date}-mroonga-#{version}.txt"
     @release_headline_regexp_pattern = /^.*リリース.+\n=.+/
   end
