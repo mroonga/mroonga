@@ -1,3 +1,9 @@
+mariadb-10.11-mroonga (13.05-2) unstable; urgency=low
+
+  * Rebuilt against MariaDB 10.11.6.
+
+ -- Kodama Takuya <otegami@clear-code.com>  Thu, 13 Jun 2024 15:00:00 -0000
+
 mariadb-10.11-mroonga (13.05-1) unstable; urgency=low
 
   * New upstream release.
