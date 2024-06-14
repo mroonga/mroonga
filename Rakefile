@@ -31,7 +31,7 @@ def new_version
 end
 
 def new_version_major
-  new_version.split('.')[0]
+  new_version.split(".")[0]
 end
 
 def new_version_minor
