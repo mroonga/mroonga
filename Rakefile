@@ -71,7 +71,7 @@ namespace :release do
       sh("git",
          "commit",
          "-m",
-         "doc package: update version info to #{version} (#{new_release_date})")
+         "package: update version info to #{version} (#{new_release_date})")
     end
   end
 end
