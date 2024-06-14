@@ -84,7 +84,7 @@ namespace :dev do
       File.write("plugin_version", new_plugin_version)
       File.write("version_full", env_var("NEW_VERSION"))
       File.write("version_major", new_version_major)
-      File.write("version_minor",  new_version_minor)
+      File.write("version_minor", new_version_minor)
       File.write("version_micro", new_version_micro)
     end
   end
