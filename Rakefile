@@ -35,7 +35,7 @@ def new_version_major
 end
 
 def new_version_minor
-  new_version.split('.')[1].slice(0)
+  new_version.split(".")[1][0]
 end
 
 def new_version_micro
