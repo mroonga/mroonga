@@ -43,9 +43,8 @@ def new_version_micro
 end
 
 def new_version_in_hex
-  major_in_hex = new_version_major.to_i(16)
-  minor_micro_in_hex = new_version.split(".")[1].to_i(16)
-  '0x' + major_in_hex.to_s + minor_micro_in_hex.to_s
+  major, minor_micro = new_version.split(".").collect {|x| Integer(x, 10)}
+  "0x%02x%02x" % [major, minor_micro]
 end
 
 def new_plugin_version
