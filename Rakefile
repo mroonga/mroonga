@@ -39,7 +39,7 @@ def new_version_minor
 end
 
 def new_version_micro
-  new_version.split('.')[1].slice(1)
+  new_version.split(".")[1][1]
 end
 
 def new_version_in_hex
