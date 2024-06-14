@@ -49,8 +49,10 @@ def new_version_in_hex
 end
 
 def new_plugin_version
-  minor_micro = new_version.split('.')[1].to_i(10)
-  "#{new_version_major}" + '.' + minor_micro.to_s
+  # 10.00 -> 10.0
+  # 10.01 -> 10.1
+  # 10.11 -> 10.11
+  new_version.gsub(".0", ".")
 end
 
 namespace :release do
