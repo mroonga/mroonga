@@ -82,6 +82,7 @@ namespace :dev do
     task :bump do
       File.write("plugin_version", new_plugin_version)
       File.write("version_full", new_version)
+      File.write("version_in_hex", new_version_in_hex)
       File.write("version_major", new_version_major)
       File.write("version_minor", new_version_minor)
       File.write("version_micro", new_version_micro)
