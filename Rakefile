@@ -26,6 +26,34 @@ def version
   env_var("VERSION", File.read("version_full"))
 end
 
+def new_version
+  env_var("NEW_VERSION")
+end
+
+def new_version_major
+  new_version.split(".")[0]
+end
+
+def new_version_minor
+  new_version.split(".")[1][0]
+end
+
+def new_version_micro
+  new_version.split(".")[1][1]
+end
+
+def new_version_in_hex
+  major, minor_micro = new_version.split(".").collect {|x| Integer(x, 10)}
+  "0x%02x%02x" % [major, minor_micro]
+end
+
+def new_plugin_version
+  # 10.00 -> 10.0
+  # 10.01 -> 10.1
+  # 10.11 -> 10.11
+  new_version.gsub(".0", ".")
+end
+
 namespace :release do
   namespace :version do
     desc "Update versions for a new release"
@@ -43,7 +71,20 @@ namespace :release do
       sh("git",
          "commit",
          "-m",
-         "doc package: update version info to #{version} (#{new_release_date})")
+         "package: update version info to #{version} (#{new_release_date})")
+    end
+  end
+end
+
+namespace :dev do
+  namespace :version do
+    desc "Bump version for new development"
+    task :bump do
+      File.write("plugin_version", new_plugin_version)
+      File.write("version_full", new_version)
+      File.write("version_major", new_version_major)
+      File.write("version_minor", new_version_minor)
+      File.write("version_micro", new_version_micro)
     end
   end
 end
