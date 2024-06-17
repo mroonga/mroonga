@@ -20,7 +20,6 @@ RUN \
     software-properties-common \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
-  apt build-dep -y mysql-server && \
   apt install -y -V ${quiet} \
     autoconf-archive \
     build-essential \
