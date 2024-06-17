@@ -1,3 +1,9 @@
+mysql-community-8.0-mroonga (14.04-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Mon, 17 Jun 2024 06:23:52 -0000
+
 mysql-community-8.0-mroonga (13.05-1) unstable; urgency=low
 
   * New upstream release.
