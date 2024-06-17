@@ -19,7 +19,7 @@ override_dh_auto_configure:
 	source_base=mariadb-$(MARIADB_VERSION);				\
 	build_dir=$${source_base}/builddir;				\
 	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
-	  path=universe/m/mariadb-10.11;				\
+	  path=universe/m/mariadb;					\
 	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
 	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
 	else								\
