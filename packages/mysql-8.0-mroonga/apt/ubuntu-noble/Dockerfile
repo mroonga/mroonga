@@ -29,16 +29,26 @@ RUN \
     devscripts \
     dh-apparmor \
     groonga-normalizer-mysql \
+    libcurl4-openssl-dev \
+    libedit-dev \
+    libevent-dev \
     libgroonga-dev \
-    libmysqlclient-dev \
+    libicu-dev \
+    liblz4-dev \
     libmecab-dev \
+    libmysqlclient-dev \
+    libncurses5-dev \
     libpcre3-dev \
+    libprotobuf-dev \
+    libprotoc-dev \
     libreadline-dev \
     libssl-dev \
     libxml2-dev \
     libre2-dev \
+    libwrap0-dev \
     lsb-release \
     mecab-utils \
     pkg-config \
+    protobuf-compiler \
     unixodbc-dev \
     wget
