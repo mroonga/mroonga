@@ -20,7 +20,7 @@ RUN \
     software-properties-common \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
-  apt build-dep -y mariadb-server-10.11 && \
+  apt build-dep -y mariadb-server && \
   apt install -y -V ${quiet} \
     autoconf-archive \
     build-essential \
