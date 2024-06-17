@@ -163,6 +163,9 @@ jobs:
           - os: debian-bookworm
             package: mariadb-10.11
             test-image: "images:debian/12"
+          - os: ubuntu-noble
+            package: mariadb-10.11
+            test-image: "images:ubuntu/24.04"
 
           # MySQL 8.0
           - os: ubuntu-jammy

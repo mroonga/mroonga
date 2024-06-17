@@ -103,6 +103,13 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # "mariadb-10.5" -> "mariadb-server-10.5"
     # "mysql-5.7" -> "mysql-server-5.7"
     ubuntu_package_name = package_name.sub(/-/, "-server-")
+    case code_name
+    when "focal", "jammy"
+    else
+      # "mariadb-server-10.11" -> "mariadb-server"
+      # New Ubuntu don't include version number in package name.
+      ubuntu_package_name = ubuntu_package_name.gsub(/-[\d.]+\z/, "")
+    end
     source_names = [code_name, "#{code_name}-updates"]
     source_names.each do |source_name|
       all_packages_url =
