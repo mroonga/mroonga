@@ -20,6 +20,7 @@ Build-Depends:
 	libprotobuf-dev,
 	libprotoc-dev,
 	libssl-dev,
+        libtirpc-dev,
 	libwrap0-dev,
 	lsb-release,
 	pkg-config,
