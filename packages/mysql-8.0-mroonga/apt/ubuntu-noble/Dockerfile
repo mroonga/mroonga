@@ -25,6 +25,7 @@ RUN \
     build-essential \
     ccache \
     chrpath \
+    cmake \
     debhelper \
     devscripts \
     dh-apparmor \
