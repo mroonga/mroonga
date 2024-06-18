@@ -32,6 +32,8 @@ msgid ""
 msgstr ""
 "[{doc}`/install/almalinux`] MariaDB 10.5.25、10.6.18、10.11.8 をサポートしま"
 "した。"
+msgid "[{doc}`/install/ubuntu`] Added support for MariaDB 10.11.7."
+msgstr "[{doc}`/install/ubuntu`] MariaDB 10.11.7 をサポートしました。"
 
 msgid "[{doc}`/install/ubuntu`] Added support for MariaDB 10.6.18."
 msgstr "[{doc}`/install/ubuntu`] MariaDB 10.6.18 をサポートしました。"
