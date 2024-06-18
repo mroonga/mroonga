@@ -30,6 +30,7 @@ RUN \
     dh-apparmor \
     groonga-normalizer-mysql \
     libcurl4-openssl-dev \
+    libaio-dev \
     libedit-dev \
     libevent-dev \
     libgroonga-dev \
