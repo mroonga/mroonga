@@ -30,6 +30,7 @@ RUN \
     devscripts \
     dh-apparmor \
     groonga-normalizer-mysql \
+    libaio-dev \
     libcurl4-openssl-dev \
     libedit-dev \
     libevent-dev \
