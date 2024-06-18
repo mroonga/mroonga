@@ -43,6 +43,7 @@ RUN \
     libncurses5-dev \
     libpam0g-dev \
     libpcre2-dev \
+    libpmem-dev \
     libreadline-dev \
     libsnappy-dev \
     libssl-dev \
