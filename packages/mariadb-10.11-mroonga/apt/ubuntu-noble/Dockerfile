@@ -22,6 +22,7 @@ RUN \
   add-apt-repository -y ppa:groonga/ppa && \
   apt install -y -V ${quiet} \
     autoconf-archive \
+    bison \
     build-essential \
     ccache \
     chrpath \
