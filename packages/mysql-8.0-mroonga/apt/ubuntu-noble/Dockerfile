@@ -20,26 +20,38 @@ RUN \
     software-properties-common \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
-  apt build-dep -y mysql-server && \
   apt install -y -V ${quiet} \
     autoconf-archive \
     build-essential \
     ccache \
     chrpath \
+    cmake \
     debhelper \
     devscripts \
     dh-apparmor \
     groonga-normalizer-mysql \
+    libaio-dev \
+    libcurl4-openssl-dev \
+    libedit-dev \
+    libevent-dev \
     libgroonga-dev \
-    libmysqlclient-dev \
+    libicu-dev \
+    liblz4-dev \
     libmecab-dev \
+    libmysqlclient-dev \
+    libncurses5-dev \
     libpcre3-dev \
+    libprotobuf-dev \
+    libprotoc-dev \
     libreadline-dev \
     libssl-dev \
+    libtirpc-dev \
     libxml2-dev \
     libre2-dev \
+    libwrap0-dev \
     lsb-release \
     mecab-utils \
     pkg-config \
+    protobuf-compiler \
     unixodbc-dev \
     wget
