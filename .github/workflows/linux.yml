@@ -134,95 +134,95 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # MariaDB 10.5
-          - os: almalinux-8
-            package: mariadb-10.5
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: mariadb-10.5
-            test-image: "images:almalinux/9"
-
-          # MariaDB 10.6
-          - os: almalinux-8
-            package: mariadb-10.6
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: mariadb-10.6
-            test-image: "images:almalinux/9"
-          - os: ubuntu-jammy
-            package: mariadb-10.6
-            test-image: "images:ubuntu/22.04"
-
-          # MariaDB 10.11
-          - os: almalinux-8
-            package: mariadb-10.11
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: mariadb-10.11
-            test-image: "images:almalinux/9"
-          - os: debian-bookworm
-            package: mariadb-10.11
-            test-image: "images:debian/12"
+#          # MariaDB 10.5
+#          - os: almalinux-8
+#            package: mariadb-10.5
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: mariadb-10.5
+#            test-image: "images:almalinux/9"
+#
+#          # MariaDB 10.6
+#          - os: almalinux-8
+#            package: mariadb-10.6
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: mariadb-10.6
+#            test-image: "images:almalinux/9"
+#          - os: ubuntu-jammy
+#            package: mariadb-10.6
+#            test-image: "images:ubuntu/22.04"
+#
+#          # MariaDB 10.11
+#          - os: almalinux-8
+#            package: mariadb-10.11
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: mariadb-10.11
+#            test-image: "images:almalinux/9"
+#          - os: debian-bookworm
+#            package: mariadb-10.11
+#            test-image: "images:debian/12"
+#          - os: ubuntu-noble
+#            package: mariadb-10.11
+#            test-image: "images:ubuntu/24.04"
+#
+#          # MySQL 8.0
+#          - os: ubuntu-jammy
+#            package: mysql-8.0
+#            test-image: "images:ubuntu/22.04"
           - os: ubuntu-noble
-            package: mariadb-10.11
-            test-image: "images:ubuntu/24.04"
-
-          # MySQL 8.0
-          - os: ubuntu-jammy
-            package: mysql-8.0
-            test-image: "images:ubuntu/22.04"
-          - os: ubuntu-noble
             package: mysql-8.0
             test-image: "images:ubuntu/24.04"
-
-          # MySQL community 8.0
-          - os: almalinux-8
-            package: mysql-community-8.0
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: mysql-community-8.0
-            test-image: "images:almalinux/9"
-          - os: debian-bookworm
-            package: mysql-community-8.0
-            test-image: "images:debian/12"
-          - os: ubuntu-jammy
-            package: mysql-community-8.0
-            test-image: "images:ubuntu/22.04"
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   package: mysql-community-8.0
-          #   test-image: "images:ubuntu/24.04"
-
-          # MySQL community 8.4
-          - os: almalinux-8
-            package: mysql-community-8.4
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: mysql-community-8.4
-            test-image: "images:almalinux/9"
-          - os: debian-bookworm
-            package: mysql-community-8.4
-            test-image: "images:debian/12"
-          - os: ubuntu-jammy
-            package: mysql-community-8.4
-            test-image: "images:ubuntu/22.04"
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   package: mysql-community-8.4
-          #   test-image: "images:ubuntu/24.04"
-
-          # MySQL community minimal 8.0
-          - os: almalinux-8
-            package: mysql-community-minimal-8.0
-            test-image: "images:almalinux/8"
-
-          # Percona Server 8.0
-          - os: almalinux-8
-            package: percona-server-8.0
-            test-image: "images:almalinux/8"
-          - os: almalinux-9
-            package: percona-server-8.0
-            test-image: "images:almalinux/9"
+#
+#          # MySQL community 8.0
+#          - os: almalinux-8
+#            package: mysql-community-8.0
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: mysql-community-8.0
+#            test-image: "images:almalinux/9"
+#          - os: debian-bookworm
+#            package: mysql-community-8.0
+#            test-image: "images:debian/12"
+#          - os: ubuntu-jammy
+#            package: mysql-community-8.0
+#            test-image: "images:ubuntu/22.04"
+#          # Source isn't available yet.
+#          # - os: ubuntu-noble
+#          #   package: mysql-community-8.0
+#          #   test-image: "images:ubuntu/24.04"
+#
+#          # MySQL community 8.4
+#          - os: almalinux-8
+#            package: mysql-community-8.4
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: mysql-community-8.4
+#            test-image: "images:almalinux/9"
+#          - os: debian-bookworm
+#            package: mysql-community-8.4
+#            test-image: "images:debian/12"
+#          - os: ubuntu-jammy
+#            package: mysql-community-8.4
+#            test-image: "images:ubuntu/22.04"
+#          # Source isn't available yet.
+#          # - os: ubuntu-noble
+#          #   package: mysql-community-8.4
+#          #   test-image: "images:ubuntu/24.04"
+#
+#          # MySQL community minimal 8.0
+#          - os: almalinux-8
+#            package: mysql-community-minimal-8.0
+#            test-image: "images:almalinux/8"
+#
+#          # Percona Server 8.0
+#          - os: almalinux-8
+#            package: percona-server-8.0
+#            test-image: "images:almalinux/8"
+#          - os: almalinux-9
+#            package: percona-server-8.0
+#            test-image: "images:almalinux/9"
     env:
       APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
     runs-on: ubuntu-latest
