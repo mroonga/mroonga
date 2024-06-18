@@ -42,7 +42,7 @@ RUN \
     libmecab-dev \
     libncurses5-dev \
     libpam0g-dev \
-    libpcre3-dev \
+    libpcre2-dev \
     libreadline-dev \
     libsnappy-dev \
     libssl-dev \
