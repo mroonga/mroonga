@@ -25,6 +25,7 @@ Build-Depends:
 	libreadline-dev,
 	libsnappy-dev,
 	libssl-dev,
+        liburing-dev,
 	libxml2-dev,
 	lsb-release,
 	perl,

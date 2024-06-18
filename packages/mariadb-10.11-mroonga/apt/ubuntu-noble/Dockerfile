@@ -46,6 +46,7 @@ RUN \
     libreadline-dev \
     libsnappy-dev \
     libssl-dev \
+    liburing-dev \
     libxml2-dev \
     libre2-dev \
     lsb-release \
