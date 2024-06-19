@@ -1,5 +1,3 @@
-% -*- rst -*-
-
 # How to contribute in documentation topics
 
 We use Sphinx for documentation tool.
@@ -26,7 +24,7 @@ TODO
 
 まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。:
 
-```
+```console
 % git config --global user.name "Your Name"
 % git config --global user.email "Email address"
 ```
@@ -45,7 +43,7 @@ Fork リポジトリ選択画面でご自分のリポジトリへとforkして�
 
 Clone Mroonga repository to working directory. Don't forget to do "Git configuration".:
 
-```
+```console
 % git clone git@github.com:(YOUR_GITHUB_ACCOUNT)/mroonga.git
 % cd mroonga
 % git remote add upstream git@github.com:mroonga/mroonga
@@ -55,7 +53,7 @@ Clone Mroonga repository to working directory. Don't forget to do "Git configura
 
 Execute following commands to prepare for generating Mroonga documentation:
 
-```
+```console
 % ./autogen.sh
 % ./configure --enable-document --with-mysql-source=(SOURCE_DIRECTORY_OF_MySQL)
 ```
@@ -70,7 +68,7 @@ Next step is "The things you need to do every tasks".
 
 Mroonga本家の最新状態に追従して、作業がかぶらないようにします。:
 
-```
+```console
 % git fetch --all
 % git checkout main
 % git rebase upstream/main
@@ -80,13 +78,15 @@ Mroonga本家の最新状態に追従して、作業がかぶらないように�
 
 ## The things you need to do every files
 
-以下では、例えば <http://mroonga.org/docs/characteristic.html> を更新する場合で説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更する例で説明します。
+以下では、例えば {doc}`characteristic` を更新する場合で説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更する例で説明します。
 
 ### Create working branch
 
 Create a working branch. Use meaningful branch name.
 
-> \% git checkout -b use-capitalized-notation-characteristic
+```console
+% git checkout -b use-capitalized-notation-characteristic
+```
 
 ### Editing text
 
@@ -96,14 +96,14 @@ Fix typos, styles or write a new document for Mroonga.
 
 マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。:
 
-```
+```console
 % cd doc/locale/en
 % make html
 ```
 
 いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。:
 
-```
+```console
 % firefox html/characteristic.html
 ```
 
@@ -111,7 +111,7 @@ Fix typos, styles or write a new document for Mroonga.
 
 HTMLに問題がないことを確認できたら、コミットします。:
 
-```
+```console
 % cd ${cloneしたディレクトリーのトップディレクトリー}
 % git add doc/source/characteristic.rst
 % git commit
@@ -127,12 +127,12 @@ doc: use "Mroonga" notation
 
 Publish your changes to your own GitHub repository:
 
-```
+```console
 % git push -u origin use-capitalized-notation-characteristic
 ```
 
 Note that `use-capitalized-notation-characteristic` is already created branch in advance.
 
-ブラウザで <https://github.com>/(GitHubのアカウント)/mroonga を開くと「 @use-capitalized-notation-characteristic@ 」ブランチをpull requestする！みたいなUIができているので、そこのボタンを押してpull requestしてください。入力フォームがでてきますが、コミットしたときメッセージで十分なのでそのままpull requestしてOKです！
+ブラウザで `https://github.com/(GitHubのアカウント)/mroonga` を開くと「 @use-capitalized-notation-characteristic@ 」ブランチをpull requestする！みたいなUIができているので、そこのボタンを押してpull requestしてください。入力フォームがでてきますが、コミットしたときメッセージで十分なのでそのままpull requestしてOKです！
 
 これで、ひととおりの作業は完了しました。
