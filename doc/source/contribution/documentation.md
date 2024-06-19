@@ -78,7 +78,7 @@ Mroonga本家の最新状態に追従して、作業がかぶらないように�
 
 ## The things you need to do every files
 
-以下では、例えば {doc}`characteristic` を更新する場合で説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更する例で説明します。
+以下では、例えば {doc}`/characteristic` を更新する場合で説明します。作業対象となるファイルは、リポジトリのdoc/source/ディレクトリ以下にあり拡張子が.rstなファイルです。今回は、doc/source/characteristic.rstを変更する例で説明します。
 
 ### Create working branch
 
