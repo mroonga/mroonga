@@ -269,4 +269,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       raise NotImplementedError
     end
   end
+
+  def tag_name
+    "v#{@version}"
+  end
 end
