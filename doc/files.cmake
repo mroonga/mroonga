@@ -6,7 +6,7 @@ set(MRN_DOC_SOURCES
     community.rst
     conf.py
     contribution.rst
-    contribution/documentation.rst
+    contribution/documentation.md
     contribution/report.rst
     developer.rst
     developer/coding_style.rst
