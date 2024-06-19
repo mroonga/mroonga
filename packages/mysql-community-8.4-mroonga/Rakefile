@@ -9,7 +9,9 @@ class MySQLCommunity84MroongaPackageTask < MroongaPackageTask
     [
       "debian-bookworm",
       "ubuntu-jammy",
-      "ubuntu-noble",
+      # The source of MySQL Community Server for Ubuntu noble isn't available yet.
+      # So, we don't build Mroonga with MySQL 8.0 Community Server for Ubuntu noble.
+      # "ubuntu-noble",
     ]
   end
 
