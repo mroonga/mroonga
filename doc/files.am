@@ -6,7 +6,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/community.rst \
 	$(top_srcdir)/doc/source/conf.py \
 	$(top_srcdir)/doc/source/contribution.rst \
-	$(top_srcdir)/doc/source/contribution/documentation.rst \
+	$(top_srcdir)/doc/source/contribution/documentation.md \
 	$(top_srcdir)/doc/source/contribution/report.rst \
 	$(top_srcdir)/doc/source/developer.rst \
 	$(top_srcdir)/doc/source/developer/coding_style.rst \
@@ -82,7 +82,7 @@ source_files_relative_from_doc_dir = \
 	source/community.rst \
 	source/conf.py \
 	source/contribution.rst \
-	source/contribution/documentation.rst \
+	source/contribution/documentation.md \
 	source/contribution/report.rst \
 	source/developer.rst \
 	source/developer/coding_style.rst \
