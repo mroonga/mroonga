@@ -249,7 +249,8 @@ jobs:
           matrix.use-main != 'yes' && startsWith(github.ref, 'refs/tags/')
         run: |
           gh release upload ${Env:GITHUB_REF_NAME} `
-            "${Env:ARTIFACT_NAME}.zip"
+            "${Env:ARTIFACT_NAME}.zip" `
+            --repo ${Env:GITHUB_REPOSITORY}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
