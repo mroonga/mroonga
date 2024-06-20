@@ -52,7 +52,7 @@ msgstr ""
 msgid "Git configuration"
 msgstr ""
 
-msgid "まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。:"
+msgid "まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。"
 msgstr ""
 
 msgid "上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメールアドレスを設定します。"
@@ -73,13 +73,13 @@ msgstr ""
 msgid "Initial configuration for working repository"
 msgstr ""
 
-msgid "Clone Mroonga repository to working directory. Don't forget to do \"Git configuration\".:"
+msgid "Clone Mroonga repository to working directory. Don't forget to do \"Git configuration\"."
 msgstr ""
 
 msgid "Initial configuration for building documentation"
 msgstr ""
 
-msgid "Execute following commands to prepare for generating Mroonga documentation:"
+msgid "Execute following commands to prepare for generating Mroonga documentation."
 msgstr ""
 
 msgid "Next step is \"The things you need to do every tasks\"."
@@ -91,7 +91,7 @@ msgstr ""
 msgid "Follow the upstream"
 msgstr ""
 
-msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。:"
+msgid "Mroonga本家の最新状態に追従して、作業がかぶらないようにします。"
 msgstr ""
 
 msgid "最新の状態に追従できたら、「ファイルごとにやること」へと進みます。"
@@ -115,25 +115,25 @@ msgstr ""
 msgid "Confirm generated document"
 msgstr ""
 
-msgid "マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。:"
+msgid "マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。"
 msgstr ""
 
-msgid "いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。:"
+msgid "いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。"
 msgstr ""
 
 msgid "Commit"
 msgstr ""
 
-msgid "HTMLに問題がないことを確認できたら、コミットします。:"
+msgid "HTMLに問題がないことを確認できたら、コミットします。"
 msgstr ""
 
-msgid "コミットするときのメッセージについては、例えば以下のようにします。:"
+msgid "コミットするときのメッセージについては、例えば以下のようにします。"
 msgstr ""
 
 msgid "Push and pull request"
 msgstr ""
 
-msgid "Publish your changes to your own GitHub repository:"
+msgid "Publish your changes to your own GitHub repository."
 msgstr ""
 
 msgid "Note that `use-capitalized-notation-characteristic` is already created branch in advance."

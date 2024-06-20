@@ -22,7 +22,7 @@ TODO
 
 ### Git configuration
 
-まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。:
+まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。
 
 ```console
 % git config --global user.name "Your Name"
@@ -41,7 +41,7 @@ Fork リポジトリ選択画面でご自分のリポジトリへとforkして�
 
 ### Initial configuration for working repository
 
-Clone Mroonga repository to working directory. Don't forget to do "Git configuration".:
+Clone Mroonga repository to working directory. Don't forget to do "Git configuration".
 
 ```console
 % git clone git@github.com:(YOUR_GITHUB_ACCOUNT)/mroonga.git
@@ -51,7 +51,7 @@ Clone Mroonga repository to working directory. Don't forget to do "Git configura
 
 ### Initial configuration for building documentation
 
-Execute following commands to prepare for generating Mroonga documentation:
+Execute following commands to prepare for generating Mroonga documentation.
 
 ```console
 % ./autogen.sh
@@ -66,7 +66,7 @@ Next step is "The things you need to do every tasks".
 
 ### Follow the upstream
 
-Mroonga本家の最新状態に追従して、作業がかぶらないようにします。:
+Mroonga本家の最新状態に追従して、作業がかぶらないようにします。
 
 ```console
 % git fetch --all
@@ -94,14 +94,14 @@ Fix typos, styles or write a new document for Mroonga.
 
 ### Confirm generated document
 
-マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。:
+マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。
 
 ```console
 % cd doc/locale/en
 % make html
 ```
 
-いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。:
+いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。
 
 ```console
 % firefox html/characteristic.html
@@ -109,7 +109,7 @@ Fix typos, styles or write a new document for Mroonga.
 
 ### Commit
 
-HTMLに問題がないことを確認できたら、コミットします。:
+HTMLに問題がないことを確認できたら、コミットします。
 
 ```console
 % cd ${cloneしたディレクトリーのトップディレクトリー}
@@ -117,7 +117,7 @@ HTMLに問題がないことを確認できたら、コミットします。:
 % git commit
 ```
 
-コミットするときのメッセージについては、例えば以下のようにします。:
+コミットするときのメッセージについては、例えば以下のようにします。
 
 ```
 doc: use "Mroonga" notation
@@ -125,7 +125,7 @@ doc: use "Mroonga" notation
 
 ### Push and pull request
 
-Publish your changes to your own GitHub repository:
+Publish your changes to your own GitHub repository.
 
 ```console
 % git push -u origin use-capitalized-notation-characteristic
