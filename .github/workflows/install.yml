@@ -20,6 +20,10 @@ jobs:
             package: mariadb
           - image: "images:ubuntu/22.04"
             package: mysql
+          - image: "images:ubuntu/24.04"
+            package: mariadb
+          - image: "images:ubuntu/24.04"
+            package: mysql
     steps:
       - uses: actions/checkout@v4
       - name: Install Incus
