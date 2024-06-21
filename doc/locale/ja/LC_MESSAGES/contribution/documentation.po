@@ -43,12 +43,6 @@ msgstr ""
 msgid "以下では、最初に一度だけ実施しておけば良いことを説明します。"
 msgstr ""
 
-msgid "Required softwares"
-msgstr ""
-
-msgid "TODO"
-msgstr ""
-
 msgid "Git configuration"
 msgstr ""
 
@@ -74,6 +68,18 @@ msgid "Initial configuration for working repository"
 msgstr ""
 
 msgid "Clone Mroonga repository to working directory. Don't forget to do \"Git configuration\"."
+msgstr ""
+
+msgid "Required softwares"
+msgstr "必要なソフトウェア"
+
+msgid "Generating Mroonga documentations needs [Sphinx](https://www.sphinx-doc.org/) and MySQL's source and build directories. Instructions for installing Sphinx are provided below. Please see {doc}`/install/others` for information on preparing the MySQL source and build directories."
+msgstr "Mroongaドキュメントの生成には、[Sphinx](https://www.sphinx-doc.org/)とMySQLのソースとビルドディレクトリーが必要です。Sphinxのインストール手順は以下になります。MySQLのソースとビルドディレクトリーの準備に関しては、こちらの{doc}`/install/others`を確認してください。"
+
+msgid "Here are command lines to install Sphinx."
+msgstr "以下のコマンドでSphinxをインストールします。"
+
+msgid "Debian GNU/Linux, Ubuntu:"
 msgstr ""
 
 msgid "Initial configuration for building documentation"
