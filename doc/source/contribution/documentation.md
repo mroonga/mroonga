@@ -53,8 +53,6 @@ Please see {doc}`/install/others` for information on preparing the MySQL source 
 
 Here are command lines to install Sphinx.
 
-Debian GNU/Linux, Ubuntu:
-
 ```console
 % pip install -r doc/requirements.txt
 % (cd doc && bundle install)

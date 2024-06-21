@@ -79,9 +79,6 @@ msgstr "Mroongaドキュメントの生成には、[Sphinx](https://www.sphinx-d
 msgid "Here are command lines to install Sphinx."
 msgstr "以下のコマンドでSphinxをインストールします。"
 
-msgid "Debian GNU/Linux, Ubuntu:"
-msgstr ""
-
 msgid "Initial configuration for building documentation"
 msgstr ""
 
