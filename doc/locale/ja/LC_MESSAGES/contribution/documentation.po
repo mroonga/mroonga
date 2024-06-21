@@ -73,11 +73,26 @@ msgstr ""
 msgid "Required softwares"
 msgstr "必要なソフトウェア"
 
-msgid "Generating Mroonga documentations needs [Sphinx](https://www.sphinx-doc.org/) and MySQL's source and build directories. Instructions for installing Sphinx are provided below. Please see {doc}`/install/others` for information on preparing the MySQL source and build directories."
-msgstr "Mroongaドキュメントの生成には、[Sphinx](https://www.sphinx-doc.org/)とMySQLのソースとビルドディレクトリーが必要です。Sphinxのインストール手順は以下になります。MySQLのソースとビルドディレクトリーの準備に関しては、こちらの{doc}`/install/others`を確認してください。"
+msgid "Generating Mroonga documentations needs the followings softwares."
+msgstr "Mroongaドキュメントを生成するには、下記のソフトウェアが必要です。"
+
+msgid "[Sphinx](https://www.sphinx-doc.org/): Used for generating the documentation"
+msgstr "[Sphinx](https://www.sphinx-doc.org/): ドキュメントを生成するのに利用します。"
+
+msgid "[MySQL](https://www.mysql.com/): The source, build directories and `mysql_config` are needed"
+msgstr "[MySQL](https://www.mysql.com/): ソース、ビルドディレクトリーと`mysql_config`が必要です。"
+
+msgid "[Groonga](https://groonga.org/): Mroonga is based on Groonga, the full text search engine"
+msgstr "[Groonga](https://groonga.org/): Mroongaは、全文検索エンジンであるGroongaを元にしているため必要です。"
+
+msgid "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql): A MySQL compatible normalizer plugin for Groonga"
+msgstr "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql): GroongaのMySQL互換のノーマライザープラグインとして必要です。"
 
 msgid "Here are command lines to install Sphinx."
 msgstr "以下のコマンドでSphinxをインストールします。"
+
+msgid "Please see {doc}`/install/others` for information on preparing the other softwares like the MySQL source and build directories."
+msgstr "MySQLのソースとビルドディレクトリーなど他の必要なソフトウェアの準備に関しては、こちらの{doc}`/install/others`を確認してください。"
 
 msgid "Initial configuration for building documentation"
 msgstr ""
