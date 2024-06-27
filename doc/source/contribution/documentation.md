@@ -47,12 +47,11 @@ Clone Mroonga repository to working directory. Don't forget to do "Git configura
 
 ### Required softwares
 
-Generating Mroonga documentations needs the followings softwares.
+Generating Mroonga documentations needs the followings.
 
-- [Sphinx](https://www.sphinx-doc.org/): Used for generating the documentation
-- [MySQL](https://www.mysql.com/): The source, build directories and `mysql_config` are needed
-- [Groonga](https://groonga.org/): Mroonga is based on Groonga, the full text search engine
-- [groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql): A MySQL compatible normalizer plugin for Groonga
+- [Sphinx](https://www.sphinx-doc.org/)
+- [Groonga](https://groonga.org/)
+- [MySQL](https://www.mysql.com/)(source, build directories and `mysql_config`)
 
 Here are command lines to install Sphinx.
 
@@ -61,7 +60,7 @@ Here are command lines to install Sphinx.
 % (cd doc && bundle install)
 ```
 
-Please see {doc}`/install/others` for information on preparing the other softwares like the MySQL source and build directories.
+Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`)
 
 ### Initial configuration for building documentation
 
