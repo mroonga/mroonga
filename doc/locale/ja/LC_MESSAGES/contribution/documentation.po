@@ -16,6 +16,9 @@ msgstr ""
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "Here are command lines to install Sphinx."
+msgstr "以下のコマンドでSphinxをインストールします。"
+
 msgid "How to contribute in documentation topics"
 msgstr ""
 
@@ -83,13 +86,7 @@ msgid "[Groonga](https://groonga.org/)"
 msgstr ""
 
 msgid "[MySQL](https://www.mysql.com/)(source, build directories and `mysql_config`)"
-msgstr ""
-
-msgid "Here are command lines to install Sphinx."
-msgstr "以下のコマンドでSphinxをインストールします。"
-
-msgid "Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`)"
-msgstr "GroogngaとMySQL(ソース、ビルドディレクトリーや`mysql_config`)の準備に関しては、こちらの{doc}`/install/others`を確認してください。"
+msgstr "[MySQL](https://www.mysql.com/)(ソース、ビルドディレクトリーと`mysql_config`)"
 
 msgid "Initial configuration for building documentation"
 msgstr ""
@@ -159,3 +156,6 @@ msgstr ""
 
 msgid "これで、ひととおりの作業は完了しました。"
 msgstr ""
+
+msgid "Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`)"
+msgstr "GroogngaとMySQL(ソース、ビルドディレクトリーと`mysql_config`)の準備に関しては、こちらの{doc}`/install/others`を確認してください。"
