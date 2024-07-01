@@ -61,7 +61,7 @@ Here are command lines to install Sphinx and gettext gem.
 % (cd doc && bundle install)
 ```
 
-Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`)
+Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`).
 
 ### Initial configuration for building documentation
 
