@@ -50,10 +50,11 @@ Clone Mroonga repository to working directory. Don't forget to do "Git configura
 Generating Mroonga documentations needs the followings.
 
 - [Sphinx](https://www.sphinx-doc.org/)
+- [gettext gem](https://github.com/ruby-gettext/gettext)
 - [Groonga](https://groonga.org/)
 - [MySQL](https://www.mysql.com/)(source, build directories and `mysql_config`)
 
-Here are command lines to install Sphinx.
+Here are command lines to install Sphinx and gettext gem.
 
 ```console
 % pip install -r doc/requirements.txt
