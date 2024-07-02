@@ -88,8 +88,8 @@ msgstr ""
 msgid "[MySQL](https://www.mysql.com/)"
 msgstr ""
 
-msgid "We use Sphinx for documentation tool and use gettext gem for localization (L10n). Here are command lines to install Sphinx and gettext gem."
-msgstr "ドキュメントツールとしてSphinxを使用し、ローカライズ(10n)にはgettext gemを使用します。以下のコマンドでSphinxとgettext gemをインストールします。"
+msgid "We use Sphinx for documentation tool and use gettext gem for localization. Here are command lines to install Sphinx and gettext gem."
+msgstr "ドキュメントツールとしてSphinxを使用し、ローカライズにはgettext gemを使用します。以下のコマンドでSphinxとgettext gemをインストールします。"
 
 msgid "Please see {doc}`/install/others` about setting up Groonga and MySQL."
 msgstr "GroongaとMySQLの準備に関しては、こちらの{doc}`/install/others`を確認してください。"

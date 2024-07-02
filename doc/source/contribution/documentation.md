@@ -54,7 +54,7 @@ Generating Mroonga documentations needs the followings.
 - [Groonga](https://groonga.org/)
 - [MySQL](https://www.mysql.com/)
 
-We use Sphinx for documentation tool and use gettext gem for localization (L10n).
+We use Sphinx for documentation tool and use gettext gem for localization.
 Here are command lines to install Sphinx and gettext gem.
 
 ```console
