@@ -52,7 +52,7 @@ Generating Mroonga documentations needs the followings.
 - [Sphinx](https://www.sphinx-doc.org/)
 - [gettext gem](https://github.com/ruby-gettext/gettext)
 - [Groonga](https://groonga.org/)
-- [MySQL](https://www.mysql.com/)(source, build directories and `mysql_config`)
+- [MySQL](https://www.mysql.com/)
 
 We use Sphinx for documentation tool and use gettext gem for localization (L10n).
 Here are command lines to install Sphinx and gettext gem.
@@ -62,7 +62,7 @@ Here are command lines to install Sphinx and gettext gem.
 % (cd doc && bundle install)
 ```
 
-Please see {doc}`/install/others` about setting up Groonga and MySQL(source, build directories, and `mysql_config`).
+Please see {doc}`/install/others` about setting up Groonga and MySQL.
 
 ### Initial configuration for building documentation
 
