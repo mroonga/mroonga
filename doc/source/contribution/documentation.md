@@ -16,10 +16,6 @@ We use Sphinx for documentation tool.
 
 以下では、最初に一度だけ実施しておけば良いことを説明します。
 
-### Required softwares
-
-TODO
-
 ### Git configuration
 
 まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。
@@ -48,6 +44,25 @@ Clone Mroonga repository to working directory. Don't forget to do "Git configura
 % cd mroonga
 % git remote add upstream git@github.com:mroonga/mroonga
 ```
+
+### Required softwares
+
+Generating Mroonga documentations needs the followings.
+
+- [Sphinx](https://www.sphinx-doc.org/)
+- [gettext gem](https://github.com/ruby-gettext/gettext)
+- [Groonga](https://groonga.org/)
+- [MySQL](https://www.mysql.com/)
+
+We use Sphinx for documentation tool and use gettext gem for localization.
+Here are command lines to install Sphinx and gettext gem.
+
+```console
+% pip install -r doc/requirements.txt
+% (cd doc && bundle install)
+```
+
+Please see {doc}`/install/others` about setting up Groonga and MySQL.
 
 ### Initial configuration for building documentation
 
