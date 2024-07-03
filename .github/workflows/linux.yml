@@ -82,7 +82,7 @@ jobs:
           make dist
 
       # Artifact
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: source
           path: mroonga-*.tar.gz
@@ -250,7 +250,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v3
         with:
           name: source
       - name: Update version
@@ -302,7 +302,7 @@ jobs:
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
           path: packages/${{ matrix.package }}-mroonga/${{ env.PACKAGE_TYPE }}/repositories/
