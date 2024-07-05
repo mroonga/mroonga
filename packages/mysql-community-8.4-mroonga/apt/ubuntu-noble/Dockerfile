@@ -39,4 +39,5 @@ RUN \
     groonga-normalizer-mysql \
     libgroonga-dev \
     libmysqlclient-dev \
+    libtirpc-dev \
     ninja-build
