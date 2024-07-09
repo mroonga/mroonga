@@ -115,17 +115,16 @@ Fix typos, styles or write a new document for Mroonga.
 
 ### Confirm generated document
 
-マークアップに問題がないか、HTMLを確認します。HTMLを生成するには以下のコマンドを実行します。
+Execute following command to generate HTML files that reflect your changes.
 
 ```console
-% cd doc/locale/en
-% make html
+% cmake --build ../mroonga.doc
 ```
 
-いつも使っているブラウザで該当ファイルを確認して、変更した内容が反映されていればOKです。
+Open the generated file in your Web browser to preview your changes are reflected.
 
 ```console
-% firefox html/characteristic.html
+% open ../mroonga.doc/doc/en/html/characteristic.html
 ```
 
 ### Commit
