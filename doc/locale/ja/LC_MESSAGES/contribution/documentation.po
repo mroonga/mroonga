@@ -43,12 +43,6 @@ msgstr ""
 msgid "以下では、最初に一度だけ実施しておけば良いことを説明します。"
 msgstr ""
 
-msgid "Required softwares"
-msgstr ""
-
-msgid "TODO"
-msgstr ""
-
 msgid "Git configuration"
 msgstr ""
 
@@ -75,6 +69,27 @@ msgstr ""
 
 msgid "Clone Mroonga repository to working directory. Don't forget to do \"Git configuration\"."
 msgstr ""
+
+msgid "Prerequisites"
+msgstr "事前に必要な対応"
+
+msgid "Before generating the Mroonga documentation, we need to build Mroonga. Please refer to {doc}`/install/others` for the instructions on how to build Mroonga."
+msgstr "Mroongaのドキュメントを生成する前に、まずMroongaをビルドする必要があります。Mroongaのビルド方法については、{doc}`/install/others`を参照してください。"
+
+msgid "Required software"
+msgstr "必要なソフトウェア"
+
+msgid "Generating Mroonga documentation needs the followings."
+msgstr "Mroongaのドキュメントを生成するためには、以下が必要です。"
+
+msgid "[Sphinx](https://www.sphinx-doc.org/)"
+msgstr ""
+
+msgid "[gettext gem](https://github.com/ruby-gettext/gettext)"
+msgstr ""
+
+msgid "We use Sphinx for documentation tool and use gettext gem for localization. You can install both tools using the following commands."
+msgstr "ドキュメントツールとしてSphinxを使用し、ローカライズにはgettext gemを使用します。以下のコマンドでこれらのツールをインストールできます。"
 
 msgid "Initial configuration for building documentation"
 msgstr ""
