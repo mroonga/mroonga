@@ -168,11 +168,17 @@ You don't need to install Sphinx by yourself because Mroonga clones the latest S
 Build Mroonga
 ^^^^^^^^^^^^^
 
-In order to enables documentation generation, you should run configure script with "--enable-document" option as follows. ::
+To enable documentation generation, run the following command with the ``--preset=doc`` option.
 
-  % ./configure --enable-document --with-mysql-source=(your mysql source directory)
-  % make
-  % make install
+.. code-block:: console
+
+  % cmake \
+      -S . \
+      -B ../mroonga.doc \
+      --preset=doc \
+      -DMYSQL_SOURCE_DIR=(MySQL_SOURCE_DIRECTORY) \
+      -DMYSQL_BUILD_DIR=(MySQL_BUILD_DIRECTORY) \
+      -DMYSQL_CONFIG=(MySQL_CONFIG)
 
 Adding a document
 ^^^^^^^^^^^^^^^^^

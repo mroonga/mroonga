@@ -274,8 +274,8 @@ msgstr "Sphinxを自分でインストールする必要はありません。Mro
 msgid "Build Mroonga"
 msgstr "Mroongaのビルド"
 
-msgid "In order to enables documentation generation, you should run configure script with \"--enable-document\" option as follows. ::"
-msgstr "ドキュメント生成を有効にするには、以下のようにconfigureスクリプトを\"--enable-document\"オプションを指定して実行します。"
+msgid "To enable documentation generation, run the following command with the ``--preset=doc`` option."
+msgstr "ドキュメント生成を有効にするには、以下のコマンドを ``--preset-doc`` オプションをつけて実行します。"
 
 msgid "Adding a document"
 msgstr "ドキュメントを追加"
