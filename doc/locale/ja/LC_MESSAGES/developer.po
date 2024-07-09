@@ -275,7 +275,7 @@ msgid "Build Mroonga"
 msgstr "Mroongaのビルド"
 
 msgid "To enable documentation generation, run the following command with the ``--preset=doc`` option."
-msgstr "ドキュメント生成を有効にするには、以下のコマンドを ``--preset-doc`` オプションをつけて実行します。"
+msgstr "ドキュメント生成を有効にするには、以下のように ``--preset-doc`` オプションをつけてコマンドを実行します。"
 
 msgid "Adding a document"
 msgstr "ドキュメントを追加"
