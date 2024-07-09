@@ -92,13 +92,13 @@ msgid "We use Sphinx for documentation tool and use gettext gem for localization
 msgstr "ドキュメントツールとしてSphinxを使用し、ローカライズにはgettext gemを使用します。以下のコマンドでこれらのツールをインストールできます。"
 
 msgid "Initial configuration for building documentation"
-msgstr ""
+msgstr "ドキュメント生成の初期設定"
 
 msgid "Execute following commands to prepare for generating Mroonga documentation."
-msgstr ""
+msgstr "下記のコマンドで、Mroongaドキュメントを生成する設定をします。"
 
 msgid "Next step is \"The things you need to do every tasks\"."
-msgstr ""
+msgstr "次のステップは、\"ドキュメント編集・更新時に毎回必要な作業\"の説明をします。"
 
 msgid "以下では作業ごとにやることを説明します。"
 msgstr ""
