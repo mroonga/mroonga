@@ -71,12 +71,12 @@ Execute following commands to prepare for generating Mroonga documentation.
 
 ```console
 % cmake \
-  -S . \
-  -B ../mroonga.doc \
-  --preset=doc \
-  -DMYSQL_SOURCE_DIR=(MySQL_SOURCE_DIRECTORY) \
-  -DMYSQL_BUILD_DIR=(MySQL_BUILD_DIRECTORY) \
-  -DMYSQL_CONFIG=(MySQL_CONFIG)
+    -S . \
+    -B ../mroonga.doc \
+    --preset=doc \
+    -DMYSQL_SOURCE_DIR=(MySQL_SOURCE_DIRECTORY) \
+    -DMYSQL_BUILD_DIR=(MySQL_BUILD_DIRECTORY) \
+    -DMYSQL_CONFIG=(MySQL_CONFIG)
 ```
 
 Next step is "The things you need to do every tasks".
