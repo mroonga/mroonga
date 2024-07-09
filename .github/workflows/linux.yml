@@ -188,10 +188,9 @@ jobs:
           - os: ubuntu-jammy
             package: mysql-community-8.0
             test-image: "images:ubuntu/22.04"
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   package: mysql-community-8.0
-          #   test-image: "images:ubuntu/24.04"
+          - os: ubuntu-noble
+            package: mysql-community-8.0
+            test-image: "images:ubuntu/24.04"
 
           # MySQL community 8.4
           - os: almalinux-8
@@ -206,10 +205,9 @@ jobs:
           - os: ubuntu-jammy
             package: mysql-community-8.4
             test-image: "images:ubuntu/22.04"
-          # Source isn't available yet.
-          # - os: ubuntu-noble
-          #   package: mysql-community-8.4
-          #   test-image: "images:ubuntu/24.04"
+          - os: ubuntu-noble
+            package: mysql-community-8.4
+            test-image: "images:ubuntu/24.04"
 
           # Source of version 8.0.38 isn't available yet.
           # MySQL community minimal 8.0

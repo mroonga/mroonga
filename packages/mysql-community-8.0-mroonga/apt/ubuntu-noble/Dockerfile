@@ -37,7 +37,8 @@ RUN \
     dh-apparmor \
     groonga-normalizer-mysql \
     libgroonga-dev \
-    libmysqlclient-dev && \
+    libmysqlclient-dev \
+    libtirpc-dev && \
   mkdir -p /usr/global/share && \
   wget --no-verbose \
     https://packages.groonga.org/tmp/boost/boost_1_77_0.tar.bz2 && \
