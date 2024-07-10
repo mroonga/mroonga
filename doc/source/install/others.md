@@ -287,7 +287,7 @@ Here is an example when you specify `--prefix=$HOME/local` to
 ### `uninstall Mroonga`
 
 If you want to remove Mroonga,
-type below comman.
+type below commands.
 
 ```console
 % mysql < ${PREFIX}/share/mroonga/uninstall.sql

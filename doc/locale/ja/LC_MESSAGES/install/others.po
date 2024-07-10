@@ -238,5 +238,5 @@ msgstr "以下は `configure` に `--prefix=$HOME/local` と指定した場合�
 msgid "`uninstall Mroonga`"
 msgstr ""
 
-msgid "If you want to remove Mroonga, type below comman."
+msgid "If you want to remove Mroonga, type below commands."
 msgstr "Mroongaを削除したい場合は、以下のコマンドを入力して下さい。"
