@@ -13,15 +13,12 @@ MariaDB instead of MySQL.
 
 Here are required tools:
 
-> - `wget`, `curl` or Web browser for downloading source archive
-> - `tar` and `gzip` for extracting source archive
-> - shell
->   (many shells such as `dash`, `bash` and `zsh` will work)
-> - C compiler and C++ compiler
->   (`gcc` and `g++` are supported but other compilers may work)
-> - `make` (GNU make is supported but other make like BSD make will work)
-> - [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) for
->   detecting libraries
+- `wget`, `curl` or Web browser for downloading source archive
+- `tar` and `gzip` for extracting source archive
+- shell (many shells such as `dash`, `bash` and `zsh` will work)
+- C compiler and C++ compiler (`gcc` and `g++` are supported but other compilers may work)
+- `make` (GNU make is supported but other make like BSD make will work)
+- [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) for detecting libraries
 
 You must get them ready.
 
@@ -30,28 +27,24 @@ document doesn't describe about building with CMake.
 
 Here are optional tools:
 
-> - [sudo](http://www.gratisoft.us/sudo/) for installing built
->   Mroonga.
+- [sudo](http://www.gratisoft.us/sudo/) for installing built Mroonga.
 
 ### Libraries
 
 Here are required libraries:
 
-> - [Groonga](http://groonga.org/). (If you use package, install
->   development package such as `libgroonga-dev` for deb or
->   `groonga-devel` for RPM.)
-> - [groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql).
+- [Groonga](http://groonga.org/). (If you use package, install development package such as `libgroonga-dev` for deb or `groonga-devel` for RPM.)
+- [groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql).
 
 Here are optional libraries:
 
-> - [MeCab](https://taku910.github.io/mecab/):
->   Japanese morphological analysis system
->
->   :::{note}
->   If you want to use indexes of tokenizing of each
->   morpheme for full text search, install MeCab before
->   installing Groonga.
->   :::
+- [MeCab](https://taku910.github.io/mecab/): Japanese morphological analysis system
+
+```{note}
+If you want to use indexes of tokenizing of each
+morpheme for full text search, install MeCab before
+installing Groonga.
+```
 
 ### MySQL
 
@@ -63,9 +56,7 @@ If you use MariaDB instead of MySQL, you need MariaDB source.
 
 Download the latest MySQL 5.6 source code, then build and install it.
 
-:::{seealso}
-[Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/)
-:::
+See also [Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/)
 
 Here we assume that you use mysql-5.6.21 and its source code is
 extracted in the following directory:
@@ -82,7 +73,7 @@ Then build in the following directory:
 
 Here are command lines to build and install MySQL:
 
-```
+```console
 % cd /usr/local/build/mysql-5.6.21
 % cmake /usr/local/src/mysql-5.6.21
 % make
@@ -100,7 +91,7 @@ And we assume that MySQL is installed in the following directory:
 Mroonga uses GNU build system. So the following is the simplest build
 steps:
 
-```
+```console
 % wget https://packages.groonga.org/source/mroonga/mroonga-6.12.tar.gz
 % tar xvzf mroonga-6.12.tar.gz
 % cd mroonga-6.12
@@ -115,9 +106,9 @@ steps:
 
 You need to specify the following on `configure`:
 
-> - The location of MySQL source code with `--with-mysql-source`.
-> - The location of MySQL build directory with `--with-mysql-build`.
-> - The path of `mysql_config` command with `--with-mysql-config`.
+- The location of MySQL source code with `--with-mysql-source`.
+- The location of MySQL build directory with `--with-mysql-build`.
+- The path of `mysql_config` command with `--with-mysql-config`.
 
 You can confirm Mroonga is installed successfully by `SHOW ENGINES`
 SQL. If you can find `Mroonga` row, Mroonga is installed
@@ -153,7 +144,7 @@ Specifies the location of MySQL source code.
 
 This is required parameter:
 
-```
+```console
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-5.6.21 \
     --with-mysql-config=/usr/local/mysql/bin/mysql_config
@@ -170,7 +161,7 @@ need to specify this parameter.
 Here is an example when you build MySQL in
 `/usr/local/build/mysql-5.6.21`:
 
-```
+```console
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-5.6.21 \
     --with-mysql-build=/usr/local/build/mysql-5.6.21 \
@@ -186,7 +177,7 @@ need to specify this parameter. For example, if `mysql_config`
 command exists at `/usr/bin/mysql_config`, you don't need to specify
 this parameter:
 
-```
+```console
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-5.6.21
 ```
@@ -200,7 +191,7 @@ The default is `TokenBigram`.
 
 Here is an example to use `TokenMecab` as the default tokenizer:
 
-```
+```console
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-5.6.21 \
     --with-mysql-config=/usr/local/mysql/bin/mysql_config \
@@ -221,7 +212,7 @@ used for installing Mroonga is installed to
 Here is an example that installs Mroonga into `~/local` for an user
 use instead of system wide use:
 
-```
+```console
 % ./configure \
     --prefix=$HOME/local \
     --with-mysql-source=$HOME/local/src/mysql-5.6.21 \
@@ -238,7 +229,7 @@ If Groonga is not installed in the standard location like
 `PKG_CONFIG_PATH`. For example, if Groonga is installed with
 `--prefix=$HOME/local`, use the following command line:
 
-```
+```console
 ./configure \
   PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
   --with-mysql-source=/usr/local/src/mysql-5.6.21 \
@@ -249,14 +240,14 @@ If Groonga is not installed in the standard location like
 
 `configure` is succeeded, you can build Mroonga by `make`:
 
-```
+```console
 % make
 ```
 
 If you have multi cores CPU, you can make faster by using `-j`
 option. If you have 4 cores CPU, it's good for using `-j4` option:
 
-```
+```console
 % make -j4
 ```
 
@@ -267,7 +258,7 @@ If you get some errors by `make`, please report them to us:
 
 Now, you can install built Mroonga!:
 
-```
+```console
 % sudo make install
 ```
 
@@ -276,7 +267,7 @@ directory of MySQL, you don't need to use
 `sudo`. e.g. `--prefix=$HOME/local` case. In this case, use `make
 install`:
 
-```
+```console
 % make install
 ```
 
@@ -289,7 +280,7 @@ You need to run some SQLs to register Mroonga to MySQL such as
 Here is an example when you specify `--prefix=$HOME/local` to
 `configure`:
 
-```
+```console
 % mysql -u root < $HOME/local/share/mroonga/install.sql
 ```
 
@@ -298,7 +289,7 @@ Here is an example when you specify `--prefix=$HOME/local` to
 If you want to remove Mroonga,
 type below commands:
 
-```
+```console
 % mysql < ${PREFIX}/share/mroonga/uninstall.sql
 % cd ${MROONGA_BUILD_DIR}
 % sudo make uninstall
