@@ -46,17 +46,17 @@ msgstr "シェル（ `dash` 、 `bash` 、 `zsh` など、どのようなシェ�
 msgid "C compiler and C++ compiler (`gcc` and `g++` are supported but other compilers may work)"
 msgstr "CコンパイラーとC++コンパイラー （ `gcc` と `g++` がサポート対象だが、他のコンパイラーでもたぶん大丈夫）"
 
-msgid "`make` (GNU make is supported but other make like BSD make will work)"
-msgstr "`make` （GNU makeがサポート対象だが、BSD makeなど他のmakeでもたぶん大丈夫）"
+msgid "[CMake](https://cmake.org/) as a cross-platform build system generator"
+msgstr "[CMake](https://cmake.org/)（クロスプラットフォームのビルドシステムとして利用するため）"
+
+msgid "[Ninja](https://ninja-build.org/) as a small build system with a focus on speed"
+msgstr "[Ninja](https://ninja-build.org/)（高速にビルドするため）"
 
 msgid "[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) for detecting libraries"
-msgstr "[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config)`（ライブラリを検出するため）"
+msgstr "[pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config)（ライブラリを検出するため）"
 
 msgid "You must get them ready."
 msgstr "これらを用意してください。"
-
-msgid "You can use [CMake](http://www.cmake.org/) instead of shell but this document doesn't describe about building with CMake."
-msgstr "シェルの代わりに [CMake](http://www.cmake.org/)を使うこともできますが、このドキュメントではCMakeを使ってビルドする方法については説明しません。"
 
 msgid "Here are optional tools."
 msgstr "あるとよいツール"
@@ -94,14 +94,14 @@ msgstr "Mroongaはインストール済みのMySQLだけでなくMySQLのソー�
 msgid "If you use MariaDB instead of MySQL, you need MariaDB source."
 msgstr "MySQLの代わりにMariaDBを使う場合でもMariaDBのソースが必要です。"
 
-msgid "Download the latest MySQL 5.6 source code, then build and install it."
-msgstr "MySQL 5.6最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。"
+msgid "Download the latest MySQL 8.4 source code, then build and install it."
+msgstr "MySQL 8.4最新版のソースコードをダウンロードし、ビルド＆インストールして下さい。"
 
 msgid "See also [Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/)"
 msgstr "こちらの[Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/) を参照して下さい。"
 
-msgid "Here we assume that you use mysql-5.6.21 and its source code is extracted in the following directory."
-msgstr "mysql-5.6.21を使用し、以下にソースディレクトリが展開されているものと仮定します。"
+msgid "Here we assume that you use mysql-8.4.1 and its source code is extracted in the following directory."
+msgstr "mysql-8.4.1を使用し、以下にソースディレクトリが展開されているものと仮定します。"
 
 msgid "Then build in the following directory."
 msgstr "次のディレクトリーでビルドします。"

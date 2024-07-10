@@ -17,13 +17,11 @@ Here are required tools.
 - `tar` and `gzip` for extracting source archive
 - shell (many shells such as `dash`, `bash` and `zsh` will work)
 - C compiler and C++ compiler (`gcc` and `g++` are supported but other compilers may work)
-- `make` (GNU make is supported but other make like BSD make will work)
+- [CMake](https://cmake.org/) as a cross-platform build system generator
+- [Ninja](https://ninja-build.org/) as a small build system with a focus on speed
 - [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) for detecting libraries
 
 You must get them ready.
-
-You can use [CMake](http://www.cmake.org/) instead of shell but this
-document doesn't describe about building with CMake.
 
 Here are optional tools.
 
@@ -54,36 +52,36 @@ source and build directory. You need MySQL source and build directory!
 
 If you use MariaDB instead of MySQL, you need MariaDB source.
 
-Download the latest MySQL 5.6 source code, then build and install it.
+Download the latest MySQL 8.4 source code, then build and install it.
 
 See also [Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/)
 
-Here we assume that you use mysql-5.6.21 and its source code is
+Here we assume that you use mysql-8.4.1 and its source code is
 extracted in the following directory.
 
 ```
-/usr/local/src/mysql-5.6.21
+/usr/local/src/mysql-8.4.1
 ```
 
 Then build in the following directory.
 
 ```
-/usr/local/build/mysql-5.6.21
+/usr/local/src/mysql-8.4.1.build
 ```
 
 Here are command lines to build and install MySQL.
 
 ```console
-% cd /usr/local/build/mysql-5.6.21
-% cmake /usr/local/src/mysql-5.6.21
-% make
-% sudo make install
+% cd /usr/local/src/mysql-8.4.1
+% cmake -S . -B ../mysql-8.4.1.build -GNinja
+% cmake --build ../mysql-8.4.1.build
+% sudo cmake --install ../mysql-8.4.1.build
 ```
 
 And we assume that MySQL is installed in the following directory.
 
 ```
-/usr/local/mysql
+/usr/local/bin/mysql
 ```
 
 ## Build from source
