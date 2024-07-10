@@ -140,4 +140,4 @@ http://cutter.sourceforge.net/
 Adding and updating documents
 -----------------------------
 
-See :doc:`contribution/documentation` about managing Mroonga documentation.
+See :doc:`contribution/documentation` about adding and updating documents.

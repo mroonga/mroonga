@@ -235,5 +235,5 @@ msgstr "http://cutter.sourceforge.net/index.html.ja"
 msgid "Adding and updating documents"
 msgstr "ドキュメントの追加と変更について"
 
-msgid "See :doc:`contribution/documentation` about managing Mroonga documentation."
-msgstr "Mroongaドキュメントの管理については :doc:`contribution/documentation` を参照して下さい。"
+msgid "See :doc:`contribution/documentation` about adding and updating documents."
+msgstr "ドキュメントの追加と変更については、 :doc:`contribution/documentation` を参照して下さい。"
