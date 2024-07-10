@@ -29,7 +29,7 @@ absolute_source_files = \
 	$(top_srcdir)/doc/source/install/fedora.rst \
 	$(top_srcdir)/doc/source/install/macos.rst \
 	$(top_srcdir)/doc/source/install/oracle-linux.rst \
-	$(top_srcdir)/doc/source/install/others.rst \
+	$(top_srcdir)/doc/source/install/others.md \
 	$(top_srcdir)/doc/source/install/ubuntu.rst \
 	$(top_srcdir)/doc/source/install/windows.rst \
 	$(top_srcdir)/doc/source/news.rst \
@@ -105,7 +105,7 @@ source_files_relative_from_doc_dir = \
 	source/install/fedora.rst \
 	source/install/macos.rst \
 	source/install/oracle-linux.rst \
-	source/install/others.rst \
+	source/install/others.md \
 	source/install/ubuntu.rst \
 	source/install/windows.rst \
 	source/news.rst \

@@ -29,7 +29,7 @@ set(MRN_DOC_SOURCES
     install/fedora.rst
     install/macos.rst
     install/oracle-linux.rst
-    install/others.rst
+    install/others.md
     install/ubuntu.rst
     install/windows.rst
     news.rst
