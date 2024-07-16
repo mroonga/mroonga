@@ -94,12 +94,12 @@ steps.
 % tar xvzf mroonga-6.12.tar.gz
 % cd mroonga-6.12
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-build=/usr/local/build/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
+    --with-mysql-build=/usr/local/src/mysql-8.4.1.build \
+    --with-mysql-config=/usr/local/bin/mysql_config
 % make
 % sudo make install
-% /usr/local/mysql/bin/mysql -u root < /usr/local/share/mroonga/install.sql
+% /usr/local/bin/mysql -u root < /usr/local/share/mroonga/install.sql
 ```
 
 You need to specify the following on `configure`.
@@ -144,8 +144,8 @@ This is required parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
+    --with-mysql-config=/usr/local/bin/mysql_config
 ```
 
 #### `--with-mysql-build=PATH`
@@ -157,13 +157,13 @@ specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
 Here is an example when you build MySQL in
-`/usr/local/build/mysql-5.6.21`.
+`/usr/local/src/mysql-8.4.1.build`.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-build=/usr/local/build/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
+    --with-mysql-build=/usr/local/src/mysql-8.4.1.build \
+    --with-mysql-config=/usr/local/bin/mysql_config
 ```
 
 #### `--with-mysql-config=PATH`
@@ -177,7 +177,7 @@ this parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21
+    --with-mysql-source=/usr/local/src/mysql-8.4.1
 ```
 
 #### `--with-default-tokenizer=TOKENIZER`
@@ -191,8 +191,8 @@ Here is an example to use `TokenMecab` as the default tokenizer.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config \
+    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
+    --with-mysql-config=/usr/local/bin/mysql_config \
     --with-default-tokenizer=TokenMecab
 ```
 
@@ -213,8 +213,8 @@ use instead of system wide use.
 ```console
 % ./configure \
     --prefix=$HOME/local \
-    --with-mysql-source=$HOME/local/src/mysql-5.6.21 \
-    --with-mysql-config=$HOME/local/mysql/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `PKG_CONFIG_PATH=PATH`
@@ -230,8 +230,8 @@ If Groonga is not installed in the standard location like
 ```console
 ./configure \
   PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-  --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-  --with-mysql-config=/usr/local/mysql/bin/mysql_config
+  --with-mysql-source=/usr/local/src/mysql-8.4.1 \
+  --with-mysql-config=/usr/local/bin/mysql_config
 ```
 
 ### `make`
