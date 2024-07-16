@@ -81,7 +81,7 @@ Here are command lines to build and install MySQL.
 And we assume that MySQL is installed in the following directory.
 
 ```
-/usr/local/bin/mysql
+/usr/local
 ```
 
 ## Build from source
