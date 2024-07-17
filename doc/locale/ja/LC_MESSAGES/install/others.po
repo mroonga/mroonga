@@ -160,8 +160,8 @@ msgstr "MySQLのソースコードをビルドしたディレクトリーを指�
 msgid "If you build MySQL in MySQL source code directory, you don't need to specify this parameter. If you build MySQL in other directory, you need to specify this parameter."
 msgstr "MySQLのソースコードがあるディレクトリーでビルドした場合はこの引数を指定する必要はありません。他のディレクトリーでビルドしたときはこの引数を指定する必要があります。"
 
-msgid "Here is an example when you build MySQL in `/usr/local/src/mysql-8.4.1.build`."
-msgstr "以下は `/usr/local/src/mysql-8.4.1.build` でMySQLをビルドした時の例です。"
+msgid "Here is an example when you build MySQL in `/usr/local/build/mysql-8.4.1`."
+msgstr "以下は `/usr/local/build/mysql-8.4.1` でMySQLをビルドした時の例です。"
 
 msgid "`--with-mysql-config=PATH`"
 msgstr ""

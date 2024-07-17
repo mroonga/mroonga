@@ -66,16 +66,15 @@ extracted in the following directory.
 Then build in the following directory.
 
 ```
-/usr/local/src/mysql-8.4.1.build
+/usr/local/build/mysql-8.4.1
 ```
 
 Here are command lines to build and install MySQL.
 
 ```console
-% cd /usr/local/src/mysql-8.4.1
-% cmake -S . -B ../mysql-8.4.1.build -GNinja
-% cmake --build ../mysql-8.4.1.build
-% sudo cmake --install ../mysql-8.4.1.build
+% sudo cmake -S /usr/local/src/mysql-8.4.1 -B /usr/local/build/mysql-8.4.1 -GNinja
+% sudo cmake --build /usr/local/build/mysql-8.4.1
+% sudo cmake --install /usr/local/build/mysql-8.4.1
 ```
 
 And we assume that MySQL is installed in the following directory.
@@ -95,7 +94,7 @@ steps.
 % cd mroonga-6.12
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-build=/usr/local/src/mysql-8.4.1.build \
+    --with-mysql-build=/usr/local/build/mysql-8.4.1 \
     --with-mysql-config=/usr/local/bin/mysql_config
 % make
 % sudo make install
@@ -157,12 +156,12 @@ specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
 Here is an example when you build MySQL in
-`/usr/local/src/mysql-8.4.1.build`.
+`/usr/local/build/mysql-8.4.1`.
 
 ```console
 % ./configure \
     --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-build=/usr/local/src/mysql-8.4.1.build \
+    --with-mysql-build=/usr/local/build/mysql-8.4.1 \
     --with-mysql-config=/usr/local/bin/mysql_config
 ```
 
