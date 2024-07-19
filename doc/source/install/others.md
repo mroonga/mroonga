@@ -60,27 +60,31 @@ Here we assume that you use mysql-8.4.1 and its source code is
 extracted in the following directory.
 
 ```
-/usr/local/src/mysql-8.4.1
+$HOME/local/src/mysql-8.4.1
 ```
 
 Then build in the following directory.
 
 ```
-/usr/local/build/mysql-8.4.1
+$HOME/local/build/mysql-8.4.1
 ```
 
 Here are command lines to build and install MySQL.
 
 ```console
-% sudo cmake -S /usr/local/src/mysql-8.4.1 -B /usr/local/build/mysql-8.4.1 -GNinja
-% sudo cmake --build /usr/local/build/mysql-8.4.1
-% sudo cmake --install /usr/local/build/mysql-8.4.1
+% cmake \
+    -S $HOME/local/src/mysql-8.4.1 \
+    -B $HOME/local/build/mysql-8.4.1 \
+    -GNinja \
+    -DCMAKE_INSTALL_PREFIX=$HOME/local
+% cmake --build $HOME/local/build/mysql-8.4.1
+% cmake --install $HOME/local/build/mysql-8.4.1
 ```
 
 And we assume that MySQL is installed in the following directory.
 
 ```
-/usr/local
+$HOME/local
 ```
 
 ## Build from source
@@ -93,12 +97,12 @@ steps.
 % tar xvzf mroonga-6.12.tar.gz
 % cd mroonga-6.12
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-build=/usr/local/build/mysql-8.4.1 \
-    --with-mysql-config=/usr/local/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 % make
 % sudo make install
-% /usr/local/bin/mysql -u root < /usr/local/share/mroonga/install.sql
+% $HOME/local/bin/mysql -u root < /usr/local/share/mroonga/install.sql
 ```
 
 You need to specify the following on `configure`.
@@ -143,8 +147,8 @@ This is required parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-config=/usr/local/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `--with-mysql-build=PATH`
@@ -156,13 +160,13 @@ specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
 Here is an example when you build MySQL in
-`/usr/local/build/mysql-8.4.1`.
+`$HOME/local/build/mysql-8.4.1`.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-build=/usr/local/build/mysql-8.4.1 \
-    --with-mysql-config=/usr/local/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `--with-mysql-config=PATH`
@@ -176,7 +180,7 @@ this parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-8.4.1
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1
 ```
 
 #### `--with-default-tokenizer=TOKENIZER`
@@ -190,8 +194,8 @@ Here is an example to use `TokenMecab` as the default tokenizer.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-    --with-mysql-config=/usr/local/bin/mysql_config \
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config \
     --with-default-tokenizer=TokenMecab
 ```
 
@@ -206,7 +210,7 @@ The default is `/usr/local`. In this case, `install.sql` that is
 used for installing Mroonga is installed to
 `/usr/local/share/mroonga/install.sql`.
 
-Here is an example that installs Mroonga into `~/local` for an user
+Here is an example that installs Mroonga into `$HOME/local` for an user
 use instead of system wide use.
 
 ```console
@@ -229,8 +233,8 @@ If Groonga is not installed in the standard location like
 ```console
 ./configure \
   PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-  --with-mysql-source=/usr/local/src/mysql-8.4.1 \
-  --with-mysql-config=/usr/local/bin/mysql_config
+  --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+  --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 ### `make`

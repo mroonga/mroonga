@@ -160,8 +160,8 @@ msgstr "MySQLのソースコードをビルドしたディレクトリーを指�
 msgid "If you build MySQL in MySQL source code directory, you don't need to specify this parameter. If you build MySQL in other directory, you need to specify this parameter."
 msgstr "MySQLのソースコードがあるディレクトリーでビルドした場合はこの引数を指定する必要はありません。他のディレクトリーでビルドしたときはこの引数を指定する必要があります。"
 
-msgid "Here is an example when you build MySQL in `/usr/local/build/mysql-8.4.1`."
-msgstr "以下は `/usr/local/build/mysql-8.4.1` でMySQLをビルドした時の例です。"
+msgid "Here is an example when you build MySQL in `$HOME/local/build/mysql-8.4.1`."
+msgstr "以下は `$HOME/local/build/mysql-8.4.1` でMySQLをビルドした時の例です。"
 
 msgid "`--with-mysql-config=PATH`"
 msgstr ""
@@ -193,8 +193,8 @@ msgstr "インストール先となるディレクトリを指定します。Mro
 msgid "The default is `/usr/local`. In this case, `install.sql` that is used for installing Mroonga is installed to `/usr/local/share/mroonga/install.sql`."
 msgstr "デフォルトは `/usr/local` です。この場合、Mroongaをインストールするために使う `install.sql` は `/usr/local/share/mroonga/install.sql` にインストールされます。"
 
-msgid "Here is an example that installs Mroonga into `~/local` for an user use instead of system wide use."
-msgstr "以下はシステム全体にMroongaをインストールするのではなく、ユーザーが個人で使う目的で `~/local` にインストールする例です。"
+msgid "Here is an example that installs Mroonga into `$HOME/local` for an user use instead of system wide use."
+msgstr "以下はシステム全体にMroongaをインストールするのではなく、ユーザーが個人で使う目的で `$HOME/local` にインストールする例です。"
 
 msgid "`PKG_CONFIG_PATH=PATH`"
 msgstr ""
