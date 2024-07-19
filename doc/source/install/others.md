@@ -17,13 +17,11 @@ Here are required tools.
 - `tar` and `gzip` for extracting source archive
 - shell (many shells such as `dash`, `bash` and `zsh` will work)
 - C compiler and C++ compiler (`gcc` and `g++` are supported but other compilers may work)
-- `make` (GNU make is supported but other make like BSD make will work)
+- [CMake](https://cmake.org/) as a cross-platform build system generator
+- [Ninja](https://ninja-build.org/) as a small build system with a focus on speed
 - [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config) for detecting libraries
 
 You must get them ready.
-
-You can use [CMake](http://www.cmake.org/) instead of shell but this
-document doesn't describe about building with CMake.
 
 Here are optional tools.
 
@@ -54,36 +52,39 @@ source and build directory. You need MySQL source and build directory!
 
 If you use MariaDB instead of MySQL, you need MariaDB source.
 
-Download the latest MySQL 5.6 source code, then build and install it.
+Download the latest MySQL 8.4 source code, then build and install it.
 
 See also [Download MySQL Community Server](http://dev.mysql.com/downloads/mysql/)
 
-Here we assume that you use mysql-5.6.21 and its source code is
+Here we assume that you use mysql-8.4.1 and its source code is
 extracted in the following directory.
 
 ```
-/usr/local/src/mysql-5.6.21
+$HOME/local/src/mysql-8.4.1
 ```
 
 Then build in the following directory.
 
 ```
-/usr/local/build/mysql-5.6.21
+$HOME/local/build/mysql-8.4.1
 ```
 
 Here are command lines to build and install MySQL.
 
 ```console
-% cd /usr/local/build/mysql-5.6.21
-% cmake /usr/local/src/mysql-5.6.21
-% make
-% sudo make install
+% cmake \
+    -S $HOME/local/src/mysql-8.4.1 \
+    -B $HOME/local/build/mysql-8.4.1 \
+    -GNinja \
+    -DCMAKE_INSTALL_PREFIX=$HOME/local
+% cmake --build $HOME/local/build/mysql-8.4.1
+% cmake --install $HOME/local/build/mysql-8.4.1
 ```
 
 And we assume that MySQL is installed in the following directory.
 
 ```
-/usr/local/mysql
+$HOME/local
 ```
 
 ## Build from source
@@ -96,12 +97,12 @@ steps.
 % tar xvzf mroonga-6.12.tar.gz
 % cd mroonga-6.12
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-build=/usr/local/build/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 % make
 % sudo make install
-% /usr/local/mysql/bin/mysql -u root < /usr/local/share/mroonga/install.sql
+% $HOME/local/bin/mysql -u root < /usr/local/share/mroonga/install.sql
 ```
 
 You need to specify the following on `configure`.
@@ -146,8 +147,8 @@ This is required parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `--with-mysql-build=PATH`
@@ -159,13 +160,13 @@ specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
 Here is an example when you build MySQL in
-`/usr/local/build/mysql-5.6.21`.
+`$HOME/local/build/mysql-8.4.1`.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-build=/usr/local/build/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `--with-mysql-config=PATH`
@@ -179,7 +180,7 @@ this parameter.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1
 ```
 
 #### `--with-default-tokenizer=TOKENIZER`
@@ -193,8 +194,8 @@ Here is an example to use `TokenMecab` as the default tokenizer.
 
 ```console
 % ./configure \
-    --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-    --with-mysql-config=/usr/local/mysql/bin/mysql_config \
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config \
     --with-default-tokenizer=TokenMecab
 ```
 
@@ -209,14 +210,14 @@ The default is `/usr/local`. In this case, `install.sql` that is
 used for installing Mroonga is installed to
 `/usr/local/share/mroonga/install.sql`.
 
-Here is an example that installs Mroonga into `~/local` for an user
+Here is an example that installs Mroonga into `$HOME/local` for an user
 use instead of system wide use.
 
 ```console
 % ./configure \
     --prefix=$HOME/local \
-    --with-mysql-source=$HOME/local/src/mysql-5.6.21 \
-    --with-mysql-config=$HOME/local/mysql/bin/mysql_config
+    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+    --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 #### `PKG_CONFIG_PATH=PATH`
@@ -232,8 +233,8 @@ If Groonga is not installed in the standard location like
 ```console
 ./configure \
   PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-  --with-mysql-source=/usr/local/src/mysql-5.6.21 \
-  --with-mysql-config=/usr/local/mysql/bin/mysql_config
+  --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
+  --with-mysql-config=$HOME/local/bin/mysql_config
 ```
 
 ### `make`
