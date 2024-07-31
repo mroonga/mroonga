@@ -100,6 +100,7 @@ source_files_relative_from_doc_dir = \
 	source/install.rst \
 	source/install/32bit-note.inc \
 	source/install/almalinux.rst \
+	source/install/centos.md \
 	source/install/debian.rst \
 	source/install/docker.rst \
 	source/install/fedora.rst \
