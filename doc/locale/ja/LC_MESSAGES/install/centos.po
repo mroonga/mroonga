@@ -24,4 +24,4 @@ msgid "Mroonga supports AlmaLinux 8. So you can continue using Mroonga by switch
 msgstr "Mroongaは、AlmaLinux 8をサポートしているので、CentOSからAlmaLinux 8にOSを切り替えることで引続きMroongaを利用できます。"
 
 msgid "See also {doc}`/install/almalinux`."
-msgstr "こちらの{doc}`/install/almalinux`を参照してください。"
+msgstr "{doc}`/install/almalinux`を参照してください。"
