@@ -1,0 +1,27 @@
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2024, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# Automatically generated, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga 14.05\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-07-31 12:55+0900\n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "CentOS"
+msgstr ""
+
+msgid "Support for Mroonga has ended from version 14.04 because of CentOS 7's EOL."
+msgstr "CentOS 7がEOLになったのでMroonga 14.04以降はCentOS 7用パッケージを提供していません。"
+
+msgid "Mroonga supports AlmaLinux 8. So you can continue using Mroonga by switching from CentOS 7 to AlmaLinux 8."
+msgstr "Mroongaは、AlmaLinux 8をサポートしているので、CentOS 7からAlmaLinux 8にOSを切り替えることで引続きMroongaを利用できます。"
+
+msgid "See also {doc}`/install/almalinux`."
+msgstr "{doc}`/install/almalinux`を参照してください。"

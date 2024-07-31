@@ -24,6 +24,7 @@ set(MRN_DOC_SOURCES
     install.rst
     install/32bit-note.inc
     install/almalinux.rst
+    install/centos.md
     install/debian.rst
     install/docker.rst
     install/fedora.rst
