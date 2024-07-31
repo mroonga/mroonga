@@ -20,5 +20,8 @@ msgstr ""
 msgid "Support for Mroonga has ended from version 14.04 because of CentOS EOL."
 msgstr "CentOSのEOLに伴い、Mroonga 14.04以降のサポートを終了しました。"
 
-msgid "Please use the packages for AlmaLinux 8. See also {doc}`/install/almalinux`."
-msgstr "AlmaLinux 8用のパッケージを使用してください。詳細は {doc}`/install/almalinux` を参照してください"
+msgid "Mroonga supports AlmaLinux 8. So you can continue using Mroonga by switching from CentOS to AlmaLinux 8."
+msgstr "Mroongaは、AlmaLinux 8をサポートしているので、CentOSからAlmaLinux 8にOSを切り替えることで引続きMroongaを利用できます。"
+
+msgid "See also {doc}`/install/almalinux`."
+msgstr "こちらの{doc}`/install/almalinux`を参照してください。"
