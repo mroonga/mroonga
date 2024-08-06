@@ -168,6 +168,9 @@ jobs:
             test-image: "images:ubuntu/24.04"
 
           # MySQL 8.0
+          - os: ubuntu-focal
+            package: mysql-8.0
+            test-image: "images:ubuntu/20.04"
           - os: ubuntu-jammy
             package: mysql-8.0
             test-image: "images:ubuntu/22.04"
