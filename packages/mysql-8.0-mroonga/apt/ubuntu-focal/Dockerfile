@@ -44,6 +44,7 @@ RUN \
     libprotoc-dev \
     libreadline-dev \
     libssl-dev \
+    libtirpc-dev \
     libxml2-dev \
     libre2-dev \
     libwrap0-dev \
