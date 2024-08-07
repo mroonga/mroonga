@@ -1,0 +1,55 @@
+ARG FROM=ubuntu:focal
+FROM ${FROM}
+
+RUN \
+  echo "debconf debconf/frontend select Noninteractive" | \
+    debconf-set-selections
+
+ARG DEBUG
+
+RUN \
+  quiet=$([ "${DEBUG}" = "yes" ] || echo "-qq") && \
+  grep '^deb ' /etc/apt/sources.list | \
+    sed -e 's/^deb /deb-src /' > /etc/apt/sources.list.d/base-source.list && \
+  apt update ${quiet} && \
+  apt install -y -V --no-install-recommends ${quiet} \
+    ca-certificates \
+    gpg-agent \
+    lsb-release \
+    software-properties-common \
+    wget && \
+  add-apt-repository -y ppa:groonga/ppa && \
+  apt install -y -V ${quiet} \
+    autoconf-archive \
+    build-essential \
+    ccache \
+    chrpath \
+    cmake \
+    debhelper \
+    devscripts \
+    dh-apparmor \
+    groonga-normalizer-mysql \
+    libcurl4-openssl-dev \
+    libaio-dev \
+    libedit-dev \
+    libevent-dev \
+    libgroonga-dev \
+    libicu-dev \
+    liblz4-dev \
+    libmecab-dev \
+    libmysqlclient-dev \
+    libncurses5-dev \
+    libpcre3-dev \
+    libprotobuf-dev \
+    libprotoc-dev \
+    libreadline-dev \
+    libssl-dev \
+    libxml2-dev \
+    libre2-dev \
+    libwrap0-dev \
+    lsb-release \
+    mecab-utils \
+    pkg-config \
+    protobuf-compiler \
+    unixodbc-dev \
+    wget
