@@ -188,6 +188,9 @@ jobs:
           - os: debian-bookworm
             package: mysql-community-8.0
             test-image: "images:debian/12"
+          - os: ubuntu-focal
+            package: mysql-community-8.0
+            test-image: "images:ubuntu/20.04"
           - os: ubuntu-jammy
             package: mysql-community-8.0
             test-image: "images:ubuntu/22.04"
