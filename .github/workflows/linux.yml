@@ -167,6 +167,11 @@ jobs:
             package: mariadb-10.11
             test-image: "images:ubuntu/24.04"
 
+          # MariaDB 11.4
+          - os: almalinux-8
+            package: mariadb-11.4
+            test-image: "images:almalinux/8"
+
           # MySQL 8.0
           - os: ubuntu-focal
             package: mysql-8.0
