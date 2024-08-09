@@ -963,32 +963,30 @@ typedef uint mrn_srid;
   my_message(error_code, ctx->errbuf, MYF(0))
 #endif
 
-#ifdef MRN_MARIADB_P
-#  if (MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) || \
-      (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) || \
-      (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200)
+#if defined(MRN_MARIADB_P) &&                                      \
+    ((MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) ||  \
+     (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||  \
+     (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200))
 
-#    define MRN_GET_TABLE_NAME(query_tables)                       \
+#  define MRN_GET_TABLE_NAME(query_tables)                         \
   (query_tables->get_table_name().str)
-#    define MRN_GET_TABLE_LENGTH(query_tables)                     \
+#  define MRN_GET_TABLE_LENGTH(query_tables)                       \
   (query_tables->get_table_name().length)
-#  else
-#    define MRN_GET_TABLE_NAME(query_tables)                       \
+#else
+#  define MRN_GET_TABLE_NAME(query_tables)                         \
   (query_tables->get_table_name())
-#    define MRN_GET_TABLE_LENGTH(query_tables)                     \
+#  define MRN_GET_TABLE_LENGTH(query_tables)                       \
   (strlen(query_tables->get_table_name()))
-#  endif
 #endif
 
-#ifdef MRN_MARIADB_P
-#  if (MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) || \
-      (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) || \
-      (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200)
+#if defined(MRN_MARIADB_P) &&                                      \
+    ((MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) ||  \
+     (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||  \
+     (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200))
 
-#    define MRN_GET_DB_NAME(table_list)                            \
+#  define MRN_GET_DB_NAME(table_list)                              \
   (table_list->get_db_name().str)
-#  else
-#    define MRN_GET_DB_NAME(table_list)                            \
+#else
+#  define MRN_GET_DB_NAME(table_list)                              \
   (table_list->get_db_name().str)
-#  endif
 #endif
