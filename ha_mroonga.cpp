@@ -3752,12 +3752,12 @@ int ha_mroonga::create_share_for_create() const
   }
   mrn_init_alloc_root(&mem_root_for_create, "mroonga::create", 1024, 0, MYF(0));
   analyzed_for_create = true;
-  if (lex->query_tables && lex->query_tables->get_table_name()) {
+  if (lex->query_tables && MRN_GET_TABLE_NAME(lex->query_tables)) {
     share_for_create.table_name =
-      mrn_my_strdup(lex->query_tables->get_table_name(),
+      mrn_my_strdup(MRN_GET_TABLE_NAME(lex->query_tables),
                     MYF(MY_WME));
     share_for_create.table_name_length =
-      strlen(lex->query_tables->get_table_name());
+      MRN_GET_TABLE_LENGTH(lex->query_tables);
   }
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
@@ -11646,10 +11646,10 @@ bool ha_mroonga::check_fast_order_limit(grn_obj *result_set,
     !query_block->group_list.elements &&
     !MRN_QUERY_BLOCK_GET_HAVING_COND(query_block) &&
     MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).elements == 1 &&
-    strcmp(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first->get_db_name(),
-           table_list->get_db_name()) == 0 &&
-    strcmp(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first->get_table_name(),
-           table_list->get_table_name()) == 0 &&
+    strcmp(MRN_GET_DB_NAME(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first),
+           MRN_GET_DB_NAME(table_list)) == 0 &&
+    strcmp(MRN_GET_TABLE_NAME(MRN_QUERY_BLOCK_GET_TABLE_LIST(query_block).first),
+           MRN_GET_TABLE_NAME(table_list)) == 0 &&
     query_block->order_list.elements &&
     MRN_QUERY_BLOCK_HAS_LIMIT(query_block) &&
     MRN_QUERY_BLOCK_SELECT_LIMIT(query_block) &&
