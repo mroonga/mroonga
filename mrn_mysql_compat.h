@@ -988,5 +988,5 @@ typedef uint mrn_srid;
   (table_list->get_db_name().str)
 #else
 #  define MRN_GET_DB_NAME(table_list)                              \
-  (table_list->get_db_name().str)
+  (table_list->get_db_name())
 #endif
