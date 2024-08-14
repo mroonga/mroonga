@@ -962,3 +962,22 @@ typedef uint mrn_srid;
 #  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)     \
   my_message(error_code, ctx->errbuf, MYF(0))
 #endif
+
+#if defined(MRN_MARIADB_P) &&                                      \
+    ((MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) ||  \
+     (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||  \
+     (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200))
+#  define MRN_GET_TABLE_NAME(query_tables)                         \
+  (query_tables->get_table_name().str)
+#  define MRN_GET_TABLE_NAME_LENGTH(query_tables)                       \
+  (query_tables->get_table_name().length)
+#  define MRN_GET_DB_NAME(table_list)                              \
+  (table_list->get_db_name().str)
+#else
+#  define MRN_GET_TABLE_NAME(query_tables)                         \
+  (query_tables->get_table_name())
+#  define MRN_GET_TABLE_NAME_LENGTH(query_tables)                       \
+  (strlen(query_tables->get_table_name()))
+#  define MRN_GET_DB_NAME(table_list)                              \
+  (table_list->get_db_name())
+#endif
