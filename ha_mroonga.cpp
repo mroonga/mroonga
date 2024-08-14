@@ -14894,9 +14894,9 @@ int ha_mroonga::truncate(
 }
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
-double ha_mroonga::wrapper_scan_time()
+mrn_io_and_cpu_cost ha_mroonga::wrapper_scan_time()
 {
-  double res;
+  mrn_io_and_cpu_cost res;
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
@@ -14907,17 +14907,17 @@ double ha_mroonga::wrapper_scan_time()
 }
 #endif
 
-double ha_mroonga::storage_scan_time()
+mrn_io_and_cpu_cost ha_mroonga::storage_scan_time()
 {
   MRN_DBUG_ENTER_METHOD();
-  double time = handler::scan_time();
+  mrn_io_and_cpu_cost time = handler::scan_time();
   DBUG_RETURN(time);
 }
 
-double ha_mroonga::scan_time()
+mrn_io_and_cpu_cost ha_mroonga::scan_time()
 {
   MRN_DBUG_ENTER_METHOD();
-  double time;
+  mrn_io_and_cpu_cost time;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode)
   {

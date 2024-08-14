@@ -692,7 +692,7 @@ public:
                            uint child_key_name_len) mrn_override;
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
-  double scan_time() mrn_override;
+  mrn_io_and_cpu_cost scan_time() mrn_override;
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
@@ -1514,9 +1514,9 @@ private:
 #endif
   void storage_change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg);
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  double wrapper_scan_time();
+  mrn_io_and_cpu_cost wrapper_scan_time();
 #endif
-  double storage_scan_time();
+  mrn_io_and_cpu_cost storage_scan_time();
 #ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
 #endif
