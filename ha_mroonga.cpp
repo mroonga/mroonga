@@ -3757,7 +3757,7 @@ int ha_mroonga::create_share_for_create() const
       mrn_my_strdup(MRN_GET_TABLE_NAME(lex->query_tables),
                     MYF(MY_WME));
     share_for_create.table_name_length =
-      MRN_GET_TABLE_LENGTH(lex->query_tables);
+      MRN_GET_TABLE_NAME_LENGTH(lex->query_tables);
   }
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
