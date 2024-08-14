@@ -981,3 +981,10 @@ typedef uint mrn_srid;
 #  define MRN_GET_DB_NAME(table_list)                              \
   (table_list->get_db_name())
 #endif
+
+#if defined(MRN_MARIADB_P) &&                                   \
+    (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+  using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
+#else
+  using mrn_io_and_cpu_cost = double;
+#endif
