@@ -393,7 +393,7 @@ typedef uint mrn_alter_table_flags;
     ((MYSQL_VERSION_ID >= 100525 && MYSQL_VERSION_ID < 100600) ||              \
      (MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||              \
      (MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200) ||              \
-     (MYSQL_VERSION_ID >= 110402 && MYSQL_VERSION_ID < 110500))
+     (MYSQL_VERSION_ID >= 110402))
 #  define MRN_HANDLER_ENABLE_INDEXES_PARAMETERS key_map map, bool persist
 #  define MRN_HANDLER_DISABLE_INDEXES_PARAMETERS key_map map, bool persist
 #  define MRN_HANDLER_ENABLE_INDEXES_ALL_ARGS key_map(table->s->keys), false
