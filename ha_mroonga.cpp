@@ -14178,6 +14178,9 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
                                                         uint n_ranges,
                                                         uint *bufsz,
                                                         uint *flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                        ha_rows limit,
+#  endif
                                                         Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -14185,7 +14188,11 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
   KEY *key_info = &(table->key_info[keyno]);
   if (mrn_is_geo_key(key_info)) {
     rows = handler::multi_range_read_info_const(keyno, seq, seq_init_param,
-                                                n_ranges, bufsz, flags, cost);
+                                                n_ranges, bufsz, flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                limit,
+#  endif
+                                                cost);
     DBUG_RETURN(rows);
   }
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
@@ -14194,6 +14201,9 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
     set_pk_bitmap();
   rows = wrap_handler->multi_range_read_info_const(keyno, seq, seq_init_param,
                                                    n_ranges, bufsz, flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                   limit,
+#  endif
                                                    cost);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
@@ -14207,12 +14217,18 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                         uint n_ranges,
                                                         uint *bufsz,
                                                         uint *flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                        ha_rows limit,
+#  endif
                                                         Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows = handler::multi_range_read_info_const(keyno, seq,
                                                       seq_init_param,
                                                       n_ranges, bufsz, flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                      limit,
+#  endif
                                                       cost);
   DBUG_RETURN(rows);
 }
@@ -14221,6 +14237,9 @@ ha_rows ha_mroonga::multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
                                                 void *seq_init_param,
                                                 uint n_ranges, uint *bufsz,
                                                 uint *flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                                ha_rows limit,
+#  endif
                                                 Cost_estimate *cost)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -14229,13 +14248,19 @@ ha_rows ha_mroonga::multi_range_read_info_const(uint keyno, RANGE_SEQ_IF *seq,
   if (share->wrapper_mode)
   {
     rows = wrapper_multi_range_read_info_const(keyno, seq, seq_init_param,
-                                               n_ranges, bufsz,
-                                               flags, cost);
+                                               n_ranges, bufsz, flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                               limit,
+#  endif
+                                               cost);
   } else {
 #endif
     rows = storage_multi_range_read_info_const(keyno, seq, seq_init_param,
-                                               n_ranges, bufsz,
-                                               flags, cost);
+                                               n_ranges, bufsz, flags,
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+                                               limit,
+#  endif
+                                               cost);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #endif
