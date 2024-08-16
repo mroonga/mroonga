@@ -15029,6 +15029,47 @@ double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
   DBUG_RETURN(time);
 }
 
+#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST res;
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  res = wrap_handler->rnd_pos_time(rows);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(res);
+}
+#  endif
+
+IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST res;
+  res = handler::rnd_pos_time(rows);
+  DBUG_RETURN(res);
+}
+
+IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST time;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  if (share->wrapper_mode)
+  {
+    time = wrapper_rnd_pos_time(rows);
+  } else {
+#endif
+    //    time = storage_rnd_pos_time(rows);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  }
+#endif
+  DBUG_RETURN(time);
+}
+#endif
+
 #ifdef MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
 #  ifdef MRN_ENABLE_WRAPPER_MODE
 const key_map *ha_mroonga::wrapper_keys_to_use_for_scanning()
