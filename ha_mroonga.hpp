@@ -694,7 +694,14 @@ public:
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   mrn_io_and_cpu_cost scan_time() mrn_override;
+#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+  IO_AND_CPU_COST keyread_time(uint index,
+                               uint ranges,
+                               ha_rows rows,
+                               ulonglong blocks) mrn_override;
+#else
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
 #endif
@@ -1522,9 +1529,15 @@ private:
 #endif
   mrn_io_and_cpu_cost storage_scan_time();
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  double wrapper_read_time(uint index, uint ranges, ha_rows rows);
+  mrn_io_and_cpu_cost wrapper_read_time(uint index,
+                                        uint ranges,
+                                        ha_rows rows,
+                                        ulonglong blocks = 0);
 #endif
-  double storage_read_time(uint index, uint ranges, ha_rows rows);
+  mrn_io_and_cpu_cost storage_read_time(uint index,
+                                        uint ranges,
+                                        ha_rows rows,
+                                        ulonglong blocks = 0);
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   longlong wrapper_get_memory_buffer_size() const;
