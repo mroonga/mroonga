@@ -189,11 +189,7 @@ namespace mrn {
   const char *ParametersParser::tokenizer() {
     const char *parser = (*this)["parser"];
     if (parser) {
-      push_warning_printf(current_thd,
-                          MRN_SEVERITY_WARNING,
-                          ER_WARN_DEPRECATED_SYNTAX,
-                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),
-                          "parser", "tokenizer");
+      MRN_WARN_DEPRECATED(current_thd, "parser", "tokenizer");
     }
     const char *tokenizer = (*this)["tokenizer"];
     if (!tokenizer) {
