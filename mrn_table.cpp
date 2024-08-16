@@ -948,12 +948,15 @@ error_alloc_share:
   DBUG_RETURN(NULL);
 }
 
-int mrn_free_share(MRN_SHARE *share)
+int mrn_free_share(MRN_SHARE *share, bool free_long_term_share)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn::Lock lock(&mrn_open_tables_mutex);
   if (!--share->use_count)
   {
+    if (free_long_term_share) {
+      mrn_free_long_term_share(share->long_term_share);
+    }
     grn_hash_delete(&mrn_ctx,
                     mrn_open_tables,
                     share->table_name,

@@ -6008,10 +6008,7 @@ int ha_mroonga::close()
   }
 #endif
   mrn_bitmap_free(&multiple_column_key_bitmap);
-  if (share->use_count == 1) {
-    mrn_free_long_term_share(share->long_term_share);
-  }
-  mrn_free_share(share);
+  mrn_free_share(share, true);
   share = NULL;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   is_clone = false;

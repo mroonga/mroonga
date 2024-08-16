@@ -215,7 +215,7 @@ int mrn_add_column_param(MRN_SHARE *share, Field *field, int i);
 int mrn_parse_column_param(MRN_SHARE *share, TABLE *table);
 MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error);
 int mrn_free_share_alloc(MRN_SHARE *share);
-int mrn_free_share(MRN_SHARE *share);
+int mrn_free_share(MRN_SHARE *share, bool free_long_term_share=false);
 MRN_LONG_TERM_SHARE *mrn_get_long_term_share(const char *table_name,
                                              uint table_name_length,
                                              int *error);
