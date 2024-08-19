@@ -15062,7 +15062,7 @@ IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
     time = wrapper_rnd_pos_time(rows);
   } else {
 #endif
-    //    time = storage_rnd_pos_time(rows);
+    time = storage_rnd_pos_time(rows);
 #ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #endif
