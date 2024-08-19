@@ -700,7 +700,8 @@ public:
                                ha_rows rows,
                                ulonglong blocks) mrn_override;
   IO_AND_CPU_COST rnd_pos_time(ha_rows rows) mrn_override;
-#else
+#endif
+#ifdef MRN_HANDLER_HAVE_READ_TIME
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
 #endif
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE

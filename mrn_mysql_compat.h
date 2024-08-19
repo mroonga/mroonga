@@ -991,6 +991,7 @@ typedef uint mrn_srid;
    keyread_time(index, ranges, rows, blocks)
 #else
   using mrn_io_and_cpu_cost = double;
+#  define MRN_HANDLER_HAVE_READ_TIME
 #  define MRN_HANDLER_KEYREAD_TIME(index, ranges, rows, blocks)  \
    read_time(index, ranges, rows)
 #endif

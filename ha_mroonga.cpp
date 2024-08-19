@@ -15002,7 +15002,8 @@ IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
                                          uint ranges,
                                          ha_rows rows,
                                          ulonglong blocks)
-#else
+#endif
+#ifdef MRN_HANDLER_HAVE_READ_TIME
 double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
 #endif
 {
