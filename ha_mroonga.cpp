@@ -15081,8 +15081,7 @@ double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
 double ha_mroonga::storage_read_time(uint index, uint ranges, ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  double time =
-    handler::read_time(index, ranges, rows);
+  double time = handler::read_time(index, ranges, rows);
   DBUG_RETURN(time);
 }
 
