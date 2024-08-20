@@ -14953,116 +14953,120 @@ mrn_io_and_cpu_cost ha_mroonga::scan_time()
   DBUG_RETURN(time);
 }
 
-#ifdef MRN_ENABLE_WRAPPER_MODE
-mrn_io_and_cpu_cost ha_mroonga::wrapper_read_time(uint index,
-                                                  uint ranges,
-                                                  ha_rows rows,
-                                                  ulonglong blocks)
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
 {
-  mrn_io_and_cpu_cost res;
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
+                                                 uint ranges,
+                                                 ha_rows rows,
+                                                 ulonglong blocks)
+{
+  IO_AND_CPU_COST res;
   MRN_DBUG_ENTER_METHOD();
   if (index < MAX_KEY) {
     KEY *key_info = &(table->key_info[index]);
     if (mrn_is_geo_key(key_info)) {
-      res = handler::MRN_HANDLER_KEYREAD_TIME(index, ranges, rows, blocks);
+      res = handler::keyread_time(index, ranges, rows, blocks);
       DBUG_RETURN(res);
     }
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->MRN_HANDLER_KEYREAD_TIME(share->wrap_key_nr[index],
-                                                 ranges,
-                                                 rows,
-                                                 blocks);
+    res = wrap_handler->keyread_time(share->wrap_key_nr[index],
+                                     ranges,
+                                     rows,
+                                     blocks);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->MRN_HANDLER_KEYREAD_TIME(index, ranges, rows, blocks);
+    res = wrap_handler->keyread_time(index, ranges, rows, blocks);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
   DBUG_RETURN(res);
 }
-#endif
+#  endif
 
-mrn_io_and_cpu_cost ha_mroonga::storage_read_time(uint index,
-                                                  uint ranges,
-                                                  ha_rows rows,
-                                                  ulonglong blocks)
+IO_AND_CPU_COST ha_mroonga::storage_keyread_time(uint index,
+                                                 uint ranges,
+                                                 ha_rows rows,
+                                                 ulonglong blocks)
 {
   MRN_DBUG_ENTER_METHOD();
-  mrn_io_and_cpu_cost time =
-    handler::MRN_HANDLER_KEYREAD_TIME(index, ranges, rows, blocks);
+  IO_AND_CPU_COST time =
+    handler::keyread_time(index, ranges, rows, blocks);
   DBUG_RETURN(time);
 }
 
-#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
 IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
                                          uint ranges,
                                          ha_rows rows,
                                          ulonglong blocks)
-#endif
-#ifdef MRN_HANDLER_HAVE_READ_TIME
-double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
-#endif
-{
-  MRN_DBUG_ENTER_METHOD();
-  mrn_io_and_cpu_cost time;
-#ifdef MRN_ENABLE_WRAPPER_MODE
-  if (share->wrapper_mode)
-  {
-    time = wrapper_read_time(index, ranges, rows
-#  ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
-                             , blocks
-#  endif
-                             );
-  } else {
-#endif
-    time = storage_read_time(index, ranges, rows
-#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
-                             , blocks
-#endif
-                             );
-#ifdef MRN_ENABLE_WRAPPER_MODE
-  }
-#endif
-  DBUG_RETURN(time);
-}
-
-#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
-#  ifdef MRN_ENABLE_WRAPPER_MODE
-IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
-{
-  MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST res;
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->rnd_pos_time(rows);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
-}
-#  endif
-
-IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
-{
-  MRN_DBUG_ENTER_METHOD();
-  auto res = handler::rnd_pos_time(rows);
-  DBUG_RETURN(res);
-}
-
-IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
   IO_AND_CPU_COST time;
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode)
   {
-    time = wrapper_rnd_pos_time(rows);
+    time = wrapper_keyread_time(index, ranges, rows, blocks);
   } else {
 #  endif
-    time = storage_rnd_pos_time(rows);
+    time = storage_keyread_time(index, ranges, rows, blocks);
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  }
+#  endif
+  DBUG_RETURN(time);
+}
+#endif
+
+#ifdef MRN_HANDLER_HAVE_READ_TIME
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
+{
+  double res;
+  MRN_DBUG_ENTER_METHOD();
+  if (index < MAX_KEY) {
+    KEY *key_info = &(table->key_info[index]);
+    if (mrn_is_geo_key(key_info)) {
+      res = handler::read_time(index, ranges, rows);
+      DBUG_RETURN(res);
+    }
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    res = wrap_handler->read_time(index, ranges, rows);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
+  DBUG_RETURN(res);
+}
+#  endif
+
+double ha_mroonga::storage_read_time(uint index, uint ranges, ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  double time =
+    handler::read_time(index, ranges, rows);
+  DBUG_RETURN(time);
+}
+
+double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  double time;
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+  if (share->wrapper_mode)
+  {
+    time = wrapper_read_time(index, ranges, rows);
+  } else {
+#  endif
+    time = storage_read_time(index, ranges, rows);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #  endif
