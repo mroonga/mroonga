@@ -1531,14 +1531,14 @@ private:
 #endif
   mrn_io_and_cpu_cost storage_scan_time();
 
-#define MRN_HANDLER_HAVE_READ_TIME
+#ifdef MRN_HANDLER_HAVE_READ_TIME
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
 #  endif
   double storage_read_time(uint index, uint ranges, ha_rows rows);
 #endif
 
-#define MRN_HANDLER_HAVE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   IO_AND_CPU_COST wrapper_keyread_time(uint index,
                                        uint ranges,
