@@ -694,7 +694,7 @@ public:
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   mrn_io_and_cpu_cost scan_time() mrn_override;
-#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
   IO_AND_CPU_COST keyread_time(uint index,
                                uint ranges,
                                ha_rows rows,
@@ -1535,7 +1535,7 @@ private:
                                         uint ranges,
                                         ha_rows rows,
                                         ulonglong blocks = 0);
-#  ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#  ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
   IO_AND_CPU_COST wrapper_rnd_pos_time(ha_rows rows);
 #  endif
 #endif
@@ -1543,7 +1543,7 @@ private:
                                         uint ranges,
                                         ha_rows rows,
                                         ulonglong blocks = 0);
-#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
   IO_AND_CPU_COST storage_rnd_pos_time(ha_rows rows);
 #endif
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE

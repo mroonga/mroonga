@@ -14997,7 +14997,7 @@ mrn_io_and_cpu_cost ha_mroonga::storage_read_time(uint index,
   DBUG_RETURN(time);
 }
 
-#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
 IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
                                          uint ranges,
                                          ha_rows rows,
@@ -15013,14 +15013,14 @@ double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
   if (share->wrapper_mode)
   {
     time = wrapper_read_time(index, ranges, rows
-#  ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#  ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
                              , blocks
 #  endif
                              );
   } else {
 #endif
     time = storage_read_time(index, ranges, rows
-#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
                              , blocks
 #endif
                              );
@@ -15030,7 +15030,7 @@ double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
   DBUG_RETURN(time);
 }
 
-#ifdef MRN_HANDLER_USE_KEYREAD_TIME
+#ifdef MRN_HANDLER_HAVE_KEYREAD_TIME
 #  ifdef MRN_ENABLE_WRAPPER_MODE
 IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
 {
