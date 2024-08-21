@@ -14968,6 +14968,13 @@ IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
 }
 #  endif
 
+IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
+{
+  MRN_DBUG_ENTER_METHOD();
+  IO_AND_CPU_COST res = handler::rnd_pos_time(rows);
+  DBUG_RETURN(res);
+}
+
 IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -14978,7 +14985,7 @@ IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
     time = wrapper_rnd_pos_time(rows);
   } else {
 #  endif
-    time = handler::rnd_pos_time(rows);
+    time = storage_rnd_pos_time(rows);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   }
 #  endif

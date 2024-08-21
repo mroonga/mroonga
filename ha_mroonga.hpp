@@ -1550,6 +1550,7 @@ private:
                                        uint ranges,
                                        ha_rows rows,
                                        ulonglong blocks);
+  IO_AND_CPU_COST storage_rnd_pos_time(ha_rows rows);
 #endif
 
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
