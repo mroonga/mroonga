@@ -15023,9 +15023,8 @@ IO_AND_CPU_COST ha_mroonga::storage_keyread_time(uint index,
                                                  ulonglong blocks)
 {
   MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST time =
-    handler::keyread_time(index, ranges, rows, blocks);
-  DBUG_RETURN(time);
+  auto cost = handler::keyread_time(index, ranges, rows, blocks);
+  DBUG_RETURN(cost);
 }
 
 IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
