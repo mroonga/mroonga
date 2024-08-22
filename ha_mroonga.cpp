@@ -14957,13 +14957,13 @@ mrn_io_and_cpu_cost ha_mroonga::scan_time()
 IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST res;
+  IO_AND_CPU_COST cost;
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
-  res = wrap_handler->rnd_pos_time(rows);
+  cost = wrap_handler->rnd_pos_time(rows);
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
-  DBUG_RETURN(res);
+  DBUG_RETURN(cost);
 }
 
 IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
