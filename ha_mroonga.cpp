@@ -14969,8 +14969,8 @@ IO_AND_CPU_COST ha_mroonga::wrapper_rnd_pos_time(ha_rows rows)
 IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST res = handler::rnd_pos_time(rows);
-  DBUG_RETURN(res);
+  auto cost = handler::rnd_pos_time(rows);
+  DBUG_RETURN(cost);
 }
 
 IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
