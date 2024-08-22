@@ -14991,17 +14991,17 @@ IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
                                                  ha_rows rows,
                                                  ulonglong blocks)
 {
-  IO_AND_CPU_COST res;
+  IO_AND_CPU_COST cost;
   MRN_DBUG_ENTER_METHOD();
   if (index < MAX_KEY) {
     KEY *key_info = &(table->key_info[index]);
     if (mrn_is_geo_key(key_info)) {
-      res = handler::keyread_time(index, ranges, rows, blocks);
-      DBUG_RETURN(res);
+      cost = handler::keyread_time(index, ranges, rows, blocks);
+      DBUG_RETURN(cost);
     }
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->keyread_time(share->wrap_key_nr[index],
+    cost = wrap_handler->keyread_time(share->wrap_key_nr[index],
                                      ranges,
                                      rows,
                                      blocks);
@@ -15010,11 +15010,11 @@ IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->keyread_time(index, ranges, rows, blocks);
+    cost = wrap_handler->keyread_time(index, ranges, rows, blocks);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(cost);
 }
 
 IO_AND_CPU_COST ha_mroonga::storage_keyread_time(uint index,
