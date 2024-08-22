@@ -15044,56 +15044,50 @@ IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
 }
 #endif
 
-#ifdef MRN_HANDLER_HAVE_READ_TIME
-#  ifdef MRN_ENABLE_WRAPPER_MODE
+#if defined(MRN_HANDLER_HAVE_READ_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
 double ha_mroonga::wrapper_read_time(uint index, uint ranges, ha_rows rows)
 {
-  double res;
+  double cost;
   MRN_DBUG_ENTER_METHOD();
   if (index < MAX_KEY) {
     KEY *key_info = &(table->key_info[index]);
     if (mrn_is_geo_key(key_info)) {
-      res = handler::read_time(index, ranges, rows);
-      DBUG_RETURN(res);
+      cost = handler::read_time(index, ranges, rows);
+      DBUG_RETURN(cost);
     }
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
+    cost = wrap_handler->read_time(share->wrap_key_nr[index], ranges, rows);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   } else {
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
-    res = wrap_handler->read_time(index, ranges, rows);
+    cost = wrap_handler->read_time(index, ranges, rows);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   }
-  DBUG_RETURN(res);
+  DBUG_RETURN(cost);
 }
-#  endif
 
 double ha_mroonga::storage_read_time(uint index, uint ranges, ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  double time = handler::read_time(index, ranges, rows);
+  auto cost = handler::read_time(index, ranges, rows);
   DBUG_RETURN(time);
 }
 
 double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  double time;
-#  ifdef MRN_ENABLE_WRAPPER_MODE
+  double cost;
   if (share->wrapper_mode)
   {
-    time = wrapper_read_time(index, ranges, rows);
+    cost = wrapper_read_time(index, ranges, rows);
   } else {
-#  endif
-    time = storage_read_time(index, ranges, rows);
-#  ifdef MRN_ENABLE_WRAPPER_MODE
+    cost = storage_read_time(index, ranges, rows);
   }
-#  endif
-  DBUG_RETURN(time);
+  DBUG_RETURN(cost);
 }
 #endif
 
