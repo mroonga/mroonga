@@ -15033,14 +15033,14 @@ IO_AND_CPU_COST ha_mroonga::keyread_time(uint index,
                                          ulonglong blocks)
 {
   MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST time;
+  IO_AND_CPU_COST cost;
   if (share->wrapper_mode)
   {
-    time = wrapper_keyread_time(index, ranges, rows, blocks);
+    cost = wrapper_keyread_time(index, ranges, rows, blocks);
   } else {
-    time = storage_keyread_time(index, ranges, rows, blocks);
+    cost = storage_keyread_time(index, ranges, rows, blocks);
   }
-  DBUG_RETURN(time);
+  DBUG_RETURN(cost);
 }
 #endif
 
