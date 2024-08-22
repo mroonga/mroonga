@@ -14976,14 +14976,14 @@ IO_AND_CPU_COST ha_mroonga::storage_rnd_pos_time(ha_rows rows)
 IO_AND_CPU_COST ha_mroonga::rnd_pos_time(ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
-  IO_AND_CPU_COST time;
+  IO_AND_CPU_COST cost;
   if (share->wrapper_mode)
   {
-    time = wrapper_rnd_pos_time(rows);
+    cost = wrapper_rnd_pos_time(rows);
   } else {
-    time = storage_rnd_pos_time(rows);
+    cost = storage_rnd_pos_time(rows);
   }
-  DBUG_RETURN(time);
+  DBUG_RETURN(cost);
 }
 
 IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
