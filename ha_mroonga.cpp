@@ -15002,9 +15002,9 @@ IO_AND_CPU_COST ha_mroonga::wrapper_keyread_time(uint index,
     MRN_SET_WRAP_SHARE_KEY(share, table->s);
     MRN_SET_WRAP_TABLE_KEY(this, table);
     cost = wrap_handler->keyread_time(share->wrap_key_nr[index],
-                                     ranges,
-                                     rows,
-                                     blocks);
+                                      ranges,
+                                      rows,
+                                      blocks);
     MRN_SET_BASE_SHARE_KEY(share, table->s);
     MRN_SET_BASE_TABLE_KEY(this, table);
   } else {
