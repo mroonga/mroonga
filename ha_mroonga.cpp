@@ -15074,7 +15074,7 @@ double ha_mroonga::storage_read_time(uint index, uint ranges, ha_rows rows)
 {
   MRN_DBUG_ENTER_METHOD();
   auto cost = handler::read_time(index, ranges, rows);
-  DBUG_RETURN(time);
+  DBUG_RETURN(cost);
 }
 
 double ha_mroonga::read_time(uint index, uint ranges, ha_rows rows)
