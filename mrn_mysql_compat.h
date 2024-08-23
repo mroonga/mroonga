@@ -982,7 +982,7 @@ typedef uint mrn_srid;
   (table_list->get_db_name())
 #endif
 
-#if defined(MRN_MARIADB_P) &&                                    \
+#if defined(MRN_MARIADB_P) &&                                   \
     (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
