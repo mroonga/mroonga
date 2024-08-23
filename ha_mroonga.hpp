@@ -694,7 +694,9 @@ public:
 #endif
   void change_table_ptr(TABLE *table_arg, TABLE_SHARE *share_arg) mrn_override;
   mrn_io_and_cpu_cost scan_time() mrn_override;
+#if defined(MRN_HANDLER_HAVE_READ_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
   double read_time(uint index, uint ranges, ha_rows rows) mrn_override;
+#endif
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
   longlong get_memory_buffer_size() const mrn_override;
 #endif
@@ -882,6 +884,14 @@ protected:
 #    endif
     ) mrn_override;
 #  endif
+
+#if defined(MRN_HANDLER_HAVE_KEYREAD_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
+  IO_AND_CPU_COST keyread_time(uint index,
+                               uint ranges,
+                               ha_rows rows,
+                               ulonglong blocks) mrn_override;
+  IO_AND_CPU_COST rnd_pos_time(ha_rows rows) mrn_override;
+#endif
 
 private:
   bool have_unique_index();
@@ -1521,10 +1531,25 @@ private:
   mrn_io_and_cpu_cost wrapper_scan_time();
 #endif
   mrn_io_and_cpu_cost storage_scan_time();
-#ifdef MRN_ENABLE_WRAPPER_MODE
+
+#if defined(MRN_HANDLER_HAVE_READ_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
   double wrapper_read_time(uint index, uint ranges, ha_rows rows);
-#endif
   double storage_read_time(uint index, uint ranges, ha_rows rows);
+#endif
+
+#if defined(MRN_HANDLER_HAVE_KEYREAD_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
+  IO_AND_CPU_COST wrapper_keyread_time(uint index,
+                                       uint ranges,
+                                       ha_rows rows,
+                                       ulonglong blocks);
+  IO_AND_CPU_COST storage_keyread_time(uint index,
+                                       uint ranges,
+                                       ha_rows rows,
+                                       ulonglong blocks);
+  IO_AND_CPU_COST wrapper_rnd_pos_time(ha_rows rows);
+  IO_AND_CPU_COST storage_rnd_pos_time(ha_rows rows);
+#endif
+
 #ifdef MRN_HANDLER_HAVE_GET_MEMORY_BUFFER_SIZE
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   longlong wrapper_get_memory_buffer_size() const;

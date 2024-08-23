@@ -986,6 +986,8 @@ typedef uint mrn_srid;
     (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  define MRN_HANDLER_HAVE_KEYREAD_TIME
 #else
   using mrn_io_and_cpu_cost = double;
+#  define MRN_HANDLER_HAVE_READ_TIME
 #endif
