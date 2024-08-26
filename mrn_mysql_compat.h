@@ -982,12 +982,30 @@ typedef uint mrn_srid;
   (table_list->get_db_name())
 #endif
 
-#if defined(MRN_MARIADB_P) &&                                   \
+#if defined(MRN_MARIADB_P) &&                                        \
     (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
+// warn_deprecated<>() requires deprecated version. MariaDB will report an error
+// on build when the deprecated version will reach EOL.
+// 
+// However, MariaDB version isn't related to Mroonga version. So the mechanism
+// isn't suitable for Mroonga.
+//
+// We always use 999999 as the deprecated version here to disable the build time check.
+// The version is never reported as an error. See the warn_deprecated<>() definition
+// for details.
+#  define MRN_WARN_DEPRECATED(thd, what, to)                         \
+  (warn_deprecated<999999>(thd, what, to))
 #else
   using mrn_io_and_cpu_cost = double;
 #  define MRN_HANDLER_HAVE_READ_TIME
+#  define MRN_WARN_DEPRECATED(thd, what, to)                         \
+   (push_warning_printf(thd,                                         \
+                        MRN_SEVERITY_WARNING,                        \
+                        ER_WARN_DEPRECATED_SYNTAX,                   \
+                        MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),  \
+                        what,                                        \
+                        to))
 #endif
