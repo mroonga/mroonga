@@ -987,12 +987,12 @@ typedef uint mrn_srid;
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
-#  define MRN_WARN_DEPRECATED(thd, what, to, version)                \
-   (warn_deprecated<version>(thd, what, to))
+#  define MRN_WARN_DEPRECATED(thd, what, to)                         \
+   (warn_deprecated<999999>(thd, what, to))
 #else
   using mrn_io_and_cpu_cost = double;
 #  define MRN_HANDLER_HAVE_READ_TIME
-#  define MRN_WARN_DEPRECATED(thd, what, to, version)                \
+#  define MRN_WARN_DEPRECATED(thd, what, to)                         \
    (push_warning_printf(thd,                                         \
                         MRN_SEVERITY_WARNING,                        \
                         ER_WARN_DEPRECATED_SYNTAX,                   \
