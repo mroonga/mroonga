@@ -987,8 +987,14 @@ typedef uint mrn_srid;
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
+/*
+ * warn_deprecated() require deprecated version.
+ * However, backward compatibility is important for Mroonga.
+ * Therefore we rarely remove deprecated features.
+ * So, Mroonga output only warning by specifing 999999 into deprecated version.
+ */
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
-   (warn_deprecated<999999>(thd, what, to))
+  (warn_deprecated<999999>(thd, what, to))
 #else
   using mrn_io_and_cpu_cost = double;
 #  define MRN_HANDLER_HAVE_READ_TIME
