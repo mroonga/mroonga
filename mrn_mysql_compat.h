@@ -966,7 +966,8 @@ typedef uint mrn_srid;
 #if defined(MRN_MARIADB_P) &&                                      \
     ((MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) ||  \
      (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||  \
-     (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200))
+     (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200) ||  \
+     (MYSQL_VERSION_ID >= 110403 && MYSQL_VERSION_ID < 110500))
 #  define MRN_GET_TABLE_NAME(query_tables)                         \
   (query_tables->get_table_name().str)
 #  define MRN_GET_TABLE_NAME_LENGTH(query_tables)                       \
