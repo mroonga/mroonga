@@ -1,3 +1,9 @@
+mysql-8.0-mroonga (14.04-3) unstable; urgency=low
+
+  * Rebuilt against MySQL 8.0.39-0ubuntu0.24.04.2.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Tue, 27 Aug 2024 03:23:39 -0000
+
 mysql-8.0-mroonga (14.04-2) unstable; urgency=low
 
   * Rebuilt against MySQL 8.0.39.
