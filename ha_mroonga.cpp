@@ -18733,14 +18733,13 @@ char *ha_mroonga::get_foreign_key_create_info()
 }
 
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#    if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::wrapper_get_foreign_key_list(const THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#    else
 int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
+#    endif
 {
   MRN_DBUG_ENTER_METHOD();
   int res;
@@ -18753,11 +18752,10 @@ int ha_mroonga::wrapper_get_foreign_key_list(THD *thd,
 }
 #endif
 
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#  if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::storage_get_foreign_key_list(const THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#  else
 int ha_mroonga::storage_get_foreign_key_list(THD *thd,
                                              List<FOREIGN_KEY_INFO> *f_key_list)
 #  endif
@@ -18871,12 +18869,11 @@ int ha_mroonga::storage_get_foreign_key_list(THD *thd,
   DBUG_RETURN(0);
 }
 
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#  if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::get_foreign_key_list(
     const THD *thd,
     List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#  else
 int ha_mroonga::get_foreign_key_list(
     THD *thd,
     List<FOREIGN_KEY_INFO> *f_key_list)
@@ -18897,17 +18894,16 @@ int ha_mroonga::get_foreign_key_list(
   DBUG_RETURN(res);
 }
 
-#ifdef MRN_ENABLE_WRAPPER_MODE
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#  ifdef MRN_ENABLE_WRAPPER_MODE
+#    if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::wrapper_get_parent_foreign_key_list(
     const THD *thd,
     List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#    else
 int ha_mroonga::wrapper_get_parent_foreign_key_list(
     THD *thd,
     List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
+#    endif
 {
   MRN_DBUG_ENTER_METHOD();
   int res;
@@ -18920,11 +18916,10 @@ int ha_mroonga::wrapper_get_parent_foreign_key_list(
 }
 #  endif
 
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#  if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::storage_get_parent_foreign_key_list(
     const THD *thd, List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#  else
 int ha_mroonga::storage_get_parent_foreign_key_list(
     THD *thd, List<FOREIGN_KEY_INFO> *f_key_list)
 #  endif
@@ -18934,14 +18929,13 @@ int ha_mroonga::storage_get_parent_foreign_key_list(
   DBUG_RETURN(res);
 }
 
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITH_CONST)
+#  if defined(MARIADB_11_4_OR_LATER)
 int ha_mroonga::get_parent_foreign_key_list(const THD *thd,
                                             List<FOREIGN_KEY_INFO> *f_key_list)
-#  endif
-#  if defined(MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST)
+#  else
 int ha_mroonga::get_parent_foreign_key_list(THD *thd,
                                             List<FOREIGN_KEY_INFO> *f_key_list)
-#endif
+#  endif
 {
   MRN_DBUG_ENTER_METHOD();
   int res;

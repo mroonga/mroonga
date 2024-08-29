@@ -999,7 +999,6 @@ typedef uint mrn_srid;
 // for details.
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
   (warn_deprecated<999999>(thd, what, to))
-#  define MRN_GET_FOREIGN_KEY_LIST_WITH_CONST
 #else
   using mrn_io_and_cpu_cost = double;
 #  define MRN_HANDLER_HAVE_READ_TIME
@@ -1010,5 +1009,8 @@ typedef uint mrn_srid;
                         MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),  \
                         what,                                        \
                         to))
-#  define MRN_GET_FOREIGN_KEY_LIST_WITHOUT_CONST
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110400)
+#  define MARIADB_11_4_OR_LATER
 #endif
