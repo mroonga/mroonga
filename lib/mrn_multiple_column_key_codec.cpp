@@ -669,7 +669,7 @@ namespace mrn {
       grn_key = buffer;
     }
     int int_value;
-    mrn_byte_order_network_to_host(&int_value, buffer, grn_key_size);
+    mrn_byte_order_network_to_host(&int_value, grn_key, grn_key_size);
     int max_bit = (grn_key_size * 8 - 1);
     *((int *)mysql_key) =
       int_value ^ (((int_value ^ (1 << max_bit)) >> max_bit) |
