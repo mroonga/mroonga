@@ -29,15 +29,15 @@ CREATE TABLE items (
   INDEX (prefix, value desc)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO items (prefix, value) VALUES(1, -1);
-INSERT INTO items (prefix, value) VALUES(1, -2);
-INSERT INTO items (prefix, value) VALUES(1, -2);
-INSERT INTO items (prefix, value) VALUES(1, -2);
-INSERT INTO items (prefix, value) VALUES(1, -3);
+INSERT INTO items (prefix, value) VALUES(1, -9223372036854775806);
+INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
+INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
+INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
+INSERT INTO items (prefix, value) VALUES(1, -9223372036854775808);
 
 SELECT *
        FROM items
-       WHERE prefix = 1 AND value > -3
+       WHERE prefix = 1 AND value > -9223372036854775808
        ORDER BY value DESC;
 
 DROP TABLE items;
