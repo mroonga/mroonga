@@ -697,6 +697,9 @@ namespace mrn {
                                                     volatile long long int value,
                                                     uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
+    if (is_reverse_sort(key_part)) {
+      value = reverse_number(value);
+    }
     uint value_size = 8;
     mrn_byte_order_host_to_network(grn_key, &value, value_size);
     grn_key[0] ^= 0x80;
@@ -712,6 +715,9 @@ namespace mrn {
     grn_memcpy(buffer, grn_key, grn_key_size);
     buffer[0] ^= 0x80;
     mrn_byte_order_network_to_host(value, buffer, grn_key_size);
+    if (is_reverse_sort(key_part)) {
+      *value = reverse_number(*value);
+    }
     DBUG_VOID_RETURN;
   }
 

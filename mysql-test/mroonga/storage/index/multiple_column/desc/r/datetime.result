@@ -1,0 +1,22 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+prefix INT,
+value DATETIME,
+INDEX (prefix, value desc)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO items (prefix, value) VALUES(1, "2024-09-01 00:00:00");
+INSERT INTO items (prefix, value) VALUES(1, "2024-09-02 00:00:00");
+INSERT INTO items (prefix, value) VALUES(1, "2024-09-02 00:00:00");
+INSERT INTO items (prefix, value) VALUES(1, "2024-09-02 00:00:00");
+INSERT INTO items (prefix, value) VALUES(1, "2024-09-03 00:00:00");
+SELECT *
+FROM items
+WHERE prefix = 1 AND value < "2024-09-03 00:00:00"
+       ORDER BY value DESC;
+id	prefix	value
+2	1	2024-09-02 00:00:00
+3	1	2024-09-02 00:00:00
+4	1	2024-09-02 00:00:00
+1	1	2024-09-01 00:00:00
+DROP TABLE items;
