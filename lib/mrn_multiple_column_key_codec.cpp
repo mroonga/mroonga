@@ -147,7 +147,7 @@ namespace mrn {
         {
           float value;
           value_decoder::decode(&value, current_mysql_key);
-          encode_float(key_part, value, data_size, current_grn_key);
+          encode_float(key_part, value, current_grn_key);
         }
         break;
       case TYPE_DOUBLE:
@@ -287,7 +287,6 @@ namespace mrn {
       case TYPE_FLOAT:
         decode_float(key_part,
                      current_grn_key,
-                     grn_key_data_size,
                      current_mysql_key);
         break;
       case TYPE_DOUBLE:
@@ -645,24 +644,33 @@ namespace mrn {
 
   void MultipleColumnKeyCodec::encode_float(KEY_PART_INFO *key_part,
                                             volatile float value,
-                                            uint value_size,
                                             uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
+    constexpr auto value_size = sizeof(float);
     int n_bits = (value_size * 8 - 1);
     volatile int *int_value_pointer = (int *)(&value);
     int int_value = *int_value_pointer;
     int_value ^= ((int_value >> n_bits) | (1 << n_bits));
     mrn_byte_order_host_to_network(grn_key, &int_value, value_size);
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(grn_key, value_size);
+    }
     DBUG_VOID_RETURN;
   }
 
   void MultipleColumnKeyCodec::decode_float(KEY_PART_INFO *key_part,
                                             const uchar *grn_key,
-                                            uint grn_key_size,
                                             uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
+    constexpr auto grn_key_size = sizeof(float);
+    uchar buffer[grn_key_size];
+    if (is_reverse_sort(key_part)) {
+      grn_memcpy(buffer, grn_key, grn_key_size);
+      reverse_bits(buffer, grn_key_size);
+      grn_key = buffer;
+    }
     int int_value;
-    mrn_byte_order_network_to_host(&int_value, grn_key, grn_key_size);
+    mrn_byte_order_network_to_host(&int_value, buffer, grn_key_size);
     int max_bit = (grn_key_size * 8 - 1);
     *((int *)mysql_key) =
       int_value ^ (((int_value ^ (1 << max_bit)) >> max_bit) |

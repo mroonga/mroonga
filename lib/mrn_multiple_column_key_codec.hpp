@@ -81,11 +81,9 @@ namespace mrn {
                               long long int *value);
     void encode_float(KEY_PART_INFO *key_part,
                       volatile float value,
-                      uint value_size,
                       uchar *grn_key);
     void decode_float(KEY_PART_INFO *key_part,
                       const uchar *grn_key,
-                      uint grn_key_size,
                       uchar *mysql_key);
     void encode_double(KEY_PART_INFO *key_part,
                        volatile double value,
