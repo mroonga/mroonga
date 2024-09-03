@@ -87,11 +87,9 @@ namespace mrn {
                       uchar *mysql_key);
     void encode_double(KEY_PART_INFO *key_part,
                        volatile double value,
-                       uint value_size,
                        uchar *grn_key);
     void decode_double(KEY_PART_INFO *key_part,
                        const uchar *grn_key,
-                       uint grn_key_size,
                        uchar *mysql_key);
     void encode_sequence(KEY_PART_INFO *key_part,
                         const uchar *mysql_key,

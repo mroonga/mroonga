@@ -154,7 +154,7 @@ namespace mrn {
         {
           double value;
           value_decoder::decode(&value, current_mysql_key);
-          encode_double(key_part, value, data_size, current_grn_key);
+          encode_double(key_part, value, current_grn_key);
         }
         break;
       case TYPE_DATETIME:
@@ -292,7 +292,6 @@ namespace mrn {
       case TYPE_DOUBLE:
         decode_double(key_part,
                       current_grn_key,
-                      grn_key_data_size,
                       current_mysql_key);
         break;
       case TYPE_DATETIME:
@@ -631,8 +630,8 @@ namespace mrn {
                                                     const uchar *grn_key,
                                                     long long int *value) {
     MRN_DBUG_ENTER_METHOD();
-    constexpr uint grn_key_size = 8;
-    uchar buffer[8];
+    constexpr auto grn_key_size = sizeof(long long int);
+    uchar buffer[grn_key_size];
     grn_memcpy(buffer, grn_key, grn_key_size);
     if (is_reverse_sort(key_part)) {
       reverse_bits(buffer, grn_key_size);
@@ -680,22 +679,31 @@ namespace mrn {
 
   void MultipleColumnKeyCodec::encode_double(KEY_PART_INFO *key_part,
                                              volatile double value,
-                                             uint value_size,
                                              uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
+    constexpr auto value_size = sizeof(double);
     int n_bits = (value_size * 8 - 1);
     volatile long long int *long_long_value_pointer = (long long int *)(&value);
     volatile long long int long_long_value = *long_long_value_pointer;
     long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
     mrn_byte_order_host_to_network(grn_key, &long_long_value, value_size);
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(grn_key, value_size);
+    }
     DBUG_VOID_RETURN;
   }
 
   void MultipleColumnKeyCodec::decode_double(KEY_PART_INFO *key_part,
                                              const uchar *grn_key,
-                                             uint grn_key_size,
                                              uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
+    constexpr auto grn_key_size = sizeof(float);
+    uchar buffer[grn_key_size];
+    if (is_reverse_sort(key_part)) {
+      grn_memcpy(buffer, grn_key, grn_key_size);
+      reverse_bits(buffer, grn_key_size);
+      grn_key = buffer;
+    }
     long long int long_long_value;
     mrn_byte_order_network_to_host(&long_long_value, grn_key, grn_key_size);
     int max_bit = (grn_key_size * 8 - 1);
