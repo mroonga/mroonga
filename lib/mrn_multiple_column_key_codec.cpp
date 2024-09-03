@@ -30,8 +30,6 @@
 #include <field.h>
 
 #include <cstring>
-#include <limits>
-#include <utility>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
@@ -69,77 +67,11 @@
 #endif /* WORDS_BIGENDIAN */
 
 namespace {
-  template <typename TYPE>
-  TYPE
-  reverse_number(TYPE number) {
-    return std::numeric_limits<TYPE>::max() - number;
-  }
-
-  union NumberValue {
-    int8_t int8;
-    int16_t int16;
-    int32_t int32;
-    uint8_t int24[3];
-    int64_t int64;
-    uint8_t uint8;
-    uint16_t uint16;
-    uint8_t uint24[3];
-    uint32_t uint32;
-    uint64_t uint64;
-  };
-
-  std::pair<bool, NumberValue>
-  reverse_number_data(const uchar *data, uint size, bool is_signed) {
-    bool reversed = true;
-    NumberValue value;
-    if (size == 1) {
-      if (is_signed) {
-        value.int8 =
-          reverse_number(*reinterpret_cast<const int8_t *>(data));
-      } else {
-        value.uint8 =
-          reverse_number(*reinterpret_cast<const uint8_t *>(data));
-      }
-    } else if (size == 2) {
-      if (is_signed) {
-        int32_t data_value = sint3korr(data);
-        const int32_t max_value = 8388607; // 2 ** 23 - 1
-        data_value = max_value - data_value;
-        int3store(value.int24, data_value);
-      } else {
-        uint32_t data_value = uint3korr(data);
-        const uint32_t max_value =  16777215; // 2 ** 24 - 1
-        data_value = max_value - data_value;
-        int3store(value.uint24, data_value);
-      }
-    } else if (size == 3) {
-      if (is_signed) {
-        value.int32 =
-          reverse_number(*reinterpret_cast<const int16_t *>(data));
-      } else {
-        value.uint16 =
-          reverse_number(*reinterpret_cast<const uint16_t *>(data));
-      }
-    } else if (size == 4) {
-      if (is_signed) {
-        value.int32 =
-          reverse_number(*reinterpret_cast<const int32_t *>(data));
-      } else {
-        value.uint32 =
-          reverse_number(*reinterpret_cast<const uint32_t *>(data));
-      }
-    } else if (size == 8) {
-      if (is_signed) {
-        value.int64 =
-          reverse_number(*reinterpret_cast<const int64_t *>(data));
-      } else {
-        value.uint64 =
-          reverse_number(*reinterpret_cast<const uint64_t *>(data));
-      }
-    } else {
-      reversed = false;
+  void
+  reverse_bits(uint8_t *data, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+      data[i] = ~data[i];
     }
-    return std::make_pair(reversed, value);
   }
 };
 
@@ -655,18 +587,12 @@ namespace mrn {
                                              bool is_signed,
                                              uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
-    NumberValue value;
-    if (is_reverse_sort(key_part)) {
-      const auto result = reverse_number_data(mysql_key, mysql_key_size, is_signed);
-      const auto reversed = result.first;
-      if (reversed) {
-        value = result.second;
-        mysql_key = reinterpret_cast<const uchar *>(&value);
-      }
-    }
     mrn_byte_order_host_to_network(grn_key, mysql_key, mysql_key_size);
     if (is_signed) {
       grn_key[0] ^= 0x80;
+    }
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(grn_key, mysql_key_size);
     }
     DBUG_VOID_RETURN;
   }
@@ -679,17 +605,13 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     uchar buffer[8];
     grn_memcpy(buffer, grn_key, grn_key_size);
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(buffer, grn_key_size);
+    }
     if (is_signed) {
       buffer[0] ^= 0x80;
     }
     mrn_byte_order_network_to_host(mysql_key, buffer, grn_key_size);
-    if (is_reverse_sort(key_part)) {
-      const auto result = reverse_number_data(mysql_key, grn_key_size, is_signed);
-      const auto reversed = result.first;
-      if (reversed) {
-        grn_memcpy(mysql_key, &(result.second), grn_key_size);
-      }
-    }
     DBUG_VOID_RETURN;
   }
 
@@ -697,12 +619,12 @@ namespace mrn {
                                                     volatile long long int value,
                                                     uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
-    if (is_reverse_sort(key_part)) {
-      value = reverse_number(value);
-    }
-    uint value_size = 8;
+    constexpr uint value_size = 8;
     mrn_byte_order_host_to_network(grn_key, &value, value_size);
     grn_key[0] ^= 0x80;
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(grn_key, value_size);
+    }
     DBUG_VOID_RETURN;
   }
 
@@ -710,14 +632,14 @@ namespace mrn {
                                                     const uchar *grn_key,
                                                     long long int *value) {
     MRN_DBUG_ENTER_METHOD();
-    uint grn_key_size = 8;
+    constexpr uint grn_key_size = 8;
     uchar buffer[8];
     grn_memcpy(buffer, grn_key, grn_key_size);
+    if (is_reverse_sort(key_part)) {
+      reverse_bits(buffer, grn_key_size);
+    }
     buffer[0] ^= 0x80;
     mrn_byte_order_network_to_host(value, buffer, grn_key_size);
-    if (is_reverse_sort(key_part)) {
-      *value = reverse_number(*value);
-    }
     DBUG_VOID_RETURN;
   }
 
