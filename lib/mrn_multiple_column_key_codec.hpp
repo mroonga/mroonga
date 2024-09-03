@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2013 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2024  Sutou Kouhe <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef MRN_MULTIPLE_COLUMN_KEY_CODEC_HPP_
-#define MRN_MULTIPLE_COLUMN_KEY_CODEC_HPP_
+#pragma once
 
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
@@ -57,44 +56,70 @@ namespace mrn {
     THD *thread_;
     KEY *key_info_;
 
+    bool is_reverse_sort(KEY_PART_INFO *key_part) {
+      return key_part->key_part_flag & HA_REVERSE_SORT;
+    }
+
     void get_key_info(KEY_PART_INFO *key_part,
                       DataType *data_type, uint *data_size);
 
-    void encode_number(const uchar *mysql_key,
+    void encode_number(KEY_PART_INFO *key_part,
+                       const uchar *mysql_key,
                        uint mysql_key_size,
                        bool is_signed,
                        uchar *grn_key);
-    void decode_number(const uchar *grn_key,
+    void decode_number(KEY_PART_INFO *key_part,
+                       const uchar *grn_key,
                        uint grn_key_size,
                        bool is_signed,
                        uchar *mysql_key);
-    void encode_long_long_int(volatile long long int value,
+    void encode_long_long_int(KEY_PART_INFO *key_part,
+                              volatile long long int value,
                               uchar *grn_key);
-    void decode_long_long_int(const uchar *grn_key,
+    void decode_long_long_int(KEY_PART_INFO *key_part,
+                              const uchar *grn_key,
                               long long int *value);
-    void encode_float(volatile float value,
+    void encode_float(KEY_PART_INFO *key_part,
+                      volatile float value,
                       uint value_size,
                       uchar *grn_key);
-    void decode_float(const uchar *grn_key,
+    void decode_float(KEY_PART_INFO *key_part,
+                      const uchar *grn_key,
                       uint grn_key_size,
                       uchar *mysql_key);
-    void encode_double(volatile double value,
+    void encode_double(KEY_PART_INFO *key_part,
+                       volatile double value,
                        uint value_size,
                        uchar *grn_key);
-    void decode_double(const uchar *grn_key,
+    void decode_double(KEY_PART_INFO *key_part,
+                       const uchar *grn_key,
                        uint grn_key_size,
                        uchar *mysql_key);
-    void encode_reverse(const uchar *mysql_key,
+    void encode_sequence(KEY_PART_INFO *key_part,
+                        const uchar *mysql_key,
                         uint mysql_key_size,
                         uchar *grn_key);
-    void decode_reverse(const uchar *grn_key,
+    void decode_sequence(KEY_PART_INFO *key_part,
+                         const uchar *grn_key,
+                         uint grn_key_size,
+                         uchar *mysql_key);
+    void encode_reverse(KEY_PART_INFO *key_part,
+                        const uchar *mysql_key,
+                        uint mysql_key_size,
+                        uchar *grn_key);
+    void decode_reverse(KEY_PART_INFO *key_part,
+                        const uchar *grn_key,
                         uint grn_key_size,
                         uchar *mysql_key);
-    void encode_blob(const uchar *mysql_key,
+    void encode_blob(KEY_PART_INFO *key_part,
+                     const uchar *mysql_key,
                      uint *mysql_key_size,
                      Field *field,
                      uchar *grn_key);
+    void decode_blob(KEY_PART_INFO *key_part,
+                     const uchar *grn_key,
+                     uint grn_key_size,
+                     uchar *mysql_key);
   };
 }
 
-#endif // MRN_MULTIPLE_COLUMN_KEY_CODEC_HPP_

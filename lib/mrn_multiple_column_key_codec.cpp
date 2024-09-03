@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012-2019 Kouhei Sutou <kou@clear-code.com>
-  Copyright(C) 2013 Kentoku SHIBA
-  Copyright(C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2012-2024  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2013  Kentoku SHIBA
+  Copyright (C) 2020  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,8 @@
 #include <field.h>
 
 #include <cstring>
+#include <limits>
+#include <utility>
 
 // for debug
 #define MRN_CLASS_NAME "mrn::MultipleColumnKeyCodec"
@@ -65,6 +67,81 @@
   while (size_) { *buf_++ = *(--key_); size_--; }       \
 }
 #endif /* WORDS_BIGENDIAN */
+
+namespace {
+  template <typename TYPE>
+  TYPE
+  reverse_number(TYPE number) {
+    return std::numeric_limits<TYPE>::max() - number;
+  }
+
+  union NumberValue {
+    int8_t int8;
+    int16_t int16;
+    int32_t int32;
+    uint8_t int24[3];
+    int64_t int64;
+    uint8_t uint8;
+    uint16_t uint16;
+    uint8_t uint24[3];
+    uint32_t uint32;
+    uint64_t uint64;
+  };
+
+  std::pair<bool, NumberValue>
+  reverse_number_data(const uchar *data, uint size, bool is_signed) {
+    bool reversed = true;
+    NumberValue value;
+    if (size == 1) {
+      if (is_signed) {
+        value.int8 =
+          reverse_number(*reinterpret_cast<const int8_t *>(data));
+      } else {
+        value.uint8 =
+          reverse_number(*reinterpret_cast<const uint8_t *>(data));
+      }
+    } else if (size == 2) {
+      if (is_signed) {
+        int32_t data_value = sint3korr(data);
+        const int32_t max_value = 8388607; // 2 ** 23 - 1
+        data_value = max_value - data_value;
+        int3store(value.int24, data_value);
+      } else {
+        uint32_t data_value = uint3korr(data);
+        const uint32_t max_value =  16777215; // 2 ** 24 - 1
+        data_value = max_value - data_value;
+        int3store(value.uint24, data_value);
+      }
+    } else if (size == 3) {
+      if (is_signed) {
+        value.int32 =
+          reverse_number(*reinterpret_cast<const int16_t *>(data));
+      } else {
+        value.uint16 =
+          reverse_number(*reinterpret_cast<const uint16_t *>(data));
+      }
+    } else if (size == 4) {
+      if (is_signed) {
+        value.int32 =
+          reverse_number(*reinterpret_cast<const int32_t *>(data));
+      } else {
+        value.uint32 =
+          reverse_number(*reinterpret_cast<const uint32_t *>(data));
+      }
+    } else if (size == 8) {
+      if (is_signed) {
+        value.int64 =
+          reverse_number(*reinterpret_cast<const int64_t *>(data));
+      } else {
+        value.uint64 =
+          reverse_number(*reinterpret_cast<const uint64_t *>(data));
+      }
+    } else {
+      reversed = false;
+    }
+    return std::make_pair(reversed, value);
+  }
+};
 
 namespace mrn {
   MultipleColumnKeyCodec::MultipleColumnKeyCodec(grn_ctx *ctx,
@@ -121,13 +198,14 @@ namespace mrn {
         {
           long long int long_long_value = 0;
           long_long_value = sint8korr(current_mysql_key);
-          encode_long_long_int(long_long_value, current_grn_key);
+          encode_long_long_int(key_part, long_long_value, current_grn_key);
         }
         break;
       case TYPE_NUMBER:
         {
           Field_num *number_field = static_cast<Field_num *>(field);
-          encode_number(current_mysql_key,
+          encode_number(key_part,
+                        current_mysql_key,
                         data_size,
                         !MRN_FIELD_IS_UNSIGNED(number_field),
                         current_grn_key);
@@ -137,14 +215,14 @@ namespace mrn {
         {
           float value;
           value_decoder::decode(&value, current_mysql_key);
-          encode_float(value, data_size, current_grn_key);
+          encode_float(key_part, value, data_size, current_grn_key);
         }
         break;
       case TYPE_DOUBLE:
         {
           double value;
           value_decoder::decode(&value, current_mysql_key);
-          encode_double(value, data_size, current_grn_key);
+          encode_double(key_part, value, data_size, current_grn_key);
         }
         break;
       case TYPE_DATETIME:
@@ -168,7 +246,7 @@ namespace mrn {
               time_converter.mysql_datetime_to_grn_time(mysql_datetime,
                                                         &truncated);
           }
-          encode_long_long_int(grn_time, current_grn_key);
+          encode_long_long_int(key_part, grn_time, current_grn_key);
         }
         break;
 #ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
@@ -192,18 +270,18 @@ namespace mrn {
               time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
           }
           grn_key_data_size = 8;
-          encode_long_long_int(grn_time, current_grn_key);
+          encode_long_long_int(key_part, grn_time, current_grn_key);
         }
         break;
 #endif
       case TYPE_BYTE_SEQUENCE:
-        grn_memcpy(current_grn_key, current_mysql_key, data_size);
+        encode_sequence(key_part, current_mysql_key, data_size, current_grn_key);
         break;
       case TYPE_BYTE_REVERSE:
-        encode_reverse(current_mysql_key, data_size, current_grn_key);
+        encode_reverse(key_part, current_mysql_key, data_size, current_grn_key);
         break;
       case TYPE_BYTE_BLOB:
-        encode_blob(current_mysql_key, &data_size, field, current_grn_key);
+        encode_blob(key_part, current_mysql_key, &data_size, field, current_grn_key);
         grn_key_data_size = data_size;
         break;
       }
@@ -260,29 +338,36 @@ namespace mrn {
       case TYPE_LONG_LONG_NUMBER:
         {
           long long int value;
-          decode_long_long_int(current_grn_key, &value);
+          decode_long_long_int(key_part, current_grn_key, &value);
           int8store(current_mysql_key, value);
         }
         break;
       case TYPE_NUMBER:
         {
           Field_num *number_field = static_cast<Field_num *>(field);
-          decode_number(current_grn_key,
+          decode_number(key_part,
+                        current_grn_key,
                         grn_key_data_size,
                         !MRN_FIELD_IS_UNSIGNED(number_field),
                         current_mysql_key);
         }
         break;
       case TYPE_FLOAT:
-        decode_float(current_grn_key, grn_key_data_size, current_mysql_key);
+        decode_float(key_part,
+                     current_grn_key,
+                     grn_key_data_size,
+                     current_mysql_key);
         break;
       case TYPE_DOUBLE:
-        decode_double(current_grn_key, grn_key_data_size, current_mysql_key);
+        decode_double(key_part,
+                      current_grn_key,
+                      grn_key_data_size,
+                      current_mysql_key);
         break;
       case TYPE_DATETIME:
         {
           long long int grn_time;
-          decode_long_long_int(current_grn_key, &grn_time);
+          decode_long_long_int(key_part, current_grn_key, &grn_time);
           TimeConverter time_converter;
           long long int mysql_datetime =
             time_converter.grn_time_to_mysql_datetime(grn_time);
@@ -303,7 +388,7 @@ namespace mrn {
             static_cast<Field_datetimef *>(field);
           long long int grn_time;
           grn_key_data_size = 8;
-          decode_long_long_int(current_grn_key, &grn_time);
+          decode_long_long_int(key_part, current_grn_key, &grn_time);
           TimeConverter time_converter;
           MYSQL_TIME mysql_time;
           mysql_time.neg = false;
@@ -318,18 +403,22 @@ namespace mrn {
         break;
 #endif
       case TYPE_BYTE_SEQUENCE:
-        grn_memcpy(current_mysql_key, current_grn_key, grn_key_data_size);
+        decode_sequence(key_part,
+                        current_grn_key,
+                        grn_key_data_size,
+                        current_mysql_key);
         break;
       case TYPE_BYTE_REVERSE:
-        decode_reverse(current_grn_key, grn_key_data_size, current_mysql_key);
+        decode_reverse(key_part,
+                       current_grn_key,
+                       grn_key_data_size,
+                       current_mysql_key);
         break;
       case TYPE_BYTE_BLOB:
-        grn_memcpy(current_mysql_key,
-                   current_grn_key + data_size,
-                   HA_KEY_BLOB_LENGTH);
-        grn_memcpy(current_mysql_key + HA_KEY_BLOB_LENGTH,
-                   current_grn_key,
-                   data_size);
+        decode_reverse(key_part,
+                       current_grn_key,
+                       data_size,
+                       current_mysql_key);
         data_size += HA_KEY_BLOB_LENGTH;
         grn_key_data_size = data_size;
         break;
@@ -560,11 +649,21 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_number(const uchar *mysql_key,
+  void MultipleColumnKeyCodec::encode_number(KEY_PART_INFO *key_part,
+                                             const uchar *mysql_key,
                                              uint mysql_key_size,
                                              bool is_signed,
                                              uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
+    NumberValue value;
+    if (is_reverse_sort(key_part)) {
+      const auto result = reverse_number_data(mysql_key, mysql_key_size, is_signed);
+      const auto reversed = result.first;
+      if (reversed) {
+        value = result.second;
+        mysql_key = reinterpret_cast<const uchar *>(&value);
+      }
+    }
     mrn_byte_order_host_to_network(grn_key, mysql_key, mysql_key_size);
     if (is_signed) {
       grn_key[0] ^= 0x80;
@@ -572,7 +671,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::decode_number(const uchar *grn_key,
+  void MultipleColumnKeyCodec::decode_number(KEY_PART_INFO *key_part,
+                                             const uchar *grn_key,
                                              uint grn_key_size,
                                              bool is_signed,
                                              uchar *mysql_key) {
@@ -583,10 +683,18 @@ namespace mrn {
       buffer[0] ^= 0x80;
     }
     mrn_byte_order_network_to_host(mysql_key, buffer, grn_key_size);
+    if (is_reverse_sort(key_part)) {
+      const auto result = reverse_number_data(mysql_key, grn_key_size, is_signed);
+      const auto reversed = result.first;
+      if (reversed) {
+        grn_memcpy(mysql_key, &(result.second), grn_key_size);
+      }
+    }
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_long_long_int(volatile long long int value,
+  void MultipleColumnKeyCodec::encode_long_long_int(KEY_PART_INFO *key_part,
+                                                    volatile long long int value,
                                                     uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
     uint value_size = 8;
@@ -595,7 +703,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::decode_long_long_int(const uchar *grn_key,
+  void MultipleColumnKeyCodec::decode_long_long_int(KEY_PART_INFO *key_part,
+                                                    const uchar *grn_key,
                                                     long long int *value) {
     MRN_DBUG_ENTER_METHOD();
     uint grn_key_size = 8;
@@ -606,7 +715,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_float(volatile float value,
+  void MultipleColumnKeyCodec::encode_float(KEY_PART_INFO *key_part,
+                                            volatile float value,
                                             uint value_size,
                                             uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -618,7 +728,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::decode_float(const uchar *grn_key,
+  void MultipleColumnKeyCodec::decode_float(KEY_PART_INFO *key_part,
+                                            const uchar *grn_key,
                                             uint grn_key_size,
                                             uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -631,7 +742,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_double(volatile double value,
+  void MultipleColumnKeyCodec::encode_double(KEY_PART_INFO *key_part,
+                                             volatile double value,
                                              uint value_size,
                                              uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -643,7 +755,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::decode_double(const uchar *grn_key,
+  void MultipleColumnKeyCodec::decode_double(KEY_PART_INFO *key_part,
+                                             const uchar *grn_key,
                                              uint grn_key_size,
                                              uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -657,7 +770,26 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_reverse(const uchar *mysql_key,
+  void MultipleColumnKeyCodec::encode_sequence(KEY_PART_INFO *key_part,
+                                               const uchar *mysql_key,
+                                               uint mysql_key_size,
+                                               uchar *grn_key) {
+    MRN_DBUG_ENTER_METHOD();
+    grn_memcpy(grn_key, mysql_key, mysql_key_size);
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::decode_sequence(KEY_PART_INFO *key_part,
+                                               const uchar *grn_key,
+                                               uint grn_key_size,
+                                               uchar *mysql_key) {
+    MRN_DBUG_ENTER_METHOD();
+    grn_memcpy(mysql_key, grn_key, grn_key_size);
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::encode_reverse(KEY_PART_INFO *key_part,
+                                              const uchar *mysql_key,
                                               uint mysql_key_size,
                                               uchar *grn_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -667,7 +799,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::decode_reverse(const uchar *grn_key,
+  void MultipleColumnKeyCodec::decode_reverse(KEY_PART_INFO *key_part,
+                                              const uchar *grn_key,
                                               uint grn_key_size,
                                               uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
@@ -677,7 +810,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void MultipleColumnKeyCodec::encode_blob(const uchar *mysql_key,
+  void MultipleColumnKeyCodec::encode_blob(KEY_PART_INFO *key_part,
+                                           const uchar *mysql_key,
                                            uint *mysql_key_size,
                                            Field *field,
                                            uchar *grn_key) {
@@ -733,6 +867,20 @@ namespace mrn {
       grn_memcpy(grn_key, mysql_key + HA_KEY_BLOB_LENGTH, *mysql_key_size);
     }
     *mysql_key_size += HA_KEY_BLOB_LENGTH;
+    DBUG_VOID_RETURN;
+  }
+
+  void MultipleColumnKeyCodec::decode_blob(KEY_PART_INFO *key_part,
+                                           const uchar *grn_key,
+                                           uint data_size,
+                                           uchar *mysql_key) {
+    MRN_DBUG_ENTER_METHOD();
+    grn_memcpy(mysql_key,
+               grn_key + data_size,
+               HA_KEY_BLOB_LENGTH);
+    grn_memcpy(mysql_key + HA_KEY_BLOB_LENGTH,
+               grn_key,
+               data_size);
     DBUG_VOID_RETURN;
   }
 }

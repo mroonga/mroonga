@@ -1,0 +1,43 @@
+# Copyright (C) 2024  Sutou Kouhei <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../../include/mroonga/have_mroonga.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS items;
+--enable_warnings
+
+CREATE TABLE items (
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  prefix INT,
+  value TINYINT UNSIGNED,
+  INDEX (prefix, value desc)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO items (prefix, value) VALUES(1, 1);
+INSERT INTO items (prefix, value) VALUES(1, 2);
+INSERT INTO items (prefix, value) VALUES(1, 2);
+INSERT INTO items (prefix, value) VALUES(1, 2);
+INSERT INTO items (prefix, value) VALUES(1, 3);
+
+SELECT *
+       FROM items
+       WHERE prefix = 1 AND value > 1
+       ORDER BY value DESC;
+
+DROP TABLE items;
+
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
