@@ -887,7 +887,7 @@ protected:
 
 #if defined(MRN_HANDLER_HAVE_KEYREAD_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
   IO_AND_CPU_COST keyread_time(uint index,
-                               uint ranges,
+                               ulong ranges,
                                ha_rows rows,
                                ulonglong blocks) mrn_override;
   IO_AND_CPU_COST rnd_pos_time(ha_rows rows) mrn_override;
@@ -1539,11 +1539,11 @@ private:
 
 #if defined(MRN_HANDLER_HAVE_KEYREAD_TIME) && defined(MRN_ENABLE_WRAPPER_MODE)
   IO_AND_CPU_COST wrapper_keyread_time(uint index,
-                                       uint ranges,
+                                       ulong ranges,
                                        ha_rows rows,
                                        ulonglong blocks);
   IO_AND_CPU_COST storage_keyread_time(uint index,
-                                       uint ranges,
+                                       ulong ranges,
                                        ha_rows rows,
                                        ulonglong blocks);
   IO_AND_CPU_COST wrapper_rnd_pos_time(ha_rows rows);
