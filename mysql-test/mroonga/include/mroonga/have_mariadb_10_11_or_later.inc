@@ -16,21 +16,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/have_mariadb_10_11_or_later.inc
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
---disable_warnings
-DROP TABLE IF EXISTS items;
---enable_warnings
+if (!$mariadb) {
+  --skip This test is for MariaDB version 10.11.x or later
+}
 
-CREATE TABLE items (
-  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  value INT
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---error ER_ILLEGAL_HA_CREATE_OPTION
-ALTER TABLE items ADD INDEX (id desc);
-
-DROP TABLE items;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+if (!$version_10_11_or_later) {
+  --skip This test is for MariaDB version 10.11.x or later
+}

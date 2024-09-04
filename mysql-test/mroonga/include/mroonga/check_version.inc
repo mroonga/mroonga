@@ -1,6 +1,6 @@
 # -*- mode: sql; sql-product: mysql -*-
 #
-# Copyright (C) 2012-2023  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2012-2024  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -42,4 +42,5 @@ let $version_10_6          = `SELECT $version_major_minor = 10.06`;
 let $version_8_0_or_later   = `SELECT $version_major_minor >= 8.00`;
 let $version_10_4_or_later  = `SELECT $version_major_minor >= 10.04`;
 let $version_10_5_or_later  = `SELECT $version_major_minor >= 10.05`;
+let $version_10_11_or_later  = `SELECT $version_major_minor >= 10.11`;
 --enable_query_log
