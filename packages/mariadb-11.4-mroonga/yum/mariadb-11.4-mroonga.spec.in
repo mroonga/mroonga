@@ -8,14 +8,6 @@
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
 %define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:%{mariadb_dist_default}}
 
-%define use_dnf (%{rhel} >= 8)
-
-%if %{use_dnf}
-%define dnf_download dnf download
-%else
-%define dnf_download yumdownloader
-%endif
-
 %if ! %{defined cmake}
 %define cmake %{cmake3}
 %endif
@@ -40,17 +32,13 @@ Source0:	https://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildRequires:	MariaDB-devel = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+BuildRequires:	dnf-command(download)
 BuildRequires:	gcc-c++
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	rpm
 BuildRequires:	sed
 BuildRequires:	which
-%if %{use_dnf}
-BuildRequires:	dnf-command(download)
-%else
-BuildRequires:	yum-utils
-%endif
 Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	MariaDB-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
@@ -74,7 +62,7 @@ Documentation for Mroonga
 %setup -q -n mroonga-%{version}
 
 if ! cp /MariaDB-*.src.rpm ./; then
-  %{dnf_download} -y ${quiet} --source MariaDB
+  dnf download -y ${quiet} --source MariaDB
 fi
 rpm -Uvh MariaDB-*.src.rpm
 sed -i'' -e 's/^make /make perfschema /' ~/rpmbuild/SPECS/MariaDB.spec
