@@ -697,7 +697,7 @@ namespace mrn {
                                              const uchar *grn_key,
                                              uchar *mysql_key) {
     MRN_DBUG_ENTER_METHOD();
-    constexpr auto grn_key_size = sizeof(float);
+    constexpr auto grn_key_size = sizeof(double);
     uchar buffer[grn_key_size];
     if (is_reverse_sort(key_part)) {
       grn_memcpy(buffer, grn_key, grn_key_size);
