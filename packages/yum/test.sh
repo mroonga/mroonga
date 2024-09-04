@@ -54,14 +54,7 @@ case ${package} in
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
     test_package_name=MariaDB-test
-    case ${mysql_version} in
-      10.5|10.6|10.11)
-        baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
-        ;;
-      *)
-        baseurl=https://yum.mariadb.org/${mysql_version}/centos${major_version}-amd64
-        ;;
-    esac
+    baseurl=https://yum.mariadb.org/${mysql_version}/rhel/${major_version}/x86_64
     sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
@@ -184,7 +177,11 @@ case ${os}-${major_version} in
     ;;
 esac
 
-cd /usr/share/mysql-test/
+test_directory=/usr/share/mysql-test
+if [ -d /usr/share/mariadb-test ]; then
+  test_directory=/usr/share/mariadb-test
+fi
+cd ${test_directory}
 if [ -d plugin ]; then
   sudo mv plugin plugin.backup
 else

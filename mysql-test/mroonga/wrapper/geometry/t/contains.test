@@ -139,7 +139,8 @@ insert into shops (name, location)
                    ST_GeomFromText('POINT(35.647701 139.711517)'));
 select id, name, ST_AsText(location) as location_text from shops;
 select id, name, ST_AsText(location) as location_text from shops
-  where MBRContains(ST_GeomFromText('LineString(35.6684 139.7727, 35.7121 139.7038)'), location);
+  where MBRContains(ST_GeomFromText('LineString(35.6684 139.7727, 35.7121 139.7038)'), location)
+  order by id;
 drop table shops;
 
 --source ../../../include/mroonga/have_mroonga_deinit.inc
