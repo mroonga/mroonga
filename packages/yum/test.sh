@@ -177,7 +177,11 @@ case ${os}-${major_version} in
     ;;
 esac
 
-cd /usr/share/mysql-test/
+test_directory=/usr/share/mysql-test
+if [ -d /usr/share/mariadb-test ]; then
+  test_directory=/usr/share/mariadb-test
+fi
+cd ${test_directory}
 if [ -d plugin ]; then
   sudo mv plugin plugin.backup
 else
