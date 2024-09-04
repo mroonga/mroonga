@@ -88,6 +88,7 @@ rpmbuild -bc ~/rpmbuild/SPECS/MariaDB.spec
 mariadb_source=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/mariadb-%{_mariadb_version}
 mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_dir
 %cmake \
+  -DMRN_WITH_DOC=ON \
   -DMYSQL_SOURCE_DIR=${mariadb_source} \
   -DMYSQL_BUILD_DIR=${mariadb_build} \
   -DMYSQL_CONFIG=${mariadb_build}/scripts/mysql_config \
@@ -96,10 +97,7 @@ mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_d
 
 %install
 %cmake_install
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?
-mv $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?.?.? \
+mv $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so \
    $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga_official.so
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mroonga-doc/
 sed -i'' -e 's/ha_mroonga/ha_mroonga_official/g' \
@@ -127,8 +125,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
 %{_datadir}/mroonga/*
-%{_datadir}/man/man1/*
-%{_datadir}/man/*/man1/*
 
 %files doc
 %defattr(-,root,root,-)
