@@ -54,7 +54,7 @@ case ${package} in
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
     test_package_name=MariaDB-test
-    baseurl=https://yum.mariadb.org/${mysql_version}/rhel${major_version}-amd64
+    baseurl=https://yum.mariadb.org/${mysql_version}/rhel/${major_version}/amd64
     sudo tee /etc/yum.repos.d/MariaDB.repo <<-REPO
 [mariadb]
 name = MariaDB
