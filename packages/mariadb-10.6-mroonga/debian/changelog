@@ -1,6 +1,6 @@
 mariadb-10.6-mroonga (14.04-2) unstable; urgency=low
 
-  * New upstream release.
+  * Rebuild against MariaDB 10.6.18.
 
  -- Horimoto Yasuhiro <horimoto@clear-code.com>  Fri, 21 Jun 2024 02:09:18 -0000
 
