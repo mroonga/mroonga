@@ -2,11 +2,7 @@
 
 %define mariadb_version_default 11.4.3
 %define mariadb_release_default 1
-%if %{rhel} == 7
-%define mariadb_dist_default    el%{rhel}.centos
-%else
 %define mariadb_dist_default    el%{rhel}
-%endif
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
