@@ -20,6 +20,16 @@
 %define dnf_download yumdownloader
 %endif
 
+%if ! %{defined cmake}
+%define cmake %{cmake3}
+%endif
+%if ! %{defined cmake_build}
+%define cmake_build %{cmake3_build}
+%endif
+%if ! %{defined cmake_install}
+%define cmake_install %{cmake3_install}
+%endif
+
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
 Name:		mariadb-11.4-mroonga
@@ -77,17 +87,15 @@ sed -i'' -e 's/^make /make perfschema /' ~/rpmbuild/SPECS/MariaDB.spec
 rpmbuild -bc ~/rpmbuild/SPECS/MariaDB.spec
 mariadb_source=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/mariadb-%{_mariadb_version}
 mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_dir
-%configure \
-    --disable-static \
-    --with-mysql-source=${mariadb_source} \
-    --with-mysql-build=${mariadb_build} \
-    --with-mysql-config=${mariadb_build}/scripts/mysql_config \
-    %{?mroonga_configure_options}
-make %{?_smp_mflags}
+%cmake \
+  -DMYSQL_SOURCE_DIR=${mariadb_source} \
+  -DMYSQL_BUILD_DIR=${mariadb_build} \
+  -DMYSQL_CONFIG=${mariadb_build}/scripts/mysql_config \
+  %{?mroonga_configure_options}
+%cmake_build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%cmake_install
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so
 rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/ha_mroonga.so.?
