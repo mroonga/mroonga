@@ -5,7 +5,10 @@ AM_CPPFLAGS =					\
 	$(GROONGA_CFLAGS)			\
 	$(MYSQL_VERSION_CFLAGS)
 
-libmrn_need_mysql_la_CXXFLAGS = $(AM_CXXFLAGS) $(MYSQL_CFLAGS)
+libmrn_need_mysql_la_CXXFLAGS =			\
+	$(AM_CXXFLAGS)				\
+	$(MYSQL_CFLAGS)				\
+	-DMYSQL_DYNAMIC_PLUGIN
 
 noinst_LTLIBRARIES =				\
 	$(LIBMYSQLSERVICES_COMPAT)		\
