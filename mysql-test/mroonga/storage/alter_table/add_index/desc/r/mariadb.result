@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+value INT
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+ALTER TABLE items ADD INDEX (id desc);
+ERROR HY000: descending index isn't supported yet
+DROP TABLE items;

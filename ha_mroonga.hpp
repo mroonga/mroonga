@@ -1155,6 +1155,7 @@ private:
                                   const dd::Table *table_def,
 #  endif
                                   int &error);
+  int storage_validate_key(KEY *key);
   int storage_create_validate_index(TABLE *table);
   bool find_lexicon_flags(KEY *key, grn_table_flags *lexicon_flags);
   int storage_create_index_table(TABLE *table, const char *grn_table_name,

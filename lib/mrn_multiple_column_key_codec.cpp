@@ -589,6 +589,8 @@ namespace mrn {
     if (is_signed) {
       grn_key[0] ^= 0x80;
     }
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(grn_key, mysql_key_size);
     }
@@ -603,6 +605,8 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     uchar buffer[8];
     grn_memcpy(buffer, grn_key, grn_key_size);
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(buffer, grn_key_size);
     }
@@ -620,6 +624,8 @@ namespace mrn {
     constexpr uint value_size = 8;
     mrn_byte_order_host_to_network(grn_key, &value, value_size);
     grn_key[0] ^= 0x80;
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(grn_key, value_size);
     }
@@ -633,6 +639,8 @@ namespace mrn {
     constexpr auto grn_key_size = sizeof(long long int);
     uchar buffer[grn_key_size];
     grn_memcpy(buffer, grn_key, grn_key_size);
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(buffer, grn_key_size);
     }
@@ -651,6 +659,8 @@ namespace mrn {
     int int_value = *int_value_pointer;
     int_value ^= ((int_value >> n_bits) | (1 << n_bits));
     mrn_byte_order_host_to_network(grn_key, &int_value, value_size);
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(grn_key, value_size);
     }
@@ -663,6 +673,8 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     constexpr auto grn_key_size = sizeof(float);
     uchar buffer[grn_key_size];
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       grn_memcpy(buffer, grn_key, grn_key_size);
       reverse_bits(buffer, grn_key_size);
@@ -687,6 +699,8 @@ namespace mrn {
     volatile long long int long_long_value = *long_long_value_pointer;
     long_long_value ^= ((long_long_value >> n_bits) | (1LL << n_bits));
     mrn_byte_order_host_to_network(grn_key, &long_long_value, value_size);
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       reverse_bits(grn_key, value_size);
     }
@@ -699,6 +713,8 @@ namespace mrn {
     MRN_DBUG_ENTER_METHOD();
     constexpr auto grn_key_size = sizeof(double);
     uchar buffer[grn_key_size];
+    // TODO: Descending index support is disabled for now. So this
+    // code isn't used.
     if (is_reverse_sort(key_part)) {
       grn_memcpy(buffer, grn_key, grn_key_size);
       reverse_bits(buffer, grn_key_size);
@@ -718,6 +734,7 @@ namespace mrn {
                                                const uchar *mysql_key,
                                                uint mysql_key_size,
                                                uchar *grn_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     grn_memcpy(grn_key, mysql_key, mysql_key_size);
     DBUG_VOID_RETURN;
@@ -727,6 +744,7 @@ namespace mrn {
                                                const uchar *grn_key,
                                                uint grn_key_size,
                                                uchar *mysql_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     grn_memcpy(mysql_key, grn_key, grn_key_size);
     DBUG_VOID_RETURN;
@@ -736,6 +754,7 @@ namespace mrn {
                                               const uchar *mysql_key,
                                               uint mysql_key_size,
                                               uchar *grn_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     for (uint i = 0; i < mysql_key_size; i++) {
       grn_key[i] = mysql_key[mysql_key_size - i - 1];
@@ -747,6 +766,7 @@ namespace mrn {
                                               const uchar *grn_key,
                                               uint grn_key_size,
                                               uchar *mysql_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     for (uint i = 0; i < grn_key_size; i++) {
       mysql_key[i] = grn_key[grn_key_size - i - 1];
@@ -759,6 +779,7 @@ namespace mrn {
                                            uint *mysql_key_size,
                                            Field *field,
                                            uchar *grn_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     FieldNormalizer normalizer(ctx_, thread_, field);
     if (normalizer.should_normalize()) {
@@ -818,6 +839,7 @@ namespace mrn {
                                            const uchar *grn_key,
                                            uint data_size,
                                            uchar *mysql_key) {
+    // TODO: Descending index support isn't implemented yet.
     MRN_DBUG_ENTER_METHOD();
     grn_memcpy(mysql_key,
                grn_key + data_size,

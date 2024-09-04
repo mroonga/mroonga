@@ -4665,21 +4665,40 @@ bool ha_mroonga::storage_create_foreign_key(TABLE *table,
 int ha_mroonga::storage_create_validate_index(TABLE *table)
 {
   int error = 0;
-  uint i;
 
   MRN_DBUG_ENTER_METHOD();
-  /* checking if index is used for virtual columns  */
-  uint n_keys = table->s->keys;
-  for (i = 0; i < n_keys; i++) {
-    KEY *key_info = &(table->s->key_info[i]);
-    // must be single column key
-    int key_parts = KEY_N_KEY_PARTS(key_info);
-    if (key_parts != 1) {
-      continue;
+  const auto n_keys = table->s->keys;
+  for (uint i = 0; i < n_keys; i++) {
+    auto key = &(table->s->key_info[i]);
+    error = storage_validate_key(key);
+    if (error != 0) {
+      break;
     }
-    Field *field = key_info->key_part[0].field;
+  }
+
+  DBUG_RETURN(error);
+}
+
+int ha_mroonga::storage_validate_key(KEY *key)
+{
+  int error = 0;
+
+  MRN_DBUG_ENTER_METHOD();
+  const auto n_key_parts = KEY_N_KEY_PARTS(key);
+  for (uint j = 0; j < n_key_parts; ++j) {
+    auto key_part = &(key->key_part[j]);
+    auto field = key_part->field;
+
+    if (key_part->key_part_flag & HA_REVERSE_SORT) {
+      error = ER_ILLEGAL_HA_CREATE_OPTION;
+      my_message(error, "descending index isn't supported yet", MYF(0));
+      DBUG_RETURN(error);
+    }
+
+    // checking if index is used for virtual columns
     if (FIELD_NAME_EQUAL(field, MRN_COLUMN_NAME_ID)) {
-      if (key_info->algorithm == HA_KEY_ALG_HASH) {
+      // must be single column key
+      if (key->algorithm == HA_KEY_ALG_HASH && n_key_parts == 1) {
         continue; // hash index is ok
       }
       GRN_LOG(ctx, GRN_LOG_ERROR, "only hash index can be defined for _id");
@@ -17229,6 +17248,18 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
   Alter_inplace_info *ha_alter_info)
 {
   MRN_DBUG_ENTER_METHOD();
+
+  {
+    const auto n_keys = ha_alter_info->index_add_count;
+    for (uint i = 0; i < n_keys; ++i) {
+      auto key_pos = ha_alter_info->index_add_buffer[i];
+      auto key = &altered_table->key_info[key_pos];
+      auto error = storage_validate_key(key);
+      if (error != 0) {
+        DBUG_RETURN(true);
+      }
+    }
+  }
 
   MRN_ALLOCATE_VARIABLE_LENGTH_ARRAYS(grn_obj *, index_tables,
                                       ha_alter_info->key_count);

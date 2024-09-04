@@ -16,32 +16,18 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---skip We may reuse this when we add support for descending index
-
---source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_mariadb.inc
+--source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS items;
 --enable_warnings
 
+--error ER_ILLEGAL_HA_CREATE_OPTION
 CREATE TABLE items (
   id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-  prefix INT,
-  value BIGINT,
-  INDEX (prefix, value desc)
+  value INT,
+  INDEX (value desc)
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO items (prefix, value) VALUES(1, -9223372036854775806);
-INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
-INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
-INSERT INTO items (prefix, value) VALUES(1, -9223372036854775807);
-INSERT INTO items (prefix, value) VALUES(1, -9223372036854775808);
-
-SELECT *
-       FROM items
-       WHERE prefix = 1 AND value > -9223372036854775808
-       ORDER BY value DESC;
-
-DROP TABLE items;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc
