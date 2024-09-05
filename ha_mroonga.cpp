@@ -379,55 +379,55 @@ static PSI_mutex_key mrn_context_pool_mutex_key;
 static PSI_mutex_key mrn_operations_mutex_key;
 
 #  if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80011)
-#    define MRN_MUTEXT_INFO_ENTRY(key, name, flags, volatility, document) \
+#    define MRN_MUTEX_INFO_ENTRY(key, name, flags, volatility, document) \
   {key, name, flags, volatility, document}
 #  else
-#    define MRN_MUTEXT_INFO_ENTRY(key, name, flags, volatility, document) \
+#    define MRN_MUTEX_INFO_ENTRY(key, name, flags, volatility, document) \
   {key, name, flags}
 #  endif
 
 static PSI_mutex_info mrn_mutexes[] =
 {
-  MRN_MUTEXT_INFO_ENTRY(&mrn_open_tables_mutex_key,
-                        "mrn::open_tables",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_shares_mutex_key,
-                        "mrn::long_term_shares",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_allocated_thds_mutex_key,
-                        "mrn::allocated_thds",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_share_mutex_key,
-                        "mrn::share",
-                        0,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_long_term_share_auto_inc_mutex_key,
-                        "mrn::long_term_share::auto_inc",
-                        0,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_db_manager_mutex_key,
-                        "mrn::DatabaseManager",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_context_pool_mutex_key,
-                        "mrn::ContextPool",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME),
-  MRN_MUTEXT_INFO_ENTRY(&mrn_operations_mutex_key,
-                        "mrn::Operations",
-                        PSI_FLAG_SINGLETON,
-                        PSI_VOLATILITY_UNKNOWN,
-                        PSI_DOCUMENT_ME)
+  MRN_MUTEX_INFO_ENTRY(&mrn_open_tables_mutex_key,
+                       "mrn::open_tables",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_long_term_shares_mutex_key,
+                       "mrn::long_term_shares",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_allocated_thds_mutex_key,
+                       "mrn::allocated_thds",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_share_mutex_key,
+                       "mrn::share",
+                       0,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_long_term_share_auto_inc_mutex_key,
+                       "mrn::long_term_share::auto_inc",
+                       0,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_db_manager_mutex_key,
+                       "mrn::DatabaseManager",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_context_pool_mutex_key,
+                       "mrn::ContextPool",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME),
+  MRN_MUTEX_INFO_ENTRY(&mrn_operations_mutex_key,
+                       "mrn::Operations",
+                       PSI_FLAG_SINGLETON,
+                       PSI_VOLATILITY_UNKNOWN,
+                       PSI_DOCUMENT_ME)
 };
 
 #  if !defined(MRN_MARIADB_P)
