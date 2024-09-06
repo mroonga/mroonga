@@ -19,11 +19,56 @@ msgstr ""
 msgid "News - 14 series"
 msgstr "お知らせ - 14系"
 
-msgid "Release 14.04 - 2024-06-12"
-msgstr "14.04リリース - 2024-06-12"
+msgid "Release 14.07 - 2024-09-06"
+msgstr "14.07リリース - 2024-09-06"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "[{doc}`/install/almalinux`][{doc}`/install/debian`][{doc}`/install/ubuntu`] Added support for MySQL community 8.4.2."
+msgstr "[{doc}`/install/almalinux`][{doc}`/install/debian`][{doc}`/install/ubuntu`] MySQL Community Server 8.4.2 をサポートしました。"
+
+msgid "[{doc}`/install/almalinux`][{doc}`/install/debian`][{doc}`/install/ubuntu`] Added support for MySQL community 8.0.39."
+msgstr "[{doc}`/install/almalinux`][{doc}`/install/debian`][{doc}`/install/ubuntu`] MySQL Community Server 8.0.39 をサポートしました。"
+
+msgid "[{doc}`/install/almalinux`] Added support for Percona Server 8.0.37-29."
+msgstr "[{doc}`/install/almalinux`] Percona Server 8.0.37-29 をサポートしました。"
+
+msgid "[{doc}`/install/ubuntu`] Added support for MySQL 8.0.39"
+msgstr "[{doc}`/install/ubuntu`] MySQL 8.0.39 をサポートしました。"
+
+msgid "[{doc}`/install/almalinux`] Added support for MariaDB 11.4.3, 10.11.9, 10.6.19, and 10.5.26."
+msgstr "[{doc}`/install/almalinux`] MariaDB 10.5.26、10.6.19、10.11.9、11.4.3 をサポートしました。"
+
+msgid "[{doc}`/install/ubuntu`] Added support for MariaDB 10.6.18 and 10.11.8."
+msgstr "[{doc}`/install/ubuntu`] MariaDB 10.6.18 と 10.11.8 をサポートしました。"
+
+msgid "Disable descending index support [GitHub #764][Reported by Josep Sanz]"
+msgstr "降順インデックスのサポートを無効にしました。 [GitHub #764][Josep Sanzさんの報告]"
+
+msgid "If we don't add support for descending index with MariaDB >= 10.8, Mroonga returns wrong result with descending index. So, we disable descending index support now. However, we may re-try it later."
+msgstr "MariaDB >= 10.8 で降順インデックスをサポートしない場合、Mroongaは誤った結果を返します。そのため、降順インデックスのサポートを無効にしましたが、後日サポートするかもしれません。"
+
+msgid "By the way, if we use descending index with MySQL >= 8.0, MySQL returns error."
+msgstr "MySQL >= 8.0で降順インデックスを使った場合は、MySQLがエラーを返します。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fix a crash bug with concurrent `FLUSH TABLES` and `INSERT`. [GitHub #743][Reported by Watson]"
+msgstr "`FLUSH TABLES` と `INSERT`の同時実行でクラッシュする問題を修正しました。 [GitHub #743][Watsonさんの報告]"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Josep Sanz"
+msgstr "Josep Sanzさん"
+
+msgid "Watson"
+msgstr "Watsonさん"
+
+msgid "Release 14.04 - 2024-06-12"
+msgstr "14.04リリース - 2024-06-12"
 
 msgid "[{doc}`/install/almalinux`] Added support for MariaDB 10.5.25, 10.6.18, and 10.11.8."
 msgstr "[{doc}`/install/almalinux`] MariaDB 10.5.25、10.6.18、10.11.8 をサポートしました。"
@@ -106,9 +151,6 @@ msgstr "Mroongaを初期化していない状態で、MroongaのUDFを使用し�
 msgid "Before this fix, using Mroonga's UDF without initializing Mroonga (not having run `INSTALL PLUGIN mroonga`) would cause a crash. This patch changes the output from a crash to logging an error."
 msgstr "この修正が入る前は、Mroongaを初期化していない状態（`INSTALL PLUGIN mroonga`を実行していない状態）でMroongaのUDFを使用するとクラッシュしてしまいました。この修正によって、クラッシュではなく、エラーをログに出力するようになります。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "[{doc}`/tutorial/wrapper`] Fixed memory leaks in cases where engines not supporting online DDL are wrapped."
 msgstr "[{doc}`/tutorial/wrapper`] オンラインDDLに対応していないストレージエンジンをラップしている場合にメモリーリークする問題を修正しました。"
 
@@ -123,9 +165,6 @@ msgstr "[{doc}`/tutorial/storage`] 圧縮された`VARCHAR`型のカラム、ま
 
 msgid "This issue occurs only in storage mode and not in wrapper mode."
 msgstr "ストレージモードでのみ発生します。ラッパーモードでは発生しません。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Ian Gilfillan"
 msgstr "Ian Gilfillanさん"
