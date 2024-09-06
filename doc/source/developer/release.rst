@@ -30,14 +30,7 @@ Install the following packages::
 Describe the changes
 --------------------
 
-Summarize recent changes since the previous release into ``doc/source/news.txt``.
-This summary is also used in release note.
-
-Execute the following command to collect change logs since the previous version::
-
-   % git log -p --reverse $(git tag | tail -1)..
-
-Search the logs by ``^commit``, and pick up collect remarkable changes.
+Summarize recent changes since the previous release into ``doc/source/news/xx.md``.
 
 Should be included
 
@@ -48,45 +41,21 @@ Shoud not be included
 
 * The changes which doesn't affect to users (Internal source code changes or refactoring)
 
-Execute the following command to create HTML for news.
+Execute the following command to create HTML for news::
 
-  % make update-files
-  % make -C doc html
-
-Generate configure script
--------------------------
-
-Because of main branch doesn't include configure script, then it is required to generate configure script for building.
-
-Execute ``autogen.sh`` with the following command::
-
-    % sh autogen.sh
-
-It generates ``configure`` script.
-
-Execute configure script
-------------------------
-
-For generating ``Makefile``, execute the ``configure`` script.
-
-Execute with the following options for the release::
-
-    % ./configure \
-        --enable-document \
-        --prefix=/tmp/local \
-        --with-launchpad-uploader-pgp-key=(The key ID that is registered Launchpad) \
-        --with-mroonga-github-com-path=$MROONGA_GITHUB_COM_PATH \
-        --with-cutter-source-path=$CUTTER_SOURCE_PATH \
-        --with-groonga-source-path=$GROONGA_SOURCE_PATH \
-        --with-mysql-source=(The directory of MySQL source code) \
-        --with-mysql-build=(The build directory of MySQL) \
-        --with-mysql-config=(The path to mysql_config command)
-
-See :doc:`/install/others`  for the details of ``--with-mysql-source`` option.
-
-.. note::
-   We can not upload and override the same name packages to PPA repository.
-   Therefore, we upload packages to a stable repository after confirming the successful build of they in the nightly repository.
+    % cd $MARIADB_SOURCE_DIRECTORY
+    % cmake -S . -B ../build-dir/mariadb-11.4 -GNinja -DCMAKE_INSTALL_PREFIX=/tmp/local -DPLUGIN_CASSANDRA=NO
+    % cmake --build ../build-dir/mariadb-11.4
+    % cmake --install ../build-dir/mariadb-11.4
+    % cd ..
+    % cd $GROONGA_SOURCE_DIRECTORY
+    % cmake -S . -B ../build-dir/groonga --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="/tmp/local"
+    % cmake --build ../build-dir/groonga
+    % cmake --install ../build-dir/groonga
+    % cd ..
+    % cd $MROONGA_SOURCE_DIRECTORY
+    % PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake -S . -B ../build-dir/mroonga --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="/tmp/local" -DMYSQL_SOURCE_DIR=~/Work/free-software/mariadb-11.4.3 -DMYSQL_BUILD_DIR=~/Work/free-software/build-dir/mariadb-11.4 -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config
+    % cmake --build ../build-dir/mroonga
 
 Check whether you can upload packages
 -------------------------------------
@@ -102,58 +71,46 @@ If you can't login to packages.groonga.org, you must be registered ssh public ke
 Execute make update-latest-release
 ----------------------------------
 
-Execute ``make update-latest-release`` command with OLD_RELEASE_DATE, NEW_RELEASE_DATE.
+Execute ``rake release:version:update`` command with OLD_RELEASE_DATE, NEW_RELEASE_DATE.
 
-When 9.09 release, we executed the following command::
+When 14.07 release, we executed the following command::
 
-    % make update-latest-release OLD_RELEASE=9.09 OLD_RELEASE_DATE=2019-09-27 NEW_RELEASE_DATE=2019-10-30
+    % rake release:version:update OLD_RELEASE=14.04 OLD_RELEASE_DATE=2024-06-12 NEW_RELEASE_DATE=2024-09-06
 
-This command updates some html files (which is used for web sites of Mroonga - index.html,ja/index.html) and the version of spec file or debian/changelog entry.
+This command updates the version of spec file or debian/changelog entry.
 
 Confirm the results of each test
 --------------------------------
 
-We confirm the results of all the below tests before setting the tag to Mroonga.
+We confirm the results of all the below tests and build before setting the tag to Mroonga.
 Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
 
 * `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
+* `Launchpad <https://launchpad.net/~groonga/+archive/ubuntu/nightly/+packages>`_
+
+How to build packages for Ubuntu on Nightly::
+
+    Download source archive from GitHub actions.
+    % mv mroonga-14.07.tar.gz mroonga/
+    % cd mroonga/packages
+    % rake ubuntu DPUT_CONFIGURATION_NAME=groonga-ppa-nightly DPUT_INCOMING="~groonga/ubuntu/nightly" LAUNCHPAD_UPLOADER_PGP_KEY=xxxxxxx
 
 Tagging for release
 -------------------
 
 Execute the following command for tagging::
 
-    % make tag
-    % git push --tags origin
-
-.. note::
-   After tagging for the release, execute ``configure`` script. This tag information is reflected when generating the documents.
+    % rake release:tag
 
 Upload archive files
 --------------------
 
-Then, create archive file (``tar.gz``) for distribution::
-
-    % make dist
-
-Change working directory to ``packages/source``::
+Execute the following command for uploading source archive::
 
     % cd packages/source
-
-Execute ``make download`` for syncing with the upstream::
-
-    % make download
-
-Execute ``make archive`` for generating source archive::
-
-    % make archive
-
-Execute ``make upload`` for uploading archive file::
-
-    % make upload
+    % rake source
 
 As a result, ``tar.gz`` archive file is available from https://packages.groonga.org/source/mroonga/.
-
 
 Create packages for the release
 -------------------------------
@@ -217,30 +174,7 @@ For windows packages, we use artifacts of `GitHub release page <https://github.c
 Update Docker images
 --------------------
 
-We update Mroonga's Docker images of `Docker Hub <https://hub.docker.com/r/groonga/mroonga>`_ .
-
-Clone `the Mroonga's Docker repository <https://github.com/mroonga/docker>`_ and update Dockerfiles in tha repository.
-
-Here is an example for the case that the MySQL version is ``5.7.26``, the Mroonga version is ``9.01``, the Groonga version is ``9.0.2``::
-
-    % mkdir -p ~/work/mroonga
-    % test -e ~/work/mroonga/docker.clean || git clone --recursive git@github.com:mroonga/docker.git ~/work/mroonga/docker.clean
-    % cd ~/work/mroonga/docker.clean
-    % git clean -xdf
-    % git checkout .
-    % git pull
-    % ./update.sh 5.7.26 9.01 9.0.2 #Automatically update Dockerfiles and commit changes and create a tag.
-    % git push
-
-You have to specify the latest versions.
-
-After you check `GitHub Actions of the Mroonga's Docker repository <https://github.com/mroonga/docker/actions>`_ are succeeded, push tag to remote, push tag to remote.::
-
-    % git push --tags
-
-GitHub Actions of the Mroonga's Docker repository automatically update the Mroonga's docker images of Docker Hub after you push the tag.
-
-You have to execute this procedure for both MySQL 5.x.x and 8.x.x.
+TODO
 
 Upload documents
 ----------------
@@ -306,4 +240,4 @@ Bump version
 
 Bump version to the latest release::
 
-    % make update-version NEW_VERSION_MAJOR=9 NEW_VERSION_MINOR=1 NEW_VERSION_MICRO=0
+    % rake dev:version:bump NEW_VERSION=xx.xx
