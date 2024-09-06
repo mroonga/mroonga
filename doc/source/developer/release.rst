@@ -11,13 +11,13 @@ Here is the requirements about release procedure.
 
 Use the following working directories.
 
-* MROONGA_DIR=$HOME/work/mroonga
-* MROONGA_CLONE_DIR=$HOME/work/mroonga/mroonga.clean
-* MROONGA_GITHUB_COM_PATH=$HOME/work/mroonga/mroonga.github.com
-* CUTTER_DIR=$HOME/work/cutter
-* CUTTER_SOURCE_PATH=$HOME/work/cutter/cutter
-* GROONGA_SOURCE_PATH=$HOME/work/groonga/groonga.clean
-* PACKAGES_GROONGA_ORG_REPOSITORY=$HOME/work/groonga/packages.groonga.org
+* MROONGA_SOURCE_DIR=$HOME/work/mroonga
+* MROONGA_BUILD_DIR=$HOME/work/build-dir/mroonga
+* MARIADB_SOURCE_DIR=$HOME/work/mariadb
+* MARIADB_BUILD_DIR=$HOME/work/build-dir/mariadb
+* GROONGA_SOURCE_DIR=$HOME/work/groonga
+* GROONGA_BUILD_DIR=$HOME/work/build-dir/groonga
+* INSTALL_DIR=/tmp/local
 
 Setup build environment
 -----------------------
@@ -43,19 +43,19 @@ Shoud not be included
 
 Execute the following command to create HTML for news::
 
-    % cd $MARIADB_SOURCE_DIRECTORY
-    % cmake -S . -B ../build-dir/mariadb-11.4 -GNinja -DCMAKE_INSTALL_PREFIX=/tmp/local -DPLUGIN_CASSANDRA=NO
-    % cmake --build ../build-dir/mariadb-11.4
-    % cmake --install ../build-dir/mariadb-11.4
+    % cd ${MROONGA_SOURCE_DIR}
+    % cmake -S . -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
+    % cmake --build ${MARIADB_BUILD_DIR}
+    % cmake --install ${MARIADB_BUILD_DIR}
     % cd ..
-    % cd $GROONGA_SOURCE_DIRECTORY
-    % cmake -S . -B ../build-dir/groonga --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="/tmp/local"
-    % cmake --build ../build-dir/groonga
-    % cmake --install ../build-dir/groonga
+    % cd ${GROONGA_SOURCE_DIRECTORY}
+    % cmake -S . -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
+    % cmake --build ${GROONGA_BUILD_DIR}
+    % cmake --install ${GROONGA_BUILD_DIR}
     % cd ..
-    % cd $MROONGA_SOURCE_DIRECTORY
-    % PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake -S . -B ../build-dir/mroonga --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="/tmp/local" -DMYSQL_SOURCE_DIR=~/Work/free-software/mariadb-11.4.3 -DMYSQL_BUILD_DIR=~/Work/free-software/build-dir/mariadb-11.4 -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config
-    % cmake --build ../build-dir/mroonga
+    % cd ${MROONGA_SOURCE_DIRECTORY}
+    % PKG_CONFIG_PATH=${INSTALL_DIR}/lib/pkgconfig cmake -S . -B ${MROONGA_BUILD_DIR} --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" -DMYSQL_SOURCE_DIR=~${MARIADB_SOURCE_DIR} -DMYSQL_BUILD_DIR=${MARIADB_BUILD_DIR} -DMYSQL_CONFIG=${INSTALL_DIR}/bin/mariadb_config
+    % cmake --build ${MROONGA_BUILD_DIR}
 
 Check whether you can upload packages
 -------------------------------------
