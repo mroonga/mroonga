@@ -1,6 +1,6 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.0.38
+%define mysql_version_default 8.0.39
 %define mysql_release_default 1
 %define mysql_dist_default    el%{rhel}
 %define mysql_spec_file_default mysql.spec
@@ -99,37 +99,4 @@ This is a trnsitional package. This can safely be removed.
 
 %changelog
 * Fri Sep 06 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.07-1
-- New upstream release.
-
-* Fri Jul 05 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.04-2
-- build against MySQL 8.0.38.
-
-* Mon Jun 17 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.04-1
-- New upstream release.
-
-* Thu May 09 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-4
-- build against MySQL 8.0.37.
-
-* Fri Jan 19 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-3
-- build against MySQL 8.0.36.
-
-* Wed Oct 25 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-2
-- build against MySQL 8.0.35.
-
-* Tue Aug 01 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.05-1
-- New upstream release.
-
-* Fri Jul 28 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.04-1
-- New upstream release.
-
-* Thu Jul 20 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-3
-- build against MySQL 8.0.34.
-
-* Thu Apr 13 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-2
-- build against MySQL 8.0.33.
-
-* Thu Apr 13 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.01-1
-- New upstream release.
-
-* Thu Mar 23 2023 Horimoto Yasuhiro <horimoto@clear-code.com> - 13.00-1
 - New upstream release.
