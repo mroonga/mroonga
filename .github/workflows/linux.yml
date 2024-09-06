@@ -223,7 +223,7 @@ jobs:
             package: mysql-community-8.4
             test-image: "images:ubuntu/24.04"
 
-          MySQL community minimal 8.0
+          # MySQL community minimal 8.0
           - os: almalinux-9
             package: mysql-community-minimal-8.0
             test-image: "images:almalinux/9"
