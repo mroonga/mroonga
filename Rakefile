@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+require "tmpdir"
 
 def env_var(name, default=nil)
   value = ENV[name] || default
@@ -53,8 +54,6 @@ def new_plugin_version
   # 10.11 -> 10.11
   new_version.gsub(".0", ".")
 end
-
-require "tmpdir"
 
 namespace :release do
   namespace :document do
