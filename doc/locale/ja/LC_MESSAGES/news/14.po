@@ -46,8 +46,11 @@ msgstr "[{doc}`/install/ubuntu`] MariaDB 10.6.18 と 10.11.8 をサポートし�
 msgid "Disable descending index support"
 msgstr "降順インデックスのサポートを無効にしました"
 
-msgid "If we don't add support for descending index with MySQL >= 8.0 or MariaDB >= 10.8, Mroonga returns wrong result with descending index. So, we disable descending index support now. However, we may re-try it later."
-msgstr "MySQL >= 8.0 または MariaDB >= 10.8 で降順インデックスをサポートしない場合、Mroongaは降順インデックスで誤った結果を返します。そのため、降順インデックスのサポートを無効にしましたが、後日サポートする可能性があります。"
+msgid "If we don't add support for descending index with MariaDB >= 10.8, Mroonga returns wrong result with descending index. So, we disable descending index support now. However, we may re-try it later."
+msgstr "MariaDB >= 10.8 で降順インデックスをサポートしない場合、Mroongaは誤った結果を返します。そのため、降順インデックスのサポートを無効にしましたが、後日サポートするかもしれません。"
+
+msgid "By the way, if we use descending index with MySQL >= 8.0, MySQL returns error."
+msgstr "MySQL >= 8.0で降順インデックスを使った場合は、MySQLがエラーを返します。"
 
 msgid "Fixes"
 msgstr "修正"
