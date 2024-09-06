@@ -16,6 +16,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+require "tmpdir"
+
 def env_var(name, default=nil)
   value = ENV[name] || default
   raise "${#{name}} is missing" if value.nil?
@@ -55,6 +57,31 @@ def new_plugin_version
 end
 
 namespace :release do
+  namespace :document do
+    desc "Update document"
+    task :update do
+      build_dir = env_var("BUILD_DIR")
+      mroonga_org_path = File.expand_path(env_var("MROONGA_ORG_DIR"))
+      Dir.mktmpdir do |dir|
+        sh({"DESTDIR" => dir},
+           "cmake",
+           "--build", build_dir,
+           "--target", "install")
+        Dir.glob("#{dir}/**/share/doc/mroonga/*/") do |doc|
+          locale = File.basename(doc)
+          if locale == "en"
+            mroonga_org_docs = File.join(mroonga_org_path, "docs")
+          else
+            mroonga_org_docs = File.join(mroonga_org_path, locale, "docs")
+          end
+          rm_rf(mroonga_org_docs)
+          mv(doc, mroonga_org_docs)
+          rm_f(File.join(mroonga_org_docs, ".buildinfo"))
+        end
+      end
+    end
+  end
+
   namespace :version do
     desc "Update versions for a new release"
     task :update do
