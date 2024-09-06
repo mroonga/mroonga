@@ -43,8 +43,8 @@ msgstr "[{doc}`/install/almalinux`] MariaDB 10.5.26、10.6.19、10.11.9、11.4.3
 msgid "[{doc}`/install/ubuntu`] Added support for MariaDB 10.6.18 and 10.11.8."
 msgstr "[{doc}`/install/ubuntu`] MariaDB 10.6.18 と 10.11.8 をサポートしました。"
 
-msgid "Disable descending index support"
-msgstr "降順インデックスのサポートを無効にしました"
+msgid "Disable descending index support [GitHub #764][Reported by Josep Sanz]"
+msgstr "降順インデックスのサポートを無効にしました。 [GitHub #764][Josep Sanzさんの報告]"
 
 msgid "If we don't add support for descending index with MariaDB >= 10.8, Mroonga returns wrong result with descending index. So, we disable descending index support now. However, we may re-try it later."
 msgstr "MariaDB >= 10.8 で降順インデックスをサポートしない場合、Mroongaは誤った結果を返します。そのため、降順インデックスのサポートを無効にしましたが、後日サポートするかもしれません。"
@@ -60,6 +60,9 @@ msgstr "`FLUSH TABLES` と `INSERT`の同時実行でクラッシュする問題
 
 msgid "Thanks"
 msgstr "感謝"
+
+msgid "Josep Sanz"
+msgstr "Josep Sanzさん"
 
 msgid "Watson"
 msgstr "Watsonさん"
