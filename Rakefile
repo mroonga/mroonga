@@ -54,7 +54,34 @@ def new_plugin_version
   new_version.gsub(".0", ".")
 end
 
+require "tmpdir"
+
 namespace :release do
+  namespace :document do
+    desc "Update document"
+    task :update do
+      build_dir = env_var("BUILD_DIR")
+      mroonga_org_path = File.expand_path(env_var("MROONGA_ORG_DIR"))
+      Dir.mktmpdir do |dir|
+        sh({"DESTDIR" => dir},
+           "cmake",
+           "--build", build_dir,
+           "--target", "install")
+        Dir.glob("#{dir}/**/share/doc/mroonga/*/") do |doc|
+          locale = File.basename(doc)
+          if locale == "en"
+            mroonga_org_docs = File.join(mroonga_org_path, "docs")
+          else
+            mroonga_org_docs = File.join(mroonga_org_path, locale, "docs")
+          end
+          rm_rf(mroonga_org_docs)
+          mv(doc, mroonga_org_docs)
+          rm_f(File.join(mroonga_org_docs, ".buildinfo"))
+        end
+      end
+    end
+  end
+
   namespace :version do
     desc "Update versions for a new release"
     task :update do
