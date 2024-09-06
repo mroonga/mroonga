@@ -13,6 +13,7 @@ Use the following working directories.
 
 * MROONGA_SOURCE_DIR=$HOME/work/mroonga
 * MROONGA_BUILD_DIR=$HOME/work/build-dir/mroonga
+* MROONGA_ORG_DIR=$HOME/work/mroonga.org
 * MARIADB_SOURCE_DIR=$HOME/work/mariadb
 * MARIADB_BUILD_DIR=$HOME/work/build-dir/mariadb
 * GROONGA_SOURCE_DIR=$HOME/work/groonga
@@ -179,12 +180,11 @@ TODO
 Upload documents
 ----------------
 
-1. Clone mroonga.github.com repository
-2. Execute ``make update-document`` as below in ``$MROONGA_CLONE_DIR``::
+Execute the following command::
 
-    % make update-document
+    % rake release:document:update BUILD_DIR=${MROONGA_BUILD_DIR} MROONGA_ORG_DIR=${MROONGA_ORG_DIR}
 
-3. Commit changes in mroonga.github.com repository && push them
+Commit changes in mroonga.org repository && push them.
 
 Update blog(Mroonga blog)
 -------------------------
