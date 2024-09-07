@@ -223,11 +223,10 @@ jobs:
             package: mysql-community-8.4
             test-image: "images:ubuntu/24.04"
 
-          # Source of version 8.0.38 isn't available yet.
           # MySQL community minimal 8.0
-          #- os: almalinux-8
-          #  package: mysql-community-minimal-8.0
-          #  test-image: "images:almalinux/8"
+          - os: almalinux-9
+            package: mysql-community-minimal-8.0
+            test-image: "images:almalinux/9"
 
           # Percona Server 8.0
           - os: almalinux-8

@@ -1,35 +1,33 @@
-ARG FROM=almalinux:8
+ARG FROM=almalinux:9
 FROM ${FROM}
 
 ARG DEBUG
 
 ENV \
-  SCL=gcc-toolset-11
+  SCL=gcc-toolset-12
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   dnf update -y ${quiet} && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
-    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm && \
-  dnf install -y ${quiet} https://repo.mysql.com/mysql80-community-release-el8.rpm && \
-  dnf install --disablerepo=appstream -y ${quiet} \
+    https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm \
+    https://repo.mysql.com/mysql80-community-release-el9.rpm \
+    https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
+  dnf install -y ${quiet} \
     mysql-community-devel && \
-  dnf install --enablerepo=powertools -y ${quiet} \
-    https://repo.mysql.com/mysql-community-minimal-release-el8.rpm && \
-  dnf builddep --enablerepo=mysql80-community-minimal-source,powertools -y ${quiet} mysql-community-minimal && \
+  dnf install --enablerepo=crb -y ${quiet} \
+    https://repo.mysql.com/mysql-community-minimal-release-el9.rpm && \
+  dnf builddep --enablerepo=mysql80-community-minimal-source,crb -y ${quiet} mysql-community-minimal && \
   dnf download --enablerepo=mysql80-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
-  dnf install --enablerepo=powertools -y ${quiet} \
+  dnf install --enablerepo=crb -y ${quiet} \
     ${SCL} \
     ${SCL}-annobin-plugin-gcc \
     ccache \
     groonga-devel \
     groonga-normalizer-mysql-devel \
-    intltool \
-    libcurl-devel \
-    libtool \
-    make \
+    ninja-build \
     pkgconfig \
     rpm-build \
     wget \
