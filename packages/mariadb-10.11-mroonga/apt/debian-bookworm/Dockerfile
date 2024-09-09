@@ -23,7 +23,6 @@ RUN \
   apt update ${quiet} && \
   apt build-dep -y mariadb-server && \
   apt install -y -V ${quiet} \
-    autoconf-archive \
     build-essential \
     ccache \
     chrpath \
@@ -43,5 +42,6 @@ RUN \
     libre2-dev \
     lsb-release \
     mecab-utils \
+    ninja-build \
     pkg-config \
     unixodbc-dev

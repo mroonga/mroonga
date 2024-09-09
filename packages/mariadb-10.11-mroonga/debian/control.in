@@ -3,8 +3,6 @@ Section: database
 Priority: optional
 Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
 Build-Depends:
-	autoconf-archive,
-	autotools-dev,
 	bison,
 	chrpath,
 	cmake,
@@ -29,6 +27,7 @@ Build-Depends:
         liburing-dev,
 	libxml2-dev,
 	lsb-release,
+	ninja-build,
 	perl,
 	pkg-config,
 	po-debconf,
