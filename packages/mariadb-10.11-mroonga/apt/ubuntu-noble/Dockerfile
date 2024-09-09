@@ -21,7 +21,6 @@ RUN \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
   apt install -y -V ${quiet} \
-    autoconf-archive \
     bison \
     build-essential \
     ccache \
@@ -53,6 +52,7 @@ RUN \
     lsb-release \
     perl \
     mecab-utils \
+    ninja-build \
     pkg-config \
     psmisc \
     unixodbc-dev \

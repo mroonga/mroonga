@@ -10,7 +10,7 @@ export MARIADB_VERSION_FULL := $(shell apt-cache show mariadb-server | grep Vers
 export MARIADB_VERSION := $(shell apt-cache show mariadb-server | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2 | awk -F '-' '{print $$1}')
 
 %:
-	dh $@
+	dh $@ --without autoreconf
 
 override_dh_auto_configure:
 	archive_base=mariadb_$(MARIADB_VERSION);			\
@@ -40,10 +40,13 @@ override_dh_auto_configure:
 	  debian/rules override_dh_auto_configure);			\
 	(cd $${build_dir}/storage/perfschema &&				\
 	  $(MAKE) -j$$(nproc) perfschema);				\
-	dh_auto_configure --						\
-	  --with-mysql-source=$${source_base}				\
-	  --with-mysql-build=$${build_dir}				\
-	  --with-mysql-config=$${build_dir}/scripts/mysql_config
+	dh_auto_configure						\
+	  --buildsystem=cmake+ninja					\
+	  --								\
+	  -DMRN_WITH_DOC=ON						\
+	  -DMYSQL_BUILD_DIR=$$(pwd)/$${build_dir}			\
+	  -DMYSQL_CONFIG=$$(pwd)/$${build_dir}/scripts/mysql_config	\
+	  -DMYSQL_SOURCE_DIR=$$(pwd)/$${source_base}
 
 # disable 'make check'.
 override_dh_auto_test:
