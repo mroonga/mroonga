@@ -26,9 +26,10 @@ RUN \
   dnf builddep --enablerepo=crb -y ${quiet} MariaDB && \
   dnf download -y ${quiet} --source MariaDB && \
   dnf install --enablerepo=crb -y ${quiet} \
-    arrow-devel \
     MariaDB-devel \
+    arrow-devel \
     ccache \
+    cmake \
     gcc-c++ \
     groonga-devel \
     groonga-normalizer-mysql-devel \

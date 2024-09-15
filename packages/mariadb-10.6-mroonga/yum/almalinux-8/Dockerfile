@@ -28,6 +28,7 @@ RUN \
   dnf install --enablerepo=powertools -y ${quiet} \
     MariaDB-devel \
     ccache \
+    cmake \
     gcc-c++ \
     groonga-devel \
     groonga-normalizer-mysql-devel \
