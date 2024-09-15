@@ -8,16 +8,6 @@
 %define _mariadb_release %{?mariadb_release:%{mariadb_release}}%{!?mariadb_release:%{mariadb_release_default}}
 %define _mariadb_dist %{?mariadb_dist:%{mariadb_dist}}%{!?mariadb_dist:%{mariadb_dist_default}}
 
-%if ! %{defined cmake}
-%define cmake %{cmake3}
-%endif
-%if ! %{defined cmake_build}
-%define cmake_build %{cmake3_build}
-%endif
-%if ! %{defined cmake_install}
-%define cmake_install %{cmake3_install}
-%endif
-
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
 Name:		mariadb-11.4-mroonga
