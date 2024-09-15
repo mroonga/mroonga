@@ -67,7 +67,7 @@ mariadb_build=$HOME/rpmbuild/BUILD/MariaDB-%{_mariadb_version}/cpack_rpm_build_d
   -DMYSQL_SOURCE_DIR=${mariadb_source} \
   -DMYSQL_BUILD_DIR=${mariadb_build} \
   -DMYSQL_CONFIG=${mariadb_build}/scripts/mysql_config \
-  %{?mroonga_configure_options}
+  %{?mroonga_cmake_options}
 %cmake_build
 
 %install
