@@ -10,15 +10,6 @@
 %define _mysql_dist %{?mysql_dist:%{mysql_dist}}%{!?mysql_dist:%{mysql_dist_default}}
 %define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:%{mysql_spec_file_default}}
 
-%define use_dnf (%{rhel} >= 8)
-%define use_cmake (%{rhel} >= 8)
-
-%if %{use_dnf}
-%define dnf_download dnf download
-%else
-%define dnf_download yumdownloader
-%endif
-
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
 Name:		mysql-community-8.0-mroonga
@@ -34,17 +25,14 @@ Source0:	http://packages.groonga.org/source/mroonga/mroonga-%{version}.tar.gz
 Obsoletes:	mysql80-community-mroonga < 11.02-2%{?dist}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+BuildRequires:	cmake
 BuildRequires:	libcurl-devel
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	mysql-community-devel = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 BuildRequires:	rpm
 BuildRequires:	sed
-%if %{use_dnf}
 BuildRequires:	dnf-command(download)
-%else
-BuildRequires:	yum-utils
-%endif
 Requires:	mysql-community-client = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-common = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
 Requires:	mysql-community-libs = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
@@ -65,28 +53,24 @@ if ! cp /mysql-community-*.src.rpm ./; then
 fi
 rpm -Uvh mysql-community-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-%if %{use_cmake}
 sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-%endif
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
 mysql_source=$HOME/rpmbuild/BUILD/mysql-%{_mysql_version}/mysql-%{_mysql_version}
 mysql_build=$HOME/rpmbuild/BUILD/mysql-%{_mysql_version}/release
-%configure \
-  --disable-static \
-  --with-mysql-source=${mysql_source} \
-  --with-mysql-build=${mysql_build} \
-  --with-mysql-config=${mysql_build}/scripts/mysql_config \
-  --enable-fast-mutexes \
-  %{?mroonga_configure_options}
-make %{?_smp_mflags}
+make %_smp_mflags -C ${mysql_build}/utilities GenError
+%cmake \
+  -DMRN_WITH_DOC=ON \
+  -DMYSQL_BUILD_DIR=${mysql_build} \
+  -DMYSQL_CONFIG=${mysql_build}/scripts/mysql_config \
+  -DMYSQL_SOURCE_DIR=${mysql_source} \
+  %{?mroonga_cmake_options}
+%cmake_build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
+%cmake_install
+mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-community-8.0-mroonga-doc/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -110,8 +94,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
 %{_datadir}/mroonga/*
-%{_datadir}/man/man1/*
-%{_datadir}/man/*/man1/*
 
 %package -n mysql80-community-mroonga
 Summary:	A fast fulltext searchable storage engine for MySQL (transitional)
@@ -141,7 +123,7 @@ Documentation for Mroonga
 %files doc
 %defattr(-,root,root,-)
 %doc README COPYING
-%doc mysql-mroonga-doc/*
+%doc mysql-community-8.0-mroonga-doc/*
 
 %changelog
 * Fri Sep 06 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.07-1

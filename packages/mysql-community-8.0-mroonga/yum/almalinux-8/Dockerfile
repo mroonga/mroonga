@@ -20,11 +20,11 @@ RUN \
     ${SCL} \
     ${SCL}-annobin-plugin-gcc \
     ccache \
+    cmake \
     groonga-devel \
     groonga-normalizer-mysql-devel \
     intltool \
     libcurl-devel \
-    libtool \
     make \
     pkgconfig \
     rpm-build \
