@@ -12,18 +12,6 @@
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
-%if %{rhel} >= 9
-%define mrn_cmake_builddir %{__cmake_builddir}
-%define mrn_cmake %cmake -GNinja
-%define mrn_cmake_build cmake --build %{mrn_cmake_builddir}
-%define mrn_cmake_install %cmake_install
-%else
-%define mrn_cmake_builddir build
-%define mrn_cmake %cmake3 -S . -B %{mrn_cmake_builddir} -GNinja
-%define mrn_cmake_build cmake3 --build %{mrn_cmake_builddir}
-%define mrn_cmake_install DESTDIR="%{buildroot}" cmake3 --install %{mrn_cmake_builddir}
-%endif
-
 Name:		mysql-community-8.4-mroonga
 Version:	@VERSION@
 Release:	1%{?dist}
@@ -41,7 +29,6 @@ BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	libcurl-devel
 BuildRequires:	mysql-community-devel = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
-BuildRequires:	ninja-build
 BuildRequires:	rpm
 BuildRequires:	sed
 Requires:	mysql-community-client = %{_mysql_version}-%{_mysql_release}.%{_mysql_dist}
@@ -71,17 +58,17 @@ rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
 mysql_source=$HOME/rpmbuild/BUILD/mysql-%{_mysql_version}/mysql-%{_mysql_version}
 mysql_build=$HOME/rpmbuild/BUILD/mysql-%{_mysql_version}/release
 make -C ${mysql_build}/utilities %{?_smp_mflags} GenError
-%mrn_cmake \
+%cmake \
   -DMRN_WITH_DOC=ON \
   -DMYSQL_BUILD_DIR=${mysql_build} \
   -DMYSQL_CONFIG=${mysql_build}/scripts/mysql_config \
   -DMYSQL_SOURCE_DIR=${mysql_source} \
   %{?mroonga_cmake_options}
-%mrn_cmake_build
+%cmake_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%mrn_cmake_install
+%cmake_install
 mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
 
 %clean

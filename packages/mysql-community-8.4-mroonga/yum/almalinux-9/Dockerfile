@@ -28,7 +28,6 @@ RUN \
     libcurl-devel \
     libtool \
     make \
-    ninja-build \
     pkgconfig \
     rpm-build \
     wget \
