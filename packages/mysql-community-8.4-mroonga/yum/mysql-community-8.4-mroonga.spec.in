@@ -69,7 +69,7 @@ make -C ${mysql_build}/utilities %{?_smp_mflags} GenError
 %install
 rm -rf $RPM_BUILD_ROOT
 %cmake_install
-mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
+mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-community-8.4-mroonga-doc/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,7 +105,7 @@ Documentation for Mroonga
 %files doc
 %defattr(-,root,root,-)
 %doc README COPYING
-%doc mysql-mroonga-doc/*
+%doc mysql-community-8.4-mroonga-doc/*
 
 %changelog
 * Fri Sep 06 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.07-1
