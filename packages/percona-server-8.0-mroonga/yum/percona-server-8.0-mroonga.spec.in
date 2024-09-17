@@ -1,7 +1,5 @@
 # -*- sh-shell: rpm -*-
 
-%define _centos_ver %{?centos_ver:%{centos_ver}}%{!?centos_ver:7}
-
 %define mysql_version_default 8.0.37
 %define percona_server_version_default 29
 %define rpm_release_default 1
@@ -15,15 +13,6 @@
 %define _mysql_spec_file %{?mysql_spec_file:%{mysql_spec_file}}%{!?mysql_spec_file:%{mysql_spec_file_default}}
 
 %define _mysql_release %{_percona_server_version}.%{_rpm_release}
-
-%define use_dnf (%{_centos_ver} >= 8)
-%define use_cmake3 (%{_centos_ver} < 8)
-
-%if %{use_dnf}
-%define dnf_download dnf download
-%else
-%define dnf_download yumdownloader
-%endif
 
 %define groonga_required_version @REQUIRED_GROONGA_VERSION@
 
@@ -40,16 +29,13 @@ Source0:        http://packages.groonga.org/source/mroonga/mroonga-%{version}.ta
 Obsoletes:	percona-server-80-mroonga < 11.02-2%{?dist}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+BuildRequires:	cmake
 BuildRequires:	gcc-c++
 BuildRequires:	groonga-devel >= %{groonga_required_version}
 BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	percona-server-devel = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 BuildRequires:	rpm
-%if %{use_dnf}
 BuildRequires:	dnf-command(download)
-%else
-BuildRequires:	yum-utils
-%endif
 Requires:       percona-server-server = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       percona-server-client = %{_mysql_version}-%{_mysql_release}%{_mysql_dist}
 Requires:       groonga-libs >= %{groonga_required_version}
@@ -64,34 +50,29 @@ column store. Groonga is good at real-time update.
 %setup -q -n mroonga-%{version}
 
 if ! cp /percona-server-*.src.rpm ./; then
-  %{dnf_download} -y ${quiet} --source --enablerepo=ps-80-release-sources \
+  dnf download -y ${quiet} --source --enablerepo=ps-80-release-sources \
     percona-server
 fi
 rpm -Uvh percona-server-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-
-%if %{use_cmake3}
-sed -i'' -e 's/^  cmake /  cmake3 /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-%endif
+sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
 mysql_source=$HOME/rpmbuild/BUILD/percona-server-%{_mysql_version}-%{_percona_server_version}/percona-server-%{_mysql_version}-%{_percona_server_version}
 mysql_build=$HOME/rpmbuild/BUILD/percona-server-%{_mysql_version}-%{_percona_server_version}/release
-%configure \
-  --disable-static \
-  --with-mysql-source=${mysql_source} \
-  --with-mysql-build=${mysql_build} \
-  --with-mysql-config=${mysql_build}/scripts/mysql_config \
-  --enable-fast-mutexes \
-  %{?mroonga_configure_options}
-make %{?_smp_mflags}
+make %_smp_mflags -C ${mysql_build}/utilities GenError
+%cmake \
+  -DMRN_WITH_DOC=ON \
+  -DMYSQL_BUILD_DIR=${mysql_build} \
+  -DMYSQL_CONFIG=${mysql_build}/scripts/mysql_config \
+  -DMYSQL_SOURCE_DIR=${mysql_source} \
+  %{?mroonga_cmake_options}
+%cmake_build
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT%{_libdir}/mysql/plugin/*.la
-mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ mysql-mroonga-doc/
+%cmake_install
+mv $RPM_BUILD_ROOT%{_datadir}/doc/mroonga/ percona-server-8.0-mroonga-doc/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -115,8 +96,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_libdir}/mysql/plugin/
 %{_datadir}/mroonga/*
-%{_datadir}/man/man1/*
-%{_datadir}/man/*/man1/*
 
 %package -n percona-server-80-mroonga
 Summary:	A fast fulltext searchable storage engine for MySQL (transitional)
@@ -146,7 +125,7 @@ Documentation for Mroonga
 %files doc
 %defattr(-,root,root,-)
 %doc README COPYING
-%doc mysql-mroonga-doc/*
+%doc percona-server-8.0-mroonga-doc/*
 
 %changelog
 * Fri Sep 06 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.07-1
