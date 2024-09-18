@@ -3,25 +3,22 @@ Section: database
 Priority: optional
 Maintainer: Horimoto Yasuhiro <horimoto@clear-code.com>
 Build-Depends:
-	debhelper (>= 10),
+	autoconf-archive,
 	autotools-dev,
-	pkg-config,
-	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
-	groonga-normalizer-mysql,
-	libmariadb-client-lgpl-dev-compat,
-	libmariadbd-dev,
-	libssl-dev,
-	wget,
-	lsb-release,
 	bison,
 	chrpath,
 	cmake,
+	debhelper (>= 10),
 	dh-apparmor,
 	gdb,
+	groonga-normalizer-mysql,
 	libaio-dev [linux-any],
 	libboost-dev,
+	libgroonga-dev (>= @REQUIRED_GROONGA_VERSION@),
 	libjemalloc-dev [linux-any],
 	libjudy-dev,
+	libmariadb-client-lgpl-dev-compat,
+	libmariadbd-dev,
 	libncurses5-dev,
 	libpam0g-dev,
 	libpcre2-dev,
@@ -29,15 +26,19 @@ Build-Depends:
 	libpmem-dev,
 	libreadline-dev,
 	libsnappy-dev,
+	libssl-dev,
 	liburing-dev,
 	libxml2-dev,
 	lsb-release,
+	lsb-release,
+	ninja-build,
 	perl,
+	pkg-config,
 	po-debconf,
 	psmisc,
 	unixodbc-dev,
-	zlib1g-dev,
-	autoconf-archive
+	wget,
+	zlib1g-dev
 Standards-Version: 3.9.1
 Homepage: http://mroonga.org/
 
