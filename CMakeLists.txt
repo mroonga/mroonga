@@ -379,16 +379,21 @@ target_include_directories(mroonga BEFORE PRIVATE
   "${PROJECT_BINARY_DIR}"
   "${PROJECT_SOURCE_DIR}"
   "${PROJECT_SOURCE_DIR}/lib")
-target_include_directories(mroonga AFTER PRIVATE
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.20")
+  set(TARGET_INCLUDE_DIRECTORIES_AFTER "AFTER")
+else()
+  set(TARGET_INCLUDE_DIRECTORIES_AFTER "")
+endif()
+target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
   ${DEFAULT_INCLUDE_DIRECTORIES})
 if(NOT MRN_BUNDLED)
-  target_include_directories(mroonga AFTER PRIVATE
+  target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
     "${MYSQL_BUILD_DIR}/include"
     "${MYSQL_SOURCE_DIR}/sql"
     "${MYSQL_SOURCE_DIR}/libs"
     "${MYSQL_SOURCE_DIR}/include")
   if(${MYSQL_VARIANT} STREQUAL "MySQL")
-    target_include_directories(mroonga AFTER PRIVATE "${MYSQL_SOURCE_DIR}")
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE "${MYSQL_SOURCE_DIR}")
   endif()
 
   if(EXISTS "${MYSQL_SOURCE_DIR}/wsrep-lib")
@@ -399,7 +404,7 @@ if(NOT MRN_BUNDLED)
     get_filename_component(MYSQL_WSREP_API_INCLUDE_DIR
       "${MYSQL_WSREP_API_H}"
       DIRECTORY)
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_WSREP_INCLUDE_DIR}"
       "${MYSQL_WSREP_API_INCLUDE_DIR}")
   endif()
@@ -409,32 +414,32 @@ if(NOT MRN_BUNDLED)
   else()
     set(MYSQL_REGEX_INCLUDE_DIR "${MYSQL_SOURCE_DIR}/regex")
   endif()
-  target_include_directories(mroonga AFTER PRIVATE
+  target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
     "${MYSQL_REGEX_INCLUDE_DIR}")
 
   if(EXISTS "${MYSQL_SOURCE_DIR}/extra/rapidjson")
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_SOURCE_DIR}/extra/rapidjson/include")
   endif()
 
   if(EXISTS "${MYSQL_SOURCE_DIR}/libbinlogevents")
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_SOURCE_DIR}/libbinlogevents/export"
       "${MYSQL_BUILD_DIR}/libbinlogevents/include"
       "${MYSQL_SOURCE_DIR}/libbinlogevents/include")
   endif()
 
   if(EXISTS "${MYSQL_BUILD_DIR}/extra/protobuf/protobuf-3.11.4")
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_SOURCE_DIR}/extra/protobuf/protobuf-3.11.4/src")
   endif()
 
   if(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13")
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.13"
       "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.13")
   elseif(EXISTS "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12")
-    target_include_directories(mroonga AFTER PRIVATE
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
       "${MYSQL_BUILD_DIR}/extra/zlib/zlib-1.2.12"
       "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
   endif()
@@ -447,7 +452,7 @@ if(NOT MRN_BUNDLED)
         OUTPUT_VARIABLE BREW_PREFIX_OPENSSL11
         OUTPUT_STRIP_TRAILING_WHITESPACE)
       if(BREW_PREFIX_OPENSSL11)
-        target_include_directories(mroonga AFTER PRIVATE
+        target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
           "${BREW_PREFIX_OPENSSL11}")
       endif()
     endif()
