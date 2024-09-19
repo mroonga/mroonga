@@ -30,6 +30,7 @@ RUN \
     build-essential \
     ccache \
     chrpath \
+    cmake \
     debhelper \
     devscripts \
     dh-apparmor \
@@ -40,12 +41,13 @@ RUN \
     libmariadbd-dev \
     libmecab-dev \
     libpcre3-dev \
+    libre2-dev \
     libreadline-dev \
     libssl-dev \
     libxml2-dev \
-    libre2-dev \
     lsb-release \
     mecab-utils \
+    ninja-build \
     pkg-config && \
   mkdir -p /usr/global/share && \
   wget --no-verbose \
