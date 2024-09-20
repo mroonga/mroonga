@@ -33,12 +33,14 @@ RUN \
   apt install -y -V --no-install-recommends ${quiet} \
     build-essential \
     ccache \
+    cmake \
     devscripts \
     dh-apparmor \
     groonga-normalizer-mysql \
     libgroonga-dev \
     libmysqlclient-dev \
-    libtirpc-dev && \
+    libtirpc-dev \
+    ninja-build && \
   mkdir -p /usr/global/share && \
   wget --no-verbose \
     https://packages.groonga.org/tmp/boost/boost_1_77_0.tar.bz2 && \
