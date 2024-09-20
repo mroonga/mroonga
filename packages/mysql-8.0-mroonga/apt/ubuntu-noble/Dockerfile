@@ -51,6 +51,7 @@ RUN \
     libwrap0-dev \
     lsb-release \
     mecab-utils \
+    ninja-build \
     pkg-config \
     protobuf-compiler \
     unixodbc-dev \
