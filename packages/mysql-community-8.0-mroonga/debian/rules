@@ -28,10 +28,12 @@ override_dh_auto_configure:
 	  debian/rules override_dh_auto_configure);			\
 	(cd $${build_dir}/utilities && $(MAKE) -j$$(nproc) GenError);	\
 	dh_auto_configure						\
+	  --buildsystem=cmake+ninja					\
 	  --								\
-	  --with-mysql-source=$${source_base}				\
-	  --with-mysql-build=$${build_dir}				\
-	  --with-mysql-config=/usr/bin/mysql_config
+	  -DMRN_WITH_DOC=ON						\
+	  -DMYSQL_BUILD_DIR=$${build_dir}				\
+	  -DMYSQL_CONFIG=/usr/bin/mysql_config				\
+	  -DMYSQL_SOURCE_DIR=$${source_base}
 
 # disable 'make check'.
 override_dh_auto_test:
