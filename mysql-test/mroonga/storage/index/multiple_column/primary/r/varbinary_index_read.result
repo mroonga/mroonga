@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS logs;
+CREATE TABLE logs (
+id INT,
+content VARBINARY(256),
+PRIMARY KEY (id, content)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO logs(id, content) VALUES (1, 'aaa');
+INSERT INTO logs(id, content) VALUES (2, 'bbb');
+SELECT * FROM logs WHERE content = 'aaa';
+id	content
+1	aaa
+DROP TABLE logs;

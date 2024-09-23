@@ -345,10 +345,10 @@ namespace mrn {
                        current_mysql_key);
         break;
       case TYPE_BYTE_BLOB:
-        decode_reverse(key_part,
-                       current_grn_key,
-                       data_size,
-                       current_mysql_key);
+        decode_blob(key_part,
+                    current_grn_key,
+                    data_size,
+                    current_mysql_key);
         data_size += HA_KEY_BLOB_LENGTH;
         grn_key_data_size = data_size;
         break;
