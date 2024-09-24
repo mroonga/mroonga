@@ -60,56 +60,59 @@ Here we assume that you use mysql-8.4.1 and its source code is
 extracted in the following directory.
 
 ```
-$HOME/local/src/mysql-8.4.1
+${HOME}/local/src/mysql-8.4.1
 ```
 
 Then build in the following directory.
 
 ```
-$HOME/local/build/mysql-8.4.1
+${HOME}/local/build/mysql-8.4.1
 ```
 
 Here are command lines to build and install MySQL.
 
 ```console
 % cmake \
-    -S $HOME/local/src/mysql-8.4.1 \
-    -B $HOME/local/build/mysql-8.4.1 \
+    -S ${HOME}/local/src/mysql-8.4.1 \
+    -B ${HOME}/local/build/mysql-8.4.1 \
     -GNinja \
-    -DCMAKE_INSTALL_PREFIX=$HOME/local
-% cmake --build $HOME/local/build/mysql-8.4.1
-% cmake --install $HOME/local/build/mysql-8.4.1
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=${HOME}/local
+% cmake --build ${HOME}/local/build/mysql-8.4.1
+% cmake --install ${HOME}/local/build/mysql-8.4.1
 ```
 
-And we assume that MySQL is installed in the following directory.
-
-```
-$HOME/local
-```
+You need to run MySQL before you install Mroonga. Because you need to
+run some SQL statements to register Mroonga.
 
 ## Build from source
 
-Mroonga uses GNU build system. So the following is the simplest build
-steps.
+Mroonga uses CMake. So the following is the simplest build steps.
 
 ```console
-% wget https://packages.groonga.org/source/mroonga/mroonga-6.12.tar.gz
-% tar xvzf mroonga-6.12.tar.gz
-% cd mroonga-6.12
-% ./configure \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
-    --with-mysql-config=$HOME/local/bin/mysql_config
-% make
-% sudo make install
-% $HOME/local/bin/mysql -u root < /usr/local/share/mroonga/install.sql
+% cd ${HOME}/local/src
+% wget https://packages.groonga.org/source/mroonga/mroonga-latest.tar.gz
+% tar xvf mroonga-latest.tar.gz
+% mroonga_base_name=$(find mroonga-* -maxdepth 0 -type d)
+% cmake \
+    -S ${HOME}/local/src/${mroonga_base_name} \
+    -B ${HOME}/local/build/${mroonga_base_name} \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=${HOME}/local \
+    -DMYSQL_BUILD_DIR=${HOME}/local/build/mysql-8.4.1 \
+    -DMYSQL_CONFIG=${HOME}/local/bin/mysql_config \
+    -DMYSQL_SOURCE_DIR=${HOME}/local/src/mysql-8.4.1
+% cmake --build ${HOME}/local/build/${mroonga_base_name}
+% cmake --install ${HOME}/local/build/${mroonga_base_name}
+% ${HOME}/local/bin/mysql -u root < ${HOME}/local/share/mroonga/install.sql
 ```
 
-You need to specify the following on `configure`.
+You need to specify the following on `cmake`.
 
-- The location of MySQL source code with `--with-mysql-source`.
-- The location of MySQL build directory with `--with-mysql-build`.
-- The path of `mysql_config` command with `--with-mysql-config`.
+- `-DMYSQL_BUILD_DIR`: The location of MySQL build directory
+- `-DMYSQL_CONFIG`: The path of `mysql_config` command
+- `-DMYSQL_SOURCE_DIR`: The location of MySQL source code
 
 You can confirm Mroonga is installed successfully by `SHOW ENGINES`
 SQL. If you can find `Mroonga` row, Mroonga is installed
@@ -132,26 +135,20 @@ mysql> SHOW ENGINES;
 
 The following describes details about each step.
 
-(source-configure)=
+(source-cmake)=
 
-### `configure`
+### `cmake`
 
-First, you need to run `configure`. Here are important `configure`
+First, you need to run `cmake`. Here are important `cmake`
 parameters.
 
-#### `--with-mysql-source=PATH`
+#### `-DMYSQL_SOURCE_DIR=PATH`
 
 Specifies the location of MySQL source code.
 
 This is required parameter.
 
-```console
-% ./configure \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-    --with-mysql-config=$HOME/local/bin/mysql_config
-```
-
-#### `--with-mysql-build=PATH`
+#### `-DMYSQL_BUILD_DIR=PATH`
 
 Specifies the location where you build MySQL source code.
 
@@ -159,17 +156,7 @@ If you build MySQL in MySQL source code directory, you don't need to
 specify this parameter. If you build MySQL in other directory, you
 need to specify this parameter.
 
-Here is an example when you build MySQL in
-`$HOME/local/build/mysql-8.4.1`.
-
-```console
-% ./configure \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-    --with-mysql-build=$HOME/local/build/mysql-8.4.1 \
-    --with-mysql-config=$HOME/local/bin/mysql_config
-```
-
-#### `--with-mysql-config=PATH`
+#### `-DMYSQL_CONFIG=PATH`
 
 Specifies the path of `mysql_config` command.
 
@@ -178,31 +165,35 @@ need to specify this parameter. For example, if `mysql_config`
 command exists at `/usr/bin/mysql_config`, you don't need to specify
 this parameter.
 
-```console
-% ./configure \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1
-```
-
-#### `--with-default-tokenizer=TOKENIZER`
+#### `-DMRN_DEFAULT_TOKENIZER=TOKENIZER`
 
 Specifies the default tokenizer for full text. You can custom it in
-my.cnf.
+`my.cnf`.
 
 The default is `TokenBigram`.
 
-Here is an example to use `TokenMecab` as the default tokenizer.
+Here is an example to use `TokenMecab` as the default tokenizer:
 
 ```console
-% ./configure \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-    --with-mysql-config=$HOME/local/bin/mysql_config \
-    --with-default-tokenizer=TokenMecab
+% cmake ... -DMRN_DEFAULT_TOKENIZER=TokenMecab
 ```
 
-#### `--prefix=PATH`
+#### `-DCMAKE_BUILD_TYPE={Release,Debug,RelWithDebInfo}`
+
+Specifies the build type.
+
+If you use this Mroonga as a production environment, you must use
+`-DCAMKE_BUILD_TYPE=Release` or
+`-DCAMKE_BUILD_TYPE=RelWithDebInfo`. They enable optimization.
+
+If you use this Mroonga for development, you must use
+`-DCAMKE_BUILD_TYPE=Debug`. It disables optimization and enables debug
+symbols. They are useful for development.
+
+#### `-DCMAKE_INSTALL_PREFIX=PREFIX`
 
 Specifies the install base directory. Mroonga related files are
-installed under `${PATH}/` directory except
+installed under `${PREFIX}/` directory except
 `ha_mroonga.so`. `ha_mroonga.so` is a MySQL plugin file. It is
 installed the plugin directory of MySQL.
 
@@ -210,88 +201,35 @@ The default is `/usr/local`. In this case, `install.sql` that is
 used for installing Mroonga is installed to
 `/usr/local/share/mroonga/install.sql`.
 
-Here is an example that installs Mroonga into `$HOME/local` for an user
-use instead of system wide use.
+### `cmake --build`
 
-```console
-% ./configure \
-    --prefix=$HOME/local \
-    --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-    --with-mysql-config=$HOME/local/bin/mysql_config
-```
+If `cmake` is succeeded, you can build Mroonga by `cmake --build`.
 
-#### `PKG_CONFIG_PATH=PATH`
-
-This is not a `configure` parameter but we describe it for users who
-doesn't install Groonga into the standard location.
-
-If Groonga is not installed in the standard location like
-`/usr/lib`, you need to specify its location by
-`PKG_CONFIG_PATH`. For example, if Groonga is installed with
-`--prefix=$HOME/local`, use the following command line.
-
-```console
-./configure \
-  PKG_CONFIG_PATH=$HOME/local/lib/pkgconfig \
-  --with-mysql-source=$HOME/local/src/mysql-8.4.1 \
-  --with-mysql-config=$HOME/local/bin/mysql_config
-```
-
-### `make`
-
-`configure` is succeeded, you can build Mroonga by `make`.
-
-```console
-% make
-```
-
-If you have multi cores CPU, you can make faster by using `-j`
-option. If you have 4 cores CPU, it's good for using `-j4` option.
-
-```console
-% make -j4
-```
-
-If you get some errors by `make`, please report them to us:
+If you get some errors by `cmake --build`, please report them to us:
 {doc}`/contribution/report`
 
-### `make install`
+### `cmake --install`
 
 Now, you can install built Mroonga!
 
-```console
-% sudo make install
-```
-
-If you have write permission for `${PREFIX}` and the plugin
-directory of MySQL, you don't need to use
-`sudo`. e.g. `--prefix=$HOME/local` case. In this case, use `make
-install`.
+If you don't have write permission for `${PREFIX}` and the plugin
+directory of MySQL, you need to use `sudo`:
 
 ```console
-% make install
+% sudo cmake --install ${HOME}/local/build/${mroonga_base_name}
 ```
 
 ### `mysql -u root < install.sql`
 
-You need to run some SQLs to register Mroonga to MySQL such as
-`INSTALL PLUGIN` and `CREATE FUNCTION`. They are written in
+You need to run some SQL statements to register Mroonga to MySQL such
+as `INSTALL PLUGIN` and `CREATE FUNCTION`. They are written in
 `${PREFIX}/share/mroonga/install.sql`.
 
-Here is an example when you specify `--prefix=$HOME/local` to
-`configure`.
+### Uninstall Mroonga
+
+If you want to uninstall Mroonga, use the following command lines:
 
 ```console
-% mysql -u root < $HOME/local/share/mroonga/install.sql
-```
-
-### `uninstall Mroonga`
-
-If you want to remove Mroonga,
-type below commands.
-
-```console
-% mysql < ${PREFIX}/share/mroonga/uninstall.sql
-% cd ${MROONGA_BUILD_DIR}
-% sudo make uninstall
+% ${HOME}/local/bin/mysql -u root < ${PREFIX}/share/mroonga/uninstall.sql
+% xargs rm < ${HOME}/local/build/mroonga/install_manifest.txt
 ```

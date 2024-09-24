@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-24 11:57+0900\n"
+"PO-Revision-Date: 2024-09-24 16:02+0900\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -109,26 +109,26 @@ msgstr "次のディレクトリーでビルドします。"
 msgid "Here are command lines to build and install MySQL."
 msgstr "次のコマンドラインはMySQLをビルド・インストールするコマンドラインです。"
 
-msgid "And we assume that MySQL is installed in the following directory."
-msgstr "MySQLのバイナリが以下にインストールされているものと仮定します。"
+msgid "You need to run MySQL before you install Mroonga. Because you need to run some SQL statements to register Mroonga."
+msgstr "Mroongaをインストールする前にMySQLを起動する必要があります。なぜならMroongaを登録するためにいくつかのSQL文を実行する必要があるからです。"
 
 msgid "Build from source"
 msgstr "ソースからビルド"
 
-msgid "Mroonga uses GNU build system. So the following is the simplest build steps."
-msgstr "MroongaはGNUビルドシステムを使っています。以下は一番簡単なビルド手順です。"
+msgid "Mroonga uses CMake. So the following is the simplest build steps."
+msgstr "MroongaはCMakeを使っています。以下は一番簡単なビルド手順です。"
 
-msgid "You need to specify the following on `configure`."
-msgstr "次のことを `configure` で指定しなければいけません。"
+msgid "You need to specify the following on `cmake`."
+msgstr "次のことを `cmake` で指定しなければいけません。"
 
-msgid "The location of MySQL source code with `--with-mysql-source`."
-msgstr "`--with-mysql-source` でMySQLのソースコードがあるディレクトリーを指定します。"
+msgid "`-DMYSQL_BUILD_DIR`: The location of MySQL build directory"
+msgstr "`-DMYSQL_BUILD_DIR`: MySQLのビルドディレクトリー"
 
-msgid "The location of MySQL build directory with `--with-mysql-build`."
-msgstr "`--with-mysql-build` でMySQLのビルドディレクトリーを指定します。"
+msgid "`-DMYSQL_CONFIG`: The path of `mysql_config` command"
+msgstr "`-DMYSQL_CONFIG`: `mysql_config`コマンドのパス"
 
-msgid "The path of `mysql_config` command with `--with-mysql-config`."
-msgstr "`--with-mysql-config` で `mysql_config` コマンドのパスを指定します。"
+msgid "`-DMYSQL_SOURCE_DIR`: The location of MySQL source code"
+msgstr "`-DMYSQL_SOURCE_DIR`: MySQLのソースディレクトリー"
 
 msgid "You can confirm Mroonga is installed successfully by `SHOW ENGINES` SQL. If you can find `Mroonga` row, Mroonga is installed successfully."
 msgstr "`SHOW ENGINES` SQLを実行することでMroongaが正常にインストールされているかを確認できます。 `Mroonga` という行があればMroongaは正常にインストールされています。"
@@ -136,22 +136,22 @@ msgstr "`SHOW ENGINES` SQLを実行することでMroongaが正常にインス�
 msgid "The following describes details about each step."
 msgstr "以下、それぞれの手順の詳細を説明します。"
 
-msgid "`configure`"
+msgid "`cmake`"
 msgstr ""
 
-msgid "First, you need to run `configure`. Here are important `configure` parameters."
-msgstr "まず `configure` を実行します。重要な `configure` の引数は以下の通りです。"
+msgid "First, you need to run `cmake`. Here are important `cmake` parameters."
+msgstr "まず `cmake` を実行します。重要な `cmake` の引数は以下の通りです。"
 
-msgid "`--with-mysql-source=PATH`"
+msgid "`-DMYSQL_SOURCE_DIR=PATH`"
 msgstr ""
 
 msgid "Specifies the location of MySQL source code."
-msgstr "MYSQLのソースコードがあるディレクトリーを指定します。"
+msgstr "MySQLのソースコードがあるディレクトリーを指定します。"
 
 msgid "This is required parameter."
 msgstr "これは必須の引数です。"
 
-msgid "`--with-mysql-build=PATH`"
+msgid "`-DMYSQL_BUILD_DIR=PATH`"
 msgstr ""
 
 msgid "Specifies the location where you build MySQL source code."
@@ -160,10 +160,7 @@ msgstr "MySQLのソースコードをビルドしたディレクトリーを指�
 msgid "If you build MySQL in MySQL source code directory, you don't need to specify this parameter. If you build MySQL in other directory, you need to specify this parameter."
 msgstr "MySQLのソースコードがあるディレクトリーでビルドした場合はこの引数を指定する必要はありません。他のディレクトリーでビルドしたときはこの引数を指定する必要があります。"
 
-msgid "Here is an example when you build MySQL in `$HOME/local/build/mysql-8.4.1`."
-msgstr "以下は `$HOME/local/build/mysql-8.4.1` でMySQLをビルドした時の例です。"
-
-msgid "`--with-mysql-config=PATH`"
+msgid "`-DMYSQL_CONFIG=PATH`"
 msgstr ""
 
 msgid "Specifies the path of `mysql_config` command."
@@ -172,71 +169,65 @@ msgstr "`mysql_config` コマンドのパスを指定します。"
 msgid "If `mysql_config` command can be found by `PATH`, you don't need to specify this parameter. For example, if `mysql_config` command exists at `/usr/bin/mysql_config`, you don't need to specify this parameter."
 msgstr "`mysql_config` コマンドが `PATH` から探索可能であればこの引数を指定する必要はありません。例えば、 `mysql_config` が `/usr/bin/mysql_config` にある場合はこの引数を指定する必要はありません。"
 
-msgid "`--with-default-tokenizer=TOKENIZER`"
+msgid "`-DMRN_DEFAULT_TOKENIZER=TOKENIZER`"
 msgstr ""
 
-msgid "Specifies the default tokenizer for full text. You can custom it in my.cnf."
-msgstr "全文検索用のデフォルトのトークナイザーを指定します。この値はmy.cnfでもカスタマイズできます。"
+msgid "Specifies the default tokenizer for full text. You can custom it in `my.cnf`."
+msgstr "全文検索用のデフォルトのトークナイザーを指定します。この値は`my.cnf`でもカスタマイズできます。"
 
 msgid "The default is `TokenBigram`."
 msgstr "デフォルト値は `TokenBigram` です。"
 
-msgid "Here is an example to use `TokenMecab` as the default tokenizer."
+msgid "Here is an example to use `TokenMecab` as the default tokenizer:"
 msgstr "デフォルトのトークナイザーとして `TokenMecab` を使う例です。"
 
-msgid "`--prefix=PATH`"
+msgid "`-DCMAKE_BUILD_TYPE={Release,Debug,RelWithDebInfo}`"
 msgstr ""
 
-msgid "Specifies the install base directory. Mroonga related files are installed under `${PATH}/` directory except `ha_mroonga.so`. `ha_mroonga.so` is a MySQL plugin file. It is installed the plugin directory of MySQL."
-msgstr "インストール先となるディレクトリを指定します。Mroonga関連のファイルは  `ha_mroonga.so` を除いて `${PATH}/` ディレクトリ以下にインストールされます。 `ha_mroonga.so` はMySQLのプラグインファイルです。これはMySQLのプラグインディレクトリーにインストールされます。"
+msgid "Specifies the build type."
+msgstr "ビルドタイプを指定します。"
+
+msgid "If you use this Mroonga as a production environment, you must use `-DCAMKE_BUILD_TYPE=Release` or `-DCAMKE_BUILD_TYPE=RelWithDebInfo`. They enable optimization."
+msgstr "本番環境でこのMroongaを使う場合は`-DCAMKE_BUILD_TYPE=Release`または`-DCAMKE_BUILD_TYPE=RelWithDebInfo`を指定するべきです。最適化が有効になります。"
+
+msgid "If you use this Mroonga for development, you must use `-DCAMKE_BUILD_TYPE=Debug`. It disables optimization and enables debug symbols. They are useful for development."
+msgstr "開発用にこのMroongaを使う場合は`-DCAMKE_BUILD_TYPE=Debug`を使うべきです。最適化が無効になり、デバッグシンボルが有効になります。これらは開発時に有用です。"
+
+msgid "`-DCMAKE_INSTALL_PREFIX=PREFIX`"
+msgstr ""
+
+msgid "Specifies the install base directory. Mroonga related files are installed under `${PREFIX}/` directory except `ha_mroonga.so`. `ha_mroonga.so` is a MySQL plugin file. It is installed the plugin directory of MySQL."
+msgstr "インストール先となるディレクトリを指定します。Mroonga関連のファイルは  `ha_mroonga.so` を除いて `${PREFIX}/` ディレクトリ以下にインストールされます。 `ha_mroonga.so` はMySQLのプラグインファイルです。これはMySQLのプラグインディレクトリーにインストールされます。"
 
 msgid "The default is `/usr/local`. In this case, `install.sql` that is used for installing Mroonga is installed to `/usr/local/share/mroonga/install.sql`."
 msgstr "デフォルトは `/usr/local` です。この場合、Mroongaをインストールするために使う `install.sql` は `/usr/local/share/mroonga/install.sql` にインストールされます。"
 
-msgid "Here is an example that installs Mroonga into `$HOME/local` for an user use instead of system wide use."
-msgstr "以下はシステム全体にMroongaをインストールするのではなく、ユーザーが個人で使う目的で `$HOME/local` にインストールする例です。"
-
-msgid "`PKG_CONFIG_PATH=PATH`"
+msgid "`cmake --build`"
 msgstr ""
 
-msgid "This is not a `configure` parameter but we describe it for users who doesn't install Groonga into the standard location."
-msgstr "これは `configure` の引数ではありませんが、Groongaを標準的な場所にインストールしていないユーザーのために説明します。"
+msgid "If `cmake` is succeeded, you can build Mroonga by `cmake --build`."
+msgstr "`cmake` が成功したら `cmake --build` でMroongaをビルドします。"
 
-msgid "If Groonga is not installed in the standard location like `/usr/lib`, you need to specify its location by `PKG_CONFIG_PATH`. For example, if Groonga is installed with `--prefix=$HOME/local`, use the following command line."
-msgstr "Groongaを `/usr/lib` など標準のパス以外にインストールした場合は `PKG_CONFIG_PATH` を指定する必要があります。例えば、 `ｰｰprefix=$HOME/local` でGroongaをインストールした場合は以下のようにします。"
+msgid "If you get some errors by `cmake --build`, please report them to us: {doc}`/contribution/report`"
+msgstr "`cmake --build` で何かエラーが発生した場合は、そのエラーをレポートしてください: {doc}`/contribution/report`"
 
-msgid "`make`"
-msgstr ""
-
-msgid "`configure` is succeeded, you can build Mroonga by `make`."
-msgstr "`configure` が成功したら `make` でMroongaをビルドします。"
-
-msgid "If you have multi cores CPU, you can make faster by using `-j` option. If you have 4 cores CPU, it's good for using `-j4` option."
-msgstr "マルチコアCPUを使っている場合は `-j` オプションを使うとより速くmakeを実行できます。もし、4コアのCPUを使っている場合は、 `-j4` オプションを使うともっと速くビルドできます。"
-
-msgid "If you get some errors by `make`, please report them to us: {doc}`/contribution/report`"
-msgstr "`make` で何かエラーが発生した場合は、そのエラーをレポートしてください: {doc}`/contribution/report`"
-
-msgid "`make install`"
+msgid "`cmake --install`"
 msgstr ""
 
 msgid "Now, you can install built Mroonga!"
 msgstr "これでビルドしたMroongaをインストールできます！"
 
-msgid "If you have write permission for `${PREFIX}` and the plugin directory of MySQL, you don't need to use `sudo`. e.g. `--prefix=$HOME/local` case. In this case, use `make install`."
-msgstr "`${PREFIX}` とMySQLのプラグインディレクトリーへの書き込み権限がある場合は `sudo` を使う必要はありません。例えば、 `--prefix=$HOME/local` と指定した場合です。この場合は `make install` を使ってください。"
+msgid "If you don't have write permission for `${PREFIX}` and the plugin directory of MySQL, you need to use `sudo`:"
+msgstr "`${PREFIX}`とMySQLのプラグインディレクトリーへの書き込み権限がない場合は、`sudo`を使わないといけません。"
 
 msgid "`mysql -u root < install.sql`"
 msgstr ""
 
-msgid "You need to run some SQLs to register Mroonga to MySQL such as `INSTALL PLUGIN` and `CREATE FUNCTION`. They are written in `${PREFIX}/share/mroonga/install.sql`."
-msgstr "MroongaをMySQLに登録するために `INSTALL PLUGIN` や `CREATE FUNCTION` といったSQLを実行する必要があります。これらのSQLは `${PREFIX}/share/mroonga/install.sql` に書かれています。"
+msgid "You need to run some SQL statements to register Mroonga to MySQL such as `INSTALL PLUGIN` and `CREATE FUNCTION`. They are written in `${PREFIX}/share/mroonga/install.sql`."
+msgstr "MroongaをMySQLに登録するために `INSTALL PLUGIN` や `CREATE FUNCTION` といったSQL文を実行する必要があります。これらのSQLは `${PREFIX}/share/mroonga/install.sql` に書かれています。"
 
-msgid "Here is an example when you specify `--prefix=$HOME/local` to `configure`."
-msgstr "以下は `configure` に `--prefix=$HOME/local` と指定した場合の例です。"
+msgid "Uninstall Mroonga"
+msgstr "Mroongaのアンインストール"
 
-msgid "`uninstall Mroonga`"
-msgstr ""
-
-msgid "If you want to remove Mroonga, type below commands."
-msgstr "Mroongaを削除したい場合は、以下のコマンドを入力して下さい。"
+msgid "If you want to uninstall Mroonga, use the following command lines:"
+msgstr "Mroongaをアンインストールしたい場合は次のコマンドラインを使ってください。"
