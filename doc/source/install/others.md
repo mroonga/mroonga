@@ -25,7 +25,7 @@ You must get them ready.
 
 Here are optional tools.
 
-- [sudo](http://www.gratisoft.us/sudo/) for installing built Mroonga.
+- `sudo` for installing built Mroonga
 
 ### Libraries
 
