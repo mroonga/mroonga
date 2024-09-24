@@ -21,8 +21,8 @@ We use Sphinx for documentation tool.
 まずは、gitの設定をしましょう。すでにある程度gitを使っている場合には初期設定はすでに完了しているかも知れません。その場合には飛ばして構いません。
 
 ```console
-% git config --global user.name "Your Name"
-% git config --global user.email "Email address"
+$ git config --global user.name "Your Name"
+$ git config --global user.email "Email address"
 ```
 
 上記はコミットログに使われます。公開しても差し支えないユーザ名もしくはメールアドレスを設定します。
@@ -40,9 +40,9 @@ Fork リポジトリ選択画面でご自分のリポジトリへとforkして�
 Clone Mroonga repository to working directory. Don't forget to do "Git configuration".
 
 ```console
-% git clone git@github.com:(YOUR_GITHUB_ACCOUNT)/mroonga.git
-% cd mroonga
-% git remote add upstream git@github.com:mroonga/mroonga
+$ git clone git@github.com:(YOUR_GITHUB_ACCOUNT)/mroonga.git
+$ cd mroonga
+$ git remote add upstream git@github.com:mroonga/mroonga
 ```
 
 ### Prerequisites
@@ -61,8 +61,8 @@ We use Sphinx for documentation tool and use gettext gem for localization.
 You can install both tools using the following commands.
 
 ```console
-% pip install -r doc/requirements.txt
-% (cd doc && bundle install)
+$ pip install -r doc/requirements.txt
+$ (cd doc && bundle install)
 ```
 
 ### Initial configuration for building documentation
@@ -70,7 +70,7 @@ You can install both tools using the following commands.
 Execute following commands to prepare for generating Mroonga documentation.
 
 ```console
-% cmake \
+$ cmake \
     -S . \
     -B ../mroonga.doc \
     --preset=doc \
@@ -90,9 +90,9 @@ Next step is "The things you need to do every tasks".
 Mroonga本家の最新状態に追従して、作業がかぶらないようにします。
 
 ```console
-% git fetch --all
-% git checkout main
-% git rebase upstream/main
+$ git fetch --all
+$ git checkout main
+$ git rebase upstream/main
 ```
 
 最新の状態に追従できたら、「ファイルごとにやること」へと進みます。
@@ -106,7 +106,7 @@ Mroonga本家の最新状態に追従して、作業がかぶらないように�
 Create a working branch. Use meaningful branch name.
 
 ```console
-% git checkout -b use-capitalized-notation-characteristic
+$ git checkout -b use-capitalized-notation-characteristic
 ```
 
 ### Editing text
@@ -118,13 +118,13 @@ Fix typos, styles or write a new document for Mroonga.
 Execute following command to generate HTML files that reflect your changes.
 
 ```console
-% cmake --build ../mroonga.doc
+$ cmake --build ../mroonga.doc
 ```
 
 Open the generated file in your Web browser to preview your changes are reflected.
 
 ```console
-% open ../mroonga.doc/doc/en/html/characteristic.html
+$ open ../mroonga.doc/doc/en/html/characteristic.html
 ```
 
 ### Commit
@@ -132,9 +132,9 @@ Open the generated file in your Web browser to preview your changes are reflecte
 HTMLに問題がないことを確認できたら、コミットします。
 
 ```console
-% cd ${cloneしたディレクトリーのトップディレクトリー}
-% git add doc/source/characteristic.rst
-% git commit
+$ cd ${cloneしたディレクトリーのトップディレクトリー}
+$ git add doc/source/characteristic.rst
+$ git commit
 ```
 
 コミットするときのメッセージについては、例えば以下のようにします。
@@ -148,7 +148,7 @@ doc: use "Mroonga" notation
 Publish your changes to your own GitHub repository.
 
 ```console
-% git push -u origin use-capitalized-notation-characteristic
+$ git push -u origin use-capitalized-notation-characteristic
 ```
 
 Note that `use-capitalized-notation-characteristic` is already created branch in advance.

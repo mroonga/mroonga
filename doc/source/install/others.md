@@ -72,14 +72,14 @@ ${HOME}/local/build/mysql-8.4.1
 Here are command lines to build and install MySQL.
 
 ```console
-% cmake \
+$ cmake \
     -S ${HOME}/local/src/mysql-8.4.1 \
     -B ${HOME}/local/build/mysql-8.4.1 \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=${HOME}/local
-% cmake --build ${HOME}/local/build/mysql-8.4.1
-% cmake --install ${HOME}/local/build/mysql-8.4.1
+$ cmake --build ${HOME}/local/build/mysql-8.4.1
+$ cmake --install ${HOME}/local/build/mysql-8.4.1
 ```
 
 You need to run MySQL before you install Mroonga. Because you need to
@@ -90,11 +90,11 @@ run some SQL statements to register Mroonga.
 Mroonga uses CMake. So the following is the simplest build steps.
 
 ```console
-% cd ${HOME}/local/src
-% wget https://packages.groonga.org/source/mroonga/mroonga-latest.tar.gz
-% tar xvf mroonga-latest.tar.gz
-% mroonga_base_name=$(find mroonga-* -maxdepth 0 -type d)
-% cmake \
+$ cd ${HOME}/local/src
+$ wget https://packages.groonga.org/source/mroonga/mroonga-latest.tar.gz
+$ tar xvf mroonga-latest.tar.gz
+$ mroonga_base_name=$(find mroonga-* -maxdepth 0 -type d)
+$ cmake \
     -S ${HOME}/local/src/${mroonga_base_name} \
     -B ${HOME}/local/build/${mroonga_base_name} \
     -GNinja \
@@ -103,9 +103,9 @@ Mroonga uses CMake. So the following is the simplest build steps.
     -DMYSQL_BUILD_DIR=${HOME}/local/build/mysql-8.4.1 \
     -DMYSQL_CONFIG=${HOME}/local/bin/mysql_config \
     -DMYSQL_SOURCE_DIR=${HOME}/local/src/mysql-8.4.1
-% cmake --build ${HOME}/local/build/${mroonga_base_name}
-% cmake --install ${HOME}/local/build/${mroonga_base_name}
-% ${HOME}/local/bin/mysql -u root < ${HOME}/local/share/mroonga/install.sql
+$ cmake --build ${HOME}/local/build/${mroonga_base_name}
+$ cmake --install ${HOME}/local/build/${mroonga_base_name}
+$ ${HOME}/local/bin/mysql -u root < ${HOME}/local/share/mroonga/install.sql
 ```
 
 You need to specify the following on `cmake`.
@@ -175,7 +175,7 @@ The default is `TokenBigram`.
 Here is an example to use `TokenMecab` as the default tokenizer:
 
 ```console
-% cmake ... -DMRN_DEFAULT_TOKENIZER=TokenMecab
+$ cmake ... -DMRN_DEFAULT_TOKENIZER=TokenMecab
 ```
 
 #### `-DCMAKE_BUILD_TYPE={Release,Debug,RelWithDebInfo}`
@@ -216,7 +216,7 @@ If you don't have write permission for `${PREFIX}` and the plugin
 directory of MySQL, you need to use `sudo`:
 
 ```console
-% sudo cmake --install ${HOME}/local/build/${mroonga_base_name}
+$ sudo cmake --install ${HOME}/local/build/${mroonga_base_name}
 ```
 
 ### `mysql -u root < install.sql`
@@ -230,6 +230,6 @@ as `INSTALL PLUGIN` and `CREATE FUNCTION`. They are written in
 If you want to uninstall Mroonga, use the following command lines:
 
 ```console
-% ${HOME}/local/bin/mysql -u root < ${PREFIX}/share/mroonga/uninstall.sql
-% xargs rm < ${HOME}/local/build/mroonga/install_manifest.txt
+$ ${HOME}/local/bin/mysql -u root < ${PREFIX}/share/mroonga/uninstall.sql
+$ xargs rm < ${HOME}/local/build/mroonga/install_manifest.txt
 ```
