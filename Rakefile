@@ -1,6 +1,7 @@
 # -*- ruby -*-
 #
-# Copyright(C) 2024  Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright (C) 2024  Horimoto Yasuhiro <horimoto@clear-code.com>
+# Copyright (C) 2024  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -125,5 +126,12 @@ namespace :dev do
       File.write("version_minor", new_version_minor)
       File.write("version_micro", new_version_micro)
     end
+  end
+end
+
+desc "Lint"
+task :lint do
+  cd "packages" do
+    ruby("-S", "rake", "version:lint")
   end
 end
