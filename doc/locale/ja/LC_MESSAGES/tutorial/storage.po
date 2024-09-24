@@ -106,8 +106,8 @@ msgstr "以下は、 ``utf8_unicode_ci`` の照合順序を指定して ``Normal
 msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
 msgstr "Mroongaは、Groongaのノーマライザーを指定する以下のような構文を持っています。::"
 
-msgid "See `Groonga's documentation about normalizer <http://groonga.org/docs/reference/normalizers.html>`_ for more details."
-msgstr "詳細は `Groongaのノーマライザーのドキュメント <http://groonga.org/ja/docs/reference/normalizers.html>`_ を確認してください。"
+msgid "See `Groonga's documentation about normalizer <https://groonga.org/docs/reference/normalizers.html>`_ for more details."
+msgstr "詳細は `Groongaのノーマライザーのドキュメント <https://groonga.org/ja/docs/reference/normalizers.html>`_ を確認してください。"
 
 msgid "Here is an example that uses ``NormalizerAuto`` normalizer:"
 msgstr "以下は、``NormalizerAuto`` のノーマライザーを使用する例です。"
@@ -121,8 +121,8 @@ msgstr "Mroongaは、Groongaのトークンフィルターを指定する以下�
 msgid "Here is an example that uses ``TokenFilterStem`` token filter:"
 msgstr "以下は、``TokenFilterStem`` のトークンフィルターを使用する例です。"
 
-msgid "See `Groonga's documentation about token filter documentation <http://groonga.org/docs/reference/token_filters.html>`_ for more details."
-msgstr "詳細は `Groongaのトークンフィルターのドキュメント <http://groonga.org/ja/docs/reference/token_filters.html>`_ を確認してください。"
+msgid "See `Groonga's documentation about token filter documentation <https://groonga.org/docs/reference/token_filters.html>`_ for more details."
+msgstr "詳細は `Groongaのトークンフィルターのドキュメント <https://groonga.org/ja/docs/reference/token_filters.html>`_ を確認してください。"
 
 msgid "Here is an example that uses ``TokenFilterStopWord`` token filter:"
 msgstr "以下は、``TokenFilterStopWord`` のトークンフィルターを使用する例です。"
@@ -139,8 +139,8 @@ msgstr "Mroongaは、Groongaのカラムフラグを指定する以下のよう�
 msgid "Here is an example that uses ``COMPRESS_ZLIB`` flag:"
 msgstr "以下は、``COMPRESS_ZLIB`` フラグを使用する例です。"
 
-msgid "See `Groonga's documentation about column flags <http://groonga.org/docs/reference/commands/column_create.html#parameters>`_ for more details."
-msgstr "Groongaのカラムフラグの詳細については `Groongaのドキュメント <http://groonga.org/ja/docs/reference/commands/column_create.html#parameters>`_ を参照してください。"
+msgid "See `Groonga's documentation about column flags <https://groonga.org/docs/reference/commands/column_create.html#parameters>`_ for more details."
+msgstr "Groongaのカラムフラグの詳細については `Groongaのドキュメント <https://groonga.org/ja/docs/reference/commands/column_create.html#parameters>`_ を参照してください。"
 
 msgid "How to use geolocation search"
 msgstr "位置情報検索の利用方法"
@@ -244,8 +244,8 @@ msgstr "ユーザは「見つかりませんでした」ページを見ること
 msgid "Faceted search needs multiple ``GROUP BY`` operations against searched result set. To do faceted search by SQL, multiple ``SELECT`` requests are needed. It is not effective."
 msgstr "絞り込み検索は検索結果に対して複数の ``GROUP BY`` 操作を実行する必要があります。SQLでファセット検索をやろうとすると、複数の ``SELECT`` リクエストが必要になります。これは効率的ではありません。"
 
-msgid "Groonga can do faceted search by only one groonga command. It is effective. Groonga has the ``select`` command that can search records with faceted search. Faceted search is called as \"drilldown\" in Groonga. See `Groonga's documentation about select command <http://groonga.org/docs/reference/commands/select.html>`_ for more details."
-msgstr "Groongaは1回のgroongaコマンドでファセット検索をできます。これは効率的です。Groongaには ``select`` コマンドというファセット検索に対応した検索コマンドがあります。Groongaではファセット検索は「ドリルダウン（drilldown）」と呼んでいます。Groongaの ``select`` コマンドの詳細については `Groongaのドキュメント <http://groonga.org/ja/docs/reference/commands/select.html>`_ を参照してください。"
+msgid "Groonga can do faceted search by only one groonga command. It is effective. Groonga has the ``select`` command that can search records with faceted search. Faceted search is called as \"drilldown\" in Groonga. See `Groonga's documentation about select command <https://groonga.org/docs/reference/commands/select.html>`_ for more details."
+msgstr "Groongaは1回のgroongaコマンドでファセット検索をできます。これは効率的です。Groongaには ``select`` コマンドというファセット検索に対応した検索コマンドがあります。Groongaではファセット検索は「ドリルダウン（drilldown）」と呼んでいます。Groongaの ``select`` コマンドの詳細については `Groongaのドキュメント <https://groonga.org/ja/docs/reference/commands/select.html>`_ を参照してください。"
 
 msgid "Mroonga provides ``mroonga_command()`` function. You can run Groonga command in SQL by the function. But you should use only ``select`` command. Other commands that change schema or data may break consistency."
 msgstr "Mroongaは ``mroonga_command()`` 関数を提供しています。この関数を使えばSQLの中で好きなGroongaコマンドを実行できます。しかし、使うのは ``select`` コマンドだけにしておくべきです。スキーマやデータを変更するコマンドを使うと一貫性が壊れてしまうかもしれません。"
@@ -283,8 +283,8 @@ msgstr "ファセット検索の結果の ``_nsubrecs`` カラムの値は対応
 msgid "For example, the first faceted search result (the faceted search result for ``tag``) shows that there are 1 record that has ``groonga`` as ``tag`` value and 2 records that have ``MySQL`` as ``tag`` value:"
 msgstr "たとえば、最初のファセット検索の結果（ ``tag`` のファセット検索の結果）は ``tag`` の値として ``groonga`` を持つレコードは1件あり、 ``tag`` の値として ``MySQL`` を持つレコードは2件あることを示しています。"
 
-msgid "See `Groonga's documentation about select command <http://groonga.org/docs/reference/commands/select.html>`_ for more details."
-msgstr "詳細は `Groongaのselectコマンドのドキュメント <http://groonga.org/ja/docs/reference/commands/select.html>`_ を確認してください。"
+msgid "See `Groonga's documentation about select command <https://groonga.org/docs/reference/commands/select.html>`_ for more details."
+msgstr "詳細は `Groongaのselectコマンドのドキュメント <https://groonga.org/ja/docs/reference/commands/select.html>`_ を確認してください。"
 
 msgid "How to search by regular expression"
 msgstr "正規表現検索の利用方法"
@@ -307,8 +307,8 @@ msgstr "以下は正規表現による検索の出力例です。 ::"
 msgid "By using :ref:`boolean-mode-pragma-ss` pragma, you can search the records which matches ``/var/log/auth.log`` with ``content @~ \"\\\\\\\\A/var/log/auth\"``. ``@~`` is a Groonga's operator which executes a regular expression search, and ``\"\\\\\\\\A/var/log/auth\"`` executes prefix search, so it matches to only ``/var/log/auth.log``. ``/tmp/local/var/log/auth.log`` doesn't match because it doesn't begin with \"/var/log/auth\"."
 msgstr ":ref:`boolean-mode-pragma-ss` プラグマを使うことにより、 ``content @~ \"\\\\\\\\A/var/log/auth\"`` で ``/var/log/auth`` ではじまるレコードを検索できます。 ``@~`` はGroongaで正規表現検索するためのオペレーターで、 ``\"\\\\\\\\A/var/log/auth\"`` は前方一致検索を行うので、 ``/var/log/auth.log`` だけがマッチします。 ``/tmp/local/var/log/auth.log`` がマッチしないのは、``/var/log/auth`` ではじまっていないからです。"
 
-msgid "See `Groonga's regular expression document <http://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details."
-msgstr "構文の詳細は `Groongaの正規表現のドキュメント <http://groonga.org/ja/docs/reference/regular_expression.html#syntax>`_ を確認してください。"
+msgid "See `Groonga's regular expression document <https://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details."
+msgstr "構文の詳細は `Groongaの正規表現のドキュメント <https://groonga.org/ja/docs/reference/regular_expression.html#syntax>`_ を確認してください。"
 
 msgid "Logging"
 msgstr "ログ出力"

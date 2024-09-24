@@ -164,7 +164,7 @@ must be present in any of the rows that are returned.
 
    You can confirm token by :doc:`/reference/udf/mroonga_command` and
    `tokenize
-   <http://groonga.org/docs/reference/commands/tokenize.html>`_::
+   <https://groonga.org/docs/reference/commands/tokenize.html>`_::
 
      SELECT mroonga_command('tokenize TokenBigram "It''s" NormalizerMySQLGeneralCI');
      -- +--------------------------------------------------------------------------+
@@ -415,7 +415,7 @@ Here is a syntax of ``S`` pragma::
 Here is a list of available ``syntax``:
 
   * ``S``: `Script syntax
-    <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
+    <https://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
 
 .. _boolean-mode-pragma-ss:
 
@@ -423,7 +423,7 @@ Here is a list of available ``syntax``:
 """""""
 
 You can use `script syntax
-<http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_ by
+<https://groonga.org/docs/reference/grn_expr/script_syntax.html>`_ by
 ``*SS`` pragma. You can use full Groonga search features in script
 syntax.
 
@@ -442,7 +442,7 @@ Here are schema and data to show example of script syntax usage::
   );
 
 Here is an example to use `near search
-<http://groonga.org/docs/reference/grn_expr/script_syntax.html#near-search-operator>`_ by script syntax::
+<https://groonga.org/docs/reference/grn_expr/script_syntax.html#near-search-operator>`_ by script syntax::
 
   SELECT content,
          MATCH (content) AGAINST('*SS content *N "student fast"' IN BOOLEAN MODE) AS score

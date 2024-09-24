@@ -75,7 +75,7 @@ Improvements
 
   * e.g.: ``tokenizer "TokenNgram(\'loose_symbol\', true)"``
 
-  * ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29
+  * ref: https://groonga.org/docs/news.html#release-8-0-2-2018-04-29
 
 * Use the Groonga's default logger.
 

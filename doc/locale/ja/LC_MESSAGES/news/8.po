@@ -100,8 +100,8 @@ msgstr "トークナイザーのオプションをサポートしました。"
 msgid "e.g.: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
 msgstr "例: ``tokenizer \"TokenNgram(\\'loose_symbol\\', true)\"``"
 
-msgid "ref: http://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
-msgstr "参考: http://groonga.org/ja/docs/news.html#release-8-0-2-2018-04-29"
+msgid "ref: https://groonga.org/docs/news.html#release-8-0-2-2018-04-29"
+msgstr "参考: https://groonga.org/ja/docs/news.html#release-8-0-2-2018-04-29"
 
 msgid "Use the Groonga's default logger."
 msgstr "Groongaのデフォルトのロガーを使うようにしました。"

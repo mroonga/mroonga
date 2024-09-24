@@ -303,7 +303,7 @@ Improvements
 ^^^^^^^^^^^^
 
 * [:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax
-  <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
+  <https://groonga.org/docs/reference/grn_expr/script_syntax.html>`_
   for search. [GitHub#95][Patch by Naoya Murakami]
 
 * [Windows] Bundled LZ4.

@@ -296,8 +296,8 @@ msgstr "メジャーバージョンアップです! メジャーバージョン�
 msgid "In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and ``remove_blank`` for ``NormalizerNFKC100`` is supported. If you upgrade to Groonga 9.0.0, you can use them from Mroonga 9.00!"
 msgstr "Groonga 9.0.0 にて、 ``TokenPattern`` 、 ``TokenTable`` トークナイザーと ``NormalizerNFKC100`` に ``remove_blank`` をサポートしました。Groonga 9.0.0 にアップグレードすることで、Mroonga 9.00からこれらを使えます。"
 
-msgid "ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09"
-msgstr "参考: http://groonga.org/ja/docs/news.html#release-9-0-0-2019-02-09"
+msgid "ref: https://groonga.org/docs/news.html#release-9-0-0-2019-02-09"
+msgstr "参考: https://groonga.org/ja/docs/news.html#release-9-0-0-2019-02-09"
 
 msgid "[:doc:`/install/centos`] Supported Percona Server 5.7.24-27."
 msgstr "[:doc:`/install/centos`] Percona Server 5.7.24-27をサポートしました。"

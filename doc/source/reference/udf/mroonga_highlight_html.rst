@@ -88,7 +88,7 @@ There are some optional parameters.
 """""""""
 
 Specify query in `Groonga's query syntax
-<http://groonga.org/docs/reference/grn_expr/query_syntax.html>`_.
+<https://groonga.org/docs/reference/grn_expr/query_syntax.html>`_.
 
 You must specify ``AS query`` to extract keywords from query like the
 following::

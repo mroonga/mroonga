@@ -127,7 +127,7 @@ msgstr ""
 msgid "`MySQL <http://www.mysql.com/>`_"
 msgstr ""
 
-msgid "`Groonga <http://groonga.org/>`_"
+msgid "`Groonga <https://groonga.org/>`_"
 msgstr ""
 
 msgid "`Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)"
@@ -166,14 +166,14 @@ msgstr ""
 msgid "The implementation of utility functions"
 msgstr "ユーティリティ関数の実装コード"
 
+msgid "mysql-test/"
+msgstr ""
+
 msgid "The directory for tests by SQL"
 msgstr "SQLによるテストコード用ディレクトリ"
 
 msgid "SQL test scripts are included in each test case 't/' directory, that are also the definition of currently available SQL statements."
 msgstr "SQLによるテストコード用ディレクトリSQLテストスクリプト（現在実行可能なSQL文の定義も兼ねる）"
-
-msgid "mysql-test/"
-msgstr ""
 
 msgid "The expected results of SQL tests are included in each test case 'r/' directory , that are also the definition of the current specification of supported SQL."
 msgstr "SQLテスト想定実行結果（SQL動作仕様定義も兼ねる）"

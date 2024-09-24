@@ -48,4 +48,4 @@ It returns an evaluated result of the given Groonga command as a string.
 See also
 --------
 
-`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga document.
+`Command <https://groonga.org/docs/reference/command.html>`_ in Groonga document.

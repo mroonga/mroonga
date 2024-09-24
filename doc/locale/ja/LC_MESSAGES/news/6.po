@@ -267,8 +267,8 @@ msgstr "畑ケさん"
 msgid "Release 6.00 - 2016-02-29"
 msgstr "6.00リリース - 2016-02-29"
 
-msgid "[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <http://groonga.org/docs/reference/grn_expr/script_syntax.html>`_ for search. [GitHub#95][Patch by Naoya Murakami]"
-msgstr "[:ref:`boolean-mode-pragma-ss`] 検索に `スクリプト構文 <http://groonga.org/ja/docs/reference/grn_expr/script_syntax.html>`_ を使うためのプラグマを追加しました。 [GitHub#95][村上さんがパッチ提供]"
+msgid "[:ref:`boolean-mode-pragma-ss`] Added a pragma to use `script syntax <https://groonga.org/docs/reference/grn_expr/script_syntax.html>`_ for search. [GitHub#95][Patch by Naoya Murakami]"
+msgstr "[:ref:`boolean-mode-pragma-ss`] 検索に `スクリプト構文 <https://groonga.org/ja/docs/reference/grn_expr/script_syntax.html>`_ を使うためのプラグマを追加しました。 [GitHub#95][村上さんがパッチ提供]"
 
 msgid "[Windows] Bundled LZ4."
 msgstr "[Windows] LZ4をバンドルしました。"

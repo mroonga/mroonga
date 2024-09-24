@@ -76,7 +76,7 @@ Currently we are assuming the following development environments.
 * Linux x86_64
 * glibc
 * `MySQL <http://www.mysql.com/>`_
-* `Groonga <http://groonga.org/>`_
+* `Groonga <https://groonga.org/>`_
 * `Cutter <http://cutter.sourceforge.net/>`_ (for C/C++ unit tests)
 * `Sphinx <https://www.sphinx-doc.org/en/master/>`_ (for documents)
 

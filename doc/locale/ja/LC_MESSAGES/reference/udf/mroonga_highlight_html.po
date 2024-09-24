@@ -73,8 +73,8 @@ msgstr "いくつか省略可能な引数があります。"
 msgid "``query``"
 msgstr ""
 
-msgid "Specify query in `Groonga's query syntax <http://groonga.org/docs/reference/grn_expr/query_syntax.html>`_."
-msgstr "詳細は `Groongaのクエリー構文 <http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html>`_ を参照してください。"
+msgid "Specify query in `Groonga's query syntax <https://groonga.org/docs/reference/grn_expr/query_syntax.html>`_."
+msgstr "詳細は `Groongaのクエリー構文 <https://groonga.org/ja/docs/reference/grn_expr/query_syntax.html>`_ を参照してください。"
 
 msgid "You must specify ``AS query`` to extract keywords from query like the following::"
 msgstr "クエリーを使ってキーワードを抽出するには、以下のように ``AS query`` を指定する必要があります。::"

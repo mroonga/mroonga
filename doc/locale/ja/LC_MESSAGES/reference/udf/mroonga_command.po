@@ -67,5 +67,5 @@ msgstr "指定されたGroongaコマンドを実行した結果を文字列と�
 msgid "See also"
 msgstr "参照"
 
-msgid "`Command <http://groonga.org/docs/reference/command.html>`_ in Groonga document."
-msgstr "Groongaのドキュメント内の `コマンド <http://groonga.org/ja/docs/reference/command.html>`_ 。"
+msgid "`Command <https://groonga.org/docs/reference/command.html>`_ in Groonga document."
+msgstr "Groongaのドキュメント内の `コマンド <https://groonga.org/ja/docs/reference/command.html>`_ 。"

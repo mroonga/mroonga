@@ -280,7 +280,7 @@ In Groonga 9.0.0, ``TokenPattern``, ``TokenTable`` tokenizer and
 ``remove_blank`` for ``NormalizerNFKC100`` is supported.
 If you upgrade to Groonga 9.0.0, you can use them from Mroonga 9.00!
 
-* ref: http://groonga.org/docs/news.html#release-9-0-0-2019-02-09
+* ref: https://groonga.org/docs/news.html#release-9-0-0-2019-02-09
 
 Improvements
 ^^^^^^^^^^^^

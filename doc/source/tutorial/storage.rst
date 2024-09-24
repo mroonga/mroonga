@@ -190,7 +190,7 @@ Mroonga has the following syntax to specify Groonga's normalizer::
 
   FULLTEXT INDEX (content) COMMENT 'normalizer "NormalizerAuto"'
 
-See `Groonga's documentation about normalizer <http://groonga.org/docs/reference/normalizers.html>`_ for more details.
+See `Groonga's documentation about normalizer <https://groonga.org/docs/reference/normalizers.html>`_ for more details.
 
 Here is an example that uses ``NormalizerAuto`` normalizer:
 
@@ -271,7 +271,7 @@ Here is an example that uses ``TokenFilterStem`` token filter:
    -- +----+------------------------+
    -- 3 rows in set (0.01 sec)
 
-See `Groonga's documentation about token filter documentation <http://groonga.org/docs/reference/token_filters.html>`_ for more details.
+See `Groonga's documentation about token filter documentation <https://groonga.org/docs/reference/token_filters.html>`_ for more details.
 
 Here is an example that uses ``TokenFilterStopWord`` token filter:
 
@@ -340,7 +340,7 @@ Here is an example that uses ``COMPRESS_ZLIB`` flag:
    ) Engine=Mroonga DEFAULT CHARSET=utf8;
    -- Query OK, 0 rows affected (0.12 sec)
 
-See `Groonga's documentation about column flags <http://groonga.org/docs/reference/commands/column_create.html#parameters>`_ for more details.
+See `Groonga's documentation about column flags <https://groonga.org/docs/reference/commands/column_create.html#parameters>`_ for more details.
 
 How to use geolocation search
 -----------------------------
@@ -566,7 +566,7 @@ Groonga can do faceted search by only one groonga command. It is
 effective. Groonga has the ``select`` command that can search records
 with faceted search. Faceted search is called as "drilldown" in
 Groonga. See `Groonga's documentation about select command
-<http://groonga.org/docs/reference/commands/select.html>`_ for more
+<https://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
 Mroonga provides ``mroonga_command()`` function. You can run Groonga
@@ -737,7 +737,7 @@ as ``tag`` value and 2 records that have ``MySQL`` as ``tag`` value:
     ["MySQL",2]]
 
 See `Groonga's documentation about select command
-<http://groonga.org/docs/reference/commands/select.html>`_ for more
+<https://groonga.org/docs/reference/commands/select.html>`_ for more
 details.
 
 How to search by regular expression
@@ -777,7 +777,7 @@ By using :ref:`boolean-mode-pragma-ss` pragma, you can search the records which 
 ``@~`` is a Groonga's operator which executes a regular expression search, and ``"\\\\A/var/log/auth"`` executes prefix search, so it matches to only ``/var/log/auth.log``. ``/tmp/local/var/log/auth.log`` doesn't match because it doesn't begin with "/var/log/auth".
 
 See `Groonga's regular expression document
-<http://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details.
+<https://groonga.org/docs/reference/regular_expression.html#syntax>`_ for more syntax details.
 
 Logging
 -------

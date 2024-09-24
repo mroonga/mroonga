@@ -250,8 +250,8 @@ msgstr "以下は、 ``utf8_unicode_ci`` の照合順序を指定して ``Normal
 msgid "Mroonga has the following syntax to specify Groonga's normalizer::"
 msgstr "Mroongaは、Groongaのノーマライザーを指定する以下のような構文を持っています。::"
 
-msgid "See `Groonga's documentation about normalizer <http://groonga.org/docs/reference/normalizers.html>`_ for more details."
-msgstr "詳細は `Groongaのノーマライザーのドキュメント <http://groonga.org/ja/docs/reference/normalizers.html>`_ を確認してください。"
+msgid "See `Groonga's documentation about normalizer <https://groonga.org/docs/reference/normalizers.html>`_ for more details."
+msgstr "詳細は `Groongaのノーマライザーのドキュメント <https://groonga.org/ja/docs/reference/normalizers.html>`_ を確認してください。"
 
 msgid "Here is an example that uses ``NormalizerAuto`` normalizer::"
 msgstr "以下は、``NormalizerAuto`` のノーマライザーを使用する例です。::"
