@@ -1,13 +1,13 @@
 ---
 name: Release
 about: Issue for release
-title: 'Mroonga x.x.x '
+title: 'Mroonga x.xx '
 labels: ''
 assignees: ''
 
 ---
 
-We plan to release x.x in a few days.
+We plan to release x.xx in a few days.
 
 guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
 
@@ -34,7 +34,7 @@ guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
 - [ ] Upload packages
   - [ ] Debian
   - [ ] Ubuntu (launchpad)
-  - [ ] CentOS
+  - [ ] AlmaLinux
   - [ ] Windows
 - [ ] Upload documentation for http://mroonga.org
 - [ ] Blog https://github.com/mroonga/mroonga.github.com
@@ -44,7 +44,7 @@ guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
   - [ ] [GitHub Dicussions](https://github.com/mroonga/mroonga/discussions/categories/releases) (Japanese)
   - [ ] [GitHub Dicussions](https://github.com/mroonga/mroonga/discussions/categories/releases) (English)
   - [ ] mysql@mysql.gr.jp
-- [ ] Announce on Twitter
+- [ ] Announce on X
 - [ ] Announce on Facebook
 - [ ] Update `base_version`
 - [ ] Update Docker image
