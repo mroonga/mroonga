@@ -44,7 +44,7 @@ Shoud not be included
 
 Execute the following command to create HTML for news::
 
-    % cmake -S ${MROONGA_SOURCE_DIR} -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
+    % cmake -S ${MARIADB_SOURCE_DIR} -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
     % cmake --build ${MARIADB_BUILD_DIR}
     % cmake --install ${MARIADB_BUILD_DIR}
     % cmake -S ${GROONGA_SOURCE_DIRECTORY} -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
