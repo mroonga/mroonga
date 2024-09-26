@@ -28,7 +28,7 @@ msgstr "改良"
 msgid "We use CMake for building instead of the GNU Autotools."
 msgstr "ビルドにGNU Autotoolsの代わりにCMakeを使うようにしました"
 
-msgid "`configure` is deprecated. We suggest that use `cmake` for building from source."
+msgid "Using `configure` is deprecated. We recommend using `cmake` to build from source."
 msgstr "`configure`は非推奨となります。ソースからのビルドには、`cmake`を使うことをおすすめします。"
 
 msgid "Please refer [{doc}`/install/others`] about how to build from source with `cmake`."
@@ -40,14 +40,14 @@ msgstr "修正"
 msgid "Fixed a bug that `SELECT` returned wrong result when we used multiple primary keys and primary keys included `VARBINARY` or `BLOB` type column. [GH-783][Reported by Jérome Perrin]"
 msgstr "複数の主キーがあり、かつ主キーに`VARBINARY`型または `BLOB`型のカラムがある場合に、`SELECT`が誤った結果を返す問題を修正しました。"
 
-msgid "If this bug occured, the following query retrieved nothing."
+msgid "If this bug occurred, the following query retrieved nothing."
 msgstr "この問題が発生した場合、以下のクエリーは何も取得しません。"
 
-msgid "This bug only occured Mroonga 14.07."
+msgid "This bug only occurred in Mroonga 14.07."
 msgstr "この問題はMroonga 14.07でのみ発生します。"
 
-msgid "This bug doesn't break an index. So, we don't need to reindex an index after this fix."
-msgstr "この問題はインデックスを破壊しません。そのため、この修正後にインデックスを再生成する必要はありません。"
+msgid "This bug doesn't break an index. So, we don't need to execute `REINDEX` command after this fix."
+msgstr "この問題はインデックスを破壊しません。そのため、この修正後に`REINDEX`を実行する必要はありません。"
 
 msgid "Thanks"
 msgstr "感謝"
