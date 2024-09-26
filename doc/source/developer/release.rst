@@ -44,18 +44,13 @@ Shoud not be included
 
 Execute the following command to create HTML for news::
 
-    % cd ${MROONGA_SOURCE_DIR}
-    % cmake -S . -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
+    % cmake -S ${MROONGA_SOURCE_DIR} -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
     % cmake --build ${MARIADB_BUILD_DIR}
     % cmake --install ${MARIADB_BUILD_DIR}
-    % cd ..
-    % cd ${GROONGA_SOURCE_DIRECTORY}
-    % cmake -S . -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
+    % cmake -S ${GROONGA_SOURCE_DIRECTORY} -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
     % cmake --build ${GROONGA_BUILD_DIR}
     % cmake --install ${GROONGA_BUILD_DIR}
-    % cd ..
-    % cd ${MROONGA_SOURCE_DIRECTORY}
-    % PKG_CONFIG_PATH=${INSTALL_DIR}/lib/pkgconfig cmake -S . -B ${MROONGA_BUILD_DIR} --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" -DMYSQL_SOURCE_DIR=~${MARIADB_SOURCE_DIR} -DMYSQL_BUILD_DIR=${MARIADB_BUILD_DIR} -DMYSQL_CONFIG=${INSTALL_DIR}/bin/mariadb_config
+    % PKG_CONFIG_PATH=${INSTALL_DIR}/lib/pkgconfig cmake -S ${MROONGA_SOURCE_DIRECTORY} -B ${MROONGA_BUILD_DIR} --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" -DMYSQL_SOURCE_DIR=~${MARIADB_SOURCE_DIR} -DMYSQL_BUILD_DIR=${MARIADB_BUILD_DIR} -DMYSQL_CONFIG=${INSTALL_DIR}/bin/mariadb_config
     % cmake --build ${MROONGA_BUILD_DIR}
 
 Check whether you can upload packages
