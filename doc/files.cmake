@@ -10,7 +10,7 @@ set(MRN_DOC_SOURCES
     contribution/report.rst
     developer.rst
     developer/coding_style.rst
-    developer/debug.rst
+    developer/debug.md
     developer/release.rst
     faq.rst
     faq/mmap_cannot_allocate_memory.rst
@@ -128,6 +128,7 @@ set(MRN_DOC_HTML_FILES
     index.html
     install.html
     install/almalinux.html
+    install/centos.html
     install/debian.html
     install/docker.html
     install/fedora.html
