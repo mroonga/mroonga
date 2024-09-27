@@ -15,6 +15,23 @@
       }
     },
     {
+      "name": "debug",
+      "displayName": "For debug",
+      "inherits": ["base"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "WITH_DEBUG": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "For release",
+      "inherits": ["base"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "name": "doc",
       "displayName": "For documentation",
       "inherits": ["base"],
