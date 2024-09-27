@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 13:56+0900\n"
+"PO-Revision-Date: 2024-09-27 14:23+0900\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,8 +22,8 @@ msgstr "デバッグ方法"
 msgid "Building for debugging"
 msgstr "デバッグ用ビルド方法"
 
-msgid "When you build software for debugging, you can get more information like symbol resolutions in gdb. So we build both MySQL and Mroonga for debugging in development."
-msgstr "デバッグ用にビルドすることにより、gdb上でのシンボル解決など開発時に得られる情報が多くなります。そのため、開発時はデバッグ用にMySQLとMroongaをビルドします。"
+msgid "When you build software for debugging, you can get more information like symbol resolutions in GDB. So we build both MySQL and Mroonga for debugging in development."
+msgstr "デバッグ用にビルドすることにより、GDB上でのシンボル解決など開発時に得られる情報が多くなります。そのため、開発時はデバッグ用にMySQLとMroongaをビルドします。"
 
 msgid "If you build one of them for debugging, the size of structures etc. might be different, and you might not be able to load Mroonga, or assertions don't work in running."
 msgstr "片方だけデバッグ用ビルドにすると構造体のサイズなどが異なってしまうため、Mroongaがロードできなかったり、実行時にassertに引っかかったりしてうまく動作しません。"
@@ -31,8 +31,8 @@ msgstr "片方だけデバッグ用ビルドにすると構造体のサイズな
 msgid "How to build MySQL for debugging"
 msgstr "MySQLのデバッグ用ビルド方法"
 
-msgid "As you can see in [MySQL :: 2.9.4 Installing MySQL Using a Standard Source Distribution](https://dev.mysql.com/doc/refman/8.0/en/installing-source-distribution.html), you can build MySQL for debugging by passing `-DWITH_DEBUG=yes` option in CMAKE options."
-msgstr "[MySQL :: 2.9.4 標準ソース配布を使用して MySQL をインストールする](https://dev.mysql.com/doc/refman/8.0/ja/installing-source-distribution.html) にある通り、CMakeのオプションに`-DWITH_DEBUG=yes`オプションを渡すことでデバッグ用にビルドすることができます。"
+msgid "As you can see in [MySQL :: 2.9.4 Installing MySQL Using a Standard Source Distribution](https://dev.mysql.com/doc/refman/8.4/en/installing-source-distribution.html), you can build MySQL for debugging by passing `-DWITH_DEBUG=ON` option in CMake options."
+msgstr "[MySQL :: 2.9.4 標準ソース配布を使用して MySQL をインストールする](https://dev.mysql.com/doc/refman/8.4/ja/installing-source-distribution.html)にある通り、CMakeのオプションに`-DWITH_DEBUG=ON`オプションを渡すことでデバッグ用にビルドすることができます。"
 
 msgid "The procedure from download to build is the following:"
 msgstr "ダウンロードからビルドまでの流れは以下の通りです。"
@@ -40,8 +40,8 @@ msgstr "ダウンロードからビルドまでの流れは以下の通りです
 msgid "How tom build Mroonga for debugging"
 msgstr "Mroongaのデバッグ用ビルド方法"
 
-msgid "You can build Mroonga for debugging by passing `--with-debug` in configure options."
-msgstr "Mroongaはconfigureのオプションに`--with-debug`を渡すことでデバッグ用にビルドすることができます。"
+msgid "You can build Mroonga for debugging by passing `--preset=debug` in CMake options."
+msgstr "MroongaはCMakeのオプションに`--preset=debug`を渡すことでデバッグ用にビルドすることができます。"
 
 msgid "In order to build Mroonga, you need to install required tools and libraries beforehand."
 msgstr "Mroongaをビルドするには、必要なツールやライブラリーを事前にインストールする必要があります。"
@@ -55,20 +55,20 @@ msgstr "リポジトリのcloneからビルドまでの流れは以下の通り�
 msgid "When you successfully build both, please invoke tests like the following. If you get `[pass]` for all tests, you succeeded to build for debugging:"
 msgstr "無事にビルドができたら以下のようにテストを実行してください。すべてのテストが`[pass]`になればデバッグ用ビルドは成功しています。"
 
-msgid "More about run-sql-test.sh"
-msgstr "run-sql-test.sh を使いこなす"
+msgid "More about `run-sql-test.sh`"
+msgstr "`run-sql-test.sh`を使いこなす"
 
-msgid "run-sql-test.sh is our friend for debugging. Here we show some examples of its usage."
-msgstr "run-sql-test.sh はデバッグの友。ここでは、その便利な使い方の一例をご紹介します。"
+msgid "`run-sql-test.sh` is our friend for debugging. Here we show some examples of its usage."
+msgstr "`run-sql-test.sh`はデバッグの友。ここでは、その便利な使い方の一例をご紹介します。"
 
 msgid "Run the specified test only"
 msgstr "指定したテストを実行する"
 
-msgid "When you invoke run-sql-test.sh without any option, all tests under `mysql-test/mroonga` will be invoked."
-msgstr "何もオプションを渡さずに run-sql-test.sh を実行すると`mysql-test/mroonga`以下にある全てのテスト（`*.test`）が実行されてしまいます。"
+msgid "When you invoke `run-sql-test.sh` without any option, all tests under `mysql-test/mroonga` will be invoked."
+msgstr "何もオプションを渡さずに`run-sql-test.sh`を実行すると`mysql-test/mroonga`以下にある全てのテスト（`*.test`）が実行されてしまいます。"
 
-msgid "So if you want to run certain tests only, you can specify the test name in `--do-test` option:"
-msgstr "特定のテストだけを実行したい、という場合は次のようにしてテスト名を`--do-test`オプションに渡します。"
+msgid "So if you want to run certain tests only, you can specify the test:"
+msgstr "特定のテストだけを実行したい、という場合は次のようにしてテストを指定します。"
 
 msgid "See the trace"
 msgstr "トレースを見る"
@@ -76,14 +76,17 @@ msgstr "トレースを見る"
 msgid "When you run tests by adding `--debug` option like the following, function calls information is recorded:"
 msgstr "次のようにして`--debug`オプションをつけてテストを実行すると、関数の呼び出しなどが記録されます。"
 
-msgid "This information is stored in `${MySQL's working directory}/${MySQL version}/mysql-test/var/log/mysqld.1.trace`."
-msgstr "この呼び出しは`${MySQLの作業ディレクトリ}/${MySQLのバージョン}/mysql-test/var/log/mysqld.1.trace`に格納されます。"
+msgid "This information is stored in `${MySQL's build directory}/mysql-test/var/log/mysqld.1.trace`."
+msgstr "この呼び出しは`${MySQLのビルドディレクトリ}/mysql-test/var/log/mysqld.1.trace`に格納されます。"
 
-msgid "When you add a new function, it would be a good idea to put it in the beginning of MRN_DBUG_ENTER_FUNCTION function and record its calls."
-msgstr "新しく関数を作成した場合は MRN_DBUG_ENTER_FUNCTION 関数の先頭に配置し、関数の呼び出しを記録するようにすると良いでしょう。"
+msgid "When you add a new method, it would be a good idea to put `MRN_DBUG_ENTER_METHOD()`/`DBUG_RETURN()` in the beginning/ending of method and record its calls."
+msgstr "新しくメソッドを作成した場合は`MRN_DBUG_ENTER_METHOD()`/`DBUG_RETURN()`をメソッドの先頭/末尾に配置し、関数の呼び出しを記録するようにするとよいでしょう。"
 
 msgid "Invoking GDB"
 msgstr "GDB を立ち上げる"
 
-msgid "By adding `--gdb` option, you can debug with GDB when you run tests:"
-msgstr "`--gdb`オプションを指定することで、テストを実行する際に GDB を用いてデバッグを行うことができます。"
+msgid "By adding `--manual-gdb` option, you can debug with GDB when you run tests:"
+msgstr "`--manual-gdb`オプションを指定することで、テストを実行する際にGDBを用いてデバッグをできます。"
+
+msgid "You need to run `gdb` in other terminal for this. The command line to run `gdb` will be showed by `run-sql-test.sh`."
+msgstr "このために別のターミナルで`gdb`を実行する必要があります。`gdb`を実行するためのコマンドラインは`run-sql-test.sh`が表示します。"
