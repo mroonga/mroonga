@@ -85,6 +85,29 @@ $ cmake --install ${HOME}/local/build/mysql-8.4.1
 You need to run MySQL before you install Mroonga. Because you need to
 run some SQL statements to register Mroonga.
 
+### MariaDB
+
+You can use MariaDB instead of MySQL.
+
+Note that you need to remove `storage/mroonga/` (Mroonga bundled in MariaDB) before you build MariaDB.
+
+```console
+$ mkdir -p ${HOME}/local/src
+$ cd ${HOME}/local/src
+$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.3/mariadb-11.4.3.tar.gz
+$ tar xf mariadb-11.4.3.tar.gz
+$ rm -rf mariadb-11.4.3/storage/mroonga
+$ cd -
+$ cmake \
+    -S ${HOME}/local/src/mariadb-11.4.3 \
+    -B ${HOME}/local/build/mariadb-11.4.3 \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=${HOME}/local
+$ cmake --build ${HOME}/local/build/mariadb-11.4.3
+$ cmake --install ${HOME}/local/build/mariadb-11.4.3
+```
+
 ## Build from source
 
 Mroonga uses CMake. So the following is the simplest build steps.

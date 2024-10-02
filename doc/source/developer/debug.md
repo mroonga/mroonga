@@ -23,9 +23,35 @@ $ cmake \
     -Smysql-8.4.2 \
     -Bmysql-8.4.2.build \
     -GNinja \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_INSTALL_PREFIX=/tmp/local \
     -DWITH_DEBUG=ON
 $ cmake --build mysql-8.4.2.build
+```
+
+### How to build MariaDB for debugging
+
+If you want to use MariaDB instead of MySQL, you can use `-DWITH_DEBUG=ON` too.
+
+Note that you need to remove `storage/mroonga/` (Mroonga bundled in
+MariaDB) before you build MariaDB.
+
+The procedure from download to build is the following:
+
+```console
+$ mkdir -p ~/work/
+$ cd ~/work/
+$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.3/mariadb-11.4.3.tar.gz
+$ tar xf mariadb-11.4.3.tar.gz
+$ rm -rf mariadb-11.4.3/storage/mroonga
+$ cmake \
+    -Smariadb-11.4.3 \
+    -Bmariadb-11.4.3.build \
+    -GNinja \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_INSTALL_PREFIX=/tmp/local \
+    -DWITH_DEBUG=ON
+$ cmake --build mariadb-11.4.3.build
 ```
 
 ### How tom build Mroonga for debugging
