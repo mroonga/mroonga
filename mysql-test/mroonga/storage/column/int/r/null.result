@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+name VARCHAR(255),
+price INT NULL,
+KEY price_index(price)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO items VALUES ("smile", 0);
+INSERT INTO items VALUES ("sample chips", NULL);
+SELECT mroonga_command("index_column_diff --table items#price_index --name index");
+mroonga_command("index_column_diff --table items#price_index --name index")
+[]
+SELECT * FROM items WHERE price = 0;
+name	price
+smile	0
+sample chips	0
+DROP TABLE items;
