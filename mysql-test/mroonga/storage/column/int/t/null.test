@@ -38,4 +38,5 @@ SELECT * FROM items WHERE price = 0;
 
 DROP TABLE items;
 
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc
