@@ -7324,6 +7324,14 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
+    // TODO: Remove this when support for handling how to register NULLs
+    //       in the index is implemented for all columns.
+    if (field->is_null() &&
+        ((field->real_type() != MYSQL_TYPE_TINY) &&
+         (field->real_type() != MYSQL_TYPE_SHORT) &&
+         (field->real_type() != MYSQL_TYPE_LONG)))
+      continue;
+
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
     if (MRN_GENERATED_COLUMNS_FIELD_IS_VIRTUAL(field)) {
       continue;
