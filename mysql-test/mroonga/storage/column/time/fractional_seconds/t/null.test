@@ -29,12 +29,12 @@ CREATE TABLE running_records (
   KEY average_index(average)
 ) DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO running_records VALUES ("zero condition", 0.0);
+INSERT INTO running_records VALUES ("zero condition", "00:00:00.0");
 INSERT INTO running_records VALUES ("record failure", NULL);
 
 SELECT mroonga_command("index_column_diff --table running_records#average_index --name index");
 
-SELECT * FROM running_records WHERE average = 0.0;
+SELECT * FROM running_records WHERE average = "00:00:00.0";
 
 DROP TABLE running_records;
 
