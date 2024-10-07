@@ -977,9 +977,7 @@ private:
   int generic_store_bulk_datetime(Field *field, grn_obj *buf);
   int generic_store_bulk_year(Field *field, grn_obj *buf);
   int generic_store_bulk_new_date(Field *field, grn_obj *buf);
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   int generic_store_bulk_timestamp2(Field *field, grn_obj *buf);
-#endif
   int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
   int generic_store_bulk_time2(Field *field, grn_obj *buf);
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
@@ -1056,10 +1054,8 @@ private:
                               uchar *buf, uint *size);
   int storage_encode_key_datetime(Field *field, const uchar *key,
                                   uchar *buf, uint *size);
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   int storage_encode_key_timestamp2(Field *field, const uchar *key,
                                     uchar *buf, uint *size);
-#endif
   int storage_encode_key_datetime2(Field *field, const uchar *key,
                                    uchar *buf, uint *size);
   int storage_encode_key_time2(Field *field, const uchar *key,

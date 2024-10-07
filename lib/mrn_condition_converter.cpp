@@ -619,11 +619,9 @@ namespace mrn {
     case MYSQL_TYPE_BIT:
       type = INT_TYPE;
       break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
     case MYSQL_TYPE_TIMESTAMP2:
       type = TIME_TYPE;
       break;
-#endif
     case MYSQL_TYPE_DATETIME2:
       type = TIME_TYPE;
       break;

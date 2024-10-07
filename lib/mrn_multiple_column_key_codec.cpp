@@ -498,13 +498,11 @@ namespace mrn {
       *data_type = TYPE_NUMBER;
       *data_size = 1;
       break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
     case MYSQL_TYPE_TIMESTAMP2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP2"));
       *data_type = TYPE_BYTE_SEQUENCE;
       *data_size = key_part->length;
       break;
-#endif
     case MYSQL_TYPE_DATETIME2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
       *data_type = TYPE_DATETIME2;

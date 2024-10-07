@@ -22,10 +22,6 @@
 
 #include "mrn_mysql.h"
 
-#if MYSQL_VERSION_ID >= 50604
-#  define MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
-#endif
-
 #if MYSQL_VERSION_ID >= 50709 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_MYSQL_TYPE_JSON
 #endif
