@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS running_records;
+CREATE TABLE running_records (
+name VARCHAR(255),
+average TIME(1) NULL,
+KEY average_index(average)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO running_records VALUES ("zero condition", 0.0);
+INSERT INTO running_records VALUES ("record failure", NULL);
+SELECT mroonga_command("index_column_diff --table running_records#average_index --name index");
+mroonga_command("index_column_diff --table running_records#average_index --name index")
+[]
+SELECT * FROM running_records WHERE average = 0.0;
+name	average
+zero condition	00:00:00.0
+record failure	00:00:00.0
+DROP TABLE running_records;
