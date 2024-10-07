@@ -7324,7 +7324,12 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
   for (i = 0; i < n_columns; i++) {
     Field *field = table->field[i];
 
-    if (field->is_null())
+    // TODO: Remove this when support for handling how to register NULLs
+    //       in the index is implemented for all columns.
+    if (field->is_null() &&
+        ((field->real_type() != MYSQL_TYPE_TINY) &&
+         (field->real_type() != MYSQL_TYPE_SHORT) &&
+         (field->real_type() != MYSQL_TYPE_LONG)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -11881,7 +11886,10 @@ int ha_mroonga::generic_store_bulk_integer(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  long long value = field->val_int();
+  long long value = 0;
+  if (!field->is_null()) {
+    value = field->val_int();
+  }
   DBUG_PRINT("info", ("mroonga: value=%lld", value));
   uint32 size = field->pack_length();
   DBUG_PRINT("info", ("mroonga: size=%u", size));
