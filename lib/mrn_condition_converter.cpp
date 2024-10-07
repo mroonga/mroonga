@@ -624,11 +624,9 @@ namespace mrn {
       type = TIME_TYPE;
       break;
 #endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
     case MYSQL_TYPE_DATETIME2:
       type = TIME_TYPE;
       break;
-#endif
     case MYSQL_TYPE_TIME2:
       type = TIME_TYPE;
       break;

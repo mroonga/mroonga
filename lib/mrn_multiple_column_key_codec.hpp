@@ -44,9 +44,7 @@ namespace mrn {
       TYPE_FLOAT,
       TYPE_DOUBLE,
       TYPE_DATETIME,
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       TYPE_DATETIME2,
-#endif
       TYPE_BYTE_SEQUENCE,
       TYPE_BYTE_REVERSE,
       TYPE_BYTE_BLOB

@@ -980,9 +980,7 @@ private:
 #ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   int generic_store_bulk_timestamp2(Field *field, grn_obj *buf);
 #endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int generic_store_bulk_datetime2(Field *field, grn_obj *buf);
-#endif
   int generic_store_bulk_time2(Field *field, grn_obj *buf);
   int generic_store_bulk_new_decimal(Field *field, grn_obj *buf);
   int generic_store_bulk_blob(Field *field, grn_obj *buf);
@@ -1013,10 +1011,8 @@ private:
                                 const char *value, uint value_length);
   void storage_store_field_new_date(Field *field,
                                     const char *value, uint value_length);
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   void storage_store_field_datetime2(Field *field,
                                      const char *value, uint value_length);
-#endif
   void storage_store_field_time2(Field *field,
                                  const char *value, uint value_length);
   void storage_store_field_blob(Field *field,
@@ -1064,10 +1060,8 @@ private:
   int storage_encode_key_timestamp2(Field *field, const uchar *key,
                                     uchar *buf, uint *size);
 #endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   int storage_encode_key_datetime2(Field *field, const uchar *key,
                                    uchar *buf, uint *size);
-#endif
   int storage_encode_key_time2(Field *field, const uchar *key,
                                uchar *buf, uint *size);
   int storage_encode_key_enum(Field *field, const uchar *key,
