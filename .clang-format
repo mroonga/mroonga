@@ -1,4 +1,4 @@
-# Copyright (C) 2024  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2024  Abe Tomoaki <abe@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,22 +14,23 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-repos:
-  - repo: local
-    hooks:
-      - id: lint
-        name: Lint
-        language: system
-        entry: |
-          rake lint
-        always_run: true
-        pass_filenames: false
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: "v18.1.4"
-    hooks:
-      - id: clang-format
-        files: >-
-          (
-          ?ha_mroonga\.cpp|
-          ?ha_mroonga\.hpp|
-          )
+---
+AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: AcrossEmptyLines
+AllowAllArgumentsOnNextLine: false
+AllowShortEnumsOnASingleLine: false
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping:
+  AfterFunction: true
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 2
+IndentPPDirectives: AfterHash
+IndentWidth: 2
+NamespaceIndentation: All
+PPIndentWidth: 2
+PackConstructorInitializers: CurrentLine
+PointerAlignment: Left
+SortIncludes: Never
