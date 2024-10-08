@@ -181,7 +181,6 @@ namespace mrn {
           encode_long_long_int(key_part, grn_time, current_grn_key);
         }
         break;
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
           long long int grn_time;
@@ -205,7 +204,6 @@ namespace mrn {
           encode_long_long_int(key_part, grn_time, current_grn_key);
         }
         break;
-#endif
       case TYPE_BYTE_SEQUENCE:
         encode_sequence(key_part, current_mysql_key, data_size, current_grn_key);
         break;
@@ -311,7 +309,6 @@ namespace mrn {
           }
         }
         break;
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         {
           Field_datetimef *datetimef_field =
@@ -331,7 +328,6 @@ namespace mrn {
                                        datetimef_field->decimals());
         }
         break;
-#endif
       case TYPE_BYTE_SEQUENCE:
         decode_sequence(key_part,
                         current_grn_key,
@@ -387,11 +383,9 @@ namespace mrn {
       uint data_size = 0;
       get_key_info(key_part, &data_type, &data_size);
       switch (data_type) {
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
       case TYPE_DATETIME2:
         data_size = 8;
         break;
-#endif
       case TYPE_BYTE_BLOB:
         data_size += HA_KEY_BLOB_LENGTH;
         break;
@@ -504,27 +498,21 @@ namespace mrn {
       *data_type = TYPE_NUMBER;
       *data_size = 1;
       break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
     case MYSQL_TYPE_TIMESTAMP2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIMESTAMP2"));
       *data_type = TYPE_BYTE_SEQUENCE;
       *data_size = key_part->length;
       break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
     case MYSQL_TYPE_DATETIME2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_DATETIME2"));
       *data_type = TYPE_DATETIME2;
       *data_size = key_part->length;
       break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
     case MYSQL_TYPE_TIME2:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_TIME2"));
       *data_type = TYPE_BYTE_SEQUENCE;
       *data_size = key_part->length;
       break;
-#endif
     case MYSQL_TYPE_NEWDECIMAL:
       DBUG_PRINT("info", ("mroonga: MYSQL_TYPE_NEWDECIMAL"));
       *data_type = TYPE_BYTE_SEQUENCE;

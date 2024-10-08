@@ -1669,22 +1669,16 @@ static grn_builtin_type mrn_grn_type_from_field(grn_ctx *ctx, Field *field,
   case MYSQL_TYPE_BIT:          // BIT; <= 8bytes
     type = GRN_DB_INT64;        // 8bytes
     break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:   // TIMESTAMP; 4bytes
     type = GRN_DB_TIME;         // 8bytes
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:    // DATETIME; 8bytes
     type = GRN_DB_TIME;         // 8bytes
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:        // TIME(FSP); 3 + (FSP + 1) / 2 bytes
                                 // 0 <= FSP <= 6; 3-6bytes
     type = GRN_DB_TIME;         // 8bytes
     break;
-#endif
   case MYSQL_TYPE_NEWDECIMAL:   // DECIMAL; <= 9bytes
     type = GRN_DB_SHORT_TEXT;   // 4Kbytes
     break;
@@ -7329,11 +7323,8 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
     if (field->is_null() &&
         ((field->real_type() != MYSQL_TYPE_TINY) &&
          (field->real_type() != MYSQL_TYPE_SHORT) &&
-         (field->real_type() != MYSQL_TYPE_LONG)
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
-         && (field->real_type() != MYSQL_TYPE_TIME2)
-#endif
-        ))
+         (field->real_type() != MYSQL_TYPE_LONG) &&
+         (field->real_type() != MYSQL_TYPE_TIME2)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -12135,7 +12126,6 @@ int ha_mroonga::generic_store_bulk_year(Field *field, grn_obj *buf)
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
 int ha_mroonga::generic_store_bulk_timestamp2(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -12147,9 +12137,7 @@ int ha_mroonga::generic_store_bulk_timestamp2(Field *field, grn_obj *buf)
   GRN_TIME_SET(ctx, buf, grn_time);
   DBUG_RETURN(error);
 }
-#endif
 
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
 int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -12173,9 +12161,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field *field, grn_obj *buf)
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
 }
-#endif
 
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
 int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -12201,7 +12187,6 @@ int ha_mroonga::generic_store_bulk_time2(Field *field, grn_obj *buf)
   GRN_TIME_SET(ctx, buf, time);
   DBUG_RETURN(error);
 }
-#endif
 
 int ha_mroonga::generic_store_bulk_new_date(Field *field, grn_obj *buf)
 {
@@ -12330,21 +12315,15 @@ int ha_mroonga::generic_store_bulk(Field *field, grn_obj *buf)
   case MYSQL_TYPE_BIT:
     error = generic_store_bulk_unsigned_integer(field, buf);
     break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
     error = generic_store_bulk_timestamp2(field, buf);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
     error = generic_store_bulk_datetime2(field, buf);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
     error = generic_store_bulk_time2(field, buf);
     break;
-#endif
   case MYSQL_TYPE_NEWDECIMAL:
     error = generic_store_bulk_new_decimal(field, buf);
     break;
@@ -12639,7 +12618,6 @@ void ha_mroonga::storage_store_field_new_date(Field *field,
   DBUG_VOID_RETURN;
 }
 
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
 void ha_mroonga::storage_store_field_datetime2(Field *field,
                                                const char *value,
                                                uint value_length)
@@ -12654,9 +12632,7 @@ void ha_mroonga::storage_store_field_datetime2(Field *field,
   field->store_time(&mysql_datetime);
   DBUG_VOID_RETURN;
 }
-#endif
 
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
 void ha_mroonga::storage_store_field_time2(Field *field,
                                            const char *value,
                                            uint value_length)
@@ -12672,7 +12648,6 @@ void ha_mroonga::storage_store_field_time2(Field *field,
   field->store_time(&mysql_time);
   DBUG_VOID_RETURN;
 }
-#endif
 
 void ha_mroonga::storage_store_field_blob(Field *field,
                                           const char *value,
@@ -12825,21 +12800,15 @@ void ha_mroonga::storage_store_field(Field *field,
   case MYSQL_TYPE_BIT:
     storage_store_field_unsigned_integer(field, value, value_length);
     break;
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
     storage_store_field_timestamp(field, value, value_length);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
     storage_store_field_datetime2(field, value, value_length);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
     storage_store_field_time2(field, value, value_length);
     break;
-#endif
   case MYSQL_TYPE_NEWDECIMAL:
     storage_store_field_string(field, value, value_length);
     break;
@@ -13419,7 +13388,6 @@ int ha_mroonga::storage_encode_key_datetime(Field *field, const uchar *key,
   DBUG_RETURN(error);
 }
 
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
 int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
                                               uchar *buf, uint *size)
 {
@@ -13455,9 +13423,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field *field, const uchar *key,
 
   DBUG_RETURN(error);
 }
-#endif
 
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
 int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
                                              uchar *buf, uint *size)
 {
@@ -13486,9 +13452,7 @@ int ha_mroonga::storage_encode_key_datetime2(Field *field, const uchar *key,
 
   DBUG_RETURN(error);
 }
-#endif
 
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
 int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
                                          uchar *buf, uint *size)
 {
@@ -13517,7 +13481,6 @@ int ha_mroonga::storage_encode_key_time2(Field *field, const uchar *key,
 
   DBUG_RETURN(error);
 }
-#endif
 
 int ha_mroonga::storage_encode_key_enum(Field *field, const uchar *key,
                                         uchar *buf, uint *size)
@@ -13713,21 +13676,15 @@ int ha_mroonga::storage_encode_key(Field *field,
       *size = 8;
       break;
     }
-#ifdef MRN_HAVE_MYSQL_TYPE_TIMESTAMP2
   case MYSQL_TYPE_TIMESTAMP2:
     error = storage_encode_key_timestamp2(field, ptr, buf, size);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_DATETIME2
   case MYSQL_TYPE_DATETIME2:
     error = storage_encode_key_datetime2(field, ptr, buf, size);
     break;
-#endif
-#ifdef MRN_HAVE_MYSQL_TYPE_TIME2
   case MYSQL_TYPE_TIME2:
     error = storage_encode_key_time2(field, ptr, buf, size);
     break;
-#endif
   case MYSQL_TYPE_STRING:
     error = storage_encode_key_fixed_size_string(field, ptr, buf, size);
     break;
