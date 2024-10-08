@@ -12247,7 +12247,7 @@ int ha_mroonga::generic_store_bulk_float(Field* field, grn_obj* buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  double value = 0;
+  double value = 0.0;
   if (!field->is_null()) {
     value = field->val_real();
   }
