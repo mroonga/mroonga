@@ -1,7 +1,7 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.0.37
-%define percona_server_version_default 29
+%define mysql_version_default 8.0.39
+%define percona_server_version_default 30
 %define rpm_release_default 1
 %define mysql_dist_default    %{?dist}
 %define mysql_spec_file_default percona-server.spec
@@ -18,7 +18,7 @@
 
 Name:           percona-server-8.0-mroonga
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A fast fulltext searchable storage engine for MySQL
 
 Group:          Applications/Databases
@@ -128,6 +128,9 @@ Documentation for Mroonga
 %doc percona-server-8.0-mroonga-doc/*
 
 %changelog
+* Tue Oct 08 2024 Sutou Kouhei <kou@clear-code.com> - 14.08-2
+- Build against Percona Server 8.0.39-30.1.
+
 * Thu Sep 26 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.08-1
 - New upstream release.
 
