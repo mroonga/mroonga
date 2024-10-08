@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+name VARCHAR(255),
+created_at TIMESTAMP(1) NULL,
+KEY created_at_index(created_at)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries VALUES ("zero day", "0000-00-00 00:00:00.0");
+INSERT INTO diaries VALUES ("null day", NULL);
+INSERT INTO diaries VALUES ("Mroonga release day", "2010-8-19 00:00:00.0");
+SELECT mroonga_command("index_column_diff --table diaries#created_at_index --name index");
+mroonga_command("index_column_diff --table diaries#created_at_index --name index")
+[]
+SELECT * FROM diaries WHERE created_at = "0000-00-00 00:00:00.0";
+name	created_at
+zero day	0000-00-00 00:00:00.0
+null day	0000-00-00 00:00:00.0
+DROP TABLE diaries;
