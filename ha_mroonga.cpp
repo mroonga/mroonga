@@ -7324,8 +7324,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
         ((field->real_type() != MYSQL_TYPE_TINY) &&
          (field->real_type() != MYSQL_TYPE_SHORT) &&
          (field->real_type() != MYSQL_TYPE_LONG) &&
-         (field->real_type() != MYSQL_TYPE_TIME2)
-        ))
+         (field->real_type() != MYSQL_TYPE_TIME2)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
