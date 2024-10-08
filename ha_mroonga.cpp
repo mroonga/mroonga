@@ -7348,7 +7348,8 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_SHORT) &&
                              (field->real_type() != MYSQL_TYPE_LONG) &&
                              (field->real_type() != MYSQL_TYPE_TIME2) &&
-                             (field->real_type() != MYSQL_TYPE_DATETIME2)))
+                             (field->real_type() != MYSQL_TYPE_DATETIME2) &&
+                             (field->real_type() != MYSQL_TYPE_FLOAT)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -12245,7 +12246,10 @@ int ha_mroonga::generic_store_bulk_float(Field* field, grn_obj* buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  double value = field->val_real();
+  double value = 0;
+  if (!field->is_null()) {
+    value = field->val_real();
+  }
   uint32 size = field->pack_length();
   switch (size) {
   case 4:

@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS numbers;
+CREATE TABLE numbers (
+name VARCHAR(255),
+value FLOAT NULL,
+KEY value_index(value)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO numbers VALUES ("zero", 0.0);
+INSERT INTO numbers VALUES ("null", NULL);
+INSERT INTO numbers VALUES ("pi", 3.14);
+SELECT mroonga_command("index_column_diff --table numbers#value_index --name index");
+mroonga_command("index_column_diff --table numbers#value_index --name index")
+[]
+SELECT * FROM numbers WHERE value = 0.0;
+name	value
+zero	0
+null	0
+DROP TABLE numbers;
