@@ -37,9 +37,9 @@ SELECT mroonga_command("index_column_diff --table roles#flag_index --name index"
 
 SELECT
   name,
-  BIN(CAST(flag AS UNSIGNED)) AS flag_binary
+  BIN(flag)
 FROM roles
-WHERE CAST(flag AS UNSIGNED) = 0;
+WHERE BIN(flag) = 0;
 
 DROP TABLE roles;
 
