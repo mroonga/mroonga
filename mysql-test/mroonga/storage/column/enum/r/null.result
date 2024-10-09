@@ -10,7 +10,7 @@ INSERT INTO users VALUES ("bob", "guest");
 SELECT mroonga_command("index_column_diff --table users#role_index --name index");
 mroonga_command("index_column_diff --table users#role_index --name index")
 []
-SELECT * FROM users WHERE role = '';
+SELECT * FROM users WHERE role = "";
 name	role
 newbie	
 alice	
