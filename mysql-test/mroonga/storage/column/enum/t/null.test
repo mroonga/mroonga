@@ -1,0 +1,45 @@
+# -*- mode: sql; sql-product: mysql -*-
+#
+# Copyright (C) 2024  Kodama Takuya <otegami@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/load_mroonga_functions.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS users;
+--enable_warnings
+
+CREATE TABLE users (
+  name VARCHAR(255),
+  role ENUM("guest") NULL,
+  KEY role_index(role)
+) DEFAULT CHARSET=utf8mb4;
+
+--disable_warnings
+INSERT IGNORE INTO users VALUES ("newbie", "");
+--enable_warnings
+INSERT INTO users VALUES ("alice", NULL);
+INSERT INTO users VALUES ("bob", "guest");
+
+SELECT mroonga_command("index_column_diff --table users#role_index --name index");
+
+SELECT * FROM users WHERE role = "";
+
+DROP TABLE users;
+
+--source ../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../include/mroonga/have_mroonga_deinit.inc

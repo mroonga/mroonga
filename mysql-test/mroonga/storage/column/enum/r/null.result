@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+name VARCHAR(255),
+role ENUM("guest") NULL,
+KEY role_index(role)
+) DEFAULT CHARSET=utf8mb4;
+INSERT IGNORE INTO users VALUES ("newbie", "");
+INSERT INTO users VALUES ("alice", NULL);
+INSERT INTO users VALUES ("bob", "guest");
+SELECT mroonga_command("index_column_diff --table users#role_index --name index");
+mroonga_command("index_column_diff --table users#role_index --name index")
+[]
+SELECT * FROM users WHERE role = "";
+name	role
+newbie	
+alice	
+DROP TABLE users;
