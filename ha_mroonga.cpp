@@ -12392,10 +12392,10 @@ int ha_mroonga::generic_store_bulk_timestamp2(Field* field, grn_obj* buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   int64_t grn_time = 0;
-  Field_timestampf *timestamp_field = static_cast<Field_timestampf *>(field);
-  mrn::TimestampFieldValueConverter<Field_timestampf> converter(
-    timestamp_field);
   if (!field->is_null()) {
+    Field_timestampf* timestamp_field = static_cast<Field_timestampf*>(field);
+    mrn::TimestampFieldValueConverter<Field_timestampf> converter(
+      timestamp_field);
     grn_time = converter.convert();
   }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
