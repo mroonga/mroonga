@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS schedule_times;
+CREATE TABLE schedule_times (
+name VARCHAR(255),
+time TIME NULL,
+KEY time_index(time)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO schedule_times VALUES ('midnight', '00:00:00');
+INSERT INTO schedule_times VALUES ('null time', NULL);
+INSERT INTO schedule_times VALUES ('sunrise', '05:43:10');
+SELECT mroonga_command('index_column_diff --table schedule_times#time_index --name index');
+mroonga_command('index_column_diff --table schedule_times#time_index --name index')
+[]
+SELECT * FROM schedule_times WHERE time = '00:00:00';
+name	time
+midnight	00:00:00
+null time	00:00:00
+DROP TABLE schedule_times;
