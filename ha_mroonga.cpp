@@ -7347,11 +7347,12 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
     if (field->is_null() && ((field->real_type() != MYSQL_TYPE_TINY) &&
                              (field->real_type() != MYSQL_TYPE_SHORT) &&
                              (field->real_type() != MYSQL_TYPE_LONG) &&
+                             (field->real_type() != MYSQL_TYPE_YEAR) &&
                              (field->real_type() != MYSQL_TYPE_TIME2) &&
                              (field->real_type() != MYSQL_TYPE_DATETIME2) &&
+                             (field->real_type() != MYSQL_TYPE_TIMESTAMP2) &&
                              (field->real_type() != MYSQL_TYPE_FLOAT) &&
                              (field->real_type() != MYSQL_TYPE_DOUBLE) &&
-                             (field->real_type() != MYSQL_TYPE_TIMESTAMP2) &&
                              (field->real_type() != MYSQL_TYPE_ENUM) &&
                              (field->real_type() != MYSQL_TYPE_SET)))
       continue;
@@ -12359,11 +12360,13 @@ int ha_mroonga::generic_store_bulk_year(Field* field, grn_obj* buf)
   int error = 0;
   bool truncated = false;
 
-  int year;
-  if (field->field_length == 2) {
-    year = static_cast<int>(field->val_int() + 2000);
-  } else {
-    year = static_cast<int>(field->val_int());
+  int year = 1970;
+  if (!field->is_null()) {
+    if (field->field_length == 2) {
+      year = static_cast<int>(field->val_int() + 2000);
+    } else {
+      year = static_cast<int>(field->val_int());
+    }
   }
 
   DBUG_PRINT("info", ("mroonga: year=%d", year));
