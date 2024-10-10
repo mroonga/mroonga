@@ -12377,7 +12377,12 @@ int ha_mroonga::generic_store_bulk_year(Field* field, grn_obj* buf)
   int year = 1970;
   if (!field->is_null()) {
     if (field->field_length == 2) {
-      year = static_cast<int>(field->val_int() + 2000);
+      year = field->val_int();
+      if (0 <= year && year <= 69) {
+        year = static_cast<int>(year + 2000);
+      } else {
+        year = static_cast<int>(year + 1900);
+      }
     } else {
       year = static_cast<int>(field->val_int());
     }
