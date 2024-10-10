@@ -1660,7 +1660,7 @@ mrn_grn_type_from_field(grn_ctx* ctx, Field* field, bool for_index_key)
       }
     }
     break;
-  case MYSQL_TYPE_BIT: {  // BIT; <= 8bytes
+  case MYSQL_TYPE_BIT: { // BIT; <= 8bytes
     const auto key_length = field->key_length();
     if (key_length <= 1) {
       type = GRN_DB_UINT8;
@@ -1672,7 +1672,7 @@ mrn_grn_type_from_field(grn_ctx* ctx, Field* field, bool for_index_key)
       type = GRN_DB_UINT64;
     }
     break;
-    }
+  }
   case MYSQL_TYPE_TIMESTAMP2: // TIMESTAMP; 4bytes
     type = GRN_DB_TIME;       // 8bytes
     break;
@@ -13886,39 +13886,44 @@ int ha_mroonga::storage_encode_key(
   case MYSQL_TYPE_BIT: {
     switch (field->key_length()) {
     case 0:
-      *(reinterpret_cast<uint8_t *>(buf)) = 0;
+      *(reinterpret_cast<uint8_t*>(buf)) = 0;
       *size = 1;
       break;
     case 1:
-      *(reinterpret_cast<uint8_t *>(buf)) = ptr[0];
+      *(reinterpret_cast<uint8_t*>(buf)) = ptr[0];
       *size = 1;
       break;
     case 2:
-      *(reinterpret_cast<uint16_t *>(buf)) = mi_uint2korr(ptr);
+      *(reinterpret_cast<uint16_t*>(buf)) = mi_uint2korr(ptr);
       *size = 2;
       break;
     case 3:
-      *(reinterpret_cast<uint32_t *>(buf)) = mi_uint3korr(ptr);
+      *(reinterpret_cast<uint32_t*>(buf)) = mi_uint3korr(ptr);
       *size = 4;
       break;
     case 4:
-      *(reinterpret_cast<uint32_t *>(buf)) = mi_uint4korr(ptr);;
+      *(reinterpret_cast<uint32_t*>(buf)) = mi_uint4korr(ptr);
+      ;
       *size = 4;
       break;
     case 5:
-      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint5korr(ptr);;
+      *(reinterpret_cast<uint64_t*>(buf)) = mi_uint5korr(ptr);
+      ;
       *size = 8;
       break;
     case 6:
-      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint6korr(ptr);;
+      *(reinterpret_cast<uint64_t*>(buf)) = mi_uint6korr(ptr);
+      ;
       *size = 8;
       break;
     case 7:
-      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint7korr(ptr);;
+      *(reinterpret_cast<uint64_t*>(buf)) = mi_uint7korr(ptr);
+      ;
       *size = 8;
       break;
     default:
-      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint8korr(ptr);;
+      *(reinterpret_cast<uint64_t*>(buf)) = mi_uint8korr(ptr);
+      ;
       *size = 8;
       break;
     }
