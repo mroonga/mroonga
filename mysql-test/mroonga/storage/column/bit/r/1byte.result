@@ -1,0 +1,16 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+name VARCHAR(255),
+flags BIT(4),
+INDEX (flags)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO items VALUES ('0000',
+b'0000');
+INSERT INTO items VALUES ('0010',
+b'0010');
+INSERT INTO items VALUES ('0100',
+b'0100');
+SELECT name, BIN(flags) FROM items WHERE flags = b'0010';
+name	BIN(flags)
+0010	10
+DROP TABLE items;

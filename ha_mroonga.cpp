@@ -1660,9 +1660,19 @@ mrn_grn_type_from_field(grn_ctx* ctx, Field* field, bool for_index_key)
       }
     }
     break;
-  case MYSQL_TYPE_BIT:   // BIT; <= 8bytes
-    type = GRN_DB_INT64; // 8bytes
+  case MYSQL_TYPE_BIT: {  // BIT; <= 8bytes
+    const auto key_length = field->key_length();
+    if (key_length <= 1) {
+      type = GRN_DB_UINT8;
+    } else if (key_length <= 2) {
+      type = GRN_DB_UINT16;
+    } else if (key_length <= 4) {
+      type = GRN_DB_UINT32;
+    } else if (key_length <= 8) {
+      type = GRN_DB_UINT64;
+    }
     break;
+    }
   case MYSQL_TYPE_TIMESTAMP2: // TIMESTAMP; 4bytes
     type = GRN_DB_TIME;       // 8bytes
     break;
@@ -12229,6 +12239,9 @@ int ha_mroonga::generic_store_bulk_unsigned_integer(Field* field, grn_obj* buf)
     grn_obj_reinit(ctx, buf, GRN_DB_UINT32, 0);
     GRN_UINT32_SET(ctx, buf, unsigned_value);
     break;
+  case 5: // BIT(33-40)
+  case 6: // BIT(41-48)
+  case 7: // BIT(49-56)
   case 8:
     grn_obj_reinit(ctx, buf, GRN_DB_UINT64, 0);
     GRN_UINT64_SET(ctx, buf, unsigned_value);
@@ -12240,7 +12253,7 @@ int ha_mroonga::generic_store_bulk_unsigned_integer(Field* field, grn_obj* buf)
     snprintf(error_message,
              MRN_MESSAGE_BUFFER_SIZE,
              "unknown unsigned integer value size: <%u>: "
-             "available sizes: [1, 2, 3, 4, 8]",
+             "available sizes: [1, 2, 3, 4, 5, 6, 7, 8]",
              size);
     push_warning(ha_thd(), MRN_SEVERITY_WARNING, error, error_message);
     break;
@@ -13870,7 +13883,47 @@ int ha_mroonga::storage_encode_key(
   }
 
   switch (field->real_type()) {
-  case MYSQL_TYPE_BIT:
+  case MYSQL_TYPE_BIT: {
+    switch (field->key_length()) {
+    case 0:
+      *(reinterpret_cast<uint8_t *>(buf)) = 0;
+      *size = 1;
+      break;
+    case 1:
+      *(reinterpret_cast<uint8_t *>(buf)) = ptr[0];
+      *size = 1;
+      break;
+    case 2:
+      *(reinterpret_cast<uint16_t *>(buf)) = mi_uint2korr(ptr);
+      *size = 2;
+      break;
+    case 3:
+      *(reinterpret_cast<uint32_t *>(buf)) = mi_uint3korr(ptr);
+      *size = 4;
+      break;
+    case 4:
+      *(reinterpret_cast<uint32_t *>(buf)) = mi_uint4korr(ptr);;
+      *size = 4;
+      break;
+    case 5:
+      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint5korr(ptr);;
+      *size = 8;
+      break;
+    case 6:
+      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint6korr(ptr);;
+      *size = 8;
+      break;
+    case 7:
+      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint7korr(ptr);;
+      *size = 8;
+      break;
+    default:
+      *(reinterpret_cast<uint64_t *>(buf)) = mi_uint8korr(ptr);;
+      *size = 8;
+      break;
+    }
+    break;
+  }
   case MYSQL_TYPE_TINY: {
     memcpy(buf, ptr, 1);
     *size = 1;
