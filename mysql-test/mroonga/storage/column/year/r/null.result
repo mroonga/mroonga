@@ -4,13 +4,13 @@ name VARCHAR(255),
 year YEAR NULL,
 KEY year_index(year)
 ) DEFAULT CHARSET=utf8mb4;
-INSERT INTO anniversaries VALUES ("epoch year", "1970");
-INSERT INTO anniversaries VALUES ("null year", NULL);
-INSERT INTO anniversaries VALUES ("mroonga birth year", "2010");
-SELECT mroonga_command("index_column_diff --table anniversaries#year_index --name index");
-mroonga_command("index_column_diff --table anniversaries#year_index --name index")
+INSERT INTO anniversaries VALUES ('epoch year', '1970');
+INSERT INTO anniversaries VALUES ('null year', NULL);
+INSERT INTO anniversaries VALUES ('mroonga birth year', '2010');
+SELECT mroonga_command('index_column_diff --table anniversaries#year_index --name index');
+mroonga_command('index_column_diff --table anniversaries#year_index --name index')
 []
-SELECT * FROM anniversaries where year = "1970";
+SELECT * FROM anniversaries where year = '1970';
 name	year
 epoch year	1970
 null year	1970
