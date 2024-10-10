@@ -7359,6 +7359,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_LONG) &&
                              (field->real_type() != MYSQL_TYPE_YEAR) &&
                              (field->real_type() != MYSQL_TYPE_TIME) &&
+                             (field->real_type() != MYSQL_TYPE_DATETIME) &&
                              (field->real_type() != MYSQL_TYPE_TIME2) &&
                              (field->real_type() != MYSQL_TYPE_DATETIME2) &&
                              (field->real_type() != MYSQL_TYPE_TIMESTAMP2) &&
@@ -12352,9 +12353,11 @@ int ha_mroonga::generic_store_bulk_datetime(Field* field, grn_obj* buf)
   Field_datetime* datetime_field = (Field_datetime*)field;
   MYSQL_TIME mysql_time;
   MRN_FIELD_GET_TIME(datetime_field, &mysql_time, current_thd);
-  mrn::TimeConverter time_converter;
-  long long int time =
-    time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+  long long int time = 0;
+  if (!field->is_null()) {
+    mrn::TimeConverter time_converter;
+    time = time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
+  }
   if (truncated) {
     if (ha_thd()->is_strict_mode()) {
       error = MRN_ERROR_CODE_DATA_TRUNCATE(ha_thd());
