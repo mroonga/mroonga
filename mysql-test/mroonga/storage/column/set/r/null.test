@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+name VARCHAR(255),
+color SET('black') NULL,
+KEY color_index(color)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO items VALUES ('hat', '');
+INSERT INTO items VALUES ('t-shart', NULL);
+INSERT INTO items VALUES ('parka', 'black');
+SELECT mroonga_command('index_column_diff --table items#color_index --name index');
+mroonga_command('index_column_diff --table items#color_index --name index')
+[]
+SELECT * FROM items WHERE color = '';
+name	color
+hat	
+t-shart	
+DROP TABLE items;

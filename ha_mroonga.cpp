@@ -7352,7 +7352,8 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_FLOAT) &&
                              (field->real_type() != MYSQL_TYPE_DOUBLE) &&
                              (field->real_type() != MYSQL_TYPE_TIMESTAMP2) &&
-                             (field->real_type() != MYSQL_TYPE_ENUM)))
+                             (field->real_type() != MYSQL_TYPE_ENUM) &&
+                             (field->real_type() != MYSQL_TYPE_SET)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
