@@ -1,0 +1,32 @@
+DROP TABLE IF EXISTS two_digits;
+CREATE TABLE two_digits (
+year YEAR(2),
+KEY year_index(year)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO two_digits VALUES ('0');
+INSERT INTO two_digits VALUES (00);
+INSERT INTO two_digits VALUES ('00');
+INSERT INTO two_digits VALUES (69);
+INSERT INTO two_digits VALUES ('69');
+INSERT INTO two_digits VALUES (70);
+INSERT INTO two_digits VALUES ('70');
+INSERT INTO two_digits VALUES (99);
+INSERT INTO two_digits VALUES ('99');
+SELECT * FROM two_digits where year = 1970;
+year
+70
+70
+SELECT * FROM two_digits where year = 1999;
+year
+99
+99
+SELECT * FROM two_digits where year = 2000;
+year
+00
+00
+00
+SELECT * FROM two_digits where year = 2069;
+year
+69
+69
+DROP TABLE two_digits;
