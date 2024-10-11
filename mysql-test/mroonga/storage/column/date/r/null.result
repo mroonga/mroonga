@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+name VARCHAR(255),
+created_on DATE NULL,
+KEY created_on_index(created_on)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries VALUES ('epoch date', '1970-01-01');
+INSERT INTO diaries VALUES ('null date', NULL);
+INSERT INTO diaries VALUES ('Mroonga release date', '2010-8-19');
+SELECT mroonga_command('index_column_diff --table diaries#created_on_index --name index');
+mroonga_command('index_column_diff --table diaries#created_on_index --name index')
+[]
+SELECT * FROM diaries where created_on = '1970-01-01';
+name	created_on
+epoch date	1970-01-01
+null date	1970-01-01
+DROP TABLE diaries;
