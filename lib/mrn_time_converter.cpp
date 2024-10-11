@@ -292,4 +292,20 @@ namespace mrn {
 
     DBUG_RETURN(mysql_datetime);
   }
+
+  int TimeConverter::two_digits_year_to_mysql_year(int mysql_year) {
+    MRN_DBUG_ENTER_METHOD();
+
+    int year;
+
+    if (0 <= mysql_year && mysql_year <= 69) {
+      year = mysql_year + YEAR_2000_BASE;
+    } else if (70 <= mysql_year && mysql_year <= 99) {
+      year = mysql_year + TM_YEAR_BASE;
+    } else {
+      year = EPOCH_YEAR;
+    }
+
+    DBUG_RETURN(year);
+  }
 }
