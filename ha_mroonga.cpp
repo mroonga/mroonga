@@ -12377,11 +12377,15 @@ int ha_mroonga::generic_store_bulk_year(Field* field, grn_obj* buf)
   int year = 1970;
   if (!field->is_null()) {
     if (field->field_length == 2) {
-      year = field->val_int();
-      if (0 <= year && year <= 69) {
-        year = static_cast<int>(year + 2000);
+      const auto two_digits_year = field->val_int();
+      // https://dev.mysql.com/doc/refman/9.0/en/year.html
+      // As 1- or 2-digit numbers in the range 0 to 99. MySQL converts
+      // values in the ranges 1 to 69 and 70 to 99 to YEAR values in the
+      // ranges 2001 to 2069 and 1970 to 1999.
+      if (two_digits_year < 70) {
+        year = 2000 + two_digits_year;
       } else {
-        year = static_cast<int>(year + 1900);
+        year = 1900 + two_digits_year;
       }
     } else {
       year = static_cast<int>(field->val_int());
