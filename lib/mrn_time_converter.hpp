@@ -30,8 +30,6 @@ namespace mrn {
   class TimeConverter {
   public:
     static const long long int TM_YEAR_BASE = 1900;
-    static const long long int EPOCH_YEAR = 1970;
-    static const long long int YEAR_2000_BASE = 2000;
 
     TimeConverter();
     ~TimeConverter();
@@ -45,8 +43,6 @@ namespace mrn {
 
     void grn_time_to_mysql_time(long long int grn_time, MYSQL_TIME *mysql_time);
     long long int grn_time_to_mysql_datetime(long long int grn_time);
-
-    int two_digits_year_to_mysql_year(int mysql_year);
 
   private:
     time_t tm_to_time_gm(struct tm *time, bool *truncated);

@@ -12374,11 +12374,15 @@ int ha_mroonga::generic_store_bulk_year(Field* field, grn_obj* buf)
   int error = 0;
   bool truncated = false;
 
-  int year = mrn::TimeConverter::EPOCH_YEAR;
-  mrn::TimeConverter time_converter;
+  int year = 1970;
   if (!field->is_null()) {
     if (field->field_length == 2) {
-      year = time_converter.two_digits_year_to_mysql_year(field->val_int());
+      year = field->val_int();
+      if (0 <= year && year <= 69) {
+        year = static_cast<int>(year + 2000);
+      } else {
+        year = static_cast<int>(year + 1900);
+      }
     } else {
       year = static_cast<int>(field->val_int());
     }
@@ -12392,6 +12396,7 @@ int ha_mroonga::generic_store_bulk_year(Field* field, grn_obj* buf)
   date.tm_mday = 1;
 
   int usec = 0;
+  mrn::TimeConverter time_converter;
   long long int time = time_converter.tm_to_grn_time(&date, usec, &truncated);
   if (truncated) {
     if (ha_thd()->is_strict_mode()) {
