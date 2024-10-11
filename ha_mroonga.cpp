@@ -7360,6 +7360,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_YEAR) &&
                              (field->real_type() != MYSQL_TYPE_TIME) &&
                              (field->real_type() != MYSQL_TYPE_DATETIME) &&
+                             (field->real_type() != MYSQL_TYPE_TIMESTAMP) &&
                              (field->real_type() != MYSQL_TYPE_TIME2) &&
                              (field->real_type() != MYSQL_TYPE_DATETIME2) &&
                              (field->real_type() != MYSQL_TYPE_TIMESTAMP2) &&
@@ -12296,9 +12297,13 @@ int ha_mroonga::generic_store_bulk_timestamp(Field* field, grn_obj* buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  Field_timestamp* timestamp_field = static_cast<Field_timestamp*>(field);
-  mrn::TimestampFieldValueConverter<Field_timestamp> converter(timestamp_field);
-  int64_t grn_time = converter.convert();
+  int64_t grn_time = 0;
+  if (!field->is_null()) {
+    Field_timestamp* timestamp_field = static_cast<Field_timestamp*>(field);
+    mrn::TimestampFieldValueConverter<Field_timestamp> converter(
+      timestamp_field);
+    grn_time = converter.convert();
+  }
   grn_obj_reinit(ctx, buf, GRN_DB_TIME, 0);
   GRN_TIME_SET(ctx, buf, grn_time);
   DBUG_RETURN(error);
