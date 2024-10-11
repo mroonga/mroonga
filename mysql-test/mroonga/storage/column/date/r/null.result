@@ -6,7 +6,7 @@ KEY created_on_index(created_on)
 ) DEFAULT CHARSET=utf8mb4;
 INSERT INTO diaries VALUES ('epoch date', '1970-01-01');
 INSERT INTO diaries VALUES ('null date', NULL);
-INSERT INTO diaries VALUES ('Mroonga release day', '2010-8-19');
+INSERT INTO diaries VALUES ('Mroonga release date', '2010-8-19');
 SELECT mroonga_command('index_column_diff --table diaries#created_on_index --name index');
 mroonga_command('index_column_diff --table diaries#created_on_index --name index')
 []
