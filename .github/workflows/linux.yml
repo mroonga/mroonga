@@ -59,10 +59,10 @@ jobs:
             libgroonga-dev \
             libmysqlclient-dev \
             libtool
-          sudo pip install -U pip
+          python -m pip install -U pip
       - name: Install Sphinx
         run: |
-          sudo pip install -r doc/requirements.txt
+          python -m pip install -r doc/requirements.txt
       - name: Download MySQL source
         run: |
           mkdir -p ../mysql
