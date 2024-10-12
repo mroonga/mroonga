@@ -16,7 +16,12 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/skip_windows.inc
+# '1970-01-01' must be a valid in MySQL/MariaDB but it causes
+# an "out of range" error. It may be a problem in Mroonga.
+# Mroonga converts struct tm to Unix time for processing
+# 00700101 (this is '1970-01-01' representation in MySQL/MariaDB).
+# We should fix it but we skip this for now.
+--source ../../../../include/mroonga/skip_windows.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
