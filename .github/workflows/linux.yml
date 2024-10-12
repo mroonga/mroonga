@@ -40,6 +40,9 @@ jobs:
         with:
           path: mroonga.github.com
           repository: mroonga/mroonga.github.com
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3
       - name: Install dependencies
         run: |
           grep '^deb ' /etc/apt/sources.list | \
@@ -55,12 +58,11 @@ jobs:
             groonga-normalizer-mysql \
             libgroonga-dev \
             libmysqlclient-dev \
-            libtool \
-            python3-pip
-          sudo pip3 install -U pip
+            libtool
+          sudo pip install -U pip
       - name: Install Sphinx
         run: |
-          sudo pip3 install -r doc/requirements.txt
+          sudo pip install -r doc/requirements.txt
       - name: Download MySQL source
         run: |
           mkdir -p ../mysql
