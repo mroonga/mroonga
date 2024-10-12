@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS roles;
+CREATE TABLE roles (
+name VARCHAR(255),
+flag BIT(1) NULL,
+KEY flag_index(flag)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO roles VALUES ('non-admin', b'0');
+INSERT INTO roles VALUES ('unknown', NULL);
+INSERT INTO roles VALUES ('admin', b'1');
+SELECT mroonga_command('index_column_diff --table roles#flag_index --name index');
+mroonga_command('index_column_diff --table roles#flag_index --name index')
+[]
+SELECT
+name,
+BIN(flag)
+FROM roles
+WHERE flag = b'0';
+name	BIN(flag)
+non-admin	0
+unknown	0
+DROP TABLE roles;

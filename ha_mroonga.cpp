@@ -7368,7 +7368,8 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_FLOAT) &&
                              (field->real_type() != MYSQL_TYPE_DOUBLE) &&
                              (field->real_type() != MYSQL_TYPE_ENUM) &&
-                             (field->real_type() != MYSQL_TYPE_SET)))
+                             (field->real_type() != MYSQL_TYPE_SET) &&
+                             (field->real_type() != MYSQL_TYPE_BIT)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -12225,7 +12226,10 @@ int ha_mroonga::generic_store_bulk_unsigned_integer(Field* field, grn_obj* buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  long long signed_value = field->val_int();
+  long long signed_value = 0;
+  if (!field->is_null()) {
+    signed_value = field->val_int();
+  }
   unsigned long long unsigned_value = *((unsigned long long*)(&signed_value));
   uint32 size = field->pack_length();
   switch (size) {
