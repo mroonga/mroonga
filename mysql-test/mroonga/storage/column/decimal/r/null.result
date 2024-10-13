@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS diaries;
+CREATE TABLE diaries (
+weather TEXT,
+temperature DECIMAL(3,1) NULL
+) DEFAULT CHARSET UTF8MB4;
+INSERT INTO diaries VALUES ("snow", 0.0);
+INSERT INTO diaries VALUES ("unknown", NULL);
+INSERT INTO diaries VALUES ("sunny", 30.1);
+SELECT * FROM diaries;
+weather	temperature
+snow	0.0
+unknown	0.0
+sunny	30.1
+DROP TABLE diaries;
