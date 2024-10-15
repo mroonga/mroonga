@@ -12137,9 +12137,8 @@ int ha_mroonga::generic_store_bulk_fixed_size_string(Field* field, grn_obj* buf)
   int error = 0;
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
   if (field->is_null()) {
-    char empty_string[field->field_length];
-    memset(&empty_string, ' ', field->field_length);
-    GRN_TEXT_SET(ctx, buf, empty_string, field->field_length);
+    grn_bulk_space(ctx, buf, field->field_length);
+    memset(GRN_TEXT_VALUE(buf), ' ', field->field_length);
   } else {
     GRN_TEXT_SET(ctx, buf, MRN_FIELD_FIELD_PTR(field), field->field_length);
   }
