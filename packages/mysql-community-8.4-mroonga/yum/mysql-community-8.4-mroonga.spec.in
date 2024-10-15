@@ -1,6 +1,6 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.4.2
+%define mysql_version_default 8.4.3
 %define mysql_release_default 1
 %define mysql_dist_default    el%{rhel}
 %define mysql_spec_file_default mysql.spec
@@ -14,7 +14,7 @@
 
 Name:		mysql-community-8.4-mroonga
 Version:	@VERSION@
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -108,6 +108,9 @@ Documentation for Mroonga
 %doc mysql-community-8.4-mroonga-doc/*
 
 %changelog
+* Tue Oct 15 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.08-2
+- Rebuilt against MySQL 8.4.3.
+
 * Thu Sep 26 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.08-1
 - New upstream release.
 
