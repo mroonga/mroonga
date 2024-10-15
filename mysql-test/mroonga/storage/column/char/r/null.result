@@ -1,0 +1,17 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+id INT,
+name CHAR(5) NULL,
+KEY name_index(name)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO users VALUES (1, '');
+INSERT INTO users VALUES (2, NULL);
+INSERT INTO users VALUES (3, 'alice');
+SELECT mroonga_command('index_column_diff --table users#name_index --name index');
+mroonga_command('index_column_diff --table users#name_index --name index')
+[]
+SELECT id FROM users where name = '';
+id
+1
+2
+DROP TABLE users;

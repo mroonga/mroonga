@@ -7354,7 +7354,8 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
 
     // TODO: Remove this when support for handling how to register NULLs
     //       in the index is implemented for all columns.
-    if (field->is_null() && ((field->real_type() != MYSQL_TYPE_TINY) &&
+    if (field->is_null() && ((field->real_type() != MYSQL_TYPE_STRING) &&
+                             (field->real_type() != MYSQL_TYPE_TINY) &&
                              (field->real_type() != MYSQL_TYPE_SHORT) &&
                              (field->real_type() != MYSQL_TYPE_LONG) &&
                              (field->real_type() != MYSQL_TYPE_YEAR) &&
@@ -12135,7 +12136,12 @@ int ha_mroonga::generic_store_bulk_fixed_size_string(Field* field, grn_obj* buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, MRN_FIELD_FIELD_PTR(field), field->field_length);
+  if (field->is_null()) {
+    grn_bulk_space(ctx, buf, field->field_length);
+    memset(GRN_TEXT_VALUE(buf), ' ', field->field_length);
+  } else {
+    GRN_TEXT_SET(ctx, buf, MRN_FIELD_FIELD_PTR(field), field->field_length);
+  }
   DBUG_RETURN(error);
 }
 
