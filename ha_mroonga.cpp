@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2024 Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
-  Copyright(C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2010 Tetsuro IKEDA
+  Copyright (C) 2010-2013 Kentoku SHIBA
+  Copyright (C) 2011-2024 Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
+  Copyright (C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -14555,7 +14555,6 @@ ha_rows ha_mroonga::wrapper_multi_range_read_info_const(uint keyno,
   MRN_SET_BASE_TABLE_KEY(this, table);
   DBUG_RETURN(rows);
 }
-#endif
 
 ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                         RANGE_SEQ_IF* seq,
@@ -14563,9 +14562,9 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                         uint n_ranges,
                                                         uint* bufsz,
                                                         uint* flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                                         ha_rows limit,
-#endif
+#  endif
                                                         Cost_estimate* cost)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -14575,9 +14574,9 @@ ha_rows ha_mroonga::storage_multi_range_read_info_const(uint keyno,
                                                       n_ranges,
                                                       bufsz,
                                                       flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                                       limit,
-#endif
+#  endif
                                                       cost);
   DBUG_RETURN(rows);
 }
@@ -14588,14 +14587,13 @@ ha_rows ha_mroonga::multi_range_read_info_const(uint keyno,
                                                 uint n_ranges,
                                                 uint* bufsz,
                                                 uint* flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                                 ha_rows limit,
-#endif
+#  endif
                                                 Cost_estimate* cost)
 {
   MRN_DBUG_ENTER_METHOD();
   ha_rows rows;
-#ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode) {
     rows = wrapper_multi_range_read_info_const(keyno,
                                                seq,
@@ -14608,22 +14606,20 @@ ha_rows ha_mroonga::multi_range_read_info_const(uint keyno,
 #  endif
                                                cost);
   } else {
-#endif
     rows = storage_multi_range_read_info_const(keyno,
                                                seq,
                                                seq_init_param,
                                                n_ranges,
                                                bufsz,
                                                flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                                limit,
-#endif
+#  endif
                                                cost);
-#ifdef MRN_ENABLE_WRAPPER_MODE
   }
-#endif
   DBUG_RETURN(rows);
 }
+#endif
 
 #ifdef MRN_ENABLE_WRAPPER_MODE
 ha_rows ha_mroonga::wrapper_multi_range_read_info(uint keyno,

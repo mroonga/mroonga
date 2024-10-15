@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010  Tetsuro IKEDA
-  Copyright(C) 2010-2013  Kentoku SHIBA
-  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2024  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -709,16 +709,18 @@ public:
 #ifdef MRN_HANDLER_HAVE_TABLE_CACHE_TYPE
   uint8 table_cache_type();
 #endif
+#ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows multi_range_read_info_const(uint keyno,
                                       RANGE_SEQ_IF* seq,
                                       void* seq_init_param,
                                       uint n_ranges,
                                       uint* bufsz,
                                       uint* flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                       ha_rows limit,
-#endif
+#  endif
                                       Cost_estimate* cost) mrn_override;
+#endif
   ha_rows multi_range_read_info(uint keyno,
                                 uint n_ranges,
                                 uint keys,
@@ -1614,17 +1616,17 @@ private:
                                               ha_rows limit,
 #  endif
                                               Cost_estimate* cost);
-#endif
   ha_rows storage_multi_range_read_info_const(uint keyno,
                                               RANGE_SEQ_IF* seq,
                                               void* seq_init_param,
                                               uint n_ranges,
                                               uint* bufsz,
                                               uint* flags,
-#ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  ifdef MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
                                               ha_rows limit,
-#endif
+#  endif
                                               Cost_estimate* cost);
+#endif
 #ifdef MRN_ENABLE_WRAPPER_MODE
   ha_rows wrapper_multi_range_read_info(uint keyno,
                                         uint n_ranges,
