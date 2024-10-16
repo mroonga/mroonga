@@ -233,7 +233,11 @@ case ${package} in
     ;;
 esac
 
-if apt show ${package} > /dev/null 2>&1; then
+if [ ${package} = "mysql-community-8.0-mroonga" ] || \
+   [ ${package} = "mysql-community-8.4-mroonga" ]; then
+  echo "Skip because 14.08 packages aren't updated yet."
+  echo "We should remove this after we release 14.09."
+elif apt show ${package} > /dev/null 2>&1; then
   sudo apt install -V -y ${package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update
