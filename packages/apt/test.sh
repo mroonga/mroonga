@@ -218,6 +218,7 @@ esac
 popd
 echo "::endgroup::"
 
+
 echo "::group::Upgrade test"
 sudo apt purge -V -y \
   ${package} \
