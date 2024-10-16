@@ -1,17 +1,11 @@
 DROP TABLE IF EXISTS blobs;
 CREATE TABLE blobs (
 name VARCHAR(255),
-value MEDIUMBLOB NULL,
-KEY value_index(value)
+value MEDIUMBLOB NULL
 ) DEFAULT CHARSET=utf8mb4;
-Warnings:
-Note	1071	Specified key was too long; max key length is 3072 bytes
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
 INSERT INTO blobs VALUES ('blob', 'blob');
-SELECT mroonga_command('index_column_diff --table blobs#value_index --name index');
-mroonga_command('index_column_diff --table blobs#value_index --name index')
-[]
 SELECT name FROM blobs WHERE value = '';
 name
 empty

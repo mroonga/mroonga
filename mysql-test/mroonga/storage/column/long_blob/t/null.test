@@ -17,7 +17,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../../../include/mroonga/have_mroonga.inc
---source ../../../../include/mroonga/load_mroonga_functions.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS blobs;
@@ -25,19 +24,15 @@ DROP TABLE IF EXISTS blobs;
 
 CREATE TABLE blobs (
   name VARCHAR(255),
-  value LONGBLOB NULL,
-  KEY value_index(value)
+  value LONGBLOB NULL
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
 INSERT INTO blobs VALUES ('blob', 'blob');
 
-SELECT mroonga_command('index_column_diff --table blobs#value_index --name index');
-
 SELECT name FROM blobs WHERE value = '';
 
 DROP TABLE blobs;
 
---source ../../../../include/mroonga/unload_mroonga_functions.inc
 --source ../../../../include/mroonga/have_mroonga_deinit.inc

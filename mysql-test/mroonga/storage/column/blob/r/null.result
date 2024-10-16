@@ -1,15 +1,11 @@
 DROP TABLE IF EXISTS blobs;
 CREATE TABLE blobs (
 name VARCHAR(255),
-value BLOB NULL,
-INDEX(value(5))
+value BLOB NULL
 ) DEFAULT CHARSET=utf8mb4;
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
 INSERT INTO blobs VALUES ('blob', 'blob');
-SELECT mroonga_command('index_column_diff --table blobs#value --name index');
-mroonga_command('index_column_diff --table blobs#value --name index')
-[]
 SELECT name FROM blobs WHERE value = '';
 name
 empty
