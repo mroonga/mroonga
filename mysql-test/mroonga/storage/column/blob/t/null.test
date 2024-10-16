@@ -29,7 +29,7 @@ CREATE TABLE blobs (
 
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
-INSERT INTO blobs VALUES ('Groonga', 0x47726F6F6E6761);
+INSERT INTO blobs VALUES ('Groonga', 'Groonga');
 
 SELECT name FROM blobs WHERE value = '';
 
