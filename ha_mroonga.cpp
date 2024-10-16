@@ -7407,6 +7407,9 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
       GRN_OBJ_FIN(ctx, &colbuf);
       goto err;
     }
+    if (GRN_BULK_VSIZE(&colbuf) == 0) {
+      continue;
+    }
 
     grn_obj* column = grn_columns[i];
     if (is_foreign_key_field(table->s->table_name.str, field->field_name)) {
