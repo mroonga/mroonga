@@ -5,7 +5,7 @@ value BLOB NULL
 ) DEFAULT CHARSET=utf8mb4;
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
-INSERT INTO blobs VALUES ('blob', 'blob');
+INSERT INTO blobs VALUES ('Groonga', 0x47726F6F6E6761);
 SELECT name FROM blobs WHERE value = '';
 name
 empty
