@@ -231,6 +231,10 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
     mysql_zlib_config_include_dir="$ac_mysql_build_dir/extra/zlib"
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_zlib_config_include_dir"
   fi
+  if test -d "$ac_mysql_source_dir/extra/unordered_dense/unordered_dense-4.4.0"; then
+    mysql_unordered_dense_include_dir="$ac_mysql_source_dir/extra/unordered_dense/unordered_dense-4.4.0/include"
+    MYSQL_INCLUDES="$MYSQL_INCLUDES -I$mysql_unordered_dense_include_dir"
+  fi
   if test "${MYSQL_VARIANT}" = "mysql"; then
     MYSQL_INCLUDES="$MYSQL_INCLUDES -I$ac_mysql_source_dir"
   fi

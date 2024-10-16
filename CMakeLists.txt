@@ -444,6 +444,11 @@ if(NOT MRN_BUNDLED)
       "${MYSQL_SOURCE_DIR}/extra/zlib/zlib-1.2.12")
   endif()
 
+  if(EXISTS "${MYSQL_SOURCE_DIR}/extra/unordered_dense/unordered_dense-4.4.0")
+    target_include_directories(mroonga ${TARGET_INCLUDE_DIRECTORIES_AFTER} PRIVATE
+      "${MYSQL_SOURCE_DIR}/extra/unordered_dense/unordered_dense-4.4.0/include")
+  endif()
+
   if(APPLE)
     find_program(BREW "brew")
     if(BREW)
