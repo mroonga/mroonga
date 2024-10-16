@@ -23,21 +23,17 @@
 DROP TABLE IF EXISTS blobs;
 --enable_warnings
 
-# Unspecifying a key length for BLOB columns raised a warning due
-# to the maximum key length being exceeded in MariaDB.
---disable_warnings
 CREATE TABLE blobs (
   name VARCHAR(255),
   value BLOB NULL,
-  KEY value_index(value)
+  INDEX(value(5))
 ) DEFAULT CHARSET=utf8mb4;
---enable_warnings
 
 INSERT INTO blobs VALUES ('empty', '');
 INSERT INTO blobs VALUES ('null', NULL);
 INSERT INTO blobs VALUES ('blob', 'blob');
 
-SELECT mroonga_command('index_column_diff --table blobs#value_index --name index');
+SELECT mroonga_command('index_column_diff --table blobs#value --name index');
 
 SELECT name FROM blobs WHERE value = '';
 
