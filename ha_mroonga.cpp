@@ -7370,7 +7370,10 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                              (field->real_type() != MYSQL_TYPE_DOUBLE) &&
                              (field->real_type() != MYSQL_TYPE_ENUM) &&
                              (field->real_type() != MYSQL_TYPE_SET) &&
-                             (field->real_type() != MYSQL_TYPE_BIT)))
+                             (field->real_type() != MYSQL_TYPE_BIT) &&
+                             (field->real_type() != MYSQL_TYPE_BLOB) &&
+                             (field->real_type() != MYSQL_TYPE_MEDIUM_BLOB) &&
+                             (field->real_type() != MYSQL_TYPE_LONG_BLOB)))
       continue;
 
 #ifdef MRN_SUPPORT_GENERATED_COLUMNS
@@ -7403,6 +7406,9 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
     if (error) {
       GRN_OBJ_FIN(ctx, &colbuf);
       goto err;
+    }
+    if (GRN_BULK_VSIZE(&colbuf) == 0) {
+      continue;
     }
 
     grn_obj* column = grn_columns[i];
@@ -12543,10 +12549,12 @@ int ha_mroonga::generic_store_bulk_blob(Field* field, grn_obj* buf)
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
-  StringBuffer<MAX_FIELD_WIDTH> buffer(field->charset());
-  auto value = field->val_str(&buffer, &buffer);
   grn_obj_reinit(ctx, buf, GRN_DB_TEXT, 0);
-  GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
+  if (!field->is_null()) {
+    StringBuffer<MAX_FIELD_WIDTH> buffer(field->charset());
+    auto value = field->val_str(&buffer, &buffer);
+    GRN_TEXT_SET(ctx, buf, value->ptr(), value->length());
+  }
   DBUG_RETURN(error);
 }
 

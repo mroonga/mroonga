@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS blobs;
+CREATE TABLE blobs (
+name VARCHAR(255),
+value LONGBLOB NULL
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO blobs VALUES ('empty', '');
+INSERT INTO blobs VALUES ('null', NULL);
+INSERT INTO blobs VALUES ('Groonga', 'Groonga');
+SELECT name FROM blobs WHERE value = '';
+name
+empty
+null
+DROP TABLE blobs;
