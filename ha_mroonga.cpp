@@ -12539,12 +12539,13 @@ int ha_mroonga::generic_store_bulk_new_decimal(Field* field, grn_obj* buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   grn_obj_reinit(ctx, buf, GRN_DB_SHORT_TEXT, 0);
-  if (!field->is_null()) {
-    String value;
-    Field_new_decimal* new_decimal_field = (Field_new_decimal*)field;
-    new_decimal_field->val_str(&value, NULL);
-    GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
-  }
+  String value;
+  Field_new_decimal* new_decimal_field = (Field_new_decimal*)field;
+  // If the field is NULL, val_str() returns a zero-padded string based on the
+  // column's scale. For example: DECIMAL(3,2) -> "0.00". This ensures
+  // consistent formatting for NULL values in indexes and queries like zero.
+  new_decimal_field->val_str(&value, NULL);
+  GRN_TEXT_SET(ctx, buf, value.ptr(), value.length());
   DBUG_RETURN(error);
 }
 

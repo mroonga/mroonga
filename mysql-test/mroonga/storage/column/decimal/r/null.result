@@ -1,11 +1,15 @@
 DROP TABLE IF EXISTS diaries;
 CREATE TABLE diaries (
 weather TEXT,
-temperature DECIMAL(3,1) NULL
+temperature DECIMAL(3,1) NULL,
+KEY temperature_index(temperature)
 ) DEFAULT CHARSET UTF8MB4;
 INSERT INTO diaries VALUES ("snow", 0.0);
 INSERT INTO diaries VALUES ("unknown", NULL);
 INSERT INTO diaries VALUES ("sunny", 30.1);
+SELECT mroonga_command('select --table diaries#temperature_index');
+mroonga_command('select --table diaries#temperature_index')
+[[[2],[["_id","UInt32"],["_key","ShortText"],["index","UInt32"]],[1,"0.0",4],[2,"30.1",1]]]
 SELECT * FROM diaries;
 weather	temperature
 snow	0.0
