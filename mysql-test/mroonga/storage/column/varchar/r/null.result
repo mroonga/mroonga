@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+id INT,
+name VARCHAR(5) NULL
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO users VALUES (1, '');
+INSERT INTO users VALUES (2, NULL);
+INSERT INTO users VALUES (3, 'alice');
+SELECT id FROM users where name = '';
+id
+1
+2
+DROP TABLE users;
