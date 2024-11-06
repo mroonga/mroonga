@@ -19378,10 +19378,12 @@ int ha_mroonga::get_parent_foreign_key_list(THD* thd,
 }
 
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-uint ha_mroonga::wrapper_referenced_by_foreign_key()
+mrn_return_type_referenced_by_foreign_key
+ha_mroonga::wrapper_referenced_by_foreign_key()
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res;
+  mrn_return_type_referenced_by_foreign_key res;
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   res = wrap_handler->referenced_by_foreign_key();
@@ -19391,17 +19393,22 @@ uint ha_mroonga::wrapper_referenced_by_foreign_key()
 }
 #  endif
 
-uint ha_mroonga::storage_referenced_by_foreign_key()
+mrn_return_type_referenced_by_foreign_key
+ha_mroonga::storage_referenced_by_foreign_key()
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res = handler::referenced_by_foreign_key();
+  mrn_return_type_referenced_by_foreign_key res =
+    handler::referenced_by_foreign_key();
   DBUG_RETURN(res);
 }
 
-uint ha_mroonga::referenced_by_foreign_key()
+mrn_return_type_referenced_by_foreign_key
+ha_mroonga::referenced_by_foreign_key()
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
-  uint res;
+  mrn_return_type_referenced_by_foreign_key res;
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode) {
     res = wrapper_referenced_by_foreign_key();
