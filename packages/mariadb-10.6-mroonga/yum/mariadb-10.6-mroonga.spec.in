@@ -1,6 +1,6 @@
 # -*- sh-shell: rpm -*-
 
-%define mariadb_version_default 10.6.19
+%define mariadb_version_default 10.6.20
 %define mariadb_release_default 1
 %define mariadb_dist_default    el%{rhel}
 
