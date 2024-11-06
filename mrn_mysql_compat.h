@@ -980,7 +980,6 @@ typedef uint mrn_srid;
 #if defined(MRN_MARIADB_P) &&                                        \
     (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
-  using mrn_handler_get_foreign_key_list_thread = const THD;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
 // warn_deprecated<>() requires deprecated version. MariaDB will report an error
@@ -996,7 +995,6 @@ typedef uint mrn_srid;
   (warn_deprecated<999999>(thd, what, to))
 #else
   using mrn_io_and_cpu_cost = double;
-  using mrn_handler_get_foreign_key_list_thread = THD;
 #  define MRN_HANDLER_HAVE_READ_TIME
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
    (push_warning_printf(thd,                                         \

@@ -19189,8 +19189,7 @@ char* ha_mroonga::get_foreign_key_create_info()
 }
 
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-int ha_mroonga::wrapper_get_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::wrapper_get_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -19204,8 +19203,7 @@ int ha_mroonga::wrapper_get_foreign_key_list(
 }
 #  endif
 
-int ha_mroonga::storage_get_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::storage_get_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   int error;
@@ -19322,8 +19320,7 @@ int ha_mroonga::storage_get_foreign_key_list(
   DBUG_RETURN(0);
 }
 
-int ha_mroonga::get_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::get_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -19341,8 +19338,7 @@ int ha_mroonga::get_foreign_key_list(
 }
 
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-int ha_mroonga::wrapper_get_parent_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::wrapper_get_parent_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -19356,8 +19352,7 @@ int ha_mroonga::wrapper_get_parent_foreign_key_list(
 }
 #  endif
 
-int ha_mroonga::storage_get_parent_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::storage_get_parent_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -19365,8 +19360,7 @@ int ha_mroonga::storage_get_parent_foreign_key_list(
   DBUG_RETURN(res);
 }
 
-int ha_mroonga::get_parent_foreign_key_list(
-  mrn_handler_get_foreign_key_list_thread* thd,
+int ha_mroonga::get_parent_foreign_key_list(THD* thd,
   List<FOREIGN_KEY_INFO>* f_key_list)
 {
   MRN_DBUG_ENTER_METHOD();
