@@ -994,6 +994,8 @@ typedef uint mrn_srid;
 // for details.
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
   (warn_deprecated<999999>(thd, what, to))
+  using mrn_return_type_referenced_by_foreign_key = bool;
+#  define MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT const noexcept
 #else
   using mrn_io_and_cpu_cost = double;
   using mrn_handler_get_foreign_key_list_thread = THD;
@@ -1005,4 +1007,6 @@ typedef uint mrn_srid;
                         MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),  \
                         what,                                        \
                         to))
+  using mrn_return_type_referenced_by_foreign_key = uint;
+#  define MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
 #endif
