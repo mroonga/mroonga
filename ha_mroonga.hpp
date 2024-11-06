@@ -849,9 +849,9 @@ protected:
 #ifdef MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
   bool is_fk_defined_on_table_or_index(uint index) mrn_override;
   char* get_foreign_key_create_info() mrn_override;
-  int get_foreign_key_list(mrn_handler_get_foreign_key_list_thread* thd,
+  int get_foreign_key_list(THD* thd,
                            List<FOREIGN_KEY_INFO>* f_key_list) mrn_override;
-  int get_parent_foreign_key_list(mrn_handler_get_foreign_key_list_thread* thd,
+  int get_parent_foreign_key_list(THD* thd,
                                   List<FOREIGN_KEY_INFO>* f_key_list)
     mrn_override;
   uint referenced_by_foreign_key() mrn_override;
@@ -2002,17 +2002,15 @@ private:
 #  endif
   char* storage_get_foreign_key_create_info();
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-  int wrapper_get_foreign_key_list(mrn_handler_get_foreign_key_list_thread* thd,
+  int wrapper_get_foreign_key_list(THD* thd,
                                    List<FOREIGN_KEY_INFO>* f_key_list);
-  int wrapper_get_parent_foreign_key_list(
-    mrn_handler_get_foreign_key_list_thread* thd,
-    List<FOREIGN_KEY_INFO>* f_key_list);
+  int wrapper_get_parent_foreign_key_list(THD* thd,
+                                          List<FOREIGN_KEY_INFO>* f_key_list);
 #  endif
-  int storage_get_foreign_key_list(mrn_handler_get_foreign_key_list_thread* thd,
+  int storage_get_foreign_key_list(THD* thd,
                                    List<FOREIGN_KEY_INFO>* f_key_list);
-  int storage_get_parent_foreign_key_list(
-    mrn_handler_get_foreign_key_list_thread* thd,
-    List<FOREIGN_KEY_INFO>* f_key_list);
+  int storage_get_parent_foreign_key_list(THD* thd,
+                                          List<FOREIGN_KEY_INFO>* f_key_list);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   uint wrapper_referenced_by_foreign_key();
 #  endif
