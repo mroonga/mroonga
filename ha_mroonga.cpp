@@ -19386,7 +19386,7 @@ int ha_mroonga::get_parent_foreign_key_list(
 #  ifdef MRN_ENABLE_WRAPPER_MODE
 mrn_return_type_referenced_by_foreign_key
 ha_mroonga::wrapper_referenced_by_foreign_key()
-  MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_return_type_referenced_by_foreign_key res;
@@ -19401,7 +19401,7 @@ ha_mroonga::wrapper_referenced_by_foreign_key()
 
 mrn_return_type_referenced_by_foreign_key
 ha_mroonga::storage_referenced_by_foreign_key()
-  MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_return_type_referenced_by_foreign_key res =
@@ -19410,7 +19410,8 @@ ha_mroonga::storage_referenced_by_foreign_key()
 }
 
 mrn_return_type_referenced_by_foreign_key
-ha_mroonga::referenced_by_foreign_key() MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
+ha_mroonga::referenced_by_foreign_key()
+  MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_return_type_referenced_by_foreign_key res;
