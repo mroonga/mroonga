@@ -851,8 +851,7 @@ protected:
   char* get_foreign_key_create_info() mrn_override;
   int get_foreign_key_list(THD* thd,
                            List<FOREIGN_KEY_INFO>* f_key_list) mrn_override;
-  int get_parent_foreign_key_list(THD* thd,
-                                  List<FOREIGN_KEY_INFO>* f_key_list)
+  int get_parent_foreign_key_list(THD* thd, List<FOREIGN_KEY_INFO>* f_key_list)
     mrn_override;
   mrn_return_type_referenced_by_foreign_key referenced_by_foreign_key()
     MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT mrn_override;
