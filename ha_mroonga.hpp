@@ -854,7 +854,7 @@ protected:
   int get_parent_foreign_key_list(THD* thd, List<FOREIGN_KEY_INFO>* f_key_list)
     mrn_override;
   mrn_return_type_referenced_by_foreign_key referenced_by_foreign_key()
-    MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT mrn_override;
+    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT mrn_override;
   void free_foreign_key_create_info(char* str) mrn_override;
 #endif
   void init_table_handle_for_HANDLER();
@@ -2012,11 +2012,11 @@ private:
   int storage_get_parent_foreign_key_list(THD* thd,
                                           List<FOREIGN_KEY_INFO>* f_key_list);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-  mrn_return_type_referenced_by_foreign_key
-  wrapper_referenced_by_foreign_key() MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT;
+  mrn_return_type_referenced_by_foreign_key wrapper_referenced_by_foreign_key()
+    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
 #  endif
-  mrn_return_type_referenced_by_foreign_key
-  storage_referenced_by_foreign_key() MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT;
+  mrn_return_type_referenced_by_foreign_key storage_referenced_by_foreign_key()
+    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_free_foreign_key_create_info(char* str);
 #  endif
