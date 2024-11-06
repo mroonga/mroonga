@@ -19410,8 +19410,7 @@ ha_mroonga::storage_referenced_by_foreign_key()
 }
 
 mrn_return_type_referenced_by_foreign_key
-ha_mroonga::referenced_by_foreign_key()
-  MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
+ha_mroonga::referenced_by_foreign_key() MRN_REFERENCED_BY_FOREIGN_KEY_NOEXCEPT
 {
   MRN_DBUG_ENTER_METHOD();
   mrn_return_type_referenced_by_foreign_key res;
