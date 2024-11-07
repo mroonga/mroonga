@@ -104,9 +104,16 @@ jobs:
             $artifactName += "-embed"
           }
           $artifactName += "-${Env:PACKAGE_PLATFORM}"
+          if ("${Env:MARIADB_VERSION}" -match "^10\.*") {
+            $testDirName = "mysql-test"
+          } else {
+            $testDirName = "mariadb-test"
+          }
           Write-Output "MROONGA_VERSION=${mroongaVersion}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           Write-Output "ARTIFACT_NAME=${artifactName}" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
+          Write-Output "TEST_DIR_NAME=${testDirName}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
       - uses: actions/cache@v4
         with:
@@ -228,7 +235,7 @@ jobs:
             mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM}.zip `
             .
           pushd mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM}
-          Remove-Item mysql-test -Recurse -Force
+          Remove-Item ${Env:TEST_DIR_NAME} -Recurse -Force
           popd
           Move-Item `
             mariadb-${Env:MARIADB_VERSION}-${Env:PACKAGE_PLATFORM} `
@@ -257,7 +264,7 @@ jobs:
 
       - name: Test
         run: |
-          cd install\mysql-test
+          cd install\${Env:TEST_DIR_NAME}
           $suites = `
             Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
               Split-Path -Parent | `
@@ -271,7 +278,7 @@ jobs:
 
       - name: "Test: reference count"
         run: |
-          cd install\mysql-test
+          cd install\${Env:TEST_DIR_NAME}
           $suites = `
             Get-ChildItem -Recurse -Directory -Name t plugin\mroonga | `
               Split-Path -Parent | `
