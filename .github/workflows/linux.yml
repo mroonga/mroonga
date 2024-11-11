@@ -97,18 +97,19 @@ jobs:
         run: |
           (cd doc/source/news && \
            ruby \
-             -e 'print("## Mroonga "); \
-                 puts(ARGF.read.split(/^## Release /)[1]. \
+             -e 'print("## Mroonga ");
+                 puts(ARGF.read.split(/^## Release /)[1].
                         gsub(/^\(.+\)=$/, "").
-                        gsub(/ {.+?}/, ""). \
-                        gsub(/{doc}`(.+?)`/) { \
-                          id = $1; \
-                          title = id.split("\/").last; \
-                          path = id.delete_prefix("/"); \
-                          url = "https://mroonga.org/docs/#{path}.html"; \
-                          "[#{title}](#{url})"; \
-                        }. \
+                        gsub(/ {.+?}/, "").
+                        gsub(/{doc}`(.+?)`/) {
+                          id = $1;
+                          title = id.split("\/").last;
+                          path = id.delete_prefix("/");
+                          url = "https://mroonga.org/docs/#{path}.html";
+                          "[#{title}](#{url})";
+                        }.
                         gsub(/{ref}`(.+?)`/) {$1}.
+                        gsub(/\[(GH-\d+)\]\(.+?\)/) {$1}.
                         strip)' \
              $(ls *.md | sort --human-numeric-sort | tail -n1)) > \
             release-note.md

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-06-11 18:17+0900\n"
+"PO-Revision-Date: 2024-11-11 12:11+0900\n"
 "Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,101 @@ msgstr ""
 msgid "News - 14 series"
 msgstr "お知らせ - 14系"
 
-msgid "Release 14.08 - 2024-09-25"
-msgstr "14.08リリース - 2024-09-25"
+msgid "Release 14.10 - 2024-11-12"
+msgstr "14.10リリース - 2024-11-12"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Improved `index_column_diff` support"
+msgstr "`index_column_diff`サポートを改良"
+
+msgid "[GH-789](https://github.com/mroonga/mroonga/issues/789)"
+msgstr ""
+
+msgid "Mroonga and underlying Groonga don't support `NULL`. So the behavior of inserting `NULL` values is undefined by definition. This is not changed (you should not use `NULL` with Mroonga!) but this release changed some behaviors."
+msgstr "MroongaもMroongaが使っているGroongaも`NULL`をサポートしていません。そもそも`NULL`を挿入するときの挙動は未定義です。これは今後も変わりません（Mroongaでは`NULL`を使うべきはありません！）が、このリリースではいくつか挙動を変えました。"
+
+msgid "Groonga provides [`index_column_diff` command](https://groonga.org/docs/reference/commands/index_column_diff.html). You can use it to detect a broken index."
+msgstr "Groongaは[`index_column_diff`コマンド](https://groonga.org/ja/docs/reference/commands/index_column_diff.html)を提供しています。これを使うと壊れたインデックスを検出できます。"
+
+msgid "The current `NULL` related behavior may cause false positive broken index detection. So this release changed some `NULL` related behavior to avoid the false positive detection."
+msgstr "現在の`NULL`関連の挙動では、壊れていないインデックスを壊れたインデックスとして検出してしまうことがあります。そのため、このリリースではこの誤検出を避けるようにいくつか`NULL`関連の挙動を変更しました。"
+
+msgid "Note that this change also changed some `NULL` related behaviors but you should not depend on the behavior! (We don't describe it in details here because we don't want you to depend on the behavior.)"
+msgstr "この変更でいくつか`NULL`関連の挙動も変わっていますが、この挙動に依存するべきではありません！（この挙動に依存して欲しくないので、ここではどのように変わったかの詳細は説召しません。）"
+
+msgid "The behavior of the following types were changed:"
+msgstr "次の型の挙動が変わりました。"
+
+msgid "`bit`"
+msgstr ""
+
+msgid "`datetime`"
+msgstr ""
+
+msgid "`double`"
+msgstr ""
+
+msgid "`enum`"
+msgstr ""
+
+msgid "`float`"
+msgstr ""
+
+msgid "`int`"
+msgstr ""
+
+msgid "`set`"
+msgstr ""
+
+msgid "`smallint`"
+msgstr ""
+
+msgid "`time`"
+msgstr ""
+
+msgid "`timestamp`"
+msgstr ""
+
+msgid "`tinyint`"
+msgstr ""
+
+msgid "`year`"
+msgstr ""
+
+msgid "The behavior of other types will be changed too in the future."
+msgstr "将来的に他の型の挙動も変わる予定です。"
+
+msgid "Added support for `bit`"
+msgstr "`bit`をサポート"
+
+msgid "[GH-798](https://github.com/mroonga/mroonga/issues/798)"
+msgstr ""
+
+msgid "The current `bit` implementation is completely broken. So nobody uses it..."
+msgstr "現在の`bit`実装はぜんぜん動いていませんでした。おそらくだれも使っていなかったのでしょう。。。"
+
+msgid "This release rewrote the `bit` implementation completely. Now, `bit` works well."
+msgstr "このリリースでは`bit`実装を書き直しました。`bit`がちゃんと動くようになりました。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed `year(2)`'s `70`-`99` handling"
+msgstr "`year(2)`の`70`-`99`の扱いを修正"
+
+msgid "[GH-804](https://github.com/mroonga/mroonga/issues/804)"
+msgstr ""
+
+msgid "`70`-`99` must be processed as `1970`-`1999` but they are processed as `2070`-`2099`. This release fixed this."
+msgstr "`70`-`99`は`1970`-`1999`として扱われないといけませんが、`2070`-`2099`として扱われていました。このリリースではこの問題を修正しました。"
+
+msgid "Note that you must not use `year(2)`. It's deprecated in MariaDB and not supported in MySQL."
+msgstr "`year(2)`を使うべきはないことに注意してください。MariaDBでは非推奨になっていますし、MySQLではサポートが打ち切られています。"
+
+msgid "Release 14.08 - 2024-09-25"
+msgstr "14.08リリース - 2024-09-25"
 
 msgid "We use CMake for building instead of the GNU Autotools."
 msgstr "ビルドにGNU Autotoolsの代わりにCMakeを使うようにしました"
@@ -33,9 +123,6 @@ msgstr "`configure`は非推奨となります。ソースからのビルドに�
 
 msgid "Please refer [{doc}`/install/others`] about how to build from source with `cmake`."
 msgstr "`cmake`でのビルド方法については、[{doc}`/install/others`]を参照してください。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fixed a bug that `SELECT` returned wrong result when we used multiple primary keys and primary keys included `VARBINARY` or `BLOB` type column. [GH-783][Reported by Jérome Perrin]"
 msgstr "複数の主キーがあり、かつ主キーに`VARBINARY`型または `BLOB`型のカラムがある場合に、`SELECT`が誤った結果を返す問題を修正しました。"
