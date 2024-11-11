@@ -14,7 +14,7 @@
 
 Name:		mysql-community-minimal-8.0-mroonga
 Version:	@VERSION@
-Release:	2%{?dist}
+Release:	1%{?dist}
 Summary:	A fast fulltext searchable storage engine for MySQL
 
 Group:		Applications/Databases
@@ -77,6 +77,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mroonga/*
 
 %changelog
+* Mon Nov 11 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.10-1
+- New upstream release.
+
 * Tue Oct 15 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.08-2
 - Rebuilt against MySQL 8.0.40.
 
