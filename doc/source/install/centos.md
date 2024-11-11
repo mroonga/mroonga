@@ -1,3 +1,5 @@
+:orphan:
+
 # CentOS
 
 Support for Mroonga has ended from version 14.04 because of CentOS 7's EOL.
