@@ -18,14 +18,15 @@ Download and extract the zip file
 Download zip file and extract it. You need to choose a zip for your
 environment:
 
-  * |mroonga_mariadb_windows_package_link|
+* |mroonga_mariadb_windows_package_link|
 
 Run ``mariadb-install-db.exe``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Execution Example::
 
-  > mariadb-install-db.exe --datadir=C:\EXAMPLE\data --service=MariaDB --password=PASSWORD
+.. code-block:: pwsh-session
+
+  > bin\mariadb-install-db.exe --datadir=C:\EXAMPLE\data --service=MariaDB --password=PASSWORD
 
 * ``--datadir=C:\EXAMPLE\data``
 
@@ -49,17 +50,21 @@ Start server command
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.
 
-Just start mysqld by following command::
+Just start MariaDB server by following command.
 
-  > mysqld.exe --defaults-file=.\MY-PREFERRED-INI.ini --console
+.. code-block:: pwsh-session
+
+  > bin\mariadbd.exe --defaults-file=.\MY-PREFERRED-INI.ini --console
 
 Each zip package contains ini files (my-small.ini, my-medium.ini,
 my-large.ini and so on), choose preferred ini file which meets on your
 demand.
 
-Next connect to MariaDB by following command::
+Next connect to MariaDB by following command.
 
-  > mysql.exe
+.. code-block:: pwsh-session
+
+  > bin\mariadb.exe
   MariaDB [(none)]> SHOW ENGINES;
   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
   | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |

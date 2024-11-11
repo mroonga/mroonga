@@ -40,8 +40,6 @@ msgstr ""
 msgid "Run ``mariadb-install-db.exe``"
 msgstr "``mariadb-install-db.exe`` を実行する"
 
-msgid "Execution Example::"
-msgstr "実行例::"
 
 msgid "``--datadir=C:\\EXAMPLE\\data``"
 msgstr ""
@@ -73,14 +71,14 @@ msgstr "サーバーを起動する"
 msgid "Zip packages are pre-configured for easy to use, so no need to execute ``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
 msgstr "ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE FUNCTION`` の実行は不要です。"
 
-msgid "Just start mysqld by following command::"
-msgstr "次のように単にmysqldを起動します::"
+msgid "Just start MariaDB server by following command."
+msgstr "次のように単にMariaDBサーバーを起動します。"
 
 msgid "Each zip package contains ini files (my-small.ini, my-medium.ini, my-large.ini and so on), choose preferred ini file which meets on your demand."
 msgstr "それぞれのzipパッケージにはiniファイルが含まれています。(my-small.iniやmy-medium.ini、my-large.iniなど) 適切なiniファイルを選択してください。"
 
-msgid "Next connect to MariaDB by following command::"
-msgstr "MariaDBに次のコマンドで接続します::"
+msgid "Next connect to MariaDB by following command."
+msgstr "MariaDBに次のコマンドで接続します。"
 
 msgid "Build from source with MariaDB"
 msgstr "MariaDBと一緒にソースからビルド"
