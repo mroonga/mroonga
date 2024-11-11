@@ -47,24 +47,68 @@ Run ``bin\mariadb-install-db.exe`` to initialize the database.
 Start MariaDB server command
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Zip packages are pre-configured for easy to use, so no need to execute
-``INSTALL PLUGIN`` and ``CREATE FUNCTION``.
-
 Just start MariaDB server by following command.
 
 .. code-block:: pwsh-session
 
   > bin\mariadbd.exe --defaults-file=.\MY-PREFERRED-INI.ini --console
 
-Each zip package contains ini files (my-small.ini, my-medium.ini,
-my-large.ini and so on), choose preferred ini file which meets on your
-demand.
+If MariaDB is registered as a Windows service, it will be started by the Windows service.
+
+Install Mroonga to MariaDB
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Next connect to MariaDB by following command.
 
 .. code-block:: pwsh-session
 
   > bin\mariadb.exe
+  MariaDB [(none)]>
+
+After connecting, execute ``share\mroonga\install.sql`` to install Mroonga.
+``share\mroonga\install.sql`` is included in the zip file and should be specified with an appropriate path.
+
+.. code-block:: mysql
+
+  MariaDB [(none)]> SOURCE C:PATHTO\share\mroonga\install.sql;
+  Query OK, 0 rows affected (0.064 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.002 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.001 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.001 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.000 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.001 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.000 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.000 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.001 sec)
+
+  Query OK, 0 rows affected, 1 warning (0.000 sec)
+
+  Query OK, 0 rows affected (0.000 sec)
+
   MariaDB [(none)]> SHOW ENGINES;
   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
   | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |

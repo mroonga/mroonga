@@ -67,17 +67,20 @@ msgstr "rootユーザのパスワードを指定します"
 msgid "Start MariaDB server command"
 msgstr "MariaDBサーバーを起動する"
 
-msgid "Zip packages are pre-configured for easy to use, so no need to execute ``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
-msgstr "ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE FUNCTION`` の実行は不要です。"
-
 msgid "Just start MariaDB server by following command."
 msgstr "次のように単にMariaDBサーバーを起動します。"
 
-msgid "Each zip package contains ini files (my-small.ini, my-medium.ini, my-large.ini and so on), choose preferred ini file which meets on your demand."
-msgstr "それぞれのzipパッケージにはiniファイルが含まれています。(my-small.iniやmy-medium.ini、my-large.iniなど) 適切なiniファイルを選択してください。"
+msgid "If MariaDB is registered as a Windows service, it will be started by the Windows service."
+msgstr "MariaDBをWindowsサービスに登録した場合は、WindowsサービスがMariaDBサーバーを起動していることを確認します。"
+
+msgid "Install Mroonga to MariaDB"
+msgstr "MariaDBにMroongaをインストール"
 
 msgid "Next connect to MariaDB by following command."
 msgstr "MariaDBに次のコマンドで接続します。"
+
+msgid "After connecting, execute ``share\\mroonga\\install.sql`` to install Mroonga. ``share\\mroonga\\install.sql`` is included in the zip file and should be specified with an appropriate path."
+msgstr "接続できたら ``share\\mroonga\\install.sql`` を実行してMroongaをインストールします。そのファイルはzipファイルに含まれているので、ファイルを配置したパスを指定してください。"
 
 msgid "Build from source with MariaDB"
 msgstr "MariaDBと一緒にソースからビルド"
