@@ -68,7 +68,7 @@ Next connect to MariaDB by following command.
 After connecting, execute ``share\mroonga\install.sql`` to install Mroonga.
 ``share\mroonga\install.sql`` is included in the zip file and should be specified with an appropriate path.
 
-.. code-block:: mysql
+.. code-block::
 
   MariaDB [(none)]> SOURCE C:PATHTO\share\mroonga\install.sql;
   Query OK, 0 rows affected (0.064 sec)
