@@ -25,14 +25,50 @@ msgstr "このセクションではWindows上でMroongaをインストールす�
 msgid "Mroonga binary for Windows is provided with MariaDB binary because `some changes <https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_ are needed for building Mroonga for Windows."
 msgstr "MroongaのWindowsバイナリはMariaDBのバイナリと一緒に提供しています。これは、MroongaのWindows版をビルドするのに `MariaDB本体にいくつかの変更 <https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_ が必要だからです。"
 
-msgid "Zip"
-msgstr ""
+msgid "Install"
+msgstr "インストール"
+
+msgid "Download and extract the zip file"
+msgstr "zipファイルをダウンロードして展開する"
 
 msgid "Download zip file and extract it. You need to choose a zip for your environment:"
 msgstr "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選ぶ必要があります"
 
 msgid "|mroonga_mariadb_windows_package_link|"
 msgstr ""
+
+msgid "Run ``mariadb-install-db.exe``"
+msgstr "``mariadb-install-db.exe`` を実行する"
+
+msgid "Execution Example::"
+msgstr "実行例::"
+
+msgid "``--datadir=C:\\EXAMPLE\\data``"
+msgstr ""
+
+msgid "Data directory of the new database"
+msgstr "データベースのフォルダ名を指定します"
+
+msgid "``--service=MariaDB``"
+msgstr ""
+
+msgid "Name of the Windows service"
+msgstr "Windowsのサービス名を指定します"
+
+msgid "Specify if registering as a Windows service"
+msgstr "Windowsサービスとして登録する場合は指定してください"
+
+msgid "``--password=PASSWORD``"
+msgstr ""
+
+msgid "Password of the root user"
+msgstr "rootユーザのパスワードを指定します"
+
+msgid "(``mariadb-install-db.exe`` is included in the zip file.)"
+msgstr "（``mariadb-install-db.exe`` コマンドはzipファイルに含まれています。）"
+
+msgid "Start server command"
+msgstr "サーバーを起動する"
 
 msgid "Zip packages are pre-configured for easy to use, so no need to execute ``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
 msgstr "ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE FUNCTION`` の実行は不要です。"

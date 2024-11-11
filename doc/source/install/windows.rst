@@ -9,13 +9,42 @@ Mroonga binary for Windows is provided with MariaDB binary because
 <https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_
 are needed for building Mroonga for Windows.
 
-Zip
----
+Install
+-------
+
+Download and extract the zip file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Download zip file and extract it. You need to choose a zip for your
 environment:
 
   * |mroonga_mariadb_windows_package_link|
+
+Run ``mariadb-install-db.exe``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Execution Example::
+
+  > mariadb-install-db.exe --datadir=C:\EXAMPLE\data --service=MariaDB --password=PASSWORD
+
+* ``--datadir=C:\EXAMPLE\data``
+
+  * Data directory of the new database
+
+* ``--service=MariaDB``
+
+  * Name of the Windows service
+
+  * Specify if registering as a Windows service
+
+* ``--password=PASSWORD``
+
+  * Password of the root user
+
+(``mariadb-install-db.exe`` is included in the zip file.)
+
+Start server command
+^^^^^^^^^^^^^^^^^^^^
 
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.
