@@ -40,6 +40,8 @@ msgstr ""
 msgid "Run ``mariadb-install-db.exe``"
 msgstr "``mariadb-install-db.exe`` を実行する"
 
+msgid "Run ``bin\\mariadb-install-db.exe`` to initialize the database. ``mariadb-install-db.exe`` is included in the zip file."
+msgstr "``bin\\mariadb-install-db.exe`` を実行してデータベースを初期化してください。``mariadb-install-db.exe`` コマンドはzipファイルに含まれています。"
 
 msgid "``--datadir=C:\\EXAMPLE\\data``"
 msgstr ""
@@ -53,8 +55,8 @@ msgstr ""
 msgid "Name of the Windows service"
 msgstr "Windowsのサービス名を指定します"
 
-msgid "Specify if registering as a Windows service"
-msgstr "Windowsサービスとして登録する場合は指定してください"
+msgid "Specify if you want to register MariaDB as a Windows service"
+msgstr "MariaDBをWindowsサービスとして登録する場合は指定してください"
 
 msgid "``--password=PASSWORD``"
 msgstr ""
@@ -62,11 +64,8 @@ msgstr ""
 msgid "Password of the root user"
 msgstr "rootユーザのパスワードを指定します"
 
-msgid "(``mariadb-install-db.exe`` is included in the zip file.)"
-msgstr "（``mariadb-install-db.exe`` コマンドはzipファイルに含まれています。）"
-
-msgid "Start server command"
-msgstr "サーバーを起動する"
+msgid "Start MariaDB server command"
+msgstr "MariaDBサーバーを起動する"
 
 msgid "Zip packages are pre-configured for easy to use, so no need to execute ``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
 msgstr "ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE FUNCTION`` の実行は不要です。"

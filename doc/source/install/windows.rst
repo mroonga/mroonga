@@ -23,6 +23,8 @@ environment:
 Run ``mariadb-install-db.exe``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Run ``bin\mariadb-install-db.exe`` to initialize the database.
+``mariadb-install-db.exe`` is included in the zip file.
 
 .. code-block:: pwsh-session
 
@@ -36,16 +38,14 @@ Run ``mariadb-install-db.exe``
 
   * Name of the Windows service
 
-  * Specify if registering as a Windows service
+  * Specify if you want to register MariaDB as a Windows service
 
 * ``--password=PASSWORD``
 
   * Password of the root user
 
-(``mariadb-install-db.exe`` is included in the zip file.)
-
-Start server command
-^^^^^^^^^^^^^^^^^^^^
+Start MariaDB server command
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Zip packages are pre-configured for easy to use, so no need to execute
 ``INSTALL PLUGIN`` and ``CREATE FUNCTION``.
