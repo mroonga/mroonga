@@ -41,7 +41,7 @@ msgid "The current `NULL` related behavior may cause false positive broken index
 msgstr "現在の`NULL`関連の挙動では、壊れていないインデックスを壊れたインデックスとして検出してしまうことがあります。そのため、このリリースではこの誤検出を避けるようにいくつか`NULL`関連の挙動を変更しました。"
 
 msgid "Note that this change also changed some `NULL` related behaviors but you should not depend on the behavior! (We don't describe it in details here because we don't want you to depend on the behavior.)"
-msgstr "この変更でいくつか`NULL`関連の挙動も変わっていますが、この挙動に依存するべきではありません！（この挙動に依存して欲しくないので、ここではどのように変わったかの詳細は説召しません。）"
+msgstr "この変更でいくつか`NULL`関連の挙動も変わっていますが、この挙動に依存するべきではありません！（この挙動に依存して欲しくないので、ここではどのように変わったかの詳細は説明しません。）"
 
 msgid "The behavior of the following types were changed:"
 msgstr "次の型の挙動が変わりました。"
