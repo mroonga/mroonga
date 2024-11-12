@@ -109,20 +109,20 @@ After connecting, execute ``share\mroonga\install.sql`` to install Mroonga.
 
    Query OK, 0 rows affected (0.000 sec)
 
-  MariaDB [(none)]> SHOW ENGINES;
-  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
-  | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |
-  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
-  | CSV                | YES     | CSV storage engine                                         | NO           | NO   | NO         |
-  | PERFORMANCE_SCHEMA | YES     | Performance Schema                                         | NO           | NO   | NO         |
-  | MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
-  | MyISAM             | YES     | MyISAM storage engine                                      | NO           | NO   | NO         |
-  | MRG_MyISAM         | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
-  | InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
-  | Mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
-  | Aria               | YES     | Crash-safe tables with MyISAM heritage                     | NO           | NO   | NO         |
-  +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
-  8 rows in set (0.00 sec)
+   MariaDB [(none)]> SHOW ENGINES;
+   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+   | Engine             | Support | Comment                                                    | Transactions | XA   | Savepoints |
+   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+   | CSV                | YES     | CSV storage engine                                         | NO           | NO   | NO         |
+   | PERFORMANCE_SCHEMA | YES     | Performance Schema                                         | NO           | NO   | NO         |
+   | MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables  | NO           | NO   | NO         |
+   | MyISAM             | YES     | MyISAM storage engine                                      | NO           | NO   | NO         |
+   | MRG_MyISAM         | YES     | Collection of identical MyISAM tables                      | NO           | NO   | NO         |
+   | InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys | YES          | YES  | YES        |
+   | Mroonga            | YES     | CJK-ready fulltext search, column store                    | NO           | NO   | NO         |
+   | Aria               | YES     | Crash-safe tables with MyISAM heritage                     | NO           | NO   | NO         |
+   +--------------------+---------+------------------------------------------------------------+--------------+------+------------+
+   8 rows in set (0.00 sec)
 
 Build from source with MariaDB
 ------------------------------
