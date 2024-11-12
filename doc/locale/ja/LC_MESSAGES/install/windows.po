@@ -25,8 +25,11 @@ msgstr "このセクションではWindows上でMroongaをインストールす�
 msgid "Mroonga binary for Windows is provided with MariaDB binary because `some changes <https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_ are needed for building Mroonga for Windows."
 msgstr "MroongaのWindowsバイナリはMariaDBのバイナリと一緒に提供しています。これは、MroongaのWindows版をビルドするのに `MariaDB本体にいくつかの変更 <https://github.com/mroonga/mroonga/tree/main/packages/source/patches>`_ が必要だからです。"
 
-msgid "Zip"
-msgstr ""
+msgid "Install"
+msgstr "インストール"
+
+msgid "Download and extract the zip file"
+msgstr "zipファイルをダウンロードして展開する"
 
 msgid "Download zip file and extract it. You need to choose a zip for your environment:"
 msgstr "zipファイルをダウンロードして展開してください。環境に合わせてzipファイルを選ぶ必要があります"
@@ -34,17 +37,50 @@ msgstr "zipファイルをダウンロードして展開してください。環
 msgid "|mroonga_mariadb_windows_package_link|"
 msgstr ""
 
-msgid "Zip packages are pre-configured for easy to use, so no need to execute ``INSTALL PLUGIN`` and ``CREATE FUNCTION``."
-msgstr "ZIPパッケージはあらかじめ設定済みなので、 ``INSTALL PLUGIN`` や ``CREATE FUNCTION`` の実行は不要です。"
+msgid "Run ``mariadb-install-db.exe``"
+msgstr "``mariadb-install-db.exe`` を実行する"
 
-msgid "Just start mysqld by following command::"
-msgstr "次のように単にmysqldを起動します::"
+msgid "Run ``bin\\mariadb-install-db.exe`` to initialize the database. ``mariadb-install-db.exe`` is included in the zip file."
+msgstr "``bin\\mariadb-install-db.exe`` を実行してデータベースを初期化してください。``mariadb-install-db.exe`` コマンドはzipファイルに含まれています。"
 
-msgid "Each zip package contains ini files (my-small.ini, my-medium.ini, my-large.ini and so on), choose preferred ini file which meets on your demand."
-msgstr "それぞれのzipパッケージにはiniファイルが含まれています。(my-small.iniやmy-medium.ini、my-large.iniなど) 適切なiniファイルを選択してください。"
+msgid "``--datadir=C:\\EXAMPLE\\data``"
+msgstr ""
 
-msgid "Next connect to MariaDB by following command::"
-msgstr "MariaDBに次のコマンドで接続します::"
+msgid "Data directory of the new database"
+msgstr "データベースのフォルダ名を指定します"
+
+msgid "``--service=MariaDB``"
+msgstr ""
+
+msgid "Name of the Windows service"
+msgstr "Windowsのサービス名を指定します"
+
+msgid "Specify if you want to register MariaDB as a Windows service"
+msgstr "MariaDBをWindowsサービスとして登録する場合は指定してください"
+
+msgid "``--password=PASSWORD``"
+msgstr ""
+
+msgid "Password of the root user"
+msgstr "rootユーザのパスワードを指定します"
+
+msgid "Start MariaDB server command"
+msgstr "MariaDBサーバーを起動する"
+
+msgid "Just start MariaDB server by following command."
+msgstr "次のように単にMariaDBサーバーを起動します。"
+
+msgid "If MariaDB is registered as a Windows service, it will be started by the Windows service."
+msgstr "MariaDBをWindowsサービスに登録した場合は、WindowsサービスがMariaDBサーバーを起動していることを確認します。"
+
+msgid "Install Mroonga to MariaDB"
+msgstr "MariaDBにMroongaをインストール"
+
+msgid "Next connect to MariaDB by following command."
+msgstr "MariaDBに次のコマンドで接続します。"
+
+msgid "After connecting, execute ``share\\mroonga\\install.sql`` to install Mroonga. ``share\\mroonga\\install.sql`` is included in the zip file and should be specified with an appropriate path."
+msgstr "接続できたら ``share\\mroonga\\install.sql`` を実行してMroongaをインストールします。そのファイルはzipファイルに含まれているので、ファイルを配置したパスを指定してください。"
 
 msgid "Build from source with MariaDB"
 msgstr "MariaDBと一緒にソースからビルド"
