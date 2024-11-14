@@ -1,3 +1,9 @@
+mysql-8.0-mroonga (14.10-2) unstable; urgency=low
+
+  * Rebuilt against MySQL 8.0.40.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Thu, 14 Nov 2024 02:40:49 -0000
+
 mysql-8.0-mroonga (14.10-1) unstable; urgency=low
 
   * New upstream release.
