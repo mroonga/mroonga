@@ -94,18 +94,18 @@ Note that you need to remove `storage/mroonga/` (Mroonga bundled in MariaDB) bef
 ```console
 $ mkdir -p ${HOME}/local/src
 $ cd ${HOME}/local/src
-$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.3/mariadb-11.4.3.tar.gz
-$ tar xf mariadb-11.4.3.tar.gz
-$ rm -rf mariadb-11.4.3/storage/mroonga
+$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.4/mariadb-11.4.4.tar.gz
+$ tar xf mariadb-11.4.4.tar.gz
+$ rm -rf mariadb-11.4.4/storage/mroonga
 $ cd -
 $ cmake \
-    -S ${HOME}/local/src/mariadb-11.4.3 \
-    -B ${HOME}/local/build/mariadb-11.4.3 \
+    -S ${HOME}/local/src/mariadb-11.4.4 \
+    -B ${HOME}/local/build/mariadb-11.4.4 \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=${HOME}/local
-$ cmake --build ${HOME}/local/build/mariadb-11.4.3
-$ cmake --install ${HOME}/local/build/mariadb-11.4.3
+$ cmake --build ${HOME}/local/build/mariadb-11.4.4
+$ cmake --install ${HOME}/local/build/mariadb-11.4.4
 ```
 
 ## Build from source
