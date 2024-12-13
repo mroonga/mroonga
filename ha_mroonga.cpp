@@ -14174,6 +14174,12 @@ int ha_mroonga::generic_reset()
     DBUG_RETURN(error);
   }
 
+  if (!query_block->ftfunc_list) {
+    DBUG_RETURN(error);
+  }
+  if (!query_block->ftfunc_list->elements) {
+    DBUG_RETURN(error);
+  }
   List_iterator<Item_func_match> iterator(*(query_block->ftfunc_list));
   Item_func_match* item;
   while ((item = iterator++)) {
