@@ -109,6 +109,11 @@ jobs:
             $artifactName += "-embed"
           }
           $artifactName += "-${Env:PACKAGE_PLATFORM}"
+          if ("${{ matrix.use-main }}" -ep "yes") {
+            $uploadArtifactName = $artifactName;
+          } else {
+            $uploadArtifactName = "release-" + $artifactName;
+          }
           if ("${Env:MARIADB_VERSION}" -match "^10\.*") {
             $testDirName = "mysql-test"
           } else {
@@ -117,6 +122,8 @@ jobs:
           Write-Output "MROONGA_VERSION=${mroongaVersion}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           Write-Output "ARTIFACT_NAME=${artifactName}" | `
+            Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
+          Write-Output "UPLOAD_ARTIFACT_NAME=${uploadArtifactName}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           Write-Output "TEST_DIR_NAME=${testDirName}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
@@ -253,19 +260,8 @@ jobs:
       # Artifact
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{ env.UPLOAD_ARTIFACT_NAME }}
           path: ${{ env.ARTIFACT_NAME }}.zip
-
-      # Release
-      - name: Upload the artifact to release
-        if: |
-          matrix.use-main != 'yes' && startsWith(github.ref, 'refs/tags/')
-        run: |
-          gh release upload ${Env:GITHUB_REF_NAME} `
-            "${Env:ARTIFACT_NAME}.zip" `
-            --repo ${Env:GITHUB_REPOSITORY}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test
         run: |

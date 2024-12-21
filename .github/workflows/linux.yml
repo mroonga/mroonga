@@ -89,48 +89,8 @@ jobs:
       # Artifact
       - uses: actions/upload-artifact@v4
         with:
-          name: source
+          name: release-source
           path: mroonga-*.tar.gz
-
-      # Release
-      - name: Upload to release
-        if: |
-          startsWith(github.ref, 'refs/tags/')
-        run: |
-          (cd doc/source/news && \
-           ruby \
-             -e 'print("## Mroonga ");
-                 puts(ARGF.read.split(/^## Release /)[1].
-                        gsub(/^\(.+\)=$/, "").
-                        gsub(/ {.+?}/, "").
-                        gsub(/{doc}`(.+?)`/) {
-                          id = $1;
-                          title = id.split("\/").last;
-                          path = id.delete_prefix("/");
-                          url = "https://mroonga.org/docs/#{path}.html";
-                          "[#{title}](#{url})";
-                        }.
-                        gsub(/{ref}`(.+?)`/) {$1}.
-                        gsub(/\[(GH-\d+)\]\(.+?\)/) {$1}.
-                        strip)' \
-             $(ls *.md | sort --human-numeric-sort | tail -n1)) > \
-            release-note.md
-          echo "" >> release-note.md
-          echo "### Translations" >> release-note.md
-          echo "" >> release-note.md
-          version=${GITHUB_REF_NAME#v}
-          major_version=${version%%.*}
-          version_hyphen=$(echo ${version} | tr . -)
-          echo " * [Japanese](https://mroonga.org/ja/docs/news/${major_version}.html#release-${version_hyphen})" >> release-note.md
-          title="$(head -n1 release-note.md | sed -e 's/^## //')"
-          tail -n +2 release-note.md > release-note-without-version.md
-          gh release create ${GITHUB_REF_NAME} \
-            --discussion-category Releases \
-            --notes-file release-note-without-version.md \
-            --title "${title}" \
-            mroonga-*.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Build
@@ -270,7 +230,7 @@ jobs:
           ruby-version: ruby
       - uses: actions/download-artifact@v4
         with:
-          name: source
+          name: release-source
       - name: Update version
         if: |
           !startsWith(github.ref, 'refs/tags/') &&
@@ -325,26 +285,6 @@ jobs:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
           path: packages/${{ matrix.package }}-mroonga/${{ env.PACKAGE_TYPE }}/repositories/
 
-      # Release
-      - name: Create assets
-        if: |
-          startsWith(github.ref, 'refs/tags/')
-        run: |
-          cp -a \
-            packages/${{ matrix.package }}-mroonga/${PACKAGE_TYPE}/repositories/ \
-            repositories
-          tar czf \
-            ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz \
-            repositories
-      - name: Upload to release
-        if: |
-          startsWith(github.ref, 'refs/tags/')
-        run: |
-          gh release upload ${GITHUB_REF_NAME} \
-            ${{ matrix.package }}-mroonga-${{ matrix.os }}.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install Incus
         run: |
           sudo apt update
@@ -376,3 +316,41 @@ jobs:
         run: |
           sudo incus stop target
           sudo incus delete target
+
+  prepare-release:
+    name: Prepare for release
+    if: |
+      github.ref_type == 'tag'
+    needs: build
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+          pattern: packages-*
+      - name: Group by distribution and version
+        run: |
+          for packages_path in packages/packages-*; do
+            # packages/packages-mysql-community-8.4-almalinux-9 ->
+            # almalinux-9
+            os=$(echo ${id} | grep -E -o '(almalinux|debian|ubuntu)-[^-]+$')
+
+            mkdir -p release/${os}/repositories
+            # packages/packages-mysql-community-8.4-almalinux-9/almalinux/9/source/ ->
+            # release/almalinux-9/repositories/almalinux/9/source/
+            rsync -a ${packages_path}/ release/${os}/repositories/
+          done
+          for release_os_path in release/*; do
+            # release/almalinux-9 ->
+            # almalinux-9
+            os=$(basename ${release_os_path})
+
+            # release/almalinux-9/repositories/almalinux/9/source/ ->
+            # repositories/almalinux/9/source/
+            tar czf ${os}.tar.gz -C ${release_os_path} repositories
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-linux-packages
+          path: *.tar.gz

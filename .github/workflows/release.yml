@@ -1,0 +1,69 @@
+name: Release
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  github:
+    name: GitHub
+    runs-on: ubuntu-latest
+    # timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifacts
+        run: |
+          workflows=(linux.yml windows.yml)
+          for workflow in "${workflows[@]}"; do
+            run_id=""
+            while [ -z "${run_id}" ]; do
+              echo "Waiting for run to start ${workflow}..."
+              run_id=$(gh run list \
+                         --branch ${GITHUB_REF_NAME} \
+                         --jq '.[].databaseId' \
+                         --json databaseId \
+                         --workflow ${workflow})
+              sleep 1
+            done
+            gh run watch --exit-status ${run_id}
+            gh run download ${run_id} \
+              --dir release-artifacts \
+              --pattern "release-*"
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Publish
+        run: |
+          (cd doc/source/news && \
+           ruby \
+             -e 'print("## Mroonga ");
+                 puts(ARGF.read.split(/^## Release /)[1].
+                        gsub(/^\(.+\)=$/, "").
+                        gsub(/ {.+?}/, "").
+                        gsub(/{doc}`(.+?)`/) {
+                          id = $1;
+                          title = id.split("\/").last;
+                          path = id.delete_prefix("/");
+                          url = "https://mroonga.org/docs/#{path}.html";
+                          "[#{title}](#{url})";
+                        }.
+                        gsub(/{ref}`(.+?)`/) {$1}.
+                        gsub(/\[(GH-\d+)\]\(.+?\)/) {$1}.
+                        strip)' \
+             $(ls *.md | sort --human-numeric-sort | tail -n1)) > \
+            release-note.md
+          echo "" >> release-note.md
+          echo "### Translations" >> release-note.md
+          echo "" >> release-note.md
+          version=${GITHUB_REF_NAME#v}
+          major_version=${version%%.*}
+          version_hyphen=$(echo ${version} | tr . -)
+          echo " * [Japanese](https://mroonga.org/ja/docs/news/${major_version}.html#release-${version_hyphen})" >> release-note.md
+          title="$(head -n1 release-note.md | sed -e 's/^## //')"
+          tail -n +2 release-note.md > release-note-without-version.md
+          gh release create ${GITHUB_REF_NAME} \
+            --discussion-category Releases \
+            --notes-file release-note-without-version.md \
+            --title "${title}" \
+            release-artifacts/*/*
+        env:
+          GH_TOKEN: ${{ github.token }}
