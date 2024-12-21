@@ -353,4 +353,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: release-linux-packages
-          path: *.tar.gz
+          path: "*.tar.gz"
