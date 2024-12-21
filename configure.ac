@@ -452,14 +452,6 @@ if test "$enable_dtrace" = "no"; then
    AC_DEFINE(DISABLE_DTRACE, [1], [Define to 1 if DTrace is disabled])
 fi
 
-# check Cutter with C++ support if available
-REQUIRED_MINIMUM_CUTTER_VERSION=1.1.3
-m4_ifdef([AC_CHECK_CPPCUTTER], [
-AC_CHECK_CPPCUTTER(>= $REQUIRED_MINIMUM_CUTTER_VERSION)
-],
-[ac_cv_use_cutter="no"])
-AM_CONDITIONAL([WITH_CUTTER], [test "$ac_cv_use_cutter" != "no"])
-
 # For mroonga.github.com
 AC_ARG_WITH(mroonga-github-com-path,
             [AS_HELP_STRING([--with-mroonga-github-com-path=PATH],
@@ -492,21 +484,6 @@ AC_SUBST(LAUNCHPAD_UPLOADER_PGP_KEY)
 
 GPG_UID=m4_include(gpg_uid)
 AC_SUBST(GPG_UID)
-
-# For update-version
-AC_ARG_WITH(cutter-source-path,
-            [AS_HELP_STRING([--with-cutter-source-path=PATH],
-            [specify Cutter source path for mroonga's release manager.])],
-            [CUTTER_SOURCE_PATH="$withval"])
-case "$CUTTER_SOURCE_PATH" in
-  ""|/*)
-    : # do nothing
-    ;;
-  *)
-    CUTTER_SOURCE_PATH="\$(top_builddir)/${CUTTER_SOURCE_PATH}"
-    ;;
-esac
-AC_SUBST(CUTTER_SOURCE_PATH)
 
 # For updating apt/yum repositories
 AC_ARG_WITH(groonga-source-path,
@@ -595,7 +572,6 @@ AC_CONFIG_FILES([
   lib/Makefile
   udf/Makefile
   test/Makefile
-  test/unit/Makefile
   mysql-test/Makefile
   packages/Makefile
   packages/source/Makefile

@@ -46,36 +46,6 @@ tag:
 	cd $(top_srcdir) && \
 	  git tag v$(VERSION) -a -m 'Mroonga $(VERSION)!!!'
 
-ensure-cutter-source-path:
-	@if test -z "$(CUTTER_SOURCE_PATH)"; then \
-	  echo "\$$(CUTTER_SOURCE_PATH) is missing"; \
-	  exit 1; \
-	fi
-
-update-latest-release: ensure-cutter-source-path
-	@if test -z "$(OLD_RELEASE)"; then	\
-	  echo "\$$(OLD_RELEASE) is missing";	\
-	  exit 1;				\
-	fi
-	@if test -z "$(OLD_RELEASE_DATE)"; then		\
-	  echo "\$$(OLD_RELEASE_DATE) is missing";	\
-	  exit 1;					\
-	fi
-	@if test -z "$(NEW_RELEASE_DATE)"; then		\
-	  echo "\$$(NEW_RELEASE_DATE) is missing";	\
-	  exit 1;					\
-	fi
-	cd $(top_srcdir) &&					\
-	  "$(CUTTER_SOURCE_PATH)/misc/update-latest-release.rb"	\
-	  $(PACKAGE) $(OLD_RELEASE) $(OLD_RELEASE_DATE)		\
-	  $(VERSION) $(NEW_RELEASE_DATE)			\
-	  doc/source/install/*.rst				\
-	  doc/locale/*/LC_MESSAGES/install.po			\
-	  $(MROONGA_GITHUB_COM_PATH)/_config.yml
-	cd $(top_srcdir)/packages &&		\
-	  rake version:update			\
-	  RELEASE_TIME=$(NEW_RELEASE_DATE)
-
 update-po:
 	@for lang in $(LOCALES); do						\
 	  (cd $(top_srcdir)/doc/locale/$$lang/LC_MESSAGES && make update)	\
@@ -142,6 +112,3 @@ update-version:
 upload-to-github:
 	ruby $(srcdir)/tools/upload-to-github.rb \
 	  $$USER $(PACKAGE)-$(VERSION).tar.gz
-
-echo-cutter:
-	echo $(CUTTER)
