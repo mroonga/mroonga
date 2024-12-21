@@ -109,7 +109,7 @@ jobs:
             $artifactName += "-embed"
           }
           $artifactName += "-${Env:PACKAGE_PLATFORM}"
-          if ("${{ matrix.use-main }}" -ep "yes") {
+          if ("${{ matrix.use-main }}" -eq "yes") {
             $uploadArtifactName = $artifactName;
           } else {
             $uploadArtifactName = "release-" + $artifactName;
