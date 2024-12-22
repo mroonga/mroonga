@@ -339,17 +339,17 @@ jobs:
 
             mkdir -p release/${os}/repositories
             # packages/packages-mysql-community-8.4-almalinux-9/almalinux/9/source/ ->
-            # release/almalinux-9/repositories/almalinux/9/source/
-            rsync -a ${packages_path}/ release/${os}/repositories/
+            # release/almalinux-9/almalinux/9/source/
+            rsync -a ${packages_path}/ release/${os}/
           done
           for release_os_path in release/*; do
             # release/almalinux-9 ->
             # almalinux-9
             os=$(basename ${release_os_path})
 
-            # release/almalinux-9/repositories/almalinux/9/source/ ->
-            # repositories/almalinux/9/source/
-            tar czf ${os}.tar.gz -C ${release_os_path} repositories
+            # release/almalinux-9/almalinux/9/source/ ->
+            # almalinux-9/almalinux/9/source/
+            tar czf ${os}.tar.gz -C $(dirname ${release_os_path}) ${os}
           done
       - uses: actions/upload-artifact@v4
         with:
