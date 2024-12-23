@@ -319,8 +319,6 @@ jobs:
 
   prepare-release:
     name: Prepare for release
-    if: |
-      github.ref_type == 'tag'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 5
