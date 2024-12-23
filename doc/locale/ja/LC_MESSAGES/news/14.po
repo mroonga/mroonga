@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-11-11 12:11+0900\n"
+"PO-Revision-Date: 2024-12-23 17:58+0900\n"
 "Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -18,6 +18,18 @@ msgstr ""
 
 msgid "News - 14 series"
 msgstr "お知らせ - 14系"
+
+msgid "Release 14.11 - 2024-12-24"
+msgstr "14.11リリース - 2024-12-24"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a crash bug that may happen on shutdown"
+msgstr "シャットダウン時にクラッシュするかもしれない問題を修正"
+
+msgid "We don't have a concrete condition for this case. But we added some `nullptr` checks for safety. It will fix this problem."
+msgstr "この現象を再現する具体的な条件はわかっていません。しかし、安全のためにいくつか`nullptr`チェックを追加しました。これでこの問題が直るはずです。"
 
 msgid "Release 14.10 - 2024-11-12"
 msgstr "14.10リリース - 2024-11-12"
@@ -96,9 +108,6 @@ msgstr "現在の`bit`実装はぜんぜん動いていませんでした。お�
 
 msgid "This release rewrote the `bit` implementation completely. Now, `bit` works well."
 msgstr "このリリースでは`bit`実装を書き直しました。`bit`がちゃんと動くようになりました。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fixed `year(2)`'s `70`-`99` handling"
 msgstr "`year(2)`の`70`-`99`の扱いを修正"
