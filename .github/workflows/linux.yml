@@ -336,7 +336,7 @@ jobs:
             os=$(echo ${packages_path} | \
                    grep -E -o '(almalinux|debian|ubuntu)-[^-]+$')
 
-            mkdir -p release/${os}/repositories
+            mkdir -p release/${os}/
             # packages/packages-mysql-community-8.4-almalinux-9/almalinux/9/source/ ->
             # release/almalinux-9/almalinux/9/source/
             rsync -a ${packages_path}/ release/${os}/
