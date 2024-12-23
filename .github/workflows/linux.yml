@@ -333,7 +333,8 @@ jobs:
           for packages_path in packages/packages-*; do
             # packages/packages-mysql-community-8.4-almalinux-9 ->
             # almalinux-9
-            os=$(echo ${id} | grep -E -o '(almalinux|debian|ubuntu)-[^-]+$')
+            os=$(echo ${packages_path} | \
+                   grep -E -o '(almalinux|debian|ubuntu)-[^-]+$')
 
             mkdir -p release/${os}/repositories
             # packages/packages-mysql-community-8.4-almalinux-9/almalinux/9/source/ ->
