@@ -77,6 +77,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mroonga/*
 
 %changelog
+* Wed Dec 25 2024 Sutou Kouhei <kou@clear-code.com> - 14.12-1
+- New upstream release.
+
 * Mon Nov 11 2024 Horimoto Yasuhiro <horimoto@clear-code.com> - 14.10-1
 - New upstream release.
 
