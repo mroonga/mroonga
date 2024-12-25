@@ -17,6 +17,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+require "date"
 require "tmpdir"
 
 def env_var(name, default=nil)
@@ -86,7 +87,8 @@ namespace :release do
   namespace :version do
     desc "Update versions for a new release"
     task :update do
-      new_release_date = env_var("NEW_RELEASE_DATE")
+      new_release_date =
+        ENV["NEW_RELEASE_DATE"] || Date.today.strftime("%Y-%m-%d")
       cd("packages") do
         ruby("-S",
              "rake",
@@ -94,12 +96,13 @@ namespace :release do
       end
       sh("git",
          "add",
-         *Dir.glob("packages/**/*.spec.in"),
-         *Dir.glob("packages/**/changelog"))
+         *Dir.glob("packages/*/debian/changelog"),
+         *Dir.glob("packages/*/yum/*.spec.in"))
       sh("git",
          "commit",
          "-m",
          "package: update version info to #{version} (#{new_release_date})")
+      sh("git", "push")
     end
   end
 
