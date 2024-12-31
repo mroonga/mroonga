@@ -35,6 +35,10 @@ extern "C" {
 #include <mrn_database.hpp>
 #include <mrn_buffers.hpp>
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HANDLER_HAVE_INDEX_TYPE
+#endif
+
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_INDEX_READ_LAST_MAP
 #endif
@@ -592,7 +596,9 @@ public:
   THD* current_thread();
 
   const char* table_type() const override; // required
-  const char* index_type(uint inx);
+#ifdef MRN_HANDLER_HAVE_INDEX_TYPE
+  const char* index_type(uint inx) override;
+#endif
   const char** bas_ext() const; // required
 
   ulonglong table_flags() const override; // required

@@ -3265,6 +3265,7 @@ const char* ha_mroonga::table_type() const
   DBUG_RETURN(MRN_PLUGIN_NAME_STRING);
 }
 
+#ifdef MRN_HANDLER_HAVE_INDEX_TYPE
 const char* ha_mroonga::index_type(uint key_nr)
 {
   MRN_DBUG_ENTER_METHOD();
@@ -3277,6 +3278,7 @@ const char* ha_mroonga::index_type(uint key_nr)
     DBUG_RETURN("BTREE");
   }
 }
+#endif
 
 static const char* ha_mroonga_exts[] = {NullS};
 const char** ha_mroonga::bas_ext() const
