@@ -24,7 +24,10 @@ jobs:
                          --workflow ${workflow})
               sleep 1
             done
-            gh run watch --exit-status ${run_id}
+            gh run watch \
+              --exit-status \
+              --interval 60 \
+              ${run_id}
             gh run download ${run_id} \
               --dir release-artifacts \
               --pattern "release-*"
