@@ -60,7 +60,8 @@ jobs:
           version=${GITHUB_REF_NAME#v}
           major_version=${version%%.*}
           version_hyphen=$(echo ${version} | tr . -)
-          echo " * [Japanese](https://mroonga.org/ja/docs/news/${major_version}.html#release-${version_hyphen})" >> release-note.md
+          ja_release_note_url="https://mroonga.org/ja/docs/news/${major_version}.html#release-${version_hyphen}"
+          echo " * [Japanese](${ja_release_note_url})" >> release-note.md
           title="$(head -n1 release-note.md | sed -e 's/^## //')"
           tail -n +2 release-note.md > release-note-without-version.md
           gh release create ${GITHUB_REF_NAME} \
