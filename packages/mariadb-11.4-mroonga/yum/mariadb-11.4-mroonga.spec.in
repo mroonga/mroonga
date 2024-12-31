@@ -1,7 +1,7 @@
 # -*- sh-shell: rpm -*-
 
-%define mariadb_version_default 11.4.4
-%define mariadb_release_default 1
+%define mariadb_version_default @MARIADB_VERSION@
+%define mariadb_release_default @MARIADB_RELEASE@
 %define mariadb_dist_default    el%{rhel}
 
 %define _mariadb_version %{?mariadb_version:%{mariadb_version}}%{!?mariadb_version:%{mariadb_version_default}}

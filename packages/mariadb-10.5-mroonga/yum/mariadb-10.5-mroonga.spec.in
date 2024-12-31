@@ -3,8 +3,8 @@
 %define mariadb_package MariaDB
 %define mariadb_client_package %{mariadb_package}-client
 #%%define mariadb_epoch_default
-%define mariadb_version_default 10.5.27
-%define mariadb_release_default 1
+%define mariadb_version_default @MARIADB_VERSION@
+%define mariadb_release_default @MARIADB_RELEASE@
 %define mariadb_dist_default    el%{rhel}
 
 %define _mariadb_epoch_with_suffix %{?mariadb_epoch:%{mariadb_epoch}:}%{!?mariadb_epoch:%{?mariadb_epoch_default:%{mariadb_epoch_default}:}}

@@ -1,7 +1,7 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.4.3
-%define mysql_release_default 1
+%define mysql_version_default @MYSQL_VERSION@
+%define mysql_release_default @MYSQL_RELEASE@
 %define mysql_dist_default    el%{rhel}
 %define mysql_spec_file_default mysql.spec
 

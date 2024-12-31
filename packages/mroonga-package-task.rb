@@ -1,5 +1,6 @@
 require "English"
 require "json"
+require "open-uri"
 require "pathname"
 require "pp"
 require "zlib"
@@ -211,8 +212,130 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     @original_archive_name
   end
 
+  def detect_mariadb_release_yum
+    "1" # We can detect this when MariaDB starts using other value.
+  end
+
+  def detect_mariadb_version_yum
+    series = @mysql_package.split("-", 2)[1]
+    api_url = "https://downloads.mariadb.org/rest-api/mariadb/#{series}"
+    releases = URI.open(api_url) do |response|
+      JSON.parse(response.read)["releases"]
+    end
+    releases.first[0]
+  end
+
+  def split_mysql_package
+    *names, series = @mysql_package.split("-")
+    [names.join("-"), series]
+  end
+
+  def detect_mysql_community_rpm_version
+    series = split_mysql_package[1]
+    srpms_url =
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS/"
+    index_html = URI.open(srpms_url) do |response|
+      response.read
+    end
+    latest_target_srpm =
+      index_html.
+        scan(/href="(.+?)"/i).
+        flatten.
+        grep(/\Amysql-community-/).
+        last
+    latest_target_srpm[/\Amysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+  end
+
+  def mysql_community_rpm_version
+    @mysql_community_rpm_version ||= detect_mysql_community_rpm_version
+  end
+
+  def detect_mysql_community_minimal_rpm_version
+    series = split_mysql_package[1]
+    srpms_url =
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS/"
+    index_html = URI.open(srpms_url) do |response|
+      response.read
+    end
+    latest_target_srpm =
+      index_html.
+        scan(/href="(.+?)"/i).
+        flatten.
+        grep(/\Amysql-community-minimal-/).
+        last
+    latest_target_srpm[/\Amysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
+  end
+
+  def mysql_community_minimal_rpm_version
+    @mysql_community_minimal_rpm_version ||=
+      detect_mysql_community_minimal_rpm_version
+  end
+
+  def detect_percona_server_rpm_version
+    series = split_mysql_package[1]
+    short_series = series.gsub(".", "")
+    srpms_url =
+      "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS"
+    index_html = URI.open(srpms_url) do |response|
+      response.read
+    end
+    latest_target_srpm =
+      index_html.
+        scan(/href="(.+?)"/i).
+        flatten.
+        grep(/\Apercona-server-/).
+        last
+    latest_target_srpm[/\Apercona-server-(\d+\.\d+\.\d+-\d+\.\d+)/, 1]
+  end
+
+  def percona_server_rpm_version
+    @percona_server_rpm_version ||= detect_percona_server_rpm_version
+  end
+
+  def detect_mysql_release_yum
+    name, series = split_mysql_package
+    case name
+    when "mysql-community"
+      mysql_community_rpm_version.split("-")[1]
+    when "mysql-community-minimal"
+      mysql_community_minimal_rpm_version.split("-")[1]
+    end
+  end
+
+  def detect_mysql_version_yum
+    name, series = split_mysql_package
+    case name
+    when "mysql-community"
+      mysql_community_rpm_version.split("-")[0]
+    when "mysql-community-minimal"
+      mysql_community_minimal_rpm_version.split("-")[0]
+    when "percona-server"
+      percona_server_rpm_version.split("-")[0]
+    end
+  end
+
+  def detect_percona_server_release_yum
+    percona_server_rpm_version[/\.(\d+)\z/, 1]
+  end
+
+  def detect_percona_server_version_yum
+    percona_server_rpm_version[/-(\d+)\.\d+\z/, 1]
+  end
+
   def yum_expand_variable(key)
     case key
+    when "MARIADB_RELEASE"
+      detect_mariadb_release_yum
+    when "MARIADB_VERSION"
+      detect_mariadb_version_yum
+    when "MYSQL_RELEASE"
+      detect_mysql_release_yum
+    when "MYSQL_VERSION"
+      detect_mysql_version_yum
+    when "PERCONA_SERVER_RELEASE"
+      detect_percona_server_release_yum
+    when "PERCONA_SERVER_VERSION"
+      detect_percona_server_version_yum
     when "REQUIRED_GROONGA_VERSION"
       detect_required_groonga_version
     else

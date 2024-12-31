@@ -1,8 +1,8 @@
 # -*- sh-shell: rpm -*-
 
-%define mysql_version_default 8.0.39
-%define percona_server_version_default 30
-%define rpm_release_default 1
+%define mysql_version_default @MYSQL_VERSION@
+%define percona_server_version_default @PERCONA_SERVER_VERSION@
+%define rpm_release_default @PERCONA_SERVER_RELEASE@
 %define mysql_dist_default    %{?dist}
 %define mysql_spec_file_default percona-server.spec
 
