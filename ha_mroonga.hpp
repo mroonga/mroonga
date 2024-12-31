@@ -35,6 +35,10 @@ extern "C" {
 #include <mrn_database.hpp>
 #include <mrn_buffers.hpp>
 
+#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100600)
+#  define MRN_HANDLER_HAVE_TABLE_TYPE
+#endif
+
 #ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_INDEX_TYPE
 #endif
@@ -595,7 +599,9 @@ public:
 
   THD* current_thread();
 
-  const char* table_type() const override; // required
+#ifdef MRN_HANDLER_HAVE_TABLE_TYPE
+  const char* table_type() const override;
+#endif
 #ifdef MRN_HANDLER_HAVE_INDEX_TYPE
   const char* index_type(uint inx) override;
 #endif

@@ -3259,11 +3259,13 @@ THD* ha_mroonga::current_thread()
   DBUG_RETURN(thread);
 }
 
+#ifdef MRN_HANDLER_HAVE_TABLE_TYPE
 const char* ha_mroonga::table_type() const
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(MRN_PLUGIN_NAME_STRING);
 }
+#endif
 
 #ifdef MRN_HANDLER_HAVE_INDEX_TYPE
 const char* ha_mroonga::index_type(uint key_nr)
