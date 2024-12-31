@@ -978,7 +978,10 @@ typedef uint mrn_srid;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                        \
-    (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+  ((MYSQL_VERSION_ID >= 100527 && MYSQL_VERSION_ID < 100600) ||      \
+  ((MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||      \
+  ((MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||      \
+   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500))
   using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
