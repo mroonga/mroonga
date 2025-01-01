@@ -978,29 +978,20 @@ typedef uint mrn_srid;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                        \
-  ((MYSQL_VERSION_ID >= 100527 && MYSQL_VERSION_ID < 100600) ||      \
-   (MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||      \
-   (MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||      \
-   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500))
-  using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
-#  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
-#  define MRN_HANDLER_HAVE_KEYREAD_TIME
-// warn_deprecated<>() requires deprecated version. MariaDB will report an error
-// on build when the deprecated version will reach EOL.
+   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+// warn_deprecated<>() requires deprecated version. MariaDB will
+// report an error on build when the deprecated version will reach
+// EOL.
 //
-// However, MariaDB version isn't related to Mroonga version. So the mechanism
-// isn't suitable for Mroonga.
+// However, MariaDB version isn't related to Mroonga version. So the
+// mechanism isn't suitable for Mroonga.
 //
-// We always use 999999 as the deprecated version here to disable the build time check.
-// The version is never reported as an error. See the warn_deprecated<>() definition
-// for details.
+// We always use 999999 as the deprecated version here to disable the
+// build time check. The version is never reported as an error. See
+// the warn_deprecated<>() definition for details.
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
   (warn_deprecated<999999>(thd, what, to))
-  using mrn_return_type_referenced_by_foreign_key = bool;
-#  define MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT const noexcept
 #else
-  using mrn_io_and_cpu_cost = double;
-#  define MRN_HANDLER_HAVE_READ_TIME
 #  define MRN_WARN_DEPRECATED(thd, what, to)                         \
    (push_warning_printf(thd,                                         \
                         MRN_SEVERITY_WARNING,                        \
@@ -1008,6 +999,4 @@ typedef uint mrn_srid;
                         MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),  \
                         what,                                        \
                         to))
-  using mrn_return_type_referenced_by_foreign_key = uint;
-#  define MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
 #endif

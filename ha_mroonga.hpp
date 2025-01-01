@@ -445,6 +445,28 @@ typedef uchar* mrn_write_row_buf_t;
       (key_info[i].flags & HA_NOSAME))
 #endif
 
+#if defined(MRN_MARIADB_P) &&                                                  \
+  (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
+#  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
+#  define MRN_HANDLER_HAVE_KEYREAD_TIME
+#else
+using mrn_io_and_cpu_cost = double;
+#  define MRN_HANDLER_HAVE_READ_TIME
+#endif
+
+#if defined(MRN_MARIADB_P) &&                                                  \
+  ((MYSQL_VERSION_ID >= 100527 && MYSQL_VERSION_ID < 100600) ||                \
+   (MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||                \
+   (MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||                \
+   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500))
+using mrn_handler_referenced_by_foreign_key_bool = bool;
+#  define MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT const noexcept
+#else
+using mrn_handler_referenced_by_foreign_key_bool = uint;
+#  define MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT
+#endif
+
 class ha_mroonga;
 
 /* structs */
@@ -866,8 +888,8 @@ protected:
                            List<FOREIGN_KEY_INFO>* f_key_list) override;
   int get_parent_foreign_key_list(THD* thd,
                                   List<FOREIGN_KEY_INFO>* f_key_list) override;
-  mrn_return_type_referenced_by_foreign_key referenced_by_foreign_key()
-    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT override;
+  mrn_handler_referenced_by_foreign_key_bool referenced_by_foreign_key()
+    MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT override;
   void free_foreign_key_create_info(char* str) override;
 #endif
   void init_table_handle_for_HANDLER() override;
@@ -2025,11 +2047,11 @@ private:
   int storage_get_parent_foreign_key_list(THD* thd,
                                           List<FOREIGN_KEY_INFO>* f_key_list);
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-  mrn_return_type_referenced_by_foreign_key wrapper_referenced_by_foreign_key()
-    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
+  mrn_handler_referenced_by_foreign_key_bool wrapper_referenced_by_foreign_key()
+    MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
 #  endif
-  mrn_return_type_referenced_by_foreign_key storage_referenced_by_foreign_key()
-    MRN_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
+  mrn_handler_referenced_by_foreign_key_bool storage_referenced_by_foreign_key()
+    MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT;
 #  ifdef MRN_ENABLE_WRAPPER_MODE
   void wrapper_free_foreign_key_create_info(char* str);
 #  endif
