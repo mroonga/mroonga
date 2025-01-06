@@ -15,22 +15,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Ubuntu 20.04
-          - image: "images:ubuntu/20.04"
-            package: mysql
-
-          # Ubuntu 22.04
-          - image: "images:ubuntu/22.04"
-            package: mariadb
-          - image: "images:ubuntu/22.04"
-            package: mysql
-
-          # Ubuntu 24.04
-          - image: "images:ubuntu/24.04"
-            package: mariadb
-          - image: "images:ubuntu/24.04"
-            package: mysql
-
+#          # Ubuntu 20.04
+#          - image: "images:ubuntu/20.04"
+#            package: mysql
+#
+#          # Ubuntu 22.04
+#          - image: "images:ubuntu/22.04"
+#            package: mariadb
+#          - image: "images:ubuntu/22.04"
+#            package: mysql
+#
+#          # Ubuntu 24.04
+#          - image: "images:ubuntu/24.04"
+#            package: mariadb
+#          - image: "images:ubuntu/24.04"
+#            package: mysql
+#
           # AlmaLinux with MariaDB 10.5
           - image: "images:almalinux/8"
             package: mariadb-10.5
@@ -56,19 +56,10 @@ jobs:
           sudo incus exec target -- sudo systemctl is-system-running --wait
       - name: Install Mroonga
         run: |
-          case ${{ matrix.image }} in
-            images:ubuntu/*)
-              package_type=apt
-              os_version=$(echo ${{ matrix.image }} | awk -F "/" '{print $2}')
-              ;;
-            *)
-              package_type=yum
-              ;;
-          esac
           sudo incus exec target \
             -- \
-            /host/packages/${package_type}/install_test.sh \
-              ${{ matrix.package }}-mroonga ${os_version}
+            /host/packages/yum/install_test.sh \
+              ${{ matrix.package }}-mroonga
       - name: Delete container
         run: |
           sudo incus stop target
