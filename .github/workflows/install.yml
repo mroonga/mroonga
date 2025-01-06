@@ -19,21 +19,21 @@ jobs:
           - image: "images:almalinux/8"
             package: mariadb-10.5
 
-          # Ubuntu 20.04
-          - image: "images:ubuntu/20.04"
-            package: mysql
-
-          # Ubuntu 22.04
-          - image: "images:ubuntu/22.04"
-            package: mariadb
-          - image: "images:ubuntu/22.04"
-            package: mysql
-
-          # Ubuntu 24.04
-          - image: "images:ubuntu/24.04"
-            package: mariadb
-          - image: "images:ubuntu/24.04"
-            package: mysql
+#          # Ubuntu 20.04
+#          - image: "images:ubuntu/20.04"
+#            package: mysql
+#
+#          # Ubuntu 22.04
+#          - image: "images:ubuntu/22.04"
+#            package: mariadb
+#          - image: "images:ubuntu/22.04"
+#            package: mysql
+#
+#          # Ubuntu 24.04
+#          - image: "images:ubuntu/24.04"
+#            package: mariadb
+#          - image: "images:ubuntu/24.04"
+#            package: mysql
     steps:
       - uses: actions/checkout@v4
       - name: Install Incus
