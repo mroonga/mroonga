@@ -19,21 +19,21 @@ jobs:
           - image: "images:almalinux/8"
             package: mariadb-10.5
 
-#          # Ubuntu 20.04
-#          - image: "images:ubuntu/20.04"
-#            package: mysql
-#
-#          # Ubuntu 22.04
-#          - image: "images:ubuntu/22.04"
-#            package: mariadb
-#          - image: "images:ubuntu/22.04"
-#            package: mysql
-#
-#          # Ubuntu 24.04
-#          - image: "images:ubuntu/24.04"
-#            package: mariadb
-#          - image: "images:ubuntu/24.04"
-#            package: mysql
+          # Ubuntu 20.04
+          - image: "images:ubuntu/20.04"
+            package: mysql
+
+          # Ubuntu 22.04
+          - image: "images:ubuntu/22.04"
+            package: mariadb
+          - image: "images:ubuntu/22.04"
+            package: mysql
+
+          # Ubuntu 24.04
+          - image: "images:ubuntu/24.04"
+            package: mariadb
+          - image: "images:ubuntu/24.04"
+            package: mysql
     steps:
       - uses: actions/checkout@v4
       - name: Install Incus
@@ -56,10 +56,21 @@ jobs:
           sudo incus exec target -- sudo systemctl is-system-running --wait
       - name: Install Mroonga
         run: |
+          case ${{ matrix.image }} in
+            images:ubuntu/*)
+              package_type=apt
+              os_version=$(echo ${{ matrix.image }} | awk -F "/" '{print $2}')
+              options=(${{ matrix.package }}-mroonga ${os_version})
+              ;;
+            *)
+              package_type=yum
+              options=(${{ matrix.package }}-mroonga)
+              ;;
+          esac
           sudo incus exec target \
             -- \
-            /host/packages/yum/install_test.sh \
-              ${{ matrix.package }}-mroonga
+            /host/packages/${package_type}/install_test.sh \
+              ${options[@]}
       - name: Delete container
         run: |
           sudo incus stop target
