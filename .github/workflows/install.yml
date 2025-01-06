@@ -15,22 +15,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#          # Ubuntu 20.04
-#          - image: "images:ubuntu/20.04"
-#            package: mysql
-#
-#          # Ubuntu 22.04
-#          - image: "images:ubuntu/22.04"
-#            package: mariadb
-#          - image: "images:ubuntu/22.04"
-#            package: mysql
-#
-#          # Ubuntu 24.04
-#          - image: "images:ubuntu/24.04"
-#            package: mariadb
-#          - image: "images:ubuntu/24.04"
-#            package: mysql
-#
+          # Ubuntu 20.04
+          - image: "images:ubuntu/20.04"
+            package: mysql
+
+          # Ubuntu 22.04
+          - image: "images:ubuntu/22.04"
+            package: mariadb
+          - image: "images:ubuntu/22.04"
+            package: mysql
+
+          # Ubuntu 24.04
+          - image: "images:ubuntu/24.04"
+            package: mariadb
+          - image: "images:ubuntu/24.04"
+            package: mysql
+
           # AlmaLinux with MariaDB 10.5
           - image: "images:almalinux/8"
             package: mariadb-10.5
