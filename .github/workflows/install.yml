@@ -65,7 +65,6 @@ jobs:
               package_type=yum
               ;;
           esac
-
           sudo incus exec target \
             -- \
             /host/packages/${package_type}/install_test.sh \
