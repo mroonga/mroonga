@@ -1,4 +1,4 @@
-name: Install to Ubuntu
+name: Install Mroonga
 on:
   schedule:
     - cron: |
@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   install:
-    name: Install to Ubuntu
+    name: Install Mroonga
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
