@@ -5,7 +5,7 @@ set -exu
 package="$1"
 
 os_version=$(cut -d: -f5 /etc/system-release-cpe)
-mariadb_version=$(echo "${package}" | cut -f2 -d'-')
+mariadb_version=$(echo "${package}" | cut -d'-' -f2)
 
 cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 [mariadb]
