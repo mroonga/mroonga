@@ -4,7 +4,7 @@ set -exu
 
 package="$1"
 
-os_version=$(cat /etc/almalinux-release | cut -f3 -d' ' | cut -f1 -d'.')
+os_version=$(cut -d: -f5 /etc/system-release-cpe)
 mariadb_version=$(echo "${package}" | awk -F "-" '{print $2}')
 
 cat > /etc/yum.repos.d/MariaDB.repo <<EOF
