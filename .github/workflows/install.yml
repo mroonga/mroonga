@@ -1,7 +1,7 @@
 name: Install Mroonga
 on:
+  push:
   schedule:
-    push:
     - cron: |
         0 0 * * *
 concurrency:
