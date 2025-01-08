@@ -63,17 +63,17 @@ jobs:
             images:ubuntu/*)
               package_type=apt
               os_version=$(echo ${{ matrix.image }} | awk -F "/" '{print $2}')
-              options=(${{ matrix.package }}-mroonga ${os_version})
+              options="${{ matrix.package }}-mroonga ${os_version}"
               ;;
             *)
               package_type=yum
-              options=(${{ matrix.package }}-mroonga)
+              options=${{ matrix.package }}-mroonga
               ;;
           esac
           sudo incus exec target \
             -- \
             /host/packages/${package_type}/install_test.sh \
-              ${options[*]}
+              ${options}
       - name: Delete container
         run: |
           sudo incus stop target
