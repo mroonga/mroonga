@@ -1,5 +1,6 @@
 name: Install
 on:
+  push:
   schedule:
     - cron: |
         0 0 * * *
@@ -48,7 +49,7 @@ jobs:
         run: |
           set -x
           sudo incus admin init --auto
-          sudo incus launch ${{ matrix.image }} target
+          sudo incus launch "${{ matrix.image }}" target
           sudo incus config device add target host disk source=$PWD path=/host
           # Ideally, we would use systemctl is-system-running --wait to ensure all services are fully operational.
           # However, this option doesn't work in AlmaLinux 8 and results in an error.
@@ -58,7 +59,7 @@ jobs:
           sleep 10
       - name: Install Mroonga
         run: |
-          case ${{ matrix.image }} in
+          case "${{ matrix.image }}" in
             images:ubuntu/*)
               package_type=apt
               ;;
@@ -68,8 +69,8 @@ jobs:
           esac
           sudo incus exec target \
             -- \
-            /host/packages/${package_type}/install_test.sh \
-              ${{ matrix.package }}-mroonga
+            "/host/packages/${package_type}/install_test.sh" \
+              "${{ matrix.package }}-mroonga"
       - name: Delete container
         run: |
           sudo incus stop target
