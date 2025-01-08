@@ -1,6 +1,7 @@
 name: Install Mroonga
 on:
   schedule:
+    push:
     - cron: |
         0 0 * * *
 concurrency:
@@ -61,18 +62,15 @@ jobs:
           case ${{ matrix.image }} in
             images:ubuntu/*)
               package_type=apt
-              options=(${{ matrix.package }}-mroonga)
               ;;
             *)
               package_type=yum
-              os_version=$(echo ${{ matrix.image }} | awk -F "/" '{print $2}')
-              options=(${{ matrix.package }}-mroonga ${os_version})
               ;;
           esac
           sudo incus exec target \
             -- \
             /host/packages/${package_type}/install_test.sh \
-              ${options[@]}
+              ${{ matrix.package }}-mroonga
       - name: Delete container
         run: |
           sudo incus stop target
