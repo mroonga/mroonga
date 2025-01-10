@@ -16,13 +16,13 @@ gpgcheck = 1
 REPO
 
 case "${os_version}" in
-  9)
-    DNF_INSTALL="dnf install -y"
-    sudo ${DNF_INSTALL} "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
-    ;;
-  *)
+  8)
     DNF_INSTALL="dnf install -y --enablerepo=powertools"
     sudo dnf module -y disable mysql
+    ;;
+  *)
+    DNF_INSTALL="dnf install -y"
+    sudo ${DNF_INSTALL} "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
     ;;
 esac
 
