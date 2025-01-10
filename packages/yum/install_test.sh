@@ -20,5 +20,5 @@ sudo dnf module -y disable mariadb
 sudo dnf module -y disable mysql
 sudo dnf install -y --enablerepo=powertools mariadb-server
 sudo systemctl start mariadb
-sudo dnf install -y --enablerepo=powertools "${package}"
+#sudo dnf install -y --enablerepo=powertools "${package}"
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
