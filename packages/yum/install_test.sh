@@ -7,13 +7,13 @@ package="$1"
 os_version=$(cut -d: -f5 /etc/system-release-cpe)
 mariadb_version=$(echo "${package}" | cut -d'-' -f2)
 
-cat <<EOF | sudo tee /etc/yum.repos.d/MariaDB.repo
+cat <<REPO | sudo tee /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
 baseurl = "https://rpm.mariadb.org/${mariadb_version}/rhel/\$releasever/\$basearch"
 gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
-EOF
+REPO
 
 sudo dnf install -y "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
 sudo dnf module -y disable mariadb
