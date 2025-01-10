@@ -11,8 +11,8 @@ cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 [mariadb]
 name = MariaDB
 baseurl = "http://yum.mariadb.org/${mariadb_version}/centos${os_version}-amd64"
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
+gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck = 1
 EOF
 
 sudo dnf install -y "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
