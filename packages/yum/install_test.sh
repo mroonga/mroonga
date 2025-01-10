@@ -10,8 +10,8 @@ mariadb_version=$(echo "${package}" | cut -d'-' -f2)
 cat > /etc/yum.repos.d/MariaDB.repo <<EOF
 [mariadb]
 name = MariaDB
-baseurl = "http://yum.mariadb.org/${mariadb_version}/centos${os_version}-amd64"
-gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+baseurl = "https://rpm.mariadb.org/${mariadb_version}/rhel/\$releasever/\$basearch"
+gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 EOF
 
