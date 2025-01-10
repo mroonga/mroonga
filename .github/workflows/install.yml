@@ -14,9 +14,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # AlmaLinux with MariaDB 10.5
+          # AlmaLinux 8
           - image: "images:almalinux/8"
             package: mariadb-10.5
+
+          # AlmaLinux 9
           - image: "images:almalinux/9"
             package: mariadb-10.5
 
