@@ -28,7 +28,7 @@ case "${os_version}" in
 esac
 
 sudo ${DNF_INSTALL} "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
-sudo "${DNF_MODULE}" disable mariadb
+sudo ${DNF_MODULE} disable mariadb
 sudo ${DNF_INSTALL} mariadb-server
 sudo systemctl start mariadb
 sudo ${DNF_INSTALL} "${package}"
