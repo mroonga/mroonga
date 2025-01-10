@@ -19,17 +19,17 @@ DNF_MODULE="dnf module -y"
 case "${os_version}" in
   9)
     DNF_INSTALL="dnf install -y"
-    sudo "${DNF_INSTALL}" "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
+    sudo ${DNF_INSTALL} "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
     ;;
   *)
     DNF_INSTALL="dnf install -y --enablerepo=powertools"
-    sudo "${DNF_MODULE}" disable mysql
+    sudo ${DNF_MODULE} disable mysql
     ;;
 esac
 
-sudo "${DNF_INSTALL}" "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
+sudo ${DNF_INSTALL} "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
 sudo "${DNF_MODULE}" disable mariadb
-sudo "${DNF_INSTALL}" mariadb-server
+sudo ${DNF_INSTALL} mariadb-server
 sudo systemctl start mariadb
-sudo "${DNF_INSTALL} ${package}"
+sudo ${DNF_INSTALL} "${package}"
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
