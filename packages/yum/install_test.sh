@@ -15,6 +15,12 @@ gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 REPO
 
+case "{$os_version}" in
+  9)
+    sudo dnf install -y "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
+    ;;
+esac
+
 sudo dnf install -y "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
 sudo dnf module -y disable mariadb
 sudo dnf module -y disable mysql
