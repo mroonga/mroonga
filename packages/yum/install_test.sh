@@ -15,10 +15,20 @@ gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 REPO
 
-sudo dnf install -y "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
+case "${os_version}" in
+  8)
+    DNF_INSTALL="dnf install -y --enablerepo=powertools"
+    sudo dnf module -y disable mysql
+    ;;
+  *)
+    DNF_INSTALL="dnf install -y"
+    sudo ${DNF_INSTALL} "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
+    ;;
+esac
+
+sudo ${DNF_INSTALL} "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
 sudo dnf module -y disable mariadb
-sudo dnf module -y disable mysql
-sudo dnf install -y --enablerepo=powertools mariadb-server
+sudo ${DNF_INSTALL} mariadb-server
 sudo systemctl start mariadb
-sudo dnf install -y --enablerepo=powertools "${package}"
+sudo ${DNF_INSTALL} "${package}"
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
