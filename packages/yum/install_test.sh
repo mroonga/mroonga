@@ -7,7 +7,7 @@ package="$1"
 os_version=$(cut -d: -f5 /etc/system-release-cpe)
 mariadb_version=$(echo "${package}" | cut -d'-' -f2)
 
-cat > /etc/yum.repos.d/MariaDB.repo <<EOF
+cat <<EOF | sudo tee /etc/yum.repos.d/MariaDB.repo
 [mariadb]
 name = MariaDB
 baseurl = "https://rpm.mariadb.org/${mariadb_version}/rhel/\$releasever/\$basearch"
