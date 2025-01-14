@@ -77,9 +77,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = http://yum.mariadb.org/10.5/centos8-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.5/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
@@ -112,9 +112,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = https://yum.mariadb.org/10.6/rhel8-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.6/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
@@ -147,9 +147,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = http://yum.mariadb.org/10.11/rhel8-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.11/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
@@ -242,9 +242,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = http://yum.mariadb.org/10.5/rhel9-amd64/
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.5/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
@@ -274,9 +274,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = https://yum.mariadb.org/10.6/rhel9-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.6/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
@@ -306,9 +306,9 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
 
   [mariadb]
   name = MariaDB
-  baseurl = http://yum.mariadb.org/10.11/rhel9-amd64
-  gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-  gpgcheck=1
+  baseurl = https://rpm.mariadb.org/10.11/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
 
 Install::
 
