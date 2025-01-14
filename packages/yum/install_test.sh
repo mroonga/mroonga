@@ -48,7 +48,7 @@ sudo ${DNF_INSTALL} "${package}"
 sudo systemctl start "${service_name}"
 if [ "${have_auto_generated_password}" = "yes" ]; then
   auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
-  mysql="${mysql} -p${auto_generated_password}"
+  mysql="mysql -u root -p${auto_generated_password}"
   sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 fi
 
