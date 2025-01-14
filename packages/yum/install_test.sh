@@ -23,6 +23,7 @@ case "${package}" in
   mariadb-*)
     mariadb_version=$(echo "${package}" | cut -d'-' -f2)
     service_name=mariadb
+    have_auto_generated_password="no"
 
     cat <<REPO | sudo tee /etc/yum.repos.d/MariaDB.repo
 [mariadb]
@@ -37,6 +38,7 @@ REPO
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
     mysql_package_version=$(echo "${mysql_version}" | sed -e 's/\.//g')
     service_name=mysqld
+    have_auto_generated_password="yes"
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
@@ -44,4 +46,10 @@ esac
 
 sudo ${DNF_INSTALL} "${package}"
 sudo systemctl start "${service_name}"
+if [ "${have_auto_generated_password}" = "yes" ]; then
+  auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
+  mysql="${mysql} -p${auto_generated_password}"
+  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+fi
+
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
