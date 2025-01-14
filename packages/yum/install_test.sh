@@ -32,7 +32,6 @@ gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 REPO
     sudo dnf module -y disable mariadb
-    sudo ${DNF_INSTALL} mariadb-server
     ;;
   mysql-community-*)
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
