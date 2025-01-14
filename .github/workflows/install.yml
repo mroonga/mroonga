@@ -1,5 +1,6 @@
 name: Install
 on:
+  push:
   schedule:
     - cron: |
         0 0 * * *
@@ -27,6 +28,8 @@ jobs:
             package: mariadb-10.5
           - image: "images:almalinux/9"
             package: mariadb-10.6
+          - image: "images:almalinux/9"
+            package: mariadb-10.11
 
           # Ubuntu 20.04
           - image: "images:ubuntu/20.04"
