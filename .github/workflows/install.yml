@@ -1,5 +1,6 @@
 name: Install
 on:
+  push:
   schedule:
     - cron: |
         0 0 * * *
@@ -17,6 +18,8 @@ jobs:
           # AlmaLinux 8
           - image: "images:almalinux/8"
             package: mariadb-10.5
+          - image: "images:almalinux/8"
+            package: mariadb-10.6
 
           # AlmaLinux 9
           - image: "images:almalinux/9"
