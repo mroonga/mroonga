@@ -43,6 +43,6 @@ REPO
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
 esac
 
-sudo systemctl start "${service_name}"
 sudo ${DNF_INSTALL} "${package}"
+sudo systemctl start "${service_name}"
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
