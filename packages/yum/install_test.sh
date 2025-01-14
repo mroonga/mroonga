@@ -8,7 +8,7 @@ os_version=$(cut -d: -f5 /etc/system-release-cpe)
 
 case "${os_version}" in
   8)
-    DNF_INSTALL="dnf install -y --enablerepo=epel,powertools --disablerepo=AppStream"
+    DNF_INSTALL="dnf install -y --enablerepo=powertools --disablerepo=AppStream"
     sudo dnf module -y disable mysql
     ;;
   *)
