@@ -22,6 +22,7 @@ sudo ${DNF_INSTALL} "https://packages.groonga.org/almalinux/${os_version}/groong
 case "${package}" in
   mariadb-*)
     mariadb_version=$(echo "${package}" | cut -d'-' -f2)
+    service_name=mariadb
 
     cat <<REPO | sudo tee /etc/yum.repos.d/MariaDB.repo
 [mariadb]
@@ -32,15 +33,16 @@ gpgcheck = 1
 REPO
     sudo dnf module -y disable mariadb
     sudo ${DNF_INSTALL} mariadb-server
-    sudo systemctl start mariadb
     ;;
   mysql-community-*)
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
     mysql_package_version=$(echo "${mysql_version}" | sed -e 's/\.//g')
+    service_name=mysqld
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
 esac
 
+sudo systemctl start "${service_name}"
 sudo ${DNF_INSTALL} "${package}"
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
