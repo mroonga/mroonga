@@ -21,6 +21,8 @@ jobs:
             package: mariadb-10.6
           - image: "images:almalinux/8"
             package: mariadb-10.11
+          - image: "images:almalinux/8"
+            package: mariadb-11.4
 
           # AlmaLinux 9
           - image: "images:almalinux/9"
