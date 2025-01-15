@@ -1,5 +1,8 @@
 name: Install
 on:
+  push:
+    paths:
+      - 'packages/**/install_test.sh'
   schedule:
     - cron: |
         0 0 * * *
