@@ -2,11 +2,6 @@
 
 set -exu
 
-
-
-
-
-
 package="$1"
 
 os_version=$(cut -d: -f5 /etc/system-release-cpe)
