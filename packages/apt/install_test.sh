@@ -2,6 +2,9 @@
 
 set -exu
 
+
+
+
 package=$1
 
 sudo apt update
