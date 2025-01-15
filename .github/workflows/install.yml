@@ -1,5 +1,6 @@
 name: Install
 on:
+  push:
   schedule:
     - cron: |
         0 0 * * *
@@ -25,6 +26,8 @@ jobs:
             package: mariadb-11.4
           - image: "images:almalinux/8"
             package: mysql-community-8.0
+          - image: "images:almalinux/8"
+            package: mysql-community-8.4
 
           # AlmaLinux 9
           - image: "images:almalinux/9"
