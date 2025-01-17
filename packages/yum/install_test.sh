@@ -34,6 +34,13 @@ gpgcheck = 1
 REPO
     sudo dnf module -y disable mariadb
     ;;
+  mysql-community-minimal-*)
+    service_name=mysqld
+    have_auto_generated_password="yes"
+
+    sudo ${DNF_INSTALL} \
+         "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
+    ;;
   mysql-community-*)
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
     mysql_package_version=$(echo "${mysql_version}" | sed -e 's/\.//g')
@@ -43,12 +50,6 @@ REPO
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
     ;;
-  mysql-community-minimal-*)
-    service_name=mysqld
-    have_auto_generated_password="yes"
-
-    sudo ${DNF_INSTALL} \
-         "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
 esac
 
 sudo ${DNF_INSTALL} "${package}"
