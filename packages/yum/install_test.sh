@@ -55,12 +55,34 @@ REPO
 esac
 
 sudo ${DNF_INSTALL} "${package}"
-sudo systemctl start "${service_name}"
-mysql="mysql -u root"
-if [ "${have_auto_generated_password}" = "yes" ]; then
-  auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
-  mysql="mysql -u root -p${auto_generated_password}"
-  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-fi
+
+case "${package}" in
+  mysql-community-minimal-*)
+      sudo mkdir -p /var/lib/mysql /var/run/mysqld
+      sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
+      sudo chmod 1777 /var/lib/mysql /var/run/mysqld
+
+      auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+      mysql="mysql -u root -p${auto_generated_password}"
+      mysqld &
+      while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
+      sudo ${mysql} \
+           --connect-expired-password \
+           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+
+      sudo ${mysql} < /usr/share/mroonga/install.sql
+      ;;
+  *)
+    sudo systemctl start "${service_name}"
+    mysql="mysql -u root"
+    if [ "${have_auto_generated_password}" = "yes" ]; then
+      auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
+      mysql="mysql -u root -p${auto_generated_password}"
+      sudo ${mysql} \
+           --connect-expired-password \
+           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+    fi
+    ;;
+esac
 
 sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
