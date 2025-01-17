@@ -68,8 +68,6 @@ case "${package}" in
       sudo ${mysql} \
            --connect-expired-password \
            -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-
-      sudo ${mysql} < /usr/share/mroonga/install.sql
       ;;
   *)
     sudo systemctl start "${service_name}"
