@@ -170,6 +170,41 @@ Install groonga-tokenizer-mecab package::
   % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
   % sudo dnf module -y disable mysql
 
+.. _almalinux-8-mariadb-11-4:
+
+AlmaLinux 8 (with MariaDB 11.4 package)
+---------------------------------------
+
+You can use MariaDB's MariaDB packages version 11.4 on AlmaLinux 8 since
+Mroonga 14.07 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = https://rpm.mariadb.org/11.4/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
+
+Install::
+
+  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+  % sudo dnf module -y disable mariadb
+  % sudo dnf module -y disable mysql
+  % sudo dnf install -y --enablerepo=powertools mariadb-server
+  % sudo systemctl start mariadb
+  % sudo dnf install -y --enablerepo=powertools mariadb-11.4-mroonga
+  (% sudo mariadb-admin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf module -y enable mysql
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+  % sudo dnf module -y disable mysql
+
 .. _almalinux-9-oracle-8-0:
 
 AlmaLinux 9 (with the Oracle MySQL 8.0 package)
@@ -318,6 +353,38 @@ Install::
   % sudo systemctl start mariadb
   % sudo dnf install -y mariadb-10.11-mroonga
   (% sudo mysqladmin -u root password 'new-password')
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package::
+
+  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
+.. _almalinux-9-mariadb-11-4:
+
+AlmaLinux 9 (with MariaDB 11.4 package)
+---------------------------------------
+
+You can use MariaDB's MariaDB packages version 11.4 on AlmaLinux 9 since
+Mroonga 14.07 release.
+
+Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
+
+  [mariadb]
+  name = MariaDB
+  baseurl = https://rpm.mariadb.org/11.4/rhel/$releasever/$basearch
+  gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
+  gpgcheck = 1
+
+Install::
+
+  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+  % sudo dnf install -y mariadb-server
+  % sudo systemctl start mariadb
+  % sudo dnf install -y mariadb-11.4-mroonga
+  (% sudo mariadb-admin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
