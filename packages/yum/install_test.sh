@@ -42,6 +42,13 @@ REPO
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
+    ;;
+  mysql-community-minimal-*)
+    service_name=mysqld
+    have_auto_generated_password="yes"
+
+    sudo ${DNF_INSTALL} \
+         "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
 esac
 
 sudo ${DNF_INSTALL} "${package}"
