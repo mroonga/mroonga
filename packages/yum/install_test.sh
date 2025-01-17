@@ -40,6 +40,8 @@ REPO
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
+    echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+    sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
     ;;
   mysql-community-*)
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
