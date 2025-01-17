@@ -36,7 +36,6 @@ REPO
     ;;
   mysql-community-minimal-*)
     service_name=mysqld
-    have_auto_generated_password="yes"
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
@@ -64,7 +63,7 @@ case "${package}" in
 
       auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
       mysql="mysql -u root -p${auto_generated_password}"
-      mysqld &
+      "${service_name}" &
       while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
       sudo ${mysql} \
            --connect-expired-password \
