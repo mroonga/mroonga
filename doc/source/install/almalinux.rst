@@ -385,12 +385,12 @@ Install:
 
 .. code-block:: console
 
-  $ sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
-  $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  $ sudo dnf install -y mariadb-server
-  $ sudo systemctl start mariadb
-  $ sudo dnf install -y mariadb-11.4-mroonga
-  ($ sudo mariadb-admin -u root password 'new-password')
+   $ sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y mariadb-11.4-mroonga
+   ($ sudo mariadb-admin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
@@ -399,4 +399,4 @@ Install groonga-tokenizer-mecab package:
 
 .. code-block:: console
 
-  $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
