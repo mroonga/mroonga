@@ -35,6 +35,8 @@ jobs:
             package: mysql-community-8.0
           - image: "images:almalinux/8"
             package: mysql-community-8.4
+          - image: "images:almalinux/8"
+            package: percona-server-8.0
 
           # AlmaLinux 9
           - image: "images:almalinux/9"

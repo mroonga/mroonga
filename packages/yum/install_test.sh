@@ -51,6 +51,17 @@ REPO
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
     ;;
+  percona-*)
+    percona_server_version=$(echo "${package}" | cut -d'-' -f3)
+    service_name=mysqld
+    have_auto_generated_password=yes
+
+    sudo ${DNF_INSTALL} \
+         https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+    percona_package_version=$(echo ${percona_server_version} | sed -e 's/\.//g')
+    sudo percona-release setup ps${percona_package_version}
+    sudo ${DNF_INSTALL} percona-icu-data-files
+    ;;
 esac
 
 sudo ${DNF_INSTALL} "${package}"
