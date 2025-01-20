@@ -164,11 +164,13 @@ Install::
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf module -y enable mysql
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
+.. code-block:: console
+
+   $ sudo dnf module -y enable mysql
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-11-4:
 
