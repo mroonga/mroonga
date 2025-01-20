@@ -49,6 +49,8 @@ jobs:
             package: mysql-community-8.0
           - image: "images:almalinux/9"
             package: mysql-community-8.4
+          - image: "images:almalinux/9"
+            package: mysql-community-minimal-8.0
 
           # Ubuntu 20.04
           - image: "images:ubuntu/20.04"

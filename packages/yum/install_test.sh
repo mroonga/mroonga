@@ -34,6 +34,14 @@ gpgcheck = 1
 REPO
     sudo dnf module -y disable mariadb
     ;;
+  mysql-community-minimal-*)
+    service_name=mysqld
+
+    sudo ${DNF_INSTALL} \
+         "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
+    echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+    sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
+    ;;
   mysql-community-*)
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
     mysql_package_version=$(echo "${mysql_version}" | sed -e 's/\.//g')
@@ -42,15 +50,53 @@ REPO
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${os_version}.rpm"
+    ;;
 esac
 
 sudo ${DNF_INSTALL} "${package}"
-sudo systemctl start "${service_name}"
-mysql="mysql -u root"
-if [ "${have_auto_generated_password}" = "yes" ]; then
-  auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
-  mysql="mysql -u root -p${auto_generated_password}"
-  sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-fi
+
+case "${package}" in
+  mysql-community-minimal-*)
+    sudo mkdir -p /var/lib/mysql /var/run/mysqld
+    sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
+    sudo chmod 1777 /var/lib/mysql /var/run/mysqld
+
+    # mysql --initialize outputs the following logs to stderror:
+    #
+    #   2025-01-20T02:57:06.620776Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.40) initializing of server in progress as process 593
+    #   2025-01-20T02:57:06.631994Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+    #   2025-01-20T02:57:06.852935Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+    #   2025-01-20T02:57:07.484688Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: xxxxxxxxxxxx
+    #
+    # We can connect stderror of a command to stdin of the other
+    # command through the pipe by using "|&".  So, we can get the
+    # temporary password by using "|&" and "awk 'END{print $NF}'".
+    #
+    # Execution example:
+    #   $ mysqld --initialize |& awk 'END{print $NF}'
+    #   xxxxxxxxxxxx
+    auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+    mysql="mysql -u root -p${auto_generated_password}"
+    "${service_name}" &
+    while ! mysqladmin ping -hlocalhost --silent; do
+      sleep 1
+    done
+    sudo ${mysql} \
+         --connect-expired-password \
+         -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+    sudo ${mysql} < /usr/share/mroonga/install.sql
+    ;;
+  *)
+    sudo systemctl start "${service_name}"
+    mysql="mysql -u root"
+    if [ "${have_auto_generated_password}" = "yes" ]; then
+      auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
+      mysql="mysql -u root -p${auto_generated_password}"
+      sudo ${mysql} \
+           --connect-expired-password \
+           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+    fi
+    ;;
+esac
 
 sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
