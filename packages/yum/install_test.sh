@@ -54,11 +54,11 @@ REPO
   percona-*)
     service_name=mysqld
     have_auto_generated_password=yes
-    sudo ${DNF_INSTALL} install -y \
+    sudo ${DNF_INSTALL} \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     sudo percona-release setup ps${percona_package_version}
-    sudo ${DNF_INSTALL} install -y percona-icu-data-files
+    sudo ${DNF_INSTALL} percona-icu-data-files
     ;;
 esac
 
