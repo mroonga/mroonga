@@ -74,7 +74,7 @@ case "${package}" in
     #
     # Execution example:
     #   $ mysqld --initialize |& awk 'END{print $NF}'
-    #   $ xxxxxxxxxxxx
+    #   xxxxxxxxxxxx
     auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
     mysql="mysql -u root -p${auto_generated_password}"
     "${service_name}" &
