@@ -205,9 +205,9 @@ Install groonga-tokenizer-mecab package:
 
 .. code-block:: console
 
-  $ sudo dnf module -y enable mysql
-  $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  $ sudo dnf module -y disable mysql
+   $ sudo dnf module -y enable mysql
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf module -y disable mysql
 
 .. _almalinux-9-oracle-8-0:
 
