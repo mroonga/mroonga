@@ -188,15 +188,17 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
   gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck = 1
 
-Install::
+Install:
 
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-11.4-mroonga
-  (% sudo mariadb-admin -u root password 'new-password')
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+   $ sudo dnf module -y disable mariadb
+   $ sudo dnf module -y disable mysql
+   $ sudo dnf install -y --enablerepo=powertools mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y --enablerepo=powertools mariadb-11.4-mroonga
+   ($ sudo mariadb-admin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
