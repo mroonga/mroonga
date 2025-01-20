@@ -69,6 +69,10 @@ case "${package}" in
     #
     # We can connect stderror of a command to stdin of the other command through the pipe by using "&|".
     # So, we can get the temporary password by using "|&" and "awk 'END{print $NF}'".
+    #
+    # Execution example:
+    #   $ mysqld --initialize |& awk 'END{print $NF}'
+    #   $ xxxxxxxxxxxx
     auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
     mysql="mysql -u root -p${auto_generated_password}"
     "${service_name}" &
