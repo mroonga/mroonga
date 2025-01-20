@@ -57,19 +57,19 @@ sudo ${DNF_INSTALL} "${package}"
 
 case "${package}" in
   mysql-community-minimal-*)
-      sudo mkdir -p /var/lib/mysql /var/run/mysqld
-      sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
-      sudo chmod 1777 /var/lib/mysql /var/run/mysqld
+    sudo mkdir -p /var/lib/mysql /var/run/mysqld
+    sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
+    sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
-      auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
-      mysql="mysql -u root -p${auto_generated_password}"
-      "${service_name}" &
-      while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
-      sudo ${mysql} \
-           --connect-expired-password \
-           -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
-      sudo ${mysql} < /usr/share/mroonga/install.sql
-      ;;
+    auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+    mysql="mysql -u root -p${auto_generated_password}"
+    "${service_name}" &
+    while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
+    sudo ${mysql} \
+         --connect-expired-password \
+         -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
+    sudo ${mysql} < /usr/share/mroonga/install.sql
+    ;;
   *)
     sudo systemctl start "${service_name}"
     mysql="mysql -u root"
