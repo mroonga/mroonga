@@ -72,7 +72,9 @@ case "${package}" in
     auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
     mysql="mysql -u root -p${auto_generated_password}"
     "${service_name}" &
-    while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
+    while ! mysqladmin ping -hlocalhost --silent; do
+      sleep 1
+    done
     sudo ${mysql} \
          --connect-expired-password \
          -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
