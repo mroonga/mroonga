@@ -61,6 +61,14 @@ case "${package}" in
     sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
     sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
+    # mysql --initialize output the following log to stderror.
+    # 2025-01-20T02:57:06.620776Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.40) initializing of server in progress as process 593
+    # 2025-01-20T02:57:06.631994Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+    # 2025-01-20T02:57:06.852935Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+    # 2025-01-20T02:57:07.484688Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: xxxxxxxxxxxx
+    #
+    # We can connect stderror of a command to stdin of the other command through the pipe by using "&|".
+    # So, we can get the temporary password by using "|&" and "awk 'END{print $NF}'".
     auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
     mysql="mysql -u root -p${auto_generated_password}"
     "${service_name}" &
