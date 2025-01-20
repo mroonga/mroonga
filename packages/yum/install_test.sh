@@ -68,8 +68,9 @@ case "${package}" in
     #   2025-01-20T02:57:06.852935Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
     #   2025-01-20T02:57:07.484688Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: xxxxxxxxxxxx
     #
-    # We can connect stderror of a command to stdin of the other command through the pipe by using "|&".
-    # So, we can get the temporary password by using "|&" and "awk 'END{print $NF}'".
+    # We can connect stderror of a command to stdin of the other
+    # command through the pipe by using "|&".  So, we can get the
+    # temporary password by using "|&" and "awk 'END{print $NF}'".
     #
     # Execution example:
     #   $ mysqld --initialize |& awk 'END{print $NF}'
