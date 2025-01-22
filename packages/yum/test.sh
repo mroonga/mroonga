@@ -147,7 +147,9 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   # password is generated" | awk '{print $NF}'".
   #
   # Execution example:
-  #   $ mysqld --initialize |& grep "A temporary password is generated" | awk '{print $NF}'
+  #   $ mysqld --initialize |& \
+  #       grep "A temporary password is generated" | \
+  #       awk '{print $NF}'
   #   xxxxxxxxxxxx
   auto_generated_password=$(mysqld --initialize |& \
                               grep "A temporary password is generated" | \
