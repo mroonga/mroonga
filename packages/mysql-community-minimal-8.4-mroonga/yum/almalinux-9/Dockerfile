@@ -19,8 +19,8 @@ RUN \
     mysql-community-devel && \
   dnf install --enablerepo=crb -y ${quiet} \
     https://repo.mysql.com/mysql-community-minimal-release-el9.rpm && \
-  dnf builddep --enablerepo=mysql84-community-minimal-source,crb -y ${quiet} mysql-community-minimal && \
-  dnf download --enablerepo=mysql84-community-minimal-source -y ${quiet} --source mysql-community-minimal && \
+  dnf builddep --enablerepo=crb -y ${quiet} mysql-community-minimal && \
+  dnf download -y ${quiet} --source mysql-community-minimal && \
   dnf install --enablerepo=crb -y ${quiet} \
     ${SCL} \
     ${SCL}-annobin-plugin-gcc \
