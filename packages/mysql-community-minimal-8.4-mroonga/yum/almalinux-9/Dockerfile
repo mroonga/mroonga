@@ -13,7 +13,7 @@ RUN \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
     https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/mysql80-community-release-el9.rpm \
+    https://repo.mysql.com/mysql84-community-release-el9.rpm \
     https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
   dnf install -y ${quiet} \
     mysql-community-devel && \
