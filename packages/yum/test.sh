@@ -80,11 +80,6 @@ REPO
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=${package}
-    # TODO: Remove this after we release packages for
-    # mysql-community-8.4 on pckages.groonga.org.
-    if [ "${mysql_version}" = "8.4" ]; then
-      old_package=
-    fi
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     ;;
