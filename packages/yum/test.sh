@@ -129,7 +129,7 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
   sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
-  auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+  auto_generated_password=$(mysqld --initialize |& grep "A temporary password is generated" | awk '{print $NF}')
   mysql="mysql -u root -p${auto_generated_password}"
   mysqld &
 
