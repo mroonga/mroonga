@@ -119,7 +119,31 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   sudo chown mysql:mysql /var/lib/mysql /var/run/mysqld
   sudo chmod 1777 /var/lib/mysql /var/run/mysqld
 
-  auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
+  # mysql --initialize on mysql-community-server-minimal-8.4 outputs
+  # the following logs to stderror:
+  #
+  # 2025-01-22T05:19:57.724062Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+  # 2025-01-22T05:19:57.725325Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.4.4) initializing of server in progress as process 531
+  # 2025-01-22T05:19:57.730718Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+  # 2025-01-22T05:19:58.034043Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+  # 2025-01-22T05:19:58.567252Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: xxxxxxxxxxxx
+  # 2025-01-22T05:20:00.062959Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+  #
+  # We can connect stderror of a command to stdin of the other command
+  # through the pipe by using "|&".  MySQL output "A temporary
+  # password is generated" to stderr when generated temporary password
+  # both mysql-community-server-minimal-8.0 and 8.4.  So, we can get
+  # the temporary password by using "|&" and "grep "A temporary
+  # password is generated" | awk '{print $NF}'".
+  #
+  # Execution example:
+  #   $ mysqld --initialize |& \
+  #       grep "A temporary password is generated" | \
+  #       awk '{print $NF}'
+  #   xxxxxxxxxxxx
+  auto_generated_password=$(mysqld --initialize |& \
+                              grep "A temporary password is generated" | \
+                              awk '{print $NF}')
   mysql="mysql -u root -p${auto_generated_password}"
   mysqld &
 
