@@ -44,12 +44,7 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
-    # TODO: We can enable this after we release Mroonga 14.04. It
-    # seems that MariaDB's Yum repository removes old MariaDB packages.
-    # And Mroonga wasn't released in about a year. So we can't install
-    # the previous Mroonga that depends on old MariaDB.
-    # old_package=${package}
-    old_package=
+    old_package=${package}
     mysql_package_prefix=MariaDB
     service_name=mariadb
     ha_mroonga_so=ha_mroonga_official.so
