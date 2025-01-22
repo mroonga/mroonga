@@ -196,7 +196,7 @@ jobs:
 
           # MySQL community minimal 8.4
           - os: almalinux-9
-            package: mysql-community-minimagl-8.4
+            package: mysql-community-minimal-8.4
             test-image: "images:almalinux/9"
 
           # Percona Server 8.0
