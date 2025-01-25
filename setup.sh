@@ -89,7 +89,8 @@ cmake \
 cmake --build /tmp/mariadb.build
 cmake --install /tmp/mariadb.build
 
-groonga_latest_version=14.1.2
+groonga_latest_version=$(curl https://api.github.com/repos/groonga/groonga/releases/latest | \
+                           jq -r '.["tag_name"]' | sed 's/^v//')
 wget https://github.com/groonga/groonga/releases/download/v${groonga_latest_version}/groonga-${groonga_latest_version}.tar.gz
 tar -zxvf groonga-${groonga_latest_version}.tar.gz -C /tmp
 mkdir -p /tmp/groonga.build
@@ -100,4 +101,3 @@ cmake \
   -DCMAKE_INSTALL_PREFIX=/tmp/local
 cmake --build /tmp/groonga.build
 cmake --install /tmp/groonga.build
-
