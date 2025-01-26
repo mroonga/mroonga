@@ -45,8 +45,7 @@ else
   code_name=unknown
 fi
 
-package_names=()
-package_names+=(
+package_names=(
   ccache
   cmake
   curl
