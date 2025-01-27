@@ -31,8 +31,9 @@ Here are optional tools.
 
 Here are required libraries.
 
-- [Groonga](https://groonga.org/). (If you use package, install development package such as `libgroonga-dev` for deb or `groonga-devel` for RPM.)
-- [groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql).
+- [Groonga](https://groonga.org/)
+  - If you use package, install development package such as `libgroonga-dev` for deb or `groonga-devel` for RPM
+- [groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql)
 
 Here are optional libraries.
 

@@ -70,11 +70,14 @@ msgstr "ライブラリー"
 msgid "Here are required libraries."
 msgstr "必須のライブラリー"
 
-msgid "[Groonga](https://groonga.org/). (If you use package, install development package such as `libgroonga-dev` for deb or `groonga-devel` for RPM.)"
-msgstr "[Groonga](https://groonga.org/ja/) 。（もしパッケージを使うなら、開発用パッケージをインストールしてください。debなら `libgroonga-dev` で、RPMなら `groonga-devel` です。）"
+msgid "[Groonga](https://groonga.org/)"
+msgstr ""
 
-msgid "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql)."
-msgstr "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql>) 。"
+msgid "If you use package, install development package such as `libgroonga-dev` for deb or `groonga-devel` for RPM"
+msgstr "もしパッケージを使うなら、開発用パッケージをインストールしてください。debなら `libgroonga-dev` で、RPMなら `groonga-devel` です"
+
+msgid "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql)"
+msgstr ""
 
 msgid "Here are optional libraries."
 msgstr "あるとよいライブラリー"
