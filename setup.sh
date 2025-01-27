@@ -25,18 +25,6 @@ else
   SUDO=
 fi
 
-if [ -f /etc/debian_version ]; then
-  ${SUDO} apt update
-  ${SUDO} apt install -y -V lsb-release wget
-  wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-  ${SUDO} apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-  rm apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-  ${SUDO} apt update
-else
-  echo "This OS setup is not supported."
-  exit 1
-fi
-
 if type lsb_release > /dev/null 2>&1; then
   distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
   code_name=$(lsb_release --codename --short)
@@ -45,51 +33,71 @@ else
   code_name=unknown
 fi
 
-package_names=(
-  ccache
-  cmake
-  curl
-  doxygen
-  g++
-  gcc
-  gettext
-  graphviz
-  jq
-  libarrow-dev
-  libedit-dev
-  liblz4-dev
-  libmecab-dev
-  libmsgpack-dev
-  libsimdjson-dev
-  libstemmer-dev
-  libxxhash-dev
-  libzstd-dev
-  ninja-build
-  pkg-config
-  python3-pip
-  rapidjson-dev
-  zlib1g-dev
-)
+case "${distribution}-${code_name}" in
+  debian-*|ubuntu-*)
+    ${SUDO} apt update
+    ${SUDO} apt install -y -V lsb-release wget
+    deb=apache-arrow-apt-source-latest-${code_name}.deb
+    wget https://apache.jfrog.io/artifactory/arrow/${distribution}/${deb}
+    ${SUDO} apt install -y -V ./${deb}
+    rm ${deb}
+    ${SUDO} apt update
+    ;;
+  *)
+    echo "This OS setup is not supported."
+    exit 1
+    ;;
+esac
 
-${SUDO} apt install -y -V "${package_names[@]}"
+case "${distribution}-${code_name}" in
+  debian-*|ubuntu-*)
+    ${SUDO} apt install -y -V \
+      ccache \
+      cmake \
+      curl \
+      doxygen \
+      g++ \
+      gcc \
+      gettext \
+      graphviz \
+      jq \
+      libarrow-dev \
+      libedit-dev \
+      liblz4-dev \
+      libmecab-dev \
+      libmsgpack-dev \
+      libsimdjson-dev \
+      libstemmer-dev \
+      libxxhash-dev \
+      libzstd-dev \
+      ninja-build \
+      pkg-config \
+      python3-pip \
+      rapidjson-dev \
+      zlib1g-dev
+    ;;
+esac
 
-mariadb_latest_version=$(curl https://downloads.mariadb.org/rest-api/mariadb/11.4/latest/ | \
-                           jq -r '.releases[].release_id')
-wget "https://archive.mariadb.org/mariadb-${mariadb_latest_version}/source/mariadb-${mariadb_latest_version}.tar.gz"
-tar -zxvf "mariadb-${mariadb_latest_version}.tar.gz" -C /tmp
-mkdir -p /tmp/mariadb.build
-cmake \
-  -S/tmp/mariadb-${mariadb_latest_version} \
-  -B/tmp/mariadb.build \
-  -GNinja \
-  -DCMAKE_BUILD_TYPE=Debug \
-  -DCMAKE_INSTALL_PREFIX=/tmp/local \
-  -DWITH_DEBUG=ON
-cmake --build /tmp/mariadb.build
-cmake --install /tmp/mariadb.build
+case "${distribution}-${code_name}" in
+  debian-*)
+    deb=groonga-apt-source-latest-${code_name}.deb
+    wget https://packages.groonga.org/${distribution}/${deb}
+    ${SUDO} apt install -y -V ./${deb}
+    rm ${deb}
+    ${SUDO} apt update
+    ${SUDO} apt install -y -V libgroonga-dev
+    ;;
+  ubuntu-*)
+    ${SUDO} apt install -y -V software-properties-common
+    ${SUDO} add-apt-repository -y ppa:groonga/ppa
+    ${SUDO} apt install -y -V libgroonga-dev
+    ;;
+esac
 
-${SUDO} apt-get install -y -V software-properties-common
-${SUDO} add-apt-repository -y universe
-${SUDO} add-apt-repository -y ppa:groonga/ppa
-${SUDO} apt-get update
-${SUDO} apt -V -y install groonga
+case "${distribution}-${code_name}" in
+  debian-*|ubuntu-*)
+    ${SUDO} apt install -y -V \
+      libgroonga-dev \
+      groonga-normalizer-mysql
+    ;;
+esac
