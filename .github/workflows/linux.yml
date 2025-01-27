@@ -39,10 +39,6 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          path: mroonga.github.com
-          repository: mroonga/mroonga.github.com
       - uses: actions/setup-python@v5
         with:
           python-version: 3
@@ -70,7 +66,6 @@ jobs:
         run: |
           ./configure \
             --enable-document \
-            --with-mroonga-github-com-path=mroonga.github.com \
             --with-mysql-source=../mysql/mysql
       - name: Build archive
         run: |
