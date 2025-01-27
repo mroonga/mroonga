@@ -62,23 +62,48 @@ namespace :release do
   namespace :document do
     desc "Update document"
     task :update do
-      build_dir = env_var("BUILD_DIR")
       mroonga_org_path = File.expand_path(env_var("MROONGA_ORG_DIR"))
+      build_dir = ENV["BUILD_DIR"]
+      deploy = lambda do |output_dir, locale|
+        if locale == "en"
+          mroonga_org_docs = File.join(mroonga_org_path, "docs")
+        else
+          mroonga_org_docs = File.join(mroonga_org_path, locale, "docs")
+        end
+        rm_rf(mroonga_org_docs)
+        mkdir_p(File.expand_path(File.join(mroonga_org_docs, "..")))
+        mv(output_dir, mroonga_org_docs)
+        rm_f(File.join(mroonga_org_docs, ".buildinfo"))
+      end
       Dir.mktmpdir do |dir|
-        sh({"DESTDIR" => dir},
-           "cmake",
-           "--build", build_dir,
-           "--target", "install")
-        Dir.glob("#{dir}/**/share/doc/mroonga/*/") do |doc|
-          locale = File.basename(doc)
-          if locale == "en"
-            mroonga_org_docs = File.join(mroonga_org_path, "docs")
-          else
-            mroonga_org_docs = File.join(mroonga_org_path, locale, "docs")
+        if build_dir
+          sh({"DESTDIR" => dir},
+             "cmake",
+             "--build", build_dir,
+             "--target", "install")
+          Dir.glob("#{dir}/**/share/doc/mroonga/*/") do |doc|
+            locale = File.basename(doc)
+            deploy.call(doc, locale)
           end
-          rm_rf(mroonga_org_docs)
-          mv(doc, mroonga_org_docs)
-          rm_f(File.join(mroonga_org_docs, ".buildinfo"))
+        else
+          ["en", "ja"].each do |locale|
+            output_dir = "#{dir}/html"
+            sh({
+                 "DOCUMENT_VERSION" => version,
+                 "DOCUMENT_VERSION_FULL" => version,
+                 "LOCALE" => locale,
+                 "PACKAGE_MROONGA_VERSION" => version,
+               },
+               "sphinx-build",
+               "--builder", "html",
+               "--define", "language=#{locale}",
+               "--doctree-dir", "#{dir}/doctrees/html",
+               "--jobs", "auto",
+               "--quiet",
+               "doc/source",
+               output_dir)
+            deploy.call(output_dir, locale)
+          end
         end
       end
     end
