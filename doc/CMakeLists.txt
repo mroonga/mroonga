@@ -67,9 +67,10 @@ function(mrn_sphinx SOURCE_DIR LOCALE SOURCES HTML_FILES)
       COMMAND
         ${CMAKE_COMMAND} -E env DOCUMENT_VERSION=${MRN_VERSION_FULL}
         DOCUMENT_VERSION_FULL=${MRN_VERSION_FULL} LOCALE=${LOCALE}
-	PACKAGE_MROONGA_VERSION=${MRN_VERSION_FULL}
-        ${SPHINX_BUILD} -j auto -D language=${LOCALE} -b ${BUILDER} -d
-        ${LOCALE}/doctrees/${BUILDER} ${SOURCE_DIR} ${LOCALE}/${BUILDER}
+        PACKAGE_MROONGA_VERSION=${MRN_VERSION_FULL}
+        ${SPHINX_BUILD} $<$<CONFIG:Debug>:--fail-on-warning> --quiet -j auto -D
+        language=${LOCALE} -b ${BUILDER} -d ${LOCALE}/doctrees/${BUILDER}
+        ${SOURCE_DIR} ${LOCALE}/${BUILDER}
       COMMAND ${CMAKE_COMMAND} -E touch ${LOCALE}-${BUILDER}.time_stamp
       DEPENDS ${TARGET_SOURCES})
     if("${BUILDER}" STREQUAL "html")
