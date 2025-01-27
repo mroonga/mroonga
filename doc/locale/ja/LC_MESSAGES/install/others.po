@@ -74,7 +74,7 @@ msgid "[Groonga](https://groonga.org/). (If you use package, install development
 msgstr "[Groonga](https://groonga.org/ja/) 。（もしパッケージを使うなら、開発用パッケージをインストールしてください。debなら `libgroonga-dev` で、RPMなら `groonga-devel` です。）"
 
 msgid "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql)."
-msgstr "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql>) 。"
+msgstr "[groonga-normalizer-mysql](https://github.com/groonga/groonga-normalizer-mysql) 。"
 
 msgid "Here are optional libraries."
 msgstr "あるとよいライブラリー"
