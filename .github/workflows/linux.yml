@@ -307,9 +307,48 @@ jobs:
           sudo incus stop target
           sudo incus delete target
 
+  docs:
+    name: Documents
+    needs: source
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      BUNDLER_GEMFILE: doc/Gemfile
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-source
+      - name: Extract
+        run: |
+          tar -xf mroonga-*.tar.gz --strip-components 1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+          bundler-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install -r doc/requirements.txt
+      - name: Build
+        run: |
+          version=$(cat version_full)
+          rake \
+            release:document:update \
+            MROONGA_ORG_DIR=documents-${version}
+          tar -czf documents-${version}.tar.gz documents-${version}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-documents
+          path: documents-*.tar.gz
+
   prepare-release:
     name: Prepare for release
-    needs: build
+    needs:
+      - build
+      - docs
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
