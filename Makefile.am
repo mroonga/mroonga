@@ -37,7 +37,8 @@ SUBDIRS =					\
 EXTRA_DIST =					\
 	AUTHORS					\
 	gpg_uid					\
-	CMakeLists.txt
+	CMakeLists.txt				\
+	Rakefile
 
 installcheck-local: install
 	test/run-sql-test.sh
