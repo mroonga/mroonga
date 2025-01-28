@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-12-24 16:02+0900\n"
+"PO-Revision-Date: 2025-01-28 10:25+0900\n"
 "Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -18,6 +18,21 @@ msgstr ""
 
 msgid "News - 14 series"
 msgstr "お知らせ - 14系"
+
+msgid "Release 14.13 - 2025-01-29"
+msgstr "14.13リリース - 2025-01-29"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "Added support for `mysql:8.4` Docker image"
+msgstr "`mysql:8.4` Dockerイメージに対応"
+
+msgid "`mysql:*` Docker images use the `mysql-community-server-minimal` package not the `mysql-community-server` package. So we need to build Mroonga packages for not only `mysql-community-server` but also `mysql-community-server-minimal` to use Mroonga in `mysql:*` Docker images."
+msgstr "`mysql:*` Dockerイメージは`mysql-community-server`パッケージではなく`mysql-community-server-minimal`パッケージを使っています。そのため、`mysql:*` DockerイメージでMroongaを使うためには、`mysql-community-server`向けのMroongaパッケージだけでなく、`mysql-community-server-minimal`向けのMroongaパッケージも作る必要がありました。"
+
+msgid "We published Mroonga packages only for MySQL 8.0's `mysql-community-server-minimal` so far. In this release, we also published Mroonga packages for MySQL 8.4's `mysql-community-server-minimal`. So we can use Mroonga in `mysql:8.4` Docker images."
+msgstr "これまではMySQL 8.0の`mysql-community-server-minimal`向けMroongaパッケージしか提供していませんでした。今回のリリースからはMySQL 8.4の`mysql-community-server-minimal`向けMroongaパッケージも提供します。これで`mysql:8.4` DockerイメージでもMroongaを使うことができます。"
 
 msgid "Release 14.12 - 2024-12-25"
 msgstr "14.12リリース - 2024-12-25"
@@ -33,9 +48,6 @@ msgstr "この現象を再現する具体的な条件はわかっていません
 
 msgid "Release 14.10 - 2024-11-12"
 msgstr "14.10リリース - 2024-11-12"
-
-msgid "Improvements"
-msgstr "改良"
 
 msgid "Improved `index_column_diff` support"
 msgstr "`index_column_diff`サポートを改良"
