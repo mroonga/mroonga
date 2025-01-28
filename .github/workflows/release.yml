@@ -15,14 +15,17 @@ jobs:
           workflows=(linux.yml windows.yml)
           for workflow in "${workflows[@]}"; do
             run_id=""
-            while [ -z "${run_id}" ]; do
+            while true; do
               echo "Waiting for run to start ${workflow}..."
               run_id=$(gh run list \
                          --branch ${GITHUB_REF_NAME} \
                          --jq '.[].databaseId' \
                          --json databaseId \
                          --workflow ${workflow})
-              sleep 1
+              if [ -n "${run_id}" ]; then
+                break
+              fi
+              sleep 60
             done
             gh run watch \
               --exit-status \
