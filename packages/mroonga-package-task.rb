@@ -156,6 +156,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def define_archive_task
+    file original_archive_path.to_s do
+      source_archive_url = built_package_url(:source, @original_archive_name)
+      download(source_archive_url, "../..")
+    end
+
     [@archive_name, deb_archive_name, rpm_archive_name].each do |archive_name|
       file archive_name => original_archive_path.to_s do
         sh("tar", "xf", original_archive_path.to_s)
