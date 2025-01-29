@@ -124,6 +124,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc mariadb-10.5-mroonga-doc/*
 
 %changelog
+* Wed Jan 29 2025 Abe Tomoaki <abe@clear-code.com> - 14.13-1
+- New upstream release.
+
 * Wed Dec 25 2024 Sutou Kouhei <kou@clear-code.com> - 14.12-1
 - New upstream release.
 

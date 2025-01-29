@@ -77,4 +77,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/mroonga/*
 
 %changelog
-
+* Wed Jan 29 2025 Abe Tomoaki <abe@clear-code.com> - 14.13-1
+- New upstream release.
