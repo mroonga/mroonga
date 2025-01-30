@@ -38,7 +38,7 @@ Install::
   % sudo apt install -y -V ./groonga-apt-source-latest-bookworm.deb
   % sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config.deb
   % sudo apt update
-  % sudo apt install -y -V mysql-community-8.0-mroonga
+  % sudo env DEBIAN_FRONTEND=noninteractive apt install -y -V mysql-community-8.0-mroonga
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
