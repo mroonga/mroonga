@@ -1,9 +1,3 @@
-mariadb-10.6-mroonga (15.00-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Horimoto Yasuhiro <horimoto@clear-code.com>  Fri, 31 Jan 2025 06:50:18 -0000
-
 mariadb-10.6-mroonga (14.13-1) unstable; urgency=low
 
   * New upstream release.
