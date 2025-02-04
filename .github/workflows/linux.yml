@@ -193,6 +193,7 @@ jobs:
             test-image: "images:almalinux/9"
     env:
       APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
+      GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
     runs-on: ubuntu-24.04
     steps:
       - name: Prepare environment variables
@@ -232,8 +233,6 @@ jobs:
               rake version:update
               ;;
           esac
-        env:
-          GROONGA_REPOSITORY: ../../groonga
       - name: Login to GitHub Container registry
         uses: docker/login-action@v3
         with:
@@ -266,7 +265,6 @@ jobs:
           exit ${exit_status}
         env:
           APT_TARGETS: ${{ matrix.os }}
-          GROONGA_REPOSITORY: ../../groonga
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
