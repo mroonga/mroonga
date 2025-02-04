@@ -275,7 +275,7 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
-if [[ "${triggered_ref_type}" == "tags" ]]; then
+if [[ "${triggered_ref_type}" == "tag" ]]; then
   echo "Skip on release because external dependency updates of old package cause test failures."
 elif [ -n "${old_package}" ]; then
   # TODO: Remove this after we release a new version. Old Mroonga package
