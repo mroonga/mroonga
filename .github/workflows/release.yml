@@ -4,10 +4,11 @@ on:
     tags:
       - "*"
 jobs:
-  github:
-    name: GitHub
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     # timeout-minutes: 10
+    environment: release
     steps:
       - uses: actions/checkout@v4
       - name: Download artifacts
@@ -37,7 +38,7 @@ jobs:
           done
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Publish
+      - name: Publish to GitHub
         run: |
           (cd doc/source/news && \
            ruby \
@@ -74,3 +75,21 @@ jobs:
             release-artifacts/*/*
         env:
           GH_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@v4
+        with:
+          path: groonga
+          repository: groonga/groonga
+      - name: Prepare for Launchpad publishing
+        run: |
+          cp release-artifacts/release-source/mroonga-*.tar.gz ./
+          apt update
+          apt install -y gpg
+      - name: Publish to Launchpad
+        env:
+          GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
+          LAUNCHPAD_DEPLOY_KEY: ${{ secrets.LAUNCHPAD_DEPLOY_KEY }}
+        run: |
+          echo "${LAUNCHPAD_DEPLOY_KEY}" | gpg --import
+          echo "trusted-key 0x32862FBCD63D72C152EFF3A9BD481CAA9168EA87" > \
+            ~/.gnupg/gpg.conf
+          rake -C packages ubuntu
