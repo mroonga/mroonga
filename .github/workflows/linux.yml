@@ -301,7 +301,8 @@ jobs:
           sudo incus exec target \
             -- \
             /host/packages/${PACKAGE_TYPE}/test.sh \
-              ${{ matrix.package }}-mroonga
+              ${{ matrix.package }}-mroonga \
+              ${{ github.ref }}
       - name: Delete container
         run: |
           sudo incus stop target

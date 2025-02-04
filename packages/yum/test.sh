@@ -3,6 +3,7 @@
 set -exu
 
 package=$1
+triggered_branch=$2
 
 echo "::group::Prepare repository"
 
@@ -274,6 +275,12 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
+if [[ "${triggered_branch}" =~ ^refs/tags/ ]]; then
+  echo "Skipping upgrade tests on release."
+  echo "::endgroup::"
+  exit 0
+fi
+
 if [ -n "${old_package}" ]; then
   # TODO: Remove this after we release a new version. Old Mroonga package
   # requires "which" in rpm/post.sh.

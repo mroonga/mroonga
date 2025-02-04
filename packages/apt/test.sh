@@ -3,6 +3,7 @@
 set -exu
 
 package=$1
+triggered_branch=$2
 
 echo "::group::Prepare repository"
 
@@ -220,6 +221,12 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade test"
+if [[ "${triggered_branch}" =~ ^refs/tags/ ]]; then
+  echo "Skipping upgrade tests on release."
+  echo "::endgroup::"
+  exit 0
+fi
+
 sudo apt purge -V -y \
   ${package} \
   "${mysql_package_prefix}-*"
