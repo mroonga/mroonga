@@ -302,7 +302,7 @@ jobs:
             -- \
             /host/packages/${PACKAGE_TYPE}/test.sh \
               ${{ matrix.package }}-mroonga \
-              ${{ github.ref }}
+              ${{ github.ref_type }}
       - name: Delete container
         run: |
           sudo incus stop target

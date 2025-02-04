@@ -3,7 +3,7 @@
 set -exu
 
 package=$1
-triggered_branch=$2
+triggered_ref_type=$2
 
 echo "::group::Prepare repository"
 
@@ -221,7 +221,7 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade test"
-if [[ "${triggered_branch}" =~ ^refs/tags/ ]]; then
+if [[ "${triggered_ref_type}" == "tag" ]]; then
   echo "Skipping upgrade tests on release."
   echo "::endgroup::"
   exit 0
