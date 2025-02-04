@@ -221,12 +221,6 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade test"
-if [[ "${triggered_ref_type}" == "tag" ]]; then
-  echo "Skipping upgrade tests on release."
-  echo "::endgroup::"
-  exit 0
-fi
-
 sudo apt purge -V -y \
   ${package} \
   "${mysql_package_prefix}-*"
@@ -240,7 +234,9 @@ case ${package} in
     ;;
 esac
 
-if apt show ${package} > /dev/null 2>&1; then
+if [[ "${triggered_ref_type}" == "tag" ]]; then
+  echo "Skip on release because external dependency updates of old package cause test failures."
+elif apt show ${package} > /dev/null 2>&1; then
   sudo apt install -V -y ${package}
   sudo mv /tmp/${package}.list /etc/apt/sources.list.d/
   sudo apt update

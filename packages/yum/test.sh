@@ -276,12 +276,8 @@ echo "::endgroup::"
 
 echo "::group::Upgrade"
 if [[ "${triggered_ref_type}" == "tags" ]]; then
-  echo "Skipping upgrade tests on release."
-  echo "::endgroup::"
-  exit 0
-fi
-
-if [ -n "${old_package}" ]; then
+  echo "Skip on release because external dependency updates of old package cause test failures."
+elif [ -n "${old_package}" ]; then
   # TODO: Remove this after we release a new version. Old Mroonga package
   # requires "which" in rpm/post.sh.
   sudo ${DNF} install -y which
