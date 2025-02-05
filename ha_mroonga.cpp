@@ -730,6 +730,7 @@ static char* mrn_query_log_file_path = NULL;
 char* mrn_default_tokenizer = NULL;
 char* mrn_default_wrapper_engine = NULL;
 static int mrn_lock_timeout = grn_get_lock_timeout();
+static int mrn_n_workers = grn_get_default_n_workers();
 static char* mrn_libgroonga_version = const_cast<char*>(grn_get_version());
 static char* mrn_version = const_cast<char*>(MRN_VERSION_FULL);
 static char* mrn_vector_column_delimiter = NULL;
@@ -1205,6 +1206,36 @@ static MYSQL_SYSVAR_INT(lock_timeout,
                         INT_MAX,
                         1);
 
+static void mrn_n_workers_update(THD* thd,
+                                 mrn_sys_var* var,
+                                 void* var_ptr,
+                                 const void* save)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  const int new_value = *static_cast<const int*>(save);
+  int* old_value_ptr = static_cast<int*>(var_ptr);
+
+  *old_value_ptr = new_value;
+  grn_set_default_n_workers(new_value);
+  mrn_context_pool->set_n_workers(new_value);
+
+  DBUG_VOID_RETURN;
+}
+
+static MYSQL_SYSVAR_INT(n_workers,
+                        mrn_n_workers,
+                        PLUGIN_VAR_RQCMDARG,
+                        "Number of workers in Groonga. "
+                        "0: The default. It disables parallel workers. "
+                        "-1: Use the all CPUs in the environment. "
+                        "1 or larger: Use the specified number of CPUs.",
+                        nullptr,
+                        mrn_n_workers_update,
+                        grn_get_default_n_workers(),
+                        -1,
+                        INT_MAX,
+                        0);
+
 static MYSQL_SYSVAR_STR(libgroonga_version,
                         mrn_libgroonga_version,
                         PLUGIN_VAR_NOCMDOPT | PLUGIN_VAR_READONLY,
@@ -1399,6 +1430,7 @@ static mrn_sys_var* mrn_system_variables[] = {
   MYSQL_SYSVAR(default_wrapper_engine),
   MYSQL_SYSVAR(action_on_fulltext_query_error),
   MYSQL_SYSVAR(lock_timeout),
+  MYSQL_SYSVAR(n_workers),
   MYSQL_SYSVAR(libgroonga_version),
   MYSQL_SYSVAR(version),
   MYSQL_SYSVAR(vector_column_delimiter),
@@ -2363,6 +2395,7 @@ static int mrn_init(void* p)
   }
 
   grn_set_lock_timeout(mrn_lock_timeout);
+  grn_set_default_n_workers(mrn_n_workers);
 
   mrn_init_encoding_map();
 
