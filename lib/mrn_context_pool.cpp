@@ -104,10 +104,7 @@ namespace mrn {
     void set_n_workers(int n_workers) {
       MRN_DBUG_ENTER_METHOD();
 
-      for (std::vector<grn_ctx *>::iterator it = pool_.begin();
-           it != pool_.end();
-           ++it) {
-        grn_ctx *ctx = *it;
+      for (auto ctx : pool_) {
         grn_ctx_set_n_workers(ctx, n_workers);
       }
 
@@ -124,10 +121,7 @@ namespace mrn {
 
     void clear_without_lock(void) {
       MRN_DBUG_ENTER_METHOD();
-      for (std::vector<grn_ctx *>::iterator it = pool_.begin();
-           it != pool_.end();
-           ++it) {
-        grn_ctx *ctx = *it;
+      for (auto ctx : pool_) {
         grn_ctx_close(ctx);
         --(*n_pooling_contexts_);
       }
