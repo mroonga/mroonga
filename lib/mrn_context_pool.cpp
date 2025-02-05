@@ -101,6 +101,19 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
+    void set_n_workers(int n_workers) {
+      MRN_DBUG_ENTER_METHOD();
+
+      for (std::vector<grn_ctx *>::iterator it = pool_.begin();
+           it != pool_.end();
+           ++it) {
+        grn_ctx *ctx = *it;
+        grn_ctx_set_n_workers(ctx, n_workers);
+      }
+
+      DBUG_VOID_RETURN;
+    }
+
   private:
     static const int CLEAR_THREATHOLD_IN_SECONDS = 60 * 5;
 
@@ -151,6 +164,12 @@ namespace mrn {
   void ContextPool::clear(void) {
     MRN_DBUG_ENTER_METHOD();
     impl_->clear();
+    DBUG_VOID_RETURN;
+  }
+
+  void ContextPool::set_n_workers(int n_workers) {
+    MRN_DBUG_ENTER_METHOD();
+    impl_->set_n_workers(n_workers);
     DBUG_VOID_RETURN;
   }
 }

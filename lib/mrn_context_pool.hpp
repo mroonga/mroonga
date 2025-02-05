@@ -33,6 +33,7 @@ namespace mrn {
     grn_ctx *pull(void);
     void release(grn_ctx *context);
     void clear(void);
+    void set_n_workers(int n_workers);
 
   private:
     class Impl;

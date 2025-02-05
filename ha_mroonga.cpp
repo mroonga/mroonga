@@ -1217,9 +1217,7 @@ static void mrn_n_workers_update(THD* thd,
 
   *old_value_ptr = new_value;
   grn_set_default_n_workers(new_value);
-
-  grn_ctx* ctx = mrn_context_pool->pull();
-  grn_ctx_set_n_workers(ctx, new_value);
+  mrn_context_pool->set_n_workers(new_value);
 
   DBUG_VOID_RETURN;
 }
