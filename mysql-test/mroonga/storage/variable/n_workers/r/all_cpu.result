@@ -1,3 +1,8 @@
+SELECT
+JSON_EXTRACT(mroonga_command('status'), '$.default_n_workers') AS default_n_workers,
+JSON_EXTRACT(mroonga_command('status'), '$.n_workers') AS n_workers;
+default_n_workers	n_workers
+0	0
 SET GLOBAL mroonga_n_workers = -1;
 SHOW GLOBAL VARIABLES LIKE 'mroonga_n_workers';
 Variable_name	Value
