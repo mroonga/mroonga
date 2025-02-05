@@ -234,7 +234,7 @@ case ${package} in
     ;;
 esac
 
-if [ "${triggered_ref_type}" == "tag" ]; then
+if [ "${triggered_ref_type}" = "tag" ]; then
   echo "Skip on release because external dependency updates of old package " \
        "cause test failures."
 elif apt show ${package} > /dev/null 2>&1; then
