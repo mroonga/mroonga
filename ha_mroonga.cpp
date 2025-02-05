@@ -1229,7 +1229,7 @@ static MYSQL_SYSVAR_INT(n_workers,
                         "0: The default. It disables parallel workers. "
                         "-1: Use the all CPUs in the environment. "
                         "1 or larger: Use the specified number of CPUs.",
-                        NULL,
+                        nullptr,
                         mrn_n_workers_update,
                         grn_get_default_n_workers(),
                         -1,
