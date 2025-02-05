@@ -1225,9 +1225,9 @@ static void mrn_n_workers_update(THD* thd,
 static MYSQL_SYSVAR_INT(n_workers,
                         mrn_n_workers,
                         PLUGIN_VAR_RQCMDARG,
-                        "Number of workers in Groonga."
-                        "0: The default. It disables parallel workers."
-                        "-1: Use the all CPUs in the environment."
+                        "Number of workers in Groonga. "
+                        "0: The default. It disables parallel workers. "
+                        "-1: Use the all CPUs in the environment. "
                         "1 or larger: Use the specified number of CPUs.",
                         NULL,
                         mrn_n_workers_update,
