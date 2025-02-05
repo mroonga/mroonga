@@ -3,6 +3,7 @@
 set -exu
 
 package=$1
+triggered_ref_type=$2
 
 echo "::group::Prepare repository"
 
@@ -274,10 +275,10 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
-if [ -n "${old_package}" ]; then
-  # TODO: Remove this after we release a new version. Old Mroonga package
-  # requires "which" in rpm/post.sh.
-  sudo ${DNF} install -y which
+if [ "${triggered_ref_type}" = "tag" ]; then
+  echo "Skip on release because external dependency updates of old package " \
+       "cause test failures."
+elif [ -n "${old_package}" ]; then
   sudo ${DNF} erase -y \
        ${package} \
        "${mysql_package_prefix}-*"
