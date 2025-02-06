@@ -23,6 +23,7 @@ case "${package}" in
   mariadb-*)
     mariadb_version=$(echo "${package}" | cut -d'-' -f2)
     service_name=mariadb
+    mysql_client=mariadb
     have_auto_generated_password="no"
 
     cat <<REPO | sudo tee /etc/yum.repos.d/MariaDB.repo
@@ -36,6 +37,7 @@ REPO
     ;;
   mysql-community-minimal-*)
     service_name=mysqld
+    mysql_client=mysql
 
     sudo ${DNF_INSTALL} \
          "https://repo.mysql.com/mysql-community-minimal-release-el${os_version}.rpm"
@@ -46,6 +48,7 @@ REPO
     mysql_version=$(echo "${package}" | cut -d'-' -f3)
     mysql_package_version=$(echo "${mysql_version}" | sed -e 's/\.//g')
     service_name=mysqld
+    mysql_client=mysql
     have_auto_generated_password="yes"
 
     sudo ${DNF_INSTALL} \
@@ -54,6 +57,7 @@ REPO
   percona-*)
     percona_server_version=$(echo "${package}" | cut -d'-' -f3)
     service_name=mysqld
+    mysql_client=mysql
     have_auto_generated_password=yes
 
     sudo ${DNF_INSTALL} \
@@ -87,7 +91,7 @@ case "${package}" in
     #   $ mysqld --initialize |& awk 'END{print $NF}'
     #   xxxxxxxxxxxx
     auto_generated_password=$(mysqld --initialize |& awk 'END{print $NF}')
-    mysql="mysql -u root -p${auto_generated_password}"
+    mysql="${mysql_client} -u root -p${auto_generated_password}"
     "${service_name}" &
     while ! mysqladmin ping -hlocalhost --silent; do
       sleep 1
