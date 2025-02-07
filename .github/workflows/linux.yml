@@ -1,6 +1,18 @@
 name: Linux
 on:
   push:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/linux.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
   pull_request:
     paths:
       - "**/*.cpp"
