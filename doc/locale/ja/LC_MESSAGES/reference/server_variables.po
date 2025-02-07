@@ -352,23 +352,20 @@ msgstr "Mroongaにおいては並列処理を有効にすると ``CREATE INDEX``
 msgid "Here is the list of values which you can use. The default value is ``0``."
 msgstr "使用可能な値のリストです。デフォルト値は ``0`` です。"
 
-msgid "Number of parallels"
-msgstr "並列数"
-
-msgid "When specifying ``0`` or ``1``"
-msgstr "``0`` または ``1`` を指定した場合"
+msgid "``0`` or ``1``"
+msgstr "``0`` または ``1``"
 
 msgid "Execute in serial."
 msgstr "並列実行しません。"
 
-msgid "When specifying ``2`` or more"
-msgstr "``2`` 以上を指定した場合"
+msgid "``2`` or more"
+msgstr "``2`` 以上"
 
 msgid "Execute in parallel with at most the specified number of threads."
 msgstr "指定したスレッド数以下で並列実行します。"
 
-msgid "When specifying ``-1``"
-msgstr "``-1`` を指定した場合"
+msgid "``-1``"
+msgstr "``-1``"
 
 msgid "Execute in parallel with the threads of at most the number of CPU cores."
 msgstr "CPUのコア数以下のスレッドで並列実行します。"

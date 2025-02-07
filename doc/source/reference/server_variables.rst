@@ -456,13 +456,13 @@ The default value is ``0``.
 .. list-table::
    :header-rows: 1
 
-   * - Number of parallels
+   * - Value
      - Description
-   * - When specifying ``0`` or ``1``
+   * - ``0`` or ``1``
      - Execute in serial.
-   * - When specifying ``2`` or more
+   * - ``2`` or more
      - Execute in parallel with at most the specified number of threads.
-   * - When specifying ``-1``
+   * - ``-1``
      - Execute in parallel with the threads of at most the number of CPU cores.
 
 Here is an example SQL to change the number of parallels to ``2``::
