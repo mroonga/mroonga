@@ -439,6 +439,58 @@ Here is an example transcript to change query log file to ``/tmp/mroonga_query.l
   +------------------------+------------------+
   1 row in set (0.00 sec)
 
+.. _server-variable-mroonga-n-workers:
+
+``mroonga_n_workers``
+---------------------
+
+.. versionadded:: 15.00
+
+Specify the number of Groonga's internal processing in parallel.
+
+In Mroonga, when parallel processing is enabled, ``CREATE INDEX`` is processed in parallel, which is expected to speed up the process.
+
+Here is the list of values which you can use.
+The default value is ``0``.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Value
+     - Description
+   * - ``0`` or ``1``
+     - Execute in serial.
+   * - ``2`` or more
+     - Execute in parallel with at most the specified number of threads.
+   * - ``-1``
+     - Execute in parallel with the threads of at most the number of CPU cores.
+
+Here is an example SQL to change the number of parallels to ``2``::
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_n_workers';
+  +-------------------+-------+
+  | Variable_name     | Value |
+  +-------------------+-------+
+  | mroonga_n_workers | 0     |
+  +-------------------+-------+
+  1 row in set (0.001 sec)
+
+  mysql> SET GLOBAL mroonga_n_workers = 2;
+  Query OK, 0 rows affected (0.000 sec)
+
+  mysql> SHOW VARIABLES LIKE 'mroonga_n_workers';
+  +-------------------+-------+
+  | Variable_name     | Value |
+  +-------------------+-------+
+  | mroonga_n_workers | 2     |
+  +-------------------+-------+
+  1 row in set (0.001 sec)
+
+Only available in ``GLOBAL``.
+
+If set with ``SET GLOBAL``, it will enable from the next session. Note that this is not enabled for the current session.
+If you set it persistently, we recommend that you use ``my.cnf`` to set it.
+
 .. _server-variable-mroonga-match-escalation-threshold:
 
 ``mroonga_match_escalation_threshold``
