@@ -283,10 +283,10 @@ if [ "${triggered_ref_type}" = "tag" ]; then
   echo "Skip on release because external dependency updates of old package " \
        "cause test failures."
 elif [ "${mysql_version}" = "11.4" ]; then
-  echo "TODO: We can remove this after we release Mroonga 15.00." \
-       "MariaDB client name is changed to mariadb from mysql since MariaDB 11.4.5." \
-       "Mroonga 14.14 or eailr use mysql command. So, upgrade test is always fail currently." \
-       "We disable upgrade test temporary."
+  echo "TODO: We can remove this after we release Mroonga 15.00."
+  echo "MariaDB client name is changed to mariadb from mysql since MariaDB 11.4.5."
+  echo "Mroonga 14.14 or eailr use mysql command. So, upgrade test is always fail currently."
+  echo "We disable upgrade test temporary."
 elif [ -n "${old_package}" ]; then
   sudo ${DNF} erase -y \
        ${package} \
