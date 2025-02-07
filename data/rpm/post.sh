@@ -115,7 +115,7 @@ if [ "${try_auto_prepare}" = "yes" ]; then
     fi
   fi
 else
-  mysql="mysql -u root"
+  mysql="${mysql_command} -u root"
 fi
 
 if [ "${need_password_expire}" = "yes" ]; then

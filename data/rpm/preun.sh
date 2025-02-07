@@ -103,7 +103,7 @@ if [ "${try_auto_uninstall}" = "yes" ]; then
     need_manual_restart=no
   fi
 else
-  mysql="mysql -u root"
+  mysql="${mysql_command} -u root"
 fi
 
 if [ "${need_password_expire}" = "yes" ]; then
