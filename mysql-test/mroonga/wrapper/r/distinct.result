@@ -9,5 +9,5 @@ INSERT INTO items VALUES (2, 'blue');
 INSERT INTO items VALUES (3, 'green');
 EXPLAIN SELECT DISTINCT color FROM items;
 id	select_type	table	type	possible_keys	key	key_len	ref	rows	Extra
-1	SIMPLE	items	range	NULL	color	18	NULL	4	Using index for group-by
+1	SIMPLE	items	range	NULL	color	18	NULL	3	Using index for group-by
 DROP TABLE items;
