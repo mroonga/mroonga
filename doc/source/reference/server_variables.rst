@@ -488,6 +488,9 @@ Here is an example SQL to change the number of parallels to ``2``::
 
 Only available in ``GLOBAL``.
 
+If set with ``SET GLOBAL``, it will enable from the next session. Note that this is not enabled for the current session.
+If you set it persistently, we recommend that you use ``my.cnf`` to set it.
+
 .. _server-variable-mroonga-match-escalation-threshold:
 
 ``mroonga_match_escalation_threshold``

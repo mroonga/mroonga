@@ -376,6 +376,9 @@ msgstr "並列数を ``2`` に変更するSQLの例です::"
 msgid "Only available in ``GLOBAL``."
 msgstr "``GLOBAL`` でのみ設定可能です。"
 
+msgid "If set with ``SET GLOBAL``, it will enable from the next session. Note that this is not enabled for the current session. If you set it persistently, we recommend that you use ``my.cnf`` to set it."
+msgstr "``SET GLOBAL`` で設定すると、次のセッションから有効になります。現在のセッションでは有効にならないことに注意してください。永続的に設定する場合は、``my.cnf`` で設定してください。"
+
 msgid "``mroonga_match_escalation_threshold``"
 msgstr ""
 
