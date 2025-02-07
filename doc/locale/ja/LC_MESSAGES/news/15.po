@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 15.00\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-02-07 16:29+0900\n"
+"PO-Revision-Date: 2025-02-08 00:33+0900\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -43,3 +43,15 @@ msgstr "MariaDB: MariaDB 10.5.28, 10.6.21, 10.11.11, 11.4.5をサポート"
 
 msgid "You can use Mroonga with the latest MariaDB releases."
 msgstr "最新のMariaDBのリリースでMroongaを使えます。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "{doc}`/tutorial/wrapper`: Fixed a bug that wrapped engine's index information may not be used correctly"
+msgstr "{doc}`/tutorial/wrapper`: ラップしているエンジンのインデックス情報が正しく使われないことがある問題を修正"
+
+msgid "[GH-634](https://github.com/mroonga/mroonga/issues/634)"
+msgstr ""
+
+msgid "If wrapped engine's index information isn't used correctly, MariaDB may not be able to use suitable index. It may cause a poor performance query execution."
+msgstr "もし、ラップしているエンジンのインデックス情報が正しく使われないと、MariaDBは適切なインデックスを使えないかもしれません。これによりクエリー実行が遅くなるかもしれません。"
