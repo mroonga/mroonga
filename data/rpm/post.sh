@@ -17,15 +17,18 @@ may_have_auto_generated_password=no
 case "${variant}" in
   mysql)
     service_name=mysqld
+    mysql_command=mysql
     variant_label=MySQL
     may_have_auto_generated_password=yes
     ;;
   mariadb)
     service_name=mariadb
+    mysql_command=mariadb
     variant_label=MariaDB
     ;;
   percona)
     service_name=mysqld
+    mysql_command=mysql
     variant_label="Percona Server"
     may_have_auto_generated_password=yes
     ;;
@@ -69,7 +72,6 @@ update_sql=${data_dir}/mroonga/update.sql
 
 need_password_expire=no
 if [ "${try_auto_prepare}" = "yes" ]; then
-  mysql_command=mysql
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
     if "${mysql_command}" \
@@ -113,7 +115,7 @@ if [ "${try_auto_prepare}" = "yes" ]; then
     fi
   fi
 else
-  mysql="mysql -u root"
+  mysql="${mysql_command} -u root"
 fi
 
 if [ "${need_password_expire}" = "yes" ]; then

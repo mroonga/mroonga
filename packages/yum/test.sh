@@ -48,6 +48,7 @@ case ${package} in
     old_package=${package}
     mysql_package_prefix=MariaDB
     service_name=mariadb
+    mysql_command=mariadb
     ha_mroonga_so=ha_mroonga_official.so
     test_package_name=MariaDB-test
     baseurl=https://yum.mariadb.org/${mysql_version}/rhel/${major_version}/x86_64
@@ -63,6 +64,7 @@ REPO
     mysql_package_prefix=mysql-community-minimal
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=${package}
+    mysql_command=mysql
 
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
@@ -72,6 +74,7 @@ REPO
   mysql-community-*)
     mysql_package_prefix=mysql-community
     service_name=mysqld
+    mysql_command=mysql
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
@@ -81,6 +84,7 @@ REPO
     ;;
   percona-*)
     service_name=mysqld
+    mysql_command=mysql
     have_auto_generated_password=yes
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
@@ -100,7 +104,7 @@ echo "::group::Install"
 
 function mroonga_is_registered() {
   sudo systemctl start ${service_name}
-  mysql="mysql -u root"
+  mysql="${mysql_command} -u root"
   if [ "${have_auto_generated_password}" = "yes" ]; then
     auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
     mysql="${mysql} -p${auto_generated_password}"
@@ -145,7 +149,7 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   auto_generated_password=$(mysqld --initialize |& \
                               grep "A temporary password is generated" | \
                               awk '{print $NF}')
-  mysql="mysql -u root -p${auto_generated_password}"
+  mysql="${mysql_command} -u root -p${auto_generated_password}"
   mysqld &
 
   while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
@@ -278,6 +282,11 @@ echo "::group::Upgrade"
 if [ "${triggered_ref_type}" = "tag" ]; then
   echo "Skip on release because external dependency updates of old package " \
        "cause test failures."
+elif [ "${mysql_version}" = "11.4" ]; then
+  echo "TODO: We can remove this after we release Mroonga 15.00."
+  echo "MariaDB client name is changed to mariadb from mysql since MariaDB 11.4.5."
+  echo "Mroonga 14.14 or eailr use mysql command. So, upgrade test is always fail currently."
+  echo "We disable upgrade test temporary."
 elif [ -n "${old_package}" ]; then
   sudo ${DNF} erase -y \
        ${package} \

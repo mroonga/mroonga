@@ -16,15 +16,18 @@ may_have_auto_generated_password=no
 case "${variant}" in
   mysql)
     service_name=mysqld
+    mysql_command=mysql
     variant_label=MySQL
     may_have_auto_generated_password=yes
     ;;
   mariadb)
     service_name=mariadb
+    mysql_command=mariadb
     variant_label=MariaDB
     ;;
   percona)
     service_name=mysqld
+    mysql_command=mysql
     variant_label="Percona Server"
     may_have_auto_generated_password=yes
     ;;
@@ -64,7 +67,6 @@ uninstall_sql=${data_dir}/mroonga/uninstall.sql
 
 need_password_expire=no
 if [ "${try_auto_uninstall}" = "yes" ]; then
-  mysql_command=mysql
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
     if "${mysql_command}" \
@@ -101,7 +103,7 @@ if [ "${try_auto_uninstall}" = "yes" ]; then
     need_manual_restart=no
   fi
 else
-  mysql="mysql -u root"
+  mysql="${mysql_command} -u root"
 fi
 
 if [ "${need_password_expire}" = "yes" ]; then
