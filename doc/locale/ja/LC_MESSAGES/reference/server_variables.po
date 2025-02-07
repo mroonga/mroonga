@@ -340,6 +340,45 @@ msgstr "この値が空の場合、クエリーログはファイルに保存さ
 msgid "Here is an example transcript to change query log file to ``/tmp/mroonga_query.log``::"
 msgstr "クエリーログファイルを ``/tmp/mroonga_query.log`` に変更する例です::"
 
+msgid "``mroonga_n_workers``"
+msgstr ""
+
+msgid "Specify the number of Groonga's internal processing in parallel."
+msgstr "Groongaの内部処理の並列数を指定します。"
+
+msgid "In Mroonga, when parallel processing is enabled, ``CREATE INDEX`` is processed in parallel, which is expected to speed up the process."
+msgstr "Mroongaにおいては並列処理を有効にすると ``CREATE INDEX`` 時に並列で処理され高速化が見込まれます。"
+
+msgid "Here is the list of values which you can use. The default value is ``0``."
+msgstr "使用可能な値のリストです。デフォルト値は ``0`` です。"
+
+msgid "Number of parallels"
+msgstr "並列数"
+
+msgid "When specifying ``0`` or ``1``"
+msgstr "``0`` または ``1`` を指定した場合"
+
+msgid "Execute in serial."
+msgstr "並列実行しません。"
+
+msgid "When specifying ``2`` or more"
+msgstr "``2`` 以上を指定した場合"
+
+msgid "Execute in parallel with at most the specified number of threads."
+msgstr "指定したスレッド数以下で並列実行します。"
+
+msgid "When specifying ``-1``"
+msgstr "``-1`` を指定した場合"
+
+msgid "Execute in parallel with the threads of at most the number of CPU cores."
+msgstr "CPUのコア数以下のスレッドで並列実行します。"
+
+msgid "Here is an example SQL to change the number of parallels to ``2``::"
+msgstr "並列数を ``2`` に変更するSQLの例です::"
+
+msgid "Only available in ``GLOBAL``."
+msgstr "``GLOBAL`` でのみ設定可能です。"
+
 msgid "``mroonga_match_escalation_threshold``"
 msgstr ""
 
