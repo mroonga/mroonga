@@ -41,6 +41,7 @@ set(MRN_DOC_SOURCES
     news/12.rst
     news/13.md
     news/14.md
+    news/15.md
     news/2.rst
     news/3.rst
     news/4.rst
@@ -75,6 +76,7 @@ set(MRN_DOC_SOURCES
     upgrade.rst)
 
 set(MRN_DOC_HTML_FILES
+    .buildinfo.bak
     _images/storage-mode.png
     _images/wrapper-mode.png
     _static/basic.css
@@ -140,6 +142,7 @@ set(MRN_DOC_HTML_FILES
     news/12.html
     news/13.html
     news/14.html
+    news/15.html
     news/2.html
     news/3.html
     news/4.html

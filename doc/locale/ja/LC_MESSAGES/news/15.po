@@ -1,0 +1,45 @@
+# Japanese translations for Mroonga package.
+# Copyright (C) 2009-2025, Mroonga Project
+# This file is distributed under the same license as the Mroonga package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Mroonga 15.00\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2025-02-07 16:29+0900\n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "News - 15 series"
+msgstr "お知らせ - 15系"
+
+msgid "Release 15.00 - 2025-02-09"
+msgstr "15.00リリース - 2025-02-09"
+
+msgid "This is our annual major release! This release doesn't have any backward incompatible changes! So you can upgrade Mroonga without migrating your existing databases. You can still use your existing databases as-is."
+msgstr "毎年恒例の肉の日メジャーリリースです！このリリースには後方互換性が壊れる変更はありません！既存のデータベースを移行せずにMroongaをアップグレードできます。既存のデータベースをそのまま使い続けることができます。"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "{ref}`server-variable-mroonga-n-workers`: Added support for parallel execution"
+msgstr "{ref}`server-variable-mroonga-n-workers`: 並列実行をサポート"
+
+msgid "[GH-877](https://github.com/mroonga/mroonga/issues/877)"
+msgstr ""
+
+msgid "You can set concurrency in Groonga by {ref}`server-variable-mroonga-n-workers`. Some operations such as `CREATE INDEX` refer this server variable. You can use this to improve performance by using multiple CPU cores."
+msgstr "{ref}`server-variable-mroonga-n-workers`でGroongaの並列度を設定できます。`CREATE IDNEX`などのいくつか操作はこのサーバー変数を参照します。この変数を使うことで、複数のCPUコアで高速化できます。"
+
+msgid "In general, you should set this in `my.cnf` not `SET`. Because this doesn't change concurrency in the current session (at least for now). If you want to change this by `SET`, you need to set by `SET GLOBAL` and re-connect to MySQL."
+msgstr "通常、`SET`ではなく、`my.cnf`で設定するべきです。なぜなら（少なくとも今のところは）現在のセッションの並列度を変更できないからです。`SET`で変更したい場合は、`SET GLOBAL`で設定してMySQLに接続し直す必要があります。"
+
+msgid "MariaDB: Added support for MariaDB 10.5.28, 10.6.21, 10.11.11 and 11.4.5"
+msgstr "MariaDB: MariaDB 10.5.28, 10.6.21, 10.11.11, 11.4.5をサポート"
+
+msgid "You can use Mroonga with the latest MariaDB releases."
+msgstr "最新のMariaDBのリリースでMroongaを使えます。"
