@@ -149,7 +149,7 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   auto_generated_password=$(mysqld --initialize |& \
                               grep "A temporary password is generated" | \
                               awk '{print $NF}')
-  mysql="mysql -u root -p${auto_generated_password}"
+  mysql="${mysql_command} -u root -p${auto_generated_password}"
   mysqld &
 
   while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done
