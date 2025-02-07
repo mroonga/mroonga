@@ -29,8 +29,10 @@ BuildRequires:	groonga-normalizer-mysql-devel
 BuildRequires:	rpm
 BuildRequires:	sed
 BuildRequires:	which
-Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	MariaDB-client = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	MariaDB-common = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	MariaDB-server = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	MariaDB-shared = %{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
