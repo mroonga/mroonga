@@ -48,7 +48,7 @@ case ${package} in
     old_package=${package}
     mysql_package_prefix=MariaDB
     service_name=mariadb
-    mysql_client=mariadb
+    mysql_command=mariadb
     ha_mroonga_so=ha_mroonga_official.so
     test_package_name=MariaDB-test
     baseurl=https://yum.mariadb.org/${mysql_version}/rhel/${major_version}/x86_64
@@ -64,7 +64,7 @@ REPO
     mysql_package_prefix=mysql-community-minimal
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=${package}
-    mysql_client=mysql
+    mysql_command=mysql
 
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
@@ -74,7 +74,7 @@ REPO
   mysql-community-*)
     mysql_package_prefix=mysql-community
     service_name=mysqld
-    mysql_client=mysql
+    mysql_command=mysql
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
@@ -84,7 +84,7 @@ REPO
     ;;
   percona-*)
     service_name=mysqld
-    mysql_client=mysql
+    mysql_command=mysql
     have_auto_generated_password=yes
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
@@ -104,7 +104,7 @@ echo "::group::Install"
 
 function mroonga_is_registered() {
   sudo systemctl start ${service_name}
-  mysql="${mysql_client} -u root"
+  mysql="${mysql_command} -u root"
   if [ "${have_auto_generated_password}" = "yes" ]; then
     auto_generated_password=$(sudo awk '/root@localhost/{print $NF}' /var/log/mysqld.log | tail -n 1)
     mysql="${mysql} -p${auto_generated_password}"
