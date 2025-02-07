@@ -1,16 +1,6 @@
 name: Windows
 on:
   push:
-    paths:
-      - "**/*.cpp"
-      - "**/*.def"
-      - "**/*.h"
-      - "**/*.hpp"
-      - "**/CMakeLists.txt"
-      - ".github/workflows/windows.yml"
-      - "mysql-test/**"
-      - "packages/source/**"
-      - "version_*"
   pull_request:
     paths:
       - "**/*.cpp"

@@ -1,9 +1,6 @@
 name: Install
 on:
   push:
-    paths:
-      - '.github/workflows/install.yml'
-      - 'packages/**/install_test.sh'
   pull_request:
     paths:
       - '.github/workflows/install.yml'
