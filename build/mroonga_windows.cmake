@@ -12,9 +12,14 @@ foreach(lang C CXX)
     string(REPLACE "/Zi" "/Z7"
       CMAKE_${lang}_FLAGS${flag_suffix}
       "${CMAKE_${lang}_FLAGS${flag_suffix}}")
+    string(APPEND CMAKE_${lang}_FLAGS${flag_suffix} " /wd4090")
   endforeach()
 endforeach()
 
 # XXX: Zstandard requires ASM. So we want to enable ASM in top-level.
 # I don't know why "project(zstd LANGUAGES C ASM CXX)" doesn't work...
 enable_language(ASM)
+
+# terse static assert requires C++17.
+# WolfSSL uses it.
+SET(CMAKE_CXX_STANDARD 17)
