@@ -1,7 +1,6 @@
 # -*- sh-shell: rpm -*-
 
 %define mariadb_package MariaDB
-%define mariadb_client_package %{mariadb_package}-client
 #%%define mariadb_epoch_default
 %define mariadb_version_default @MARIADB_VERSION@
 %define mariadb_release_default @MARIADB_RELEASE@
@@ -34,8 +33,10 @@ BuildRequires:	rpm
 BuildRequires:	sed
 BuildRequires:	which
 BuildRequires:	dnf-command(download)
+Requires:	%{mariadb_package}-client = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package}-common = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	%{mariadb_package}-server = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
-Requires:	%{mariadb_client_package} = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
+Requires:	%{mariadb_package}-shared = %{_mariadb_epoch_with_suffix}%{_mariadb_version}-%{_mariadb_release}.%{_mariadb_dist}
 Requires:	groonga-libs >= %{groonga_required_version}
 Requires:	groonga-normalizer-mysql
 
