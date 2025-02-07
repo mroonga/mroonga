@@ -3656,11 +3656,15 @@ ulong ha_mroonga::wrapper_index_flags(uint idx, uint part, bool all_parts) const
 {
   ulong index_flags;
   MRN_DBUG_ENTER_METHOD();
-  MRN_SET_WRAP_SHARE_KEY(share, table->s);
-  MRN_SET_WRAP_TABLE_KEY(this, table);
-  index_flags = wrap_handler->index_flags(idx, part, all_parts);
-  MRN_SET_BASE_SHARE_KEY(share, table->s);
-  MRN_SET_BASE_TABLE_KEY(this, table);
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    index_flags = wrap_handler_for_create->index_flags(idx, part, all_parts);
+  } else {
+    MRN_SET_WRAP_SHARE_KEY(share, table->s);
+    MRN_SET_WRAP_TABLE_KEY(this, table);
+    index_flags = wrap_handler->index_flags(idx, part, all_parts);
+    MRN_SET_BASE_SHARE_KEY(share, table->s);
+    MRN_SET_BASE_TABLE_KEY(this, table);
+  }
   DBUG_RETURN(index_flags);
 }
 #endif
@@ -3711,7 +3715,16 @@ ulong ha_mroonga::index_flags(uint idx, uint part, bool all_parts) const
 
   int error = 0;
 #ifdef MRN_ENABLE_WRAPPER_MODE
-  if (wrap_handler && share && share->wrapper_mode) {
+  // Not only CREATE TABLE, CREATE INDEX and ALTER TABLE but also
+  // INSERT against not opened table call this without wrap_handler
+  // (before wrapper_open()). So we can't use
+  // thd_sql_command(ha_thd()) == SQLCOM_XXX here.
+  if (!share && !analyzed_for_create) {
+    create_share_for_create();
+  }
+  if (analyzed_for_create && share_for_create.wrapper_mode) {
+    error = wrapper_index_flags(idx, part, all_parts);
+  } else if (wrap_handler && share && share->wrapper_mode) {
     error = wrapper_index_flags(idx, part, all_parts);
   } else {
 #endif
@@ -3785,7 +3798,7 @@ int ha_mroonga::create_share_for_create() const
 
   if (share_for_create.wrapper_mode) {
     wrap_handler_for_create = MRN_HANDLERTON_CREATE(share_for_create.hton,
-                                                    NULL,
+                                                    table_share,
                                                     false,
                                                     &mem_root_for_create);
     if (!wrap_handler_for_create) {
