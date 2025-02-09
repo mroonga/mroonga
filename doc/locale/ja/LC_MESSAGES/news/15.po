@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 15.00\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-02-08 00:33+0900\n"
+"PO-Revision-Date: 2025-02-09 13:09+0900\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,6 +16,12 @@ msgstr ""
 
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
+
+msgid "Release 15.01 - 2025-02-09"
+msgstr "15.01リリース - 2025-02-09"
+
+msgid "This just fixes some release process problems. This is same as {ref}`release-15-00`."
+msgstr "リリースプロセスの問題を修正しただけです。{ref}`release-15-00`と同じ内容です。"
 
 msgid "Release 15.00 - 2025-02-09"
 msgstr "15.00リリース - 2025-02-09"
