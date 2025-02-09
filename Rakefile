@@ -1,7 +1,7 @@
 # -*- ruby -*-
 #
 # Copyright (C) 2024  Horimoto Yasuhiro <horimoto@clear-code.com>
-# Copyright (C) 2024  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2024-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -147,12 +147,19 @@ namespace :dev do
   namespace :version do
     desc "Bump version for new development"
     task :bump do
-      File.write("plugin_version", new_plugin_version)
-      File.write("version_full", new_version)
-      File.write("version_in_hex", new_version_in_hex)
-      File.write("version_major", new_version_major)
-      File.write("version_minor", new_version_minor)
-      File.write("version_micro", new_version_micro)
+      {
+        "plugin_version" => new_plugin_version,
+        "version_full" => new_version,
+        "version_in_hex" => new_version_in_hex,
+        "version_major" => new_version_major,
+        "version_minor" => new_version_minor,
+        "version_micro" => new_version_micro,
+      }.each do |path, value|
+        File.write(path, value)
+        sh("git", "add", path)
+      end
+      sh("git", "commit", "-m", "Bump version to #{new_version}")
+      sh("git", "push", "origin")
     end
   end
 end
