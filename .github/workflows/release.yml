@@ -46,7 +46,6 @@ jobs:
              -e 'print("## Mroonga ");
                  puts(ARGF.read.split(/^## Release /)[1].
                         gsub(/^\(.+\)=$/, "").
-                        gsub(/ {.+?}/, "").
                         gsub(/{doc}`(.+?)`/) {
                           id = $1;
                           title = id.split("\/").last;
