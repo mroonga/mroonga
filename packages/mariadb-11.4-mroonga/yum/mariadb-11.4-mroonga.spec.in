@@ -108,9 +108,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc mroonga-doc/*
 
 %changelog
-* Sun Feb 09 2025 Sutou Kouhei <kou@clear-code.com> - 15.01-1
-- New upstream release.
-
 * Sun Feb 09 2025 Sutou Kouhei <kou@clear-code.com> - 15.00-1
 - New upstream release.
 

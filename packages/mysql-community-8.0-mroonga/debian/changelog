@@ -1,9 +1,3 @@
-mysql-community-8.0-mroonga (15.01-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Sutou Kouhei <kou@clear-code.com>  Sun, 09 Feb 2025 04:10:25 -0000
-
 mysql-community-8.0-mroonga (15.00-1) unstable; urgency=low
 
   * New upstream release.
