@@ -26,11 +26,11 @@ jobs:
               if [ -n "${run_id}" ]; then
                 break
               fi
-              sleep 60
+              sleep 300
             done
             gh run watch \
               --exit-status \
-              --interval 60 \
+              --interval 300 \
               ${run_id}
             gh run download ${run_id} \
               --dir release-artifacts \
