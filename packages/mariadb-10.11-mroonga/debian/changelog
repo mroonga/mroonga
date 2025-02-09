@@ -1,3 +1,9 @@
+mariadb-10.11-mroonga (15.01-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Sutou Kouhei <kou@clear-code.com>  Sun, 09 Feb 2025 04:10:24 -0000
+
 mariadb-10.11-mroonga (15.00-1) unstable; urgency=low
 
   * New upstream release.
