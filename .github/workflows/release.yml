@@ -22,6 +22,7 @@ jobs:
                          --branch ${GITHUB_REF_NAME} \
                          --jq '.[].databaseId' \
                          --json databaseId \
+                         --limit 1 \
                          --workflow ${workflow})
               if [ -n "${run_id}" ]; then
                 break
