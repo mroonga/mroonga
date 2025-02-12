@@ -105,7 +105,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # "mysql-5.7" -> "mysql-server-5.7"
     ubuntu_package_name = package_name.sub(/-/, "-server-")
     case code_name
-    when "focal", "jammy"
+    when "jammy"
     else
       # "mariadb-server-10.11" -> "mariadb-server"
       # New Ubuntu don't include version number in package name.

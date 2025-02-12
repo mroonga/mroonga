@@ -56,10 +56,6 @@ jobs:
           - image: "images:almalinux/9"
             package: percona-server-8.0
 
-          # Ubuntu 20.04
-          - image: "images:ubuntu/20.04"
-            package: mysql
-
           # Ubuntu 22.04
           - image: "images:ubuntu/22.04"
             package: mariadb
