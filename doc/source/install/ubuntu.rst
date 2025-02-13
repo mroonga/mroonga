@@ -13,14 +13,17 @@ Archive) on Launchpad. You can install Mroonga by APT from the PPA.
 Here are supported Ubuntu versions:
 
   * 22.04 Jammy Jellyfish
+  * 24.04 Noble Numbat
 
 Here are Ubuntu versions that supports MySQL:
 
   * 22.04 Jammy Jellyfish
+  * 24.04 Noble Numbat
 
 Here are Ubuntu versions that supports MariaDB:
 
   * 22.04 Jammy Jellyfish
+  * 24.04 Noble Numbat
 
 Enable the universe repository and the security update repository to
 install Mroonga::
