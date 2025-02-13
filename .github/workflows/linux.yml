@@ -143,7 +143,7 @@ jobs:
             test-image: "images:almalinux/9"
           - os: debian-bookworm
             package: mysql-community-8.0
-            test-image: "images:debian/12""
+            test-image: "images:debian/12"
           - os: ubuntu-jammy
             package: mysql-community-8.0
             test-image: "images:ubuntu/22.04"
