@@ -34,6 +34,9 @@ msgstr "サポートしているUbuntuのバージョンは次の通りです。
 msgid "22.04 Jammy Jellyfish"
 msgstr ""
 
+msgid "24.04 Noble Numbat"
+msgstr ""
+
 msgid "Here are Ubuntu versions that supports MySQL:"
 msgstr "MySQLをサポートしているUbuntuのバージョンは次の通りです。"
 
