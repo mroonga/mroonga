@@ -31,9 +31,8 @@ if(MRN_BUNDLED)
   endif()
 endif()
 
-# Ubuntu 20.04: 3.16
-# CentOS 7's EPEL: 3.17
-cmake_minimum_required(VERSION 3.16)
+# Ubuntu 22.04: 3.22
+cmake_minimum_required(VERSION 3.22)
 
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_full   MRN_VERSION_FULL)
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/version_major  MRN_VERSION_MAJOR)

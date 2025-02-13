@@ -34,7 +34,7 @@ body:
       description: Tell us your environment.
       value: |
         - OS: [e.g. Ubuntu]
-        - OS Version: [e.g. Ubuntu 20.04.2 LTS]
+        - OS Version: [e.g. Ubuntu 24.04.1 LTS]
         - DB: [e.g. MySQL/MariaDB/Percona]
         - DB Version: [e.g. 8.0.30]
         - Mroonga Version: [e.g. 12.1.0]

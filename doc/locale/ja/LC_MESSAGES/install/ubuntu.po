@@ -31,9 +31,6 @@ msgstr "Ubuntu用のMroongaのAPTリポジトリーはLaunchpad上のPPA（Perso
 msgid "Here are supported Ubuntu versions:"
 msgstr "サポートしているUbuntuのバージョンは次の通りです。"
 
-msgid "20.04 Focal Fossa"
-msgstr ""
-
 msgid "22.04 Jammy Jellyfish"
 msgstr ""
 

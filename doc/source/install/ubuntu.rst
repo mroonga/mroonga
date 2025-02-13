@@ -12,17 +12,14 @@ Archive) on Launchpad. You can install Mroonga by APT from the PPA.
 
 Here are supported Ubuntu versions:
 
-  * 20.04 Focal Fossa
   * 22.04 Jammy Jellyfish
 
 Here are Ubuntu versions that supports MySQL:
 
-  * 20.04 Focal Fossa
   * 22.04 Jammy Jellyfish
 
 Here are Ubuntu versions that supports MariaDB:
 
-  * 20.04 Focal Fossa
   * 22.04 Jammy Jellyfish
 
 Enable the universe repository and the security update repository to
