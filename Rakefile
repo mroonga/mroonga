@@ -20,6 +20,8 @@
 require "date"
 require "tmpdir"
 
+VERSION_FULL = File.read("version_full")
+
 def env_var(name, default=nil)
   value = ENV[name] || default
   raise "${#{name}} is missing" if value.nil?
@@ -27,11 +29,11 @@ def env_var(name, default=nil)
 end
 
 def version
-  env_var("VERSION", File.read("version_full"))
+  env_var("VERSION", VERSION_FULL)
 end
 
 def new_version
-  env_var("NEW_VERSION")
+  env_var("NEW_VERSION", version.succ)
 end
 
 def new_version_major
