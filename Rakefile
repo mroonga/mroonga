@@ -145,6 +145,13 @@ namespace :release do
   end
 end
 
+desc "Release"
+task release: [
+  "release:version:update",
+  "release:tag",
+  "dev:version:bump"
+]
+
 namespace :dev do
   namespace :version do
     desc "Bump version for new development"
