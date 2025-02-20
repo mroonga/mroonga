@@ -25,8 +25,7 @@ Setup build environment
 
 Install the following packages::
 
-    % sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf python-sphinx bison
-    % pip3 install -U sphinx myst-parser linkify-it-py
+    $ sudo apt-get install -V ruby mecab libmecab-dev gnupg2 dh-autoreconf bison
 
 Describe the changes
 --------------------
@@ -44,178 +43,94 @@ Shoud not be included
 
 Execute the following command to create HTML for news::
 
-    % cmake -S ${MARIADB_SOURCE_DIR} -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
-    % cmake --build ${MARIADB_BUILD_DIR}
-    % cmake --install ${MARIADB_BUILD_DIR}
-    % cmake -S ${GROONGA_SOURCE_DIRECTORY} -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
-    % cmake --build ${GROONGA_BUILD_DIR}
-    % cmake --install ${GROONGA_BUILD_DIR}
-    % PKG_CONFIG_PATH=${INSTALL_DIR}/lib/pkgconfig cmake -S ${MROONGA_SOURCE_DIRECTORY} -B ${MROONGA_BUILD_DIR} --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" -DMYSQL_SOURCE_DIR=~${MARIADB_SOURCE_DIR} -DMYSQL_BUILD_DIR=${MARIADB_BUILD_DIR} -DMYSQL_CONFIG=${INSTALL_DIR}/bin/mariadb_config
-    % cmake --build ${MROONGA_BUILD_DIR}
+    $ cmake -S ${MARIADB_SOURCE_DIR} -B ${MARIADB_BUILD_DIR} -GNinja -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} -DPLUGIN_CASSANDRA=NO
+    $ cmake --build ${MARIADB_BUILD_DIR}
+    $ cmake --install ${MARIADB_BUILD_DIR}
+    $ cmake -S ${GROONGA_SOURCE_DIRECTORY} -B ${GROONGA_BUILD_DIR} --preset=release-default --fresh -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}"
+    $ cmake --build ${GROONGA_BUILD_DIR}
+    $ cmake --install ${GROONGA_BUILD_DIR}
+    $ PKG_CONFIG_PATH=${INSTALL_DIR}/lib/pkgconfig cmake -S ${MROONGA_SOURCE_DIRECTORY} -B ${MROONGA_BUILD_DIR} --fresh --preset=doc -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" -DMYSQL_SOURCE_DIR=~${MARIADB_SOURCE_DIR} -DMYSQL_BUILD_DIR=${MARIADB_BUILD_DIR} -DMYSQL_CONFIG=${INSTALL_DIR}/bin/mariadb_config
+    $ cmake --build ${MROONGA_BUILD_DIR}
 
-Check whether you can upload packages
--------------------------------------
+Execute ``release`` task
+------------------------
 
-Check whether you can login to packages.groonga.org as packages user.
+Execute ``rake release``::
 
-You can check with the following command whether you can login::
+    $ rake release
 
-    % ssh packages@packages.groonga.org
+About ``release`` task
+^^^^^^^^^^^^^^^^^^^^^^
 
-If you can't login to packages.groonga.org, you must be registered ssh public key.
+``release`` task executes the three tasks.
 
-Execute make update-latest-release
-----------------------------------
+1. ``release:version:update``
 
-Execute ``rake release:version:update`` command with OLD_RELEASE_DATE, NEW_RELEASE_DATE.
+   * Append the changelog of the new version to the spec file of the RPM package, and so on
 
-When 14.07 release, we executed the following command::
+   * You can also specify a release date with ``NEW_RELEASE_DATE``
 
-    % rake release:version:update OLD_RELEASE=14.04 OLD_RELEASE_DATE=2024-06-12 NEW_RELEASE_DATE=2024-09-06
+2. ``release:tag``
 
-This command updates the version of spec file or debian/changelog entry.
+   * Push the tag for release
 
-Confirm the results of each test
---------------------------------
+   * This will start the automatic release
 
-We confirm the results of all the below tests and build before setting the tag to Mroonga.
-Because if we will find problems in Mroonga after setting the tag to it, we must release it again.
+3. ``dev:version:bump``
+
+   * We will bump up the version for the next release
+
+   * You can also specify a version with ``NEW_VERSION``
+
+Confirm CI
+----------
+
+We confirm below CIs green or not.
 
 * `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
-* `Launchpad <https://launchpad.net/~groonga/+archive/ubuntu/nightly/+packages>`_
 
-How to build packages for Ubuntu on Nightly::
-
-    Download source archive from GitHub actions.
-    % mv mroonga-14.07.tar.gz mroonga/
-    % cd mroonga/packages
-    % rake ubuntu DPUT_CONFIGURATION_NAME=groonga-ppa-nightly DPUT_INCOMING="~groonga/ubuntu/nightly" LAUNCHPAD_UPLOADER_PGP_KEY=xxxxxxx
-
-Tagging for release
--------------------
-
-Execute the following command for tagging::
-
-    % rake release:tag
-
-Upload archive files
---------------------
-
-Execute the following command for uploading source archive::
-
-    % cd packages/source
-    % rake source
-
-As a result, ``tar.gz`` archive file is available from https://packages.groonga.org/source/mroonga/.
+We use CI to do automatic releases, so if it fails, we retry.
 
 Create packages for the release
 -------------------------------
-
-Create Linux and Windows packages.
-
-Debian
-^^^^^^
-
-Change working directory to ``packages``::
-
-    % cd packages
-
-Execute the following command::
-
-    % rake apt
-
-Now we finish build and upload packages to https://packages.groonga.org/.
-However, these packages are unsigned. We sign packages by executing the below commands::
-
-    % cd $PACKAGES_GROONGA_ORG_REPOSITORY
-    % rake apt
 
 Debian derivatives(Ubuntu)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For Ubuntu, packages are provided by PPA on launchpad.net.
 
-Change working directory to ``packages`` and execute ``rake ubuntu:upload`` command::
+Change working directory to ``packages`` and execute ``rake ubuntu`` command::
 
-    % cd packages
-    % rake ubuntu
+    $ cd packages
+    $ rake ubuntu
 
 When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail.
 You can install packages via Groonga PPA on launchpad.net::
 
   https://launchpad.net/~groonga/+archive/ubuntu/ppa
 
-Red Hat derivatives
-^^^^^^^^^^^^^^^^^^^
-
-Change working directory to ``packages`` ::
-
-    % cd packages
-
-Execute the following command::
-
-    % rake yum
-
-Now we finish build and upload packages to https://packages.groonga.org/.
-However, these packages are unsigned. We sign packages by executing the below commands::
-
-    % cd $PACKAGES_GROONGA_ORG_REPOSITORY
-    % rake yum
-
-Windows
-^^^^^^^
-
-For windows packages, we use artifacts of `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ .
-
 Update Docker images
 --------------------
 
-TODO
+Execute the following commands::
 
-Upload documents
+    $ git clone git@github.com:mroonga/docker.git mroonga-docker
+    $ cd mroonga-docker
+    $ ./update.sh
+    $ git push
+    $ git push --tags
+
+Update documents
 ----------------
 
-Execute the following command::
+Execute the following commands::
 
-    % rake release:document:update BUILD_DIR=${MROONGA_BUILD_DIR} MROONGA_ORG_DIR=${MROONGA_ORG_DIR}
+    $ export GROONGA_ORG_REPOSITORY=${HOME}/work/groonga.org
+    $ git clone git@github.com:groonga/groonga.org.git ${GROONGA_ORG_REPOSITORY}
+    $ rake -C ${MROONGA_ORG_DIR} release:version:update
 
-Commit changes in mroonga.org repository && push them.
-
-Update blog(Mroonga blog)
--------------------------
-
-We update the below files.
-
-* ``$MROONGA_GITHUB_COM_PATH/ja/_posts/(the date of release)-mroonga-(version).md``
-* ``$MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version).md``
-
-We can confirm contents of blog on Web browser by using Jekyll.::
-
-  % jekyll serve
-
-We access http://localhost:4000 on our web browser for confirming contents.
-
-.. note::
-   If we want private to blog contents, we set ``false`` on ``published:`` in ``.md`` file.::
-
-     ---
-     layout: post.en
-     title: Mroonga 10.01 has been released!
-     description: Mroonga 10.01 has been released!
-     published: false
-     ---
-
-Announce release for mailing list
----------------------------------
-
-Send release announce for each mailing list
-
-* ml@mysql.gr.jp for Japanese
-* groonga-dev@lists.osdn.me for Japanese
-* groonga-talk@lists.sourceforge.net for English
-
-Announce release for twitter
-----------------------------
+Announce release for X(Twitter)
+-------------------------------
 
 Click Tweet link in Mrooga blog entry. You can share tweet about latest release.
 If you use tweet link, title of release announce and URL is embedded into your tweet.
@@ -229,10 +144,3 @@ Announce release for Facebook
 We announce release from Mroonga group in Facebook.
 
 https://www.facebook.com/mroonga/
-
-Bump version
-------------
-
-Bump version to the latest release::
-
-    % rake dev:version:bump NEW_VERSION=xx.xx
