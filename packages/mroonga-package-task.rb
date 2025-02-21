@@ -279,6 +279,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def detect_percona_server_rpm_version
     series = split_mysql_package[1]
     short_series = series.gsub(".", "")
+    if short_series == 84
+      short_series = "84-lts"
+    end
     srpms_url =
       "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
