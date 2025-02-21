@@ -90,7 +90,11 @@ REPO
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     old_package=${package}
-    sudo percona-release setup ps${percona_package_version}
+    if [ "${percona_package_version}" = "80" ]; then
+      sudo percona-release setup ps${percona_package_version}
+    else
+      sudo percona-release enable-only ps-${percona_package_version}-lts release
+    fi
     mysql_package_prefix=percona-server
     test_package_name=percona-server-test
     sudo ${DNF} install -y percona-icu-data-files
