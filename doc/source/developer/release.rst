@@ -85,29 +85,11 @@ About ``release`` task
 Confirm CI
 ----------
 
-We confirm below CIs green or not.
+We confirm whether below CIs green or not.
 
 * `GitHub Actions <https://github.com/mroonga/mroonga/actions>`_
 
 We use CI to do automatic releases, so if it fails, we retry.
-
-Create packages for the release
--------------------------------
-
-Debian derivatives(Ubuntu)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-For Ubuntu, packages are provided by PPA on launchpad.net.
-
-Change working directory to ``packages`` and execute ``rake ubuntu`` command::
-
-    $ cd packages
-    $ rake ubuntu
-
-When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail.
-You can install packages via Groonga PPA on launchpad.net::
-
-  https://launchpad.net/~groonga/+archive/ubuntu/ppa
 
 Update Docker images
 --------------------
