@@ -1,0 +1,24 @@
+require_relative "../mroonga-package-task"
+
+class PerconaServer84MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("percona-server-8.4-mroonga")
+  end
+
+  def enable_apt?
+    false
+  end
+
+  def enable_ubuntu?
+    false
+  end
+
+  def yum_targets_default
+    [
+      "almalinux-9",
+    ]
+  end
+end
+
+task = PerconaServer84MroongaPackageTask.new
+task.define
