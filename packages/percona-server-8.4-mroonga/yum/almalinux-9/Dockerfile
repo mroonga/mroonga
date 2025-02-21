@@ -13,15 +13,16 @@ RUN \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
     https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm \
     https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
-  percona-release setup -y ps80 && \
+  percona-release enable-only ps-84-lts release && \
+  percona-release enable tools release && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' && \
   # Percona Server's SRPM is broken. devtoolset-8 is required by dnf builddep.
-  (dnf builddep -y ${quiet} --enablerepo=ps-80-release-sources \
+  (dnf builddep -y ${quiet} --enablerepo=ps-84-lts-release-sources \
      percona-server || :) && \
-  dnf download -y ${quiet} --enablerepo=ps-80-release-sources --source \
+  dnf download -y ${quiet} --enablerepo=ps-84-lts-release-sources --source \
     percona-server && \
   dnf install --enablerepo=crb -y ${quiet} \
     # Percona Server dependencies.
