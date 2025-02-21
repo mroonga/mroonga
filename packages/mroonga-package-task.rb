@@ -279,7 +279,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def detect_percona_server_rpm_version
     series = split_mysql_package[1]
     short_series = series.gsub(".", "")
-    if short_series == 84
+    if short_series == "84"
       short_series = "84-lts"
     end
     srpms_url =
