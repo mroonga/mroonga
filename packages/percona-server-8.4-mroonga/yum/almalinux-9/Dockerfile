@@ -50,8 +50,6 @@ RUN \
     ${SCL}-annobin-plugin-gcc \
     groonga-devel \
     groonga-normalizer-mysql-devel \
-    intltool \
-    libtool \
     make \
     percona-server-devel \
     pkgconfig \
