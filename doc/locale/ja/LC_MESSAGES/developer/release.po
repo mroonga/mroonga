@@ -86,154 +86,67 @@ msgid "The changes which doesn't affect to users (Internal source code changes o
 msgstr "ユーザーに影響のない内部的な変更やリファクタリング"
 
 msgid "Execute the following command to create HTML for news::"
+msgstr "以下のコマンドを実行して、ニュース用のHTMLを作成する::"
+
+msgid "Execute ``release`` task"
+msgstr "``release`` タスクを実行する"
+
+msgid "Execute ``rake release``::"
+msgstr "``rake release`` を実行::"
+
+msgid "About ``release`` task"
+msgstr "``release`` タスク について"
+
+msgid "``release`` task executes the three tasks."
+msgstr "``release`` タスクは次の3つのタスクを実行します。"
+
+msgid "``release:version:update``"
 msgstr ""
 
-msgid "Check whether you can upload packages"
-msgstr "パッケージをアップロード可能か確認する"
+msgid "Append the changelog of the new version to the spec file of the RPM package, and so on"
+msgstr "RPMパッケージのspecファイルに新しいバージョンのチェンジログを追記したりなどします"
 
-msgid "Check whether you can login to packages.groonga.org as packages user."
-msgstr "pacakgesユーザーでpackages.groonga.orgにログインできるかを確認します。"
+msgid "You can also specify a release date with ``NEW_RELEASE_DATE``"
+msgstr "環境変数 ``NEW_RELEASE_DATE`` でリリース日を指定することができます"
 
-msgid "You can check with the following command whether you can login::"
-msgstr "ログインできるかどうかは以下のコマンドで確認できます。"
+msgid "``release:tag``"
+msgstr ""
 
-msgid "If you can't login to packages.groonga.org, you must be registered ssh public key."
-msgstr "packages.groonga.orgにログインできないときは、sshの公開鍵を登録しておかないといけません。"
+msgid "Push the tag for release"
+msgstr "リリース用のタグをプッシュします"
 
-msgid "Execute make update-latest-release"
-msgstr "make update-latest-releaseを実行する"
+msgid "This will start the automatic release"
+msgstr "これにより自動リリースが動き出します"
 
-msgid "Execute ``rake release:version:update`` command with OLD_RELEASE_DATE, NEW_RELEASE_DATE."
-msgstr "``rake release:version:update`` を OLD_RELEASE_DATE や NEW_RELEASE_DATE とともに実行します。"
+msgid "``dev:version:bump``"
+msgstr ""
 
-msgid "When 14.07 release, we executed the following command::"
-msgstr "14.07 のリリースの際は、以下のコマンドを実行しました"
+msgid "We will bump up the version for the next release"
+msgstr "次のリリースに向けてバージョンをあげます"
 
-msgid "This command updates the version of spec file or debian/changelog entry."
-msgstr "このコマンドはdebian/changelogファイルのバージョンを更新します。"
+msgid "You can also specify a version with ``NEW_VERSION``"
+msgstr "環境変数 ``NEW_VERSION`` でバージョンを指定することができます"
 
-msgid "Confirm the results of each test"
-msgstr "各テストの結果確認"
+msgid "Confirm CI"
+msgstr "CIを確認する"
 
-msgid "We confirm the results of all the below tests and build before setting the tag to Mroonga. Because if we will find problems in Mroonga after setting the tag to it, we must release it again."
-msgstr "リリース用のタグを設定する前に、以下のテストとビルドが全てパスしているかを確認します。タグを設定してから問題が発覚すると、再度リリースすることになってしまうので、タグを設定する前に問題がないか確認します。"
+msgid "We confirm whether below CIs green or not."
+msgstr "以下のCIがグリーンかどうかを確認します。"
 
 msgid "`GitHub Actions <https://github.com/mroonga/mroonga/actions>`_"
 msgstr ""
 
-msgid "`Launchpad <https://launchpad.net/~groonga/+archive/ubuntu/nightly/+packages>`_"
-msgstr ""
-
-msgid "How to build packages for Ubuntu on Nightly::"
-msgstr ""
-
-msgid "Tagging for release"
-msgstr "リリースのためのタグ打ち"
-
-msgid "Execute the following command for tagging::"
-msgstr "タグを打つために以下のコマンドを実行します::"
-
-msgid "Upload archive files"
-msgstr "アーカイブファイルのアップロード"
-
-msgid "Execute the following command for uploading source archive::"
-msgstr ""
-
-msgid "As a result, ``tar.gz`` archive file is available from https://packages.groonga.org/source/mroonga/."
-msgstr "結果として、 ``tar.gz`` アーカイブ・ファイルが https://packages.groonga.org/source/mroonga/から入手可能になります。"
-
-msgid "Create packages for the release"
-msgstr "リリース向けにパッケージを作成する"
-
-msgid "Create Linux and Windows packages."
-msgstr "LinuxとWindowsのパッケージを作成します。"
-
-msgid "Debian"
-msgstr ""
-
-msgid "Change working directory to ``packages``::"
-msgstr "作業ディレクトリを ``packages`` に変更します。"
-
-msgid "Execute the following command::"
-msgstr "以下のコマンドを実行します::"
-
-msgid "Now we finish build and upload packages to https://packages.groonga.org/. However, these packages are unsigned. We sign packages by executing the below commands::"
-msgstr "これで、パッケージのビルドと https://packages.groonga.org/ へのアップロードが完了しました。しかし、この段階ではビルドしたパッケージはまだ未署名なので、以下のコマンドでパッケージを署名します。"
-
-msgid "Debian derivatives(Ubuntu)"
-msgstr "Debian系(Ubuntu)"
-
-msgid "For Ubuntu, packages are provided by PPA on launchpad.net."
-msgstr "Ubuntuの場合、パッケージはlaunchpad.netのPPAで提供されます。"
-
-msgid "Change working directory to ``packages`` and execute ``rake ubuntu:upload`` command::"
-msgstr "作業ディレクトリを ``packages`` にし、``rake ubuntu:upload`` コマンドを実行します::"
-
-msgid "When upload packages was succeeded, package build process is executed on launchpad.net. Then build result is notified via E-mail. You can install packages via Groonga PPA on launchpad.net::"
-msgstr "パッケージのアップロードに成功すると、パッケージのビルドがlaunchpad.netにて行われます。アップロードに成功するとメールで通知が届きます。ビルドが成功するとパッケージをPPA経由でインストールできます。"
-
-msgid "Red Hat derivatives"
-msgstr "Red Hat系"
-
-msgid "Change working directory to ``packages`` ::"
-msgstr "作業ディレクトリを ``packages`` に変更します。"
-
-msgid "Windows"
-msgstr ""
-
-msgid "For windows packages, we use artifacts of `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ ."
-msgstr "Windows向けには、 `GitHub release page <https://github.com/mroonga/mroonga/releases>`_ の成果物を使っています。"
+msgid "We use CI to do automatic releases, so if it fails, we retry."
+msgstr "CIで自動リリースを行っているので、失敗していたらリトライします。（何度リトライしても問題ないように設定されています。）"
 
 msgid "Update Docker images"
-msgstr ""
+msgstr "Dockerイメージを更新"
 
-msgid "TODO"
-msgstr ""
+msgid "Execute the following commands::"
+msgstr "次のコマンドを実行::"
 
-msgid "Upload documents"
-msgstr "ドキュメントをアップロード"
-
-msgid "Commit changes in mroonga.org repository && push them."
-msgstr "mroonga.orgの変更点をcommit&&pushする。"
-
-msgid "Update blog(Mroonga blog)"
-msgstr "Blog(Mroongaブログ)の更新"
-
-msgid "We update the below files."
-msgstr "以下のファイルを更新します。"
-
-msgid "``$MROONGA_GITHUB_COM_PATH/ja/_posts/(the date of release)-mroonga-(version).md``"
-msgstr ""
-
-msgid "``$MROONGA_GITHUB_COM_PATH/en/_posts/(the date of release)-mroonga-(version).md``"
-msgstr ""
-
-msgid "We can confirm contents of blog on Web browser by using Jekyll.::"
-msgstr "Jekyllを使ってWebブラウザー上でブログの内容を確認します::"
-
-msgid "We access http://localhost:4000 on our web browser for confirming contents."
-msgstr "Webブラウザーで http://localhost:4000 にアクセスして内容を確認します。"
-
-msgid "If we want private to blog contents, we set ``false`` on ``published:`` in ``.md`` file.::"
-msgstr "ブログの内容を非公開にしたい場合は、 ``.md`` ファイル内の ``published:`` を ``false`` に設定します。::"
-
-msgid "Announce release for mailing list"
-msgstr "リリースをメーリングリストで告知"
-
-msgid "Send release announce for each mailing list"
-msgstr "リリースアナウンスをそれぞれのメーリングリストに送ります"
-
-msgid "ml@mysql.gr.jp for Japanese"
-msgstr ""
-
-msgid "groonga-dev@lists.osdn.me for Japanese"
-msgstr ""
-
-msgid "groonga-talk@lists.sourceforge.net for English"
-msgstr ""
-
-msgid "Announce release for twitter"
-msgstr "リリースをTwitterで告知"
+msgid "Update documents"
+msgstr "ドキュメントを更新"
 
 msgid "Click Tweet link in Mrooga blog entry. You can share tweet about latest release. If you use tweet link, title of release announce and URL is embedded into your tweet."
 msgstr "Tweetリンクをクリックすると、最新のリリースについてツイートできます。タイトルやブログエントリのURLがツイートに含まれます。"
@@ -249,9 +162,3 @@ msgstr "FacebookのMroongaグループからリリースを告知します。"
 
 msgid "https://www.facebook.com/mroonga/"
 msgstr ""
-
-msgid "Bump version"
-msgstr "バージョンをあげる"
-
-msgid "Bump version to the latest release::"
-msgstr "最新のリリースへバージョンをあげる::"
