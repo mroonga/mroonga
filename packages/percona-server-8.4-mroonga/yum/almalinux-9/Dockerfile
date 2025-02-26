@@ -26,7 +26,7 @@ RUN \
     percona-server && \
   dnf install --enablerepo=crb -y ${quiet} \
     # Percona Server dependencies.
-    cmake\
+    cmake \
     cyrus-sasl-devel \
     cyrus-sasl-scram \
     krb5-devel \
