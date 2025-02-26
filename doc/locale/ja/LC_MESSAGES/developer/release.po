@@ -125,7 +125,7 @@ msgid "We will bump up the version for the next release"
 msgstr "次のリリースに向けてバージョンをあげます"
 
 msgid "You can also specify a version with ``NEW_VERSION``"
-msgstr "環境変数 ``NEW_RELEASE_DATE`` でバージョンを指定することができます"
+msgstr "環境変数 ``NEW_VERSION`` でバージョンを指定することができます"
 
 msgid "Confirm CI"
 msgstr "CIを確認する"
