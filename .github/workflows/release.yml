@@ -75,21 +75,26 @@ jobs:
             release-artifacts/*/*
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: actions/checkout@v4
-        with:
-          path: groonga
-          repository: groonga/groonga
       - name: Prepare for Launchpad publishing
         run: |
           cp release-artifacts/release-source/mroonga-*.tar.gz ./
           sudo apt update
           sudo apt install -y gpg
+      - uses: actions/checkout@v4
+        with:
+          path: groonga
+          repository: groonga/groonga
+      - uses: actions/checkout@v4
+        with:
+          path: apache-arrow
+          repository: apache/arrow
       - name: Publish to Launchpad
         env:
+          APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
           GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
           LAUNCHPAD_DEPLOY_KEY: ${{ secrets.LAUNCHPAD_DEPLOY_KEY }}
+          LAUNCHPAD_UPLOADER_PGP_KEY: "0x32862FBCD63D72C152EFF3A9BD481CAA9168EA87"
         run: |
           echo "${LAUNCHPAD_DEPLOY_KEY}" | gpg --import
-          echo "trusted-key 0x32862FBCD63D72C152EFF3A9BD481CAA9168EA87" > \
-            ~/.gnupg/gpg.conf
+          echo "trusted-key ${LAUNCHPAD_UPLOADER_PGP_KEY}" > ~/.gnupg/gpg.conf
           rake -C packages ubuntu
