@@ -93,10 +93,6 @@ REPO
     if [ "${percona_package_version}" = "80" ]; then
       sudo percona-release setup ps${percona_package_version}
     else
-      # TODO: We can enable this after we release Mroonga 15.03.
-      # We don't release Mroonga for Percona Server 8.4 yet.
-      # So we can't install the previous Mroonga that depends on Percona Server 8.4.
-      old_package=
       sudo percona-release enable-only ps-${percona_package_version}-lts release
     fi
     mysql_package_prefix=percona-server
@@ -287,15 +283,24 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
+
+sudo ${DNF} erase -y \
+     ${package} \
+     "${mysql_package_prefix}-*"
+sudo rm -rf /var/lib/mysql
+
+if ${DNF} info ${package} > /dev/null 2>&1; then
+  is_first_release=no
+else
+  is_first_release=yes
+fi
+
 if [ "${triggered_ref_type}" = "tag" ]; then
   echo "Skip on release because external dependency updates of old package " \
        "cause test failures."
-elif [ -n "${old_package}" ]; then
-  sudo ${DNF} erase -y \
-       ${package} \
-       "${mysql_package_prefix}-*"
-  sudo rm -rf /var/lib/mysql
-
+elif [ "${is_first_release}" = "yes" ]; then
+  echo "Skip because ${package} hasn't been released yet."
+else
   sudo ${DNF} install -y ${old_package}
   sudo ${DNF} install -y \
        ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
