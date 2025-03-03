@@ -41,17 +41,17 @@ The procedure from download to build is the following:
 ```console
 $ mkdir -p ~/work/
 $ cd ~/work/
-$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.3/mariadb-11.4.3.tar.gz
-$ tar xf mariadb-11.4.3.tar.gz
-$ rm -rf mariadb-11.4.3/storage/mroonga
+$ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.4/mariadb-11.4.4.tar.gz
+$ tar xf mariadb-11.4.4.tar.gz
+$ rm -rf mariadb-11.4.4/storage/mroonga
 $ cmake \
-    -Smariadb-11.4.3 \
-    -Bmariadb-11.4.3.build \
+    -Smariadb-11.4.4 \
+    -Bmariadb-11.4.4.build \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_INSTALL_PREFIX=/tmp/local \
     -DWITH_DEBUG=ON
-$ cmake --build mariadb-11.4.3.build
+$ cmake --build mariadb-11.4.4.build
 ```
 
 ### How tom build Mroonga for debugging
