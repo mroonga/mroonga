@@ -45,7 +45,6 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
-    old_package=${package}
     mysql_package_prefix=MariaDB
     service_name=mariadb
     mysql_command=mariadb
@@ -63,7 +62,6 @@ REPO
   mysql-community-minimal-*)
     mysql_package_prefix=mysql-community-minimal
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
     mysql_command=mysql
 
     sudo ${DNF} install -y \
@@ -78,7 +76,6 @@ REPO
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     ;;
@@ -89,7 +86,6 @@ REPO
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
     if [ "${percona_package_version}" = "80" ]; then
       sudo percona-release setup ps${percona_package_version}
     else
@@ -301,7 +297,7 @@ if [ "${triggered_ref_type}" = "tag" ]; then
 elif [ "${is_first_release}" = "yes" ]; then
   echo "Skip because ${package} hasn't been released yet."
 else
-  sudo ${DNF} install -y ${old_package}
+  sudo ${DNF} install -y ${package}
   sudo ${DNF} install -y \
        ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 
