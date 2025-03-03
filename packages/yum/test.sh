@@ -45,7 +45,6 @@ ha_mroonga_so=ha_mroonga.so
 have_auto_generated_password=no
 case ${package} in
   mariadb-*)
-    old_package=${package}
     mysql_package_prefix=MariaDB
     service_name=mariadb
     mysql_command=mariadb
@@ -63,7 +62,6 @@ REPO
   mysql-community-minimal-*)
     mysql_package_prefix=mysql-community-minimal
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
     mysql_command=mysql
 
     sudo ${DNF} install -y \
@@ -78,7 +76,6 @@ REPO
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     ;;
@@ -89,8 +86,11 @@ REPO
     sudo ${DNF} install -y \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    old_package=${package}
-    sudo percona-release setup ps${percona_package_version}
+    if [ "${percona_package_version}" = "80" ]; then
+      sudo percona-release setup ps${percona_package_version}
+    else
+      sudo percona-release enable-only ps-${percona_package_version}-lts release
+    fi
     mysql_package_prefix=percona-server
     test_package_name=percona-server-test
     sudo ${DNF} install -y percona-icu-data-files
@@ -279,16 +279,25 @@ echo "::endgroup::"
 
 
 echo "::group::Upgrade"
+
+sudo ${DNF} erase -y \
+     ${package} \
+     "${mysql_package_prefix}-*"
+sudo rm -rf /var/lib/mysql
+
+if ${DNF} info ${package} > /dev/null 2>&1; then
+  is_first_release=no
+else
+  is_first_release=yes
+fi
+
 if [ "${triggered_ref_type}" = "tag" ]; then
   echo "Skip on release because external dependency updates of old package " \
        "cause test failures."
-elif [ -n "${old_package}" ]; then
-  sudo ${DNF} erase -y \
-       ${package} \
-       "${mysql_package_prefix}-*"
-  sudo rm -rf /var/lib/mysql
-
-  sudo ${DNF} install -y ${old_package}
+elif [ "${is_first_release}" = "yes" ]; then
+  echo "Skip because ${package} hasn't been released yet."
+else
+  sudo ${DNF} install -y ${package}
   sudo ${DNF} install -y \
        ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
 

@@ -28,6 +28,7 @@ packages = [
   "mysql-community-minimal-8.0-mroonga",
   "mysql-community-minimal-8.4-mroonga",
   "percona-server-8.0-mroonga",
+  "percona-server-8.4-mroonga",
 ]
 
 namespace :version do
