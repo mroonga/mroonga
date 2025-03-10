@@ -224,7 +224,7 @@ jobs:
       - name: Update version
         if: |
           github.ref_type != 'tag' &&
-          !startsWith(github.ref, 'refs/heads/maintenance/')
+          !startsWith(github.ref_name, 'maintenance/')
         run: |
           case ${{ matrix.os }} in
             debian-*|ubuntu-*)
