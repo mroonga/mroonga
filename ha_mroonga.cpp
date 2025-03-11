@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2010 Tetsuro IKEDA
   Copyright (C) 2010-2013 Kentoku SHIBA
-  Copyright (C) 2011-2024 Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2011-2025 Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
   Copyright (C) 2020-2021 Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -4858,7 +4858,7 @@ int ha_mroonga::storage_create_index_table(TABLE* table,
   // TODO: Add NULL check for index_type
 
   int key_alg = key_info->algorithm;
-  if (key_info->flags & HA_FULLTEXT) {
+  if (key_alg == HA_KEY_ALG_FULLTEXT) {
     index_table_flags |= GRN_OBJ_TABLE_PAT_KEY;
     int error = mrn_change_encoding(ctx, key_info->key_part->field->charset());
     if (error) {
@@ -4890,14 +4890,14 @@ int ha_mroonga::storage_create_index_table(TABLE* table,
     DBUG_RETURN(error);
   }
 
-  if (key_info->flags & HA_FULLTEXT) {
+  if (key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
     set_tokenizer(index_table, key_info);
     set_token_filters(index_table, key_info);
   }
 
   {
     Field* field = &(key_info->key_part->field[0]);
-    if (key_info->flags & HA_FULLTEXT) {
+    if (key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       if (have_custom_normalizer(key_info) || should_normalize(field, true)) {
         set_normalizer(index_table, key_info);
       }
@@ -4995,7 +4995,8 @@ int ha_mroonga::storage_create_index(TABLE* table,
     if (tokenizer) {
       index_column_flags |= GRN_OBJ_WITH_POSITION;
     }
-    if (is_multiple_column_index && (key_info->flags & HA_FULLTEXT)) {
+    if (is_multiple_column_index &&
+        key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       index_column_flags |= GRN_OBJ_WITH_SECTION;
     }
   }
@@ -5036,7 +5037,7 @@ int ha_mroonga::storage_create_index(TABLE* table,
 
   mrn_change_encoding(ctx, system_charset_info);
   if (is_multiple_column_index) {
-    if (key_info->flags & HA_FULLTEXT) {
+    if (key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       grn_obj source_ids;
       GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
 
@@ -5614,8 +5615,9 @@ int ha_mroonga::storage_reindex()
       grn_table_size(ctx, reinterpret_cast<grn_obj*>(columns));
     grn_hash_close(ctx, columns);
 
-    bool is_multiple_column_index = (KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
-                                     !(key_info[i].flags & HA_FULLTEXT));
+    bool is_multiple_column_index =
+      (KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
+       key_info[i].algorithm != HA_KEY_ALG_FULLTEXT);
 
     if (n_columns == 1 || is_multiple_column_index) {
       grn_table_truncate(ctx, grn_index_tables[i]);
@@ -7614,7 +7616,8 @@ int ha_mroonga::storage_write_row_multiple_column_indexes(
 
     KEY* key_info = &(table->key_info[i]);
 
-    if (KEY_N_KEY_PARTS(key_info) == 1 || (key_info->flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(key_info) == 1 ||
+        key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       continue;
     }
 
@@ -8288,7 +8291,8 @@ int ha_mroonga::storage_update_row_index(const uchar* old_data,
 
     KEY* key_info = &(table->key_info[i]);
 
-    if (KEY_N_KEY_PARTS(key_info) == 1 || (key_info->flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(key_info) == 1 ||
+        key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       continue;
     }
 
@@ -8688,7 +8692,8 @@ int ha_mroonga::storage_delete_row_index(const uchar* buf)
 
     KEY* key_info = &(table->key_info[i]);
 
-    if (KEY_N_KEY_PARTS(key_info) == 1 || (key_info->flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(key_info) == 1 ||
+        key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
       continue;
     }
 
@@ -15315,7 +15320,8 @@ int ha_mroonga::storage_truncate_index()
     KEY* key_info = &(table->key_info[i]);
 
     if (!(key_info->flags & HA_NOSAME) &&
-        (KEY_N_KEY_PARTS(key_info) == 1 || (key_info->flags & HA_FULLTEXT))) {
+        (KEY_N_KEY_PARTS(key_info) == 1 ||
+         key_info->algorithm == HA_KEY_ALG_FULLTEXT)) {
       continue;
     }
 
@@ -16321,7 +16327,8 @@ int ha_mroonga::wrapper_disable_indexes_mroonga(
     }
     for (i = 0; i < table_share->keys; i++) {
       KEY* key_info = &(table_share->key_info[i]);
-      if (!(key_info->flags & HA_FULLTEXT) && !mrn_is_geo_key(key_info)) {
+      if (key_info->algorithm != HA_KEY_ALG_FULLTEXT &&
+          !mrn_is_geo_key(key_info)) {
         continue;
       }
 
@@ -16440,7 +16447,8 @@ int ha_mroonga::wrapper_enable_indexes_mroonga(
     mrn_set_bitmap_by_key(table->read_set, p_key_info);
     mrn::PathMapper mapper(share->table_name);
     for (i = 0, j = 0; i < n_keys; i++) {
-      if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
+      if (key_info[i].algorithm != HA_KEY_ALG_FULLTEXT &&
+          !mrn_is_geo_key(&key_info[i])) {
         j++;
         continue;
       }
@@ -16448,7 +16456,7 @@ int ha_mroonga::wrapper_enable_indexes_mroonga(
       index_tables[i] = NULL;
       index_columns[i] = NULL;
       if (!grn_index_columns[i]) {
-        if ((key_info[i].flags & HA_FULLTEXT) &&
+        if (key_info[i].algorithm == HA_KEY_ALG_FULLTEXT &&
             (error = wrapper_create_index_fulltext(mapper.table_name(),
                                                    i,
                                                    &key_info[i],
@@ -16551,7 +16559,7 @@ int ha_mroonga::storage_enable_indexes(MRN_HANDLER_ENABLE_INDEXES_PARAMETERS)
           break;
         }
         if (KEY_N_KEY_PARTS(&(key_info[i])) != 1 &&
-            !(key_info[i].flags & HA_FULLTEXT)) {
+            key_info[i].algorithm != HA_KEY_ALG_FULLTEXT) {
           mrn_set_bitmap_by_key(table->read_set, &key_info[i]);
           have_multiple_column_index = true;
         }
@@ -16697,7 +16705,7 @@ int ha_mroonga::wrapper_fill_indexes(THD* thd,
         uint k;
         for (k = 0; k < n_keys; k++) {
           tmp_key_info = &key_info[k];
-          if (!(tmp_key_info->flags & HA_FULLTEXT) &&
+          if (tmp_key_info->algorithm != HA_KEY_ALG_FULLTEXT &&
               !mrn_is_geo_key(tmp_key_info)) {
             continue;
           }
@@ -16772,7 +16780,8 @@ int ha_mroonga::wrapper_recreate_indexes(THD* thd)
   grn_table = NULL;
   mrn_set_bitmap_by_key(table->read_set, p_key_info);
   for (i = 0; i < n_keys; i++) {
-    if (!(key_info[i].flags & HA_FULLTEXT) && !mrn_is_geo_key(&key_info[i])) {
+    if (key_info[i].algorithm != HA_KEY_ALG_FULLTEXT &&
+        !mrn_is_geo_key(&key_info[i])) {
       continue;
     }
     mrn::IndexTableName index_table_name(mapper.table_name(),
@@ -17172,7 +17181,7 @@ int ha_mroonga::storage_add_index_multiple_columns(TABLE* target_table,
     for (uint i = 0; i < num_of_keys; i++) {
       KEY* current_key_info = key_info + i;
       if (KEY_N_KEY_PARTS(current_key_info) == 1 ||
-          (current_key_info->flags & HA_FULLTEXT)) {
+          current_key_info->algorithm == HA_KEY_ALG_FULLTEXT) {
         continue;
       }
       if (skip_unique_key && (key_info[i].flags & HA_NOSAME)) {
@@ -17304,7 +17313,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   n_keys = ha_alter_info->index_drop_count;
   for (i = 0; i < n_keys; ++i) {
     const KEY* key = ha_alter_info->index_drop_buffer[i];
-    if (key->flags & HA_FULLTEXT || mrn_is_geo_key(key)) {
+    if (key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key)) {
       result_mroonga = HA_ALTER_INPLACE_EXCLUSIVE_LOCK;
     } else {
       memcpy(&alter_index_drop_buffer[alter_index_drop_count],
@@ -17321,7 +17330,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   for (i = 0; i < n_keys; ++i) {
     const KEY* key =
       &altered_table->key_info[ha_alter_info->index_add_buffer[i]];
-    if (key->flags & HA_FULLTEXT || mrn_is_geo_key(key)) {
+    if (key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key)) {
       result_mroonga = HA_ALTER_INPLACE_EXCLUSIVE_LOCK;
     } else {
       alter_index_add_buffer[alter_index_add_count] =
@@ -17337,7 +17346,7 @@ enum_alter_inplace_result ha_mroonga::wrapper_check_if_supported_inplace_alter(
   n_keys = ha_alter_info->key_count;
   for (i = 0; i < n_keys; ++i) {
     const KEY* key = &altered_table->key_info[i];
-    if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
+    if (!(key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key))) {
       memcpy(&alter_key_info_buffer[alter_key_count],
              &ha_alter_info->key_info_buffer[i],
              sizeof(KEY));
@@ -17576,7 +17585,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(TABLE* altered_table,
   n_keys = ha_alter_info->index_drop_count;
   for (i = 0; i < n_keys; ++i) {
     const KEY* key = ha_alter_info->index_drop_buffer[i];
-    if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
+    if (!(key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key))) {
       continue;
     }
     while (!KEY_NAME_EQUAL_KEY(key, &(key_info[j]))) {
@@ -17611,14 +17620,14 @@ bool ha_mroonga::wrapper_inplace_alter_table(TABLE* altered_table,
   for (i = 0; i < n_keys; ++i) {
     uint key_pos = ha_alter_info->index_add_buffer[i];
     KEY* key = &altered_table->key_info[key_pos];
-    if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
+    if (!(key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key))) {
       continue;
     }
     if (share->disable_keys) {
       continue;
     }
     DBUG_PRINT("info", ("mroonga: add key pos=%u", key_pos));
-    if ((key->flags & HA_FULLTEXT) &&
+    if (key->algorithm == HA_KEY_ALG_FULLTEXT &&
         (error = wrapper_create_index_fulltext(mapper.table_name(),
                                                key_pos,
                                                key,
@@ -17689,7 +17698,7 @@ bool ha_mroonga::wrapper_inplace_alter_table(TABLE* altered_table,
     for (i = 0; i < n_keys; ++i) {
       uint key_pos = ha_alter_info->index_add_buffer[i];
       KEY* key = &altered_table->key_info[key_pos];
-      if (!(key->flags & HA_FULLTEXT || mrn_is_geo_key(key))) {
+      if (!(key->algorithm == HA_KEY_ALG_FULLTEXT || mrn_is_geo_key(key))) {
         continue;
       }
       if (share->disable_keys) {
@@ -17768,7 +17777,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_index(
       ++i;
       break;
     }
-    if (KEY_N_KEY_PARTS(key) != 1 && !(key->flags & HA_FULLTEXT)) {
+    if (KEY_N_KEY_PARTS(key) != 1 && key->algorithm != HA_KEY_ALG_FULLTEXT) {
       mrn_set_bitmap_by_key(table->read_set, key);
       have_multiple_column_index = true;
     }
