@@ -46,7 +46,7 @@ jobs:
           ruby-version: ruby
       - name: Install required packages
         run: |
-          apt install -y \
+          sudo apt install -y \
             build-essential
       - name: Build MariaDB main
         run: |
