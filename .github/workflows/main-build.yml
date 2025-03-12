@@ -77,7 +77,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX="/tmp/local" \
             -DMYSQL_SOURCE_DIR=mariadb-main-source \
             -DMYSQL_BUILD_DIR=build-mariadb-main \
-            -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config \
+            -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config
           cmake --build build-mroonga-main
           cmake --install build-mroonga-main
 
