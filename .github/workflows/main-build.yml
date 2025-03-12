@@ -44,6 +44,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
+      - name: Install required packages
+        run: |
+          apt install -y \
+            build-essential
       - name: Build MariaDB main
         run: |
           git clone --recursive https://github.com/MariaDB/server.git mariadb-main-source
