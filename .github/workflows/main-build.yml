@@ -53,7 +53,7 @@ jobs:
             -B build-mariadb-main \
             -GNinja \
             -DCMAKE_INSTALL_PREFIX=/tmp/local
-          cmake --build build-mariadb-main
+          cmake --build build-mariadb-main -j$(nproc)
           cmake --install build-mariadb-main
       - name: Build Groonga main
         run: |
@@ -64,7 +64,7 @@ jobs:
             -B build-groonga-main \
             --preset=release-default \
             -DCMAKE_INSTALL_PREFIX="/tmp/local"
-          cmake --build build-groonga-main
+          cmake --build build-groonga-main -j$(nproc)
           cmake --install build-groonga-main
       - name: Build Mroonga
         run: |
@@ -78,6 +78,6 @@ jobs:
             -DMYSQL_SOURCE_DIR=mariadb-main-source \
             -DMYSQL_BUILD_DIR=build-mariadb-main \
             -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config
-          cmake --build build-mroonga-main
+          cmake --build build-mroonga-main -j$(nproc)
           cmake --install build-mroonga-main
 
