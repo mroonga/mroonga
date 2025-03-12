@@ -78,7 +78,7 @@ jobs:
           PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake \
             -S mroonga-main-source \
             -B build-mroonga-main \
-            --preset=release-default \
+            --preset=release \
             -DCMAKE_INSTALL_PREFIX="/tmp/local" \
             -DMYSQL_SOURCE_DIR=mariadb-main-source \
             -DMYSQL_BUILD_DIR=build-mariadb-main \
