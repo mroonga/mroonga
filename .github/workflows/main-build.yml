@@ -1,0 +1,98 @@
+name: Linux
+on:
+  push:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/linux.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/linux.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  schedule:
+    - cron: |
+        0 0 * * *
+concurrency:
+  group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+    env:
+      APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
+      GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          path: groonga
+          repository: groonga/groonga
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          path: apache-arrow
+          repository: apache/arrow
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - name: Build MariaDB main
+        run: |
+          wget https://github.com/MariaDB/server/archive/refs/heads/main.zip
+          unzip main.zip -d mariadb-main-source
+          mkdir build-mariadb-main
+          cmake \
+            -S mariadb-main-source \
+            -B build-mariadb-main \
+            -GNinja \
+            -DCMAKE_INSTALL_PREFIX=/tmp/local
+          cmake --build build-mariadb-main
+          cmake --install build-mariadb-main
+      - name: Build Groonga main
+        run: |
+          wget https://github.com/groonga/groonga/archive/refs/heads/main.zip
+          unzip main.zip -d groonga-main-source
+          mkdir build-groonga-main
+          cmake \
+            -S groonga-main-source \
+            -B build-groonga-main \
+            --preset=release-default \
+            -DCMAKE_INSTALL_PREFIX="/tmp/local"
+          cmake --build build-groonga-main
+          cmake --install build-groonga-main
+      - name: Build Mroonga
+        run: |
+          wget https://github.com/mroonga/mroonga/archive/refs/heads/main.zip
+          unzip main.zip -d mroonga-main-source
+          mkdir build-mroonga-main
+          PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake \
+            -S mroonga-main-source \
+            -B build-mroonga-main \
+            --preset=release-default \
+            -DCMAKE_INSTALL_PREFIX="/tmp/local" \
+            -DMYSQL_SOURCE_DIR=mariadb-main-source \
+            -DMYSQL_BUILD_DIR=build-mariadb-main \
+            -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config \
+          cmake --build build-mroonga-main
+          cmake --install build-mroonga-main
+
