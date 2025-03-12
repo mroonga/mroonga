@@ -46,8 +46,7 @@ jobs:
           ruby-version: ruby
       - name: Build MariaDB main
         run: |
-          wget https://github.com/MariaDB/server/archive/refs/heads/main.zip
-          unzip main.zip -d mariadb-main-source
+          git clone --recursive https://github.com/MariaDB/server.git mariadb-main-source
           mkdir build-mariadb-main
           cmake \
             -S mariadb-main-source \
@@ -58,8 +57,7 @@ jobs:
           cmake --install build-mariadb-main
       - name: Build Groonga main
         run: |
-          wget https://github.com/groonga/groonga/archive/refs/heads/main.zip
-          unzip main.zip -d groonga-main-source
+          git clone --recursive https://github.com/groonga/groonga.git groonga-main-source
           mkdir build-groonga-main
           cmake \
             -S groonga-main-source \
@@ -70,8 +68,7 @@ jobs:
           cmake --install build-groonga-main
       - name: Build Mroonga
         run: |
-          wget https://github.com/mroonga/mroonga/archive/refs/heads/main.zip
-          unzip main.zip -d mroonga-main-source
+          git clone --recursive https://github.com/mroonga/mroonga.git mroonga-main-source
           mkdir build-mroonga-main
           PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake \
             -S mroonga-main-source \
