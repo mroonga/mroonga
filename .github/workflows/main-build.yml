@@ -47,7 +47,8 @@ jobs:
       - name: Install required packages
         run: |
           sudo apt install -y \
-            build-essential
+            build-essential \
+            ninja
       - name: Build MariaDB main
         run: |
           git clone --recursive https://github.com/MariaDB/server.git mariadb-main-source
