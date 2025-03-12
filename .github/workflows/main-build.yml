@@ -1,4 +1,4 @@
-name: Linux
+name: Build with MariaDB main
 on:
   push:
   pull_request:
