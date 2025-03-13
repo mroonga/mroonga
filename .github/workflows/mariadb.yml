@@ -38,9 +38,6 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
-    env:
-      APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
-      GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
     runs-on: ubuntu-24.04
     steps:
       - uses: ruby/setup-ruby@v1
