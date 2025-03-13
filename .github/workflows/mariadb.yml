@@ -39,6 +39,11 @@ jobs:
           sudo apt install -y \
             build-essential \
             ninja-build
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb
+          repository: MariaDB/server
+          submodules: recursive
       - name: Add submodules
         run: |
           cd mariadb
