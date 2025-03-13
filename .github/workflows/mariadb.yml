@@ -40,17 +40,21 @@ jobs:
         with:
           path: mariadb
           repository: MariaDB/server
-          submodules: recursive
       - name: Remove bundled Mroonga
         run: |
           cd mariadb
           git rm -r --cached storage/mroonga/
           rm -rf storage/mroonga
-      - name: Add submodules
-        run: |
-          cd mariadb
-          git submodule add https://github.com/groonga/groonga.git extra/groonga
-          git submodule add https://github.com/mroonga/mroonga.git storage/mroonga
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/extra/groonga
+          repository: groonga/groonga
+          submodules: true
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/storage/mroonga
+          repository: mroonga/mroonga
+          submodules: true
       - name: Build MariaDB main
         run: |
           mkdir build-mariadb
