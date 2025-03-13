@@ -51,6 +51,7 @@ jobs:
           rm -rf storage/mroonga
       - name: Add submodules
         run: |
+          cd mariadb
           git submodule add https://github.com/groonga/groonga.git extra/groonga
           git submodule add https://github.com/mroonga/mroonga.git storage/mroonga
       - name: Build MariaDB main
