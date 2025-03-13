@@ -43,17 +43,6 @@ jobs:
       GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          path: groonga
-          repository: groonga/groonga
-          submodules: recursive
-      - uses: actions/checkout@v4
-        with:
-          path: mariadb
-          repository: MariaDB/server
-          submodules: recursive
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
@@ -62,6 +51,11 @@ jobs:
           sudo apt install -y \
             build-essential \
             ninja-build
+      - name: Add submodules
+        run: |
+          cd mariadb
+          git submodule add https://github.com/groonga/groonga.git extra/groonga
+          git submodule add https://github.com/mroonga/mroonga.git storage/mroonga
       - name: Build MariaDB main
         run: |
           mkdir build-mariadb
@@ -72,27 +66,3 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=/tmp/local
           cmake --build build-mariadb -j$(nproc)
           cmake --install build-mariadb
-      - name: Build Groonga main
-        run: |
-          mkdir build-groonga
-          cmake \
-            -S groonga \
-            -B build-groonga \
-            --preset=release-default \
-            -DCMAKE_INSTALL_PREFIX="/tmp/local"
-          cmake --build build-groonga -j$(nproc)
-          cmake --install build-groonga
-      - name: Build Mroonga
-        run: |
-          mkdir build-mroonga
-          PKG_CONFIG_PATH=/tmp/local/lib/pkgconfig cmake \
-            -S mroonga \
-            -B build-mroonga \
-            --preset=release \
-            -DCMAKE_INSTALL_PREFIX="/tmp/local" \
-            -DMYSQL_SOURCE_DIR=mariadb \
-            -DMYSQL_BUILD_DIR=build-mariadb \
-            -DMYSQL_CONFIG=/tmp/local/bin/mariadb_config
-          cmake --build build-mroonga -j$(nproc)
-          cmake --install build-mroonga
-
