@@ -8,7 +8,7 @@ on:
       - "**/*.hpp"
       - "**/CMakeLists.txt"
       - "**/Makefile.am"
-      - ".github/workflows/linux.yml"
+      - ".github/workflows/mariadb.yml"
       - "configure.ac"
       - "doc/**"
       - "mysql-test/**"
