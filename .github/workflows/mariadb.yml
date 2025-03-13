@@ -49,10 +49,6 @@ jobs:
           path: groonga
           repository: groonga/groonga
           submodules: recursive
-      - uses: actions/checkout@v4
-        with:
-          path: apache-arrow
-          repository: apache/arrow
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
