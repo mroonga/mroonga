@@ -1,4 +1,4 @@
-name: Build with MariaDB main
+name: Build Mroonga with MariaDB main
 on:
   push:
     paths:
