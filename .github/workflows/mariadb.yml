@@ -72,7 +72,6 @@ jobs:
           cmake \
             -Smariadb \
             -Bmariadb-main.build \
-            -GNinja \
-            -DCMAKE_INSTALL_PREFIX=/tmp/local
+            -GNinja
           cmake --build mariadb-main.build
           cmake --install mariadb-main.build
