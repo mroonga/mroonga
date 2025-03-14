@@ -66,7 +66,7 @@ jobs:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
           submodules: recursive
-      - name: Build MariaDB main
+      - name: Build MariaDB
         run: |
           mkdir mariadb-main.build
           cmake \
