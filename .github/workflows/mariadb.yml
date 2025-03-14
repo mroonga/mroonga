@@ -68,7 +68,7 @@ jobs:
           submodules: recursive
       - name: Build MariaDB main
         run: |
-          mkdir build-mariadb
+          mkdir mariadb-main.build
           cmake \
             -Smariadb \
             -Bmariadb-main.build \
