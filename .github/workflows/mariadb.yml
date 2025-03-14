@@ -55,6 +55,7 @@ jobs:
       - name: Remove bundled Mroonga
         run: |
           rm -rf mariadb/storage/mroonga
+          rm -rf mariadb/extra/groonga
       - uses: actions/checkout@v4
         with:
           path: mariadb/extra/groonga
