@@ -73,4 +73,6 @@ jobs:
             -Bmariadb.build \
             -GNinja
           cmake --build mariadb.build
+      - name: Install MariaDB
+        run: |
           cmake --install mariadb.build
