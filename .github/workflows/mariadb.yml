@@ -54,8 +54,7 @@ jobs:
           repository: MariaDB/server
       - name: Remove bundled Mroonga
         run: |
-          cd mariadb
-          rm -rf storage/mroonga
+          rm -rf mariadb/storage/mroonga
       - uses: actions/checkout@v4
         with:
           path: mariadb/extra/groonga
