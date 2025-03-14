@@ -60,6 +60,7 @@ jobs:
         with:
           path: mariadb/extra/groonga
           repository: groonga/groonga
+          submodule: recursive
       - uses: actions/checkout@v4
         with:
           path: mariadb/storage/mroonga
