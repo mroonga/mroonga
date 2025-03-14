@@ -65,6 +65,7 @@ jobs:
         with:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
+          submodules: recursive
       - name: Build MariaDB main
         run: |
           mkdir build-mariadb
