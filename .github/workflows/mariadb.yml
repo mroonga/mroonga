@@ -70,7 +70,7 @@ jobs:
         run: |
           cmake \
             -Smariadb \
-            -Bmariadb-main.build \
+            -Bmariadb.build \
             -GNinja
-          cmake --build mariadb-main.build
-          cmake --install mariadb-main.build
+          cmake --build mariadb.build
+          cmake --install mariadb.build
