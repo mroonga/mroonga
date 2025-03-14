@@ -59,8 +59,8 @@ jobs:
         run: |
           mkdir build-mariadb
           cmake \
-            -S mariadb \
-            -B build-mariadb \
+            -Smariadb \
+            -Bmariadb-main.build \
             -GNinja \
             -DCMAKE_INSTALL_PREFIX=/tmp/local
           cmake --build build-mariadb -j$(nproc)
