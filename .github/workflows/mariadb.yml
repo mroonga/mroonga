@@ -55,18 +55,15 @@ jobs:
       - name: Remove bundled Mroonga
         run: |
           cd mariadb
-          git rm -r --cached storage/mroonga/
           rm -rf storage/mroonga
       - uses: actions/checkout@v4
         with:
           path: mariadb/extra/groonga
           repository: groonga/groonga
-          submodules: true
       - uses: actions/checkout@v4
         with:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
-          submodules: true
       - name: Build MariaDB main
         run: |
           mkdir build-mariadb
