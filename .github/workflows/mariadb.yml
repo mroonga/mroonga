@@ -1,0 +1,78 @@
+name: MariaDB
+on:
+  push:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/mariadb.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/mariadb.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  schedule:
+    - cron: |
+        0 0 * * *
+concurrency:
+  group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - name: Install required packages
+        run: |
+          sudo apt install -y \
+            build-essential \
+            ninja-build
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb
+          repository: MariaDB/server
+      - name: Remove bundled Mroonga
+        run: |
+          rm -rf mariadb/storage/mroonga
+          rm -rf mariadb/extra/groonga
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/extra/groonga
+          repository: groonga/groonga
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/storage/mroonga
+          repository: mroonga/mroonga
+          submodules: recursive
+      - name: Build MariaDB
+        run: |
+          cmake \
+            -Smariadb \
+            -Bmariadb.build \
+            -GNinja
+          cmake --build mariadb.build
+      - name: Install MariaDB
+        run: |
+          cmake --install mariadb.build
