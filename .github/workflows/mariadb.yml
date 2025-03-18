@@ -1,0 +1,95 @@
+name: MariaDB
+on:
+  push:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/mariadb.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - "**/Makefile.am"
+      - ".github/workflows/mariadb.yml"
+      - "configure.ac"
+      - "doc/**"
+      - "mysql-test/**"
+      - "packages/**"
+      - "version_*"
+  schedule:
+    - cron: |
+        0 0 * * *
+concurrency:
+  group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb
+          repository: MariaDB/server
+      - name: Remove bundled Mroonga
+        run: |
+          rm -rf mariadb/extra/groonga
+          rm -rf mariadb/storage/mroonga
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/extra/groonga
+          repository: groonga/groonga
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/storage/mroonga
+          repository: mroonga/mroonga
+          submodules: recursive
+      - name: Build MariaDB
+        run: |
+          cmake \
+            -Smariadb \
+            -Bmariadb.build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCONC_WITH_UNITTEST=OFF \
+            -DMYSQL_MAINTAINER_MODE=OFF \
+            -DPLUGIN_ARCHIVE=NO \
+            -DPLUGIN_BLACKHOLE=NO \
+            -DPLUGIN_COLUMNSTORE=NO \
+            -DPLUGIN_CONNECT=NO \
+            -DPLUGIN_EXAMPLE=NO \
+            -DPLUGIN_FEDERATED=NO \
+            -DPLUGIN_FEDERATEDX=NO \
+            -DPLUGIN_INNOBASE=NO \
+            -DPLUGIN_OQGRAPH=NO \
+            -DPLUGIN_PERFSCHEMA=NO \
+            -DPLUGIN_ROCKSDB=NO \
+            -DPLUGIN_SEQUENCE=NO \
+            -DPLUGIN_SPHINX=NO \
+            -DPLUGIN_SPIDER=NO \
+            -DPLUGIN_TEST_SQL_DISCOVERY=NO \
+            -DWITHOUT_DYNAMIC_PLUGIN=ON \
+            -DWITH_UNIT_TESTS=OFF \
+            -DWITH_MARIABACKUP=OFF \
+            -DWITH_SAFEMALLOC=OFF
+          cmake --build mariadb.build
+      - name: Install MariaDB
+        run: |
+          cmake --install mariadb.build
