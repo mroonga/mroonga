@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2010  Tetsuro IKEDA
   Copyright (C) 2010-2013  Kentoku SHIBA
-  Copyright (C) 2011-2024  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2011-2025  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -445,8 +445,7 @@ typedef uchar* mrn_write_row_buf_t;
       (key_info[i].flags & HA_NOSAME))
 #endif
 
-#if defined(MRN_MARIADB_P) &&                                                  \
-  (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110400)
 using mrn_io_and_cpu_cost = IO_AND_CPU_COST;
 #  define MRN_HANDLER_HAVE_MULTI_RANGE_READ_INFO_CONST_LIMIT
 #  define MRN_HANDLER_HAVE_KEYREAD_TIME
