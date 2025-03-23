@@ -977,8 +977,7 @@ typedef uint mrn_srid;
   (table_list->get_db_name())
 #endif
 
-#if defined(MRN_MARIADB_P) &&                                        \
-   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500)
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110400)
 // warn_deprecated<>() requires deprecated version. MariaDB will
 // report an error on build when the deprecated version will reach
 // EOL.
