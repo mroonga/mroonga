@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2013-2025  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -1143,8 +1143,9 @@ namespace mrn {
           String* string;
           string = const_item->val_str(NULL);
           Field_enum* enum_field = static_cast<Field_enum*>(field_item->field);
-          int enum_value =
-            find_type(string->c_ptr(), enum_field->typelib, FIND_TYPE_BASIC);
+          int enum_value = find_type(string->c_ptr(),
+                                     MRN_FIELD_ENUM_GET_TYPELIB(enum_field),
+                                     FIND_TYPE_BASIC);
           GRN_INT64_SET(ctx_, &value_, enum_value);
         } else {
           GRN_INT64_SET(ctx_, &value_, const_item->val_int());

@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2023  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2025  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -945,4 +945,10 @@ using TABLE_LIST = Table_ref;
                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),           \
                          what,                                                 \
                          to))
+#endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
+#  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib()
+#else
+#  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
 #endif
