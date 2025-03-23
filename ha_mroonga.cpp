@@ -1541,7 +1541,15 @@ static void mrn_hton_drop_database(handlerton* hton, char* path)
 #  define MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
 #endif
 
-static int mrn_hton_close_connection(handlerton* hton, THD* thd)
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
+#  define MRN_TRANSACTION_PARTICIPANT_HAVE_CLOSE_CONNECTION
+#endif
+
+static int mrn_hton_close_connection(
+#ifndef MRN_TRANSACTION_PARTICIPANT_HAVE_CLOSE_CONNECTION
+  handlerton* hton,
+#endif
+  THD* thd)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn::SlotData* slot_data = mrn_get_slot_data(thd, false);
