@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright (C) 2012-2024  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2012-2025  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2013  Kentoku SHIBA
   Copyright (C) 2020  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -808,11 +808,11 @@ namespace mrn {
                             "for multiple column index: "
                             "normalized-data-size: <%u> "
                             "max-data-size: <%u> "
-                            "column-name: <%s> "
+                            "column-name: <" FIELD_NAME_FORMAT "> "
                             "data: <%.*s>",
                             normalized_length,
                             UINT_MAX16,
-                            field->field_name,
+                            FIELD_NAME_FORMAT_VALUE(field),
                             blob_data_length,
                             blob_data);
         grn_memcpy(grn_key, normalized, blob_data_length);
