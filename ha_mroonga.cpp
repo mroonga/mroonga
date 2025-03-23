@@ -1066,21 +1066,21 @@ static MYSQL_SYSVAR_STR(default_tokenizer,
                         MRN_DEFAULT_TOKENIZER);
 
 static MYSQL_THDVAR_BOOL(
-  dry_write,                                                 /* name */
-  PLUGIN_VAR_OPCMDARG,                                       /* options */
-  "If dry_write is true, any write operations are ignored.", /* comment */
-  NULL,                                                      /* check */
-  NULL,                                                      /* update */
-  false                                                      /* default */
+  dry_write,                                                /* name */
+  PLUGIN_VAR_OPCMDARG,                                      /* options */
+  "If dry_write is true, any write operations are ignored", /* comment */
+  NULL,                                                     /* check */
+  NULL,                                                     /* update */
+  false                                                     /* default */
 );
 
 static MYSQL_THDVAR_BOOL(enable_optimization, /* name */
                          PLUGIN_VAR_OPCMDARG, /* options */
                          "If enable_optimization is true, some optimizations "
-                         "will be applied.", /* comment */
-                         NULL,               /* check */
-                         NULL,               /* update */
-                         true                /* default */
+                         "will be applied", /* comment */
+                         NULL,              /* check */
+                         NULL,              /* update */
+                         true               /* default */
 );
 
 static MYSQL_THDVAR_LONGLONG(
@@ -1228,7 +1228,7 @@ static MYSQL_SYSVAR_INT(n_workers,
                         "Number of workers in Groonga. "
                         "0: The default. It disables parallel workers. "
                         "-1: Use the all CPUs in the environment. "
-                        "1 or larger: Use the specified number of CPUs.",
+                        "1 or larger: Use the specified number of CPUs",
                         nullptr,
                         mrn_n_workers_update,
                         grn_get_default_n_workers(),
