@@ -13929,7 +13929,7 @@ int ha_mroonga::storage_encode_key_set(Field* field,
                      field->field_name,
 #endif
                      field->pack_length(),
-                     static_cast<Field_set*>(field)->typelib,
+                     MRN_FIELD_ENUM_GET_TYPELIB(static_cast<Field_set*>(field)),
                      static_cast<Field_set*>(field)->charset());
   unpacker.table = table;
   switch (field->pack_length()) {
