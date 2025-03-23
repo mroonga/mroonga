@@ -3703,7 +3703,7 @@ ulong ha_mroonga::storage_index_flags(uint idx, uint part, bool all_parts) const
   if (KEY_N_KEY_PARTS(key) > 1 || !need_normalize_p) {
     flags |= HA_READ_ORDER;
   }
-  if (key->flags & HA_SPATIAL) {
+  if (key->algorithm == HA_KEY_ALG_RTREE) {
     flags |= HA_KEY_SCAN_NOT_ROR;
   }
   DBUG_RETURN(flags);
