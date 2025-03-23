@@ -33,5 +33,6 @@ repos:
           ?ha_mroonga\.cpp|
           ?ha_mroonga\.hpp|
           ?lib/mrn_condition_converter\.cpp|
+          ?lib/mrn_multiple_column_key_codec\.cpp|
           ?mrn_mysql_compat\.h|
           )
