@@ -4448,6 +4448,22 @@ int ha_mroonga::storage_create_validate_pseudo_column(TABLE* table)
   DBUG_RETURN(error);
 }
 
+namespace {
+  std::string mrn_name_normalize(const mrn_foreign_key_name& name)
+  {
+#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 110800
+    IdentBuffer<NAME_LEN> buffer;
+    buffer.copy_casedn(name);
+    return std::string(buffer.ptr(), buffer.length());
+#else
+    char buffer[NAME_LEN + 1];
+    strmake(buffer, name.str, (std::min)(name.length, sizeof(buffer) - 1));
+    my_casedn_str(files_charset_info, buffer);
+    return std::string(buffer, strlen(buffer));
+#endif
+  }
+}; // namespace
+
 bool ha_mroonga::storage_create_foreign_key(TABLE* table,
                                             const char* grn_table_name,
                                             Field* field,
@@ -4502,27 +4518,26 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         "info",
         ("mroonga: ref_field_name=" MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT,
          MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(ref_field_name)));
-      {
-        const mrn_foreign_key_name* ref_db_name = &(fk->ref_db);
+      const mrn_foreign_key_name& ref_db_name = fk->ref_db;
+      if (ref_db_name.length > 0) {
         DBUG_PRINT("info",
                    ("mroonga: ref_db_name=%.*s",
-                    static_cast<int>(ref_db_name->length),
-                    ref_db_name->str));
-        char normalized_ref_db_name[NAME_LEN + 1];
-        strmake(normalized_ref_db_name,
-                ref_db_name->str,
-                ref_db_name->str ? ref_db_name->length : 0);
+                    static_cast<int>(ref_db_name.length),
+                    ref_db_name.str));
+        std::string normalized_ref_db_name;
         if (lower_case_table_names) {
-          my_casedn_str(system_charset_info, normalized_ref_db_name);
+          normalized_ref_db_name = mrn_name_normalize(ref_db_name);
           DBUG_PRINT(
             "info",
-            ("mroonga: casedn ref_db_name=%s", normalized_ref_db_name));
+            ("mroonga: casedn ref_db_name=%s", normalized_ref_db_name.c_str()));
+        } else {
+          normalized_ref_db_name =
+            std::string(ref_db_name.str, ref_db_name.length);
         }
-        if (ref_db_name->str &&
-            !(table->s->db.length == strlen(normalized_ref_db_name) &&
-              strncmp(table->s->db.str,
-                      normalized_ref_db_name,
-                      table->s->db.length) == 0)) {
+        if (!(table->s->db.length == normalized_ref_db_name.size() &&
+              std::memcmp(table->s->db.str,
+                          normalized_ref_db_name.data(),
+                          table->s->db.length) == 0)) {
           error = ER_CANT_CREATE_TABLE;
           my_message(error,
                      "mroonga: "
@@ -4532,20 +4547,22 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         }
       }
 
-      const mrn_foreign_key_name* ref_table_name = &(fk->ref_table);
+      const mrn_foreign_key_name& ref_table_name = fk->ref_table;
       DBUG_PRINT("info",
                  ("mroonga: ref_table_name=%.*s",
-                  static_cast<int>(ref_table_name->length),
-                  ref_table_name->str));
-      char normalized_ref_table_name[NAME_LEN + 1];
-      strmake(normalized_ref_table_name,
-              ref_table_name->str,
-              ref_table_name->str ? ref_table_name->length : 0);
+                  static_cast<int>(ref_table_name.length),
+                  ref_table_name.str));
+      std::string normalized_ref_table_name;
       if (lower_case_table_names) {
-        my_casedn_str(system_charset_info, normalized_ref_table_name);
-        DBUG_PRINT(
-          "info",
-          ("mroonga: casedn ref_table_name=%s", normalized_ref_table_name));
+        normalized_ref_table_name = mrn_name_normalize(ref_table_name);
+      } else {
+        normalized_ref_table_name =
+          std::string(ref_table_name.str, ref_table_name.length);
+      }
+      if (lower_case_table_names) {
+        DBUG_PRINT("info",
+                   ("mroonga: casedn ref_table_name=%s",
+                    normalized_ref_table_name.c_str()));
       }
 
       grn_obj *column, *column_ref = NULL, *grn_table_ref = NULL;
@@ -4553,7 +4570,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
       build_table_filename(ref_path,
                            sizeof(ref_path) - 1,
                            table->s->db.str,
-                           normalized_ref_table_name,
+                           normalized_ref_table_name.c_str(),
                            "",
                            0);
       DBUG_PRINT("info", ("mroonga: ref_path=%s", ref_path));
@@ -4571,7 +4588,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         sprintf(err_msg,
                 "reference table [%s.%s] is not mroonga table",
                 table->s->db.str,
-                normalized_ref_table_name);
+                normalized_ref_table_name.c_str());
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
@@ -4600,7 +4617,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
           sprintf(err_msg,
                   "reference table [%s.%s] is not found",
                   table->s->db.str,
-                  normalized_ref_table_name);
+                  normalized_ref_table_name.c_str());
           my_message(error, err_msg, MYF(0));
           DBUG_RETURN(false);
         }
@@ -4621,7 +4638,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         sprintf(err_msg,
                 "reference table [%s.%s] is not found",
                 table->s->db.str,
-                normalized_ref_table_name);
+                normalized_ref_table_name.c_str());
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
@@ -4636,7 +4653,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         sprintf(err_msg,
                 "reference table [%s.%s] has no primary key",
                 table->s->db.str,
-                normalized_ref_table_name);
+                normalized_ref_table_name.c_str());
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
@@ -4652,7 +4669,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         sprintf(err_msg,
                 "reference table [%s.%s] primary key is multiple column",
                 table->s->db.str,
-                normalized_ref_table_name);
+                normalized_ref_table_name.c_str());
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
       }
@@ -4669,7 +4686,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
                 "reference column [%s.%s." MRN_KEY_PART_SPEC_FIELD_NAME_FORMAT
                 "] is not used for primary key",
                 table->s->db.str,
-                normalized_ref_table_name,
+                normalized_ref_table_name.c_str(),
                 MRN_KEY_PART_SPEC_FIELD_NAME_VALUE(ref_field_name));
         my_message(error, err_msg, MYF(0));
         DBUG_RETURN(false);
