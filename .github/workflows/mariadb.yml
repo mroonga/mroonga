@@ -120,6 +120,3 @@ jobs:
             -DWITH_SAFEMALLOC=OFF \
             -DWITH_WSREP=OFF
           cmake --build mariadb.build
-      - name: Install MariaDB
-        run: |
-          cmake --install mariadb.build
