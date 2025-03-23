@@ -458,7 +458,7 @@ using mrn_io_and_cpu_cost = double;
   ((MYSQL_VERSION_ID >= 100527 && MYSQL_VERSION_ID < 100600) ||                \
    (MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||                \
    (MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||                \
-   (MYSQL_VERSION_ID >= 110400 && MYSQL_VERSION_ID < 110500))
+   (MYSQL_VERSION_ID >= 110400))
 using mrn_handler_referenced_by_foreign_key_bool = bool;
 #  define MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT const noexcept
 #else
