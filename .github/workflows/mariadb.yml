@@ -91,7 +91,7 @@ jobs:
             -DPLUGIN_FUNC_TEST=NO \
             -DPLUGIN_HANDLERSOCKET=NO \
             -DPLUGIN_INNOBASE=NO \
-            -DPLIGIN_LOCALES=NO \
+            -DPLUGIN_LOCALES=NO \
             -DPLUGIN_METADATA_LOCK_INFO=NO \
             -DPLUGIN_OQGRAPH=NO \
             -DPLUGIN_PASSWORD_REUSE_CHECK=NO \
