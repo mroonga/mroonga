@@ -113,10 +113,10 @@ jobs:
             -DPLUGIN_TEST_VERSIONING=NO \
             -DPLUGIN_TYPE_TEST=NO \
             -DPROVIDER_LZ4=NO \
-            -DWITHOUT_DYNAMIC_PLUGIN=ON \
             -DWITH_EMBEDDED_SERVER=NO \
             -DWITH_UNIT_TESTS=OFF \
             -DWITH_MARIABACKUP=OFF \
             -DWITH_SAFEMALLOC=OFF \
-            -DWITH_WSREP=OFF
+            -DWITH_WSREP=OFF \
+            -DWITHOUT_DYNAMIC_PLUGIN=ON
           cmake --build mariadb.build
