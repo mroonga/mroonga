@@ -62,6 +62,10 @@ jobs:
           repository: mroonga/mroonga
           submodules: recursive
       - name: Build MariaDB
+        # To reduce build time, we build only the MariaDB core and Mroonga.
+        # The following options disable all other storage engines, module-type
+        # plugins, and some core options to reduce compile time and external
+        # dependencies.
         run: |
           cmake \
             -Smariadb \
