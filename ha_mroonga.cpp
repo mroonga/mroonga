@@ -100,6 +100,7 @@
 #endif
 
 #include <cstring>
+#include <string>
 
 #include "mrn_err.h"
 #include "mrn_table.hpp"
