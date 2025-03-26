@@ -109,7 +109,7 @@ Execute the following commands::
 
     $ export GROONGA_ORG_REPOSITORY=${HOME}/work/groonga.org
     $ git clone git@github.com:groonga/groonga.org.git ${GROONGA_ORG_REPOSITORY}
-    $ rake -C ${MROONGA_ORG_DIR} release:version:update
+    $ rake -C ${MROONGA_ORG_DIR} release
 
 Announce release for X(Twitter)
 -------------------------------
