@@ -48,7 +48,7 @@ jobs:
         with:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
-      - name: Build MariaDB
+      - name: Configure MariaDB
         # To reduce build time, we build only the MariaDB core and Mroonga.
         # The following options disable all other storage engines, module-type
         # plugins, and some core options to reduce compile time and external
@@ -110,4 +110,6 @@ jobs:
             -DWITH_SAFEMALLOC=OFF \
             -DWITH_WSREP=OFF \
             -DWITHOUT_DYNAMIC_PLUGIN=ON
+      - name: Build MariaDB
+        run: |
           cmake --build mariadb.build
