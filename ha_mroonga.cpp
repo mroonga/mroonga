@@ -59,9 +59,6 @@
 #  include <sql_optimizer.h>
 #endif
 #include <sql_table.h>
-#ifdef MRN_HAVE_SQL_DD_TYPES_TABLE_H
-#  include <dd/types/table.h>
-#endif
 #ifdef MRN_HAVE_SQL_DERROR_H
 #  include <derror.h>
 #endif

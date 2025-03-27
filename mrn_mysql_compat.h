@@ -31,10 +31,6 @@
 #  define MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
 #endif
 
-#if MYSQL_VERSION_ID >= 80002 && !defined(MRN_MARIADB_P)
-#  define MRN_HAVE_SQL_DD_TYPES_TABLE_H
-#endif
-
 #if MYSQL_VERSION_ID >= 80019 && !defined(MRN_MARIADB_P)
 #  define MRN_HAVE_CREATE_FIELD_H
 #endif
