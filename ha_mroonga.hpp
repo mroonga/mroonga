@@ -258,7 +258,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLERTON_CREATE_HAVE_PARTITIONED
 #endif
 
