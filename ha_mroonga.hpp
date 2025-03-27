@@ -307,8 +307,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
 #endif
 
-#if defined(HAVE_PSI_INTERFACE) &&                                             \
-  (MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P))
+#if defined(HAVE_PSI_INTERFACE) && defined(MRN_MARIADB_P)
 #  define MRN_HAVE_PSI_SERVER
 #endif
 
