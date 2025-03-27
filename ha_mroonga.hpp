@@ -370,7 +370,7 @@ typedef uchar* mrn_write_row_buf_t;
 #  define MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
 #endif
 
-#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
 #endif
 
