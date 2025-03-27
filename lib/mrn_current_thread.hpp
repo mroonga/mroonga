@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright(C) 2017-2025  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,6 @@
 #include <mrn_mysql.h>
 #include <mrn_mysql_compat.h>
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#ifndef MRN_MARIADB_P
 #  include <current_thd.h>
 #endif
