@@ -72,6 +72,6 @@
 #  define MRN_DBUG_ENTER_METHOD() MRN_DBUG_ENTER_FUNCTION()
 #endif
 
-#if defined(MRN_MARIADB_P) || (MYSQL_VERSION_ID < 80000)
+#ifdef MRN_MARIADB_P
 #  define MRN_ENABLE_WRAPPER_MODE
 #endif
