@@ -303,9 +303,7 @@ static mysql_mutex_t* mrn_LOCK_open;
 #  define MRN_HANDLERTON_HAVE_KILL_QUERY
 #  define MRN_HANDLERTON_HAVE_ALTER_TABLE_FLAGS
 #else
-#  if MYSQL_VERSION_ID >= 50700
-#    define MRN_HANDLERTON_HAVE_KILL_CONNECTION
-#  endif
+#  define MRN_HANDLERTON_HAVE_KILL_CONNECTION
 #endif
 
 Rpl_filter* mrn_binlog_filter;
