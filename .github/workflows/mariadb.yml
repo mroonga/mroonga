@@ -23,8 +23,8 @@ concurrency:
   group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
-  build:
-    name: Build
+  main:
+    name: main
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
