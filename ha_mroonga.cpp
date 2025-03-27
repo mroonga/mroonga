@@ -319,14 +319,12 @@ mrn_table_def_cache_type* mrn_table_def_cache;
 #  define PSI_FLAG_SINGLETON PSI_FLAG_GLOBAL
 #endif
 
-#ifdef MRN_HAVE_PSI_MEMORY_KEY
 PSI_memory_key mrn_memory_key;
 
 static PSI_memory_info mrn_all_memory_keys[] = {
   PSI_INFO_ENTRY(
     &mrn_memory_key, "Mroonga", 0, PSI_VOLATILITY_UNKNOWN, PSI_DOCUMENT_ME),
 };
-#endif
 
 static const char* INDEX_COLUMN_NAME = "index";
 static const char* MRN_PLUGIN_AUTHOR = "The Mroonga project";
@@ -2288,13 +2286,11 @@ static int mrn_init(void* p)
 
   GRN_LOG(ctx, GRN_LOG_NOTICE, "%s started.", MRN_PACKAGE_STRING);
 
-#ifdef MRN_HAVE_PSI_MEMORY_KEY
   {
     const char* category = "mroonga";
     int n_keys = array_elements(mrn_all_memory_keys);
     mysql_memory_register(category, mrn_all_memory_keys, n_keys);
   }
-#endif
 
   // init meta-info database
   if (!(mrn_db = grn_db_create(ctx, NULL, NULL))) {

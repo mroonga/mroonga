@@ -236,28 +236,16 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_SEVERITY_WARNING Sql_condition::SL_WARNING
 #endif
 
-#if !defined(MRN_MARIADB_P) ||                                                 \
-  (MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P))
-#  define MRN_HAVE_PSI_MEMORY_KEY
-#endif
-
 #ifdef HAVE_PSI_INTERFACE
 #  define MRN_HAVE_PSI_FILE_KEY
 #endif
 
-#ifdef MRN_HAVE_PSI_MEMORY_KEY
-#  define mrn_my_malloc(size, flags)   my_malloc(mrn_memory_key, size, flags)
-#  define mrn_my_strdup(string, flags) my_strdup(mrn_memory_key, string, flags)
-#  define mrn_my_strndup(string, size, flags)                                  \
-    my_strndup(mrn_memory_key, string, size, flags)
-#  define mrn_my_multi_malloc(flags, ...)                                      \
-    my_multi_malloc(mrn_memory_key, flags, __VA_ARGS__)
-#else
-#  define mrn_my_malloc(size, flags)          my_malloc(size, flags)
-#  define mrn_my_strdup(string, flags)        my_strdup(string, flags)
-#  define mrn_my_strndup(string, size, flags) my_strndup(string, size, flags)
-#  define mrn_my_multi_malloc(flags, ...)     my_multi_malloc(flags, __VA_ARGS__)
-#endif
+#define mrn_my_malloc(size, flags)   my_malloc(mrn_memory_key, size, flags)
+#define mrn_my_strdup(string, flags) my_strdup(mrn_memory_key, string, flags)
+#define mrn_my_strndup(string, size, flags)                                    \
+  my_strndup(mrn_memory_key, string, size, flags)
+#define mrn_my_multi_malloc(flags, ...)                                        \
+  my_multi_malloc(mrn_memory_key, flags, __VA_ARGS__)
 
 #ifdef MRN_MARIADB_P
 #  define MRN_STRING_FREE(string) string.free();
