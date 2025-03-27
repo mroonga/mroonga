@@ -1,0 +1,117 @@
+name: MariaDB
+on:
+  push:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - ".github/workflows/mariadb.yml"
+      - "version_*"
+  pull_request:
+    paths:
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.hpp"
+      - "**/CMakeLists.txt"
+      - ".github/workflows/mariadb.yml"
+      - "version_*"
+  schedule:
+    - cron: |
+        0 0 * * *
+concurrency:
+  group: ${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  main:
+    name: main
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb
+          repository: MariaDB/server
+      - name: Remove bundled Mroonga
+        run: |
+          rm -rf mariadb/extra/groonga
+          rm -rf mariadb/storage/mroonga
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/extra/groonga
+          repository: groonga/groonga
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          path: mariadb/storage/mroonga
+          repository: mroonga/mroonga
+      - name: Configure MariaDB
+        # To reduce build time, we build only the MariaDB core and Mroonga.
+        # The following options disable all other storage engines, module-type
+        # plugins, and some core options to reduce compile time and external
+        # dependencies.
+        #
+        # To list available plugins, you can run:
+        #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
+        run: |
+          cmake \
+            -Smariadb \
+            -Bmariadb.build \
+            -GNinja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCONC_WITH_UNITTEST=OFF \
+            -DMYSQL_MAINTAINER_MODE=OFF \
+            -DPLUGIN_ARCHIVE=NO \
+            -DPLUGIN_AUDIT_NULL=NO \
+            -DPLUGIN_AUTH_ED25519=NO \
+            -DPLUGIN_AUTH_TEST_PLUGIN=NO \
+            -DPLUGIN_AUTH_0X0100=NO \
+            -DPLUGIN_BLACKHOLE=NO \
+            -DPLUGIN_COLUMNSTORE=NO \
+            -DPLUGIN_CONNECT=NO \
+            -DPLUGIN_DAEMON_EXAMPLE=NO \
+            -DPLUGIN_DEBUG_KEY_MANAGEMENT=NO \
+            -DPLUGIN_DIALOG_EXAMPLES=NO \
+            -DPLUGIN_DISKS=NO \
+            -DPLUGIN_EXAMPLE=NO \
+            -DPLUGIN_EXAMPLE_KEY_MANAGEMENT=NO \
+            -DPLUGIN_FEDERATED=NO \
+            -DPLUGIN_FEDERATEDX=NO \
+            -DPLUGIN_FILE_KEY_MANAGEMENT=NO \
+            -DPLUGIN_FTEXAMPLE=NO \
+            -DPLUGIN_FUNC_TEST=NO \
+            -DPLUGIN_HANDLERSOCKET=NO \
+            -DPLUGIN_INNOBASE=NO \
+            -DPLUGIN_LOCALES=NO \
+            -DPLUGIN_METADATA_LOCK_INFO=NO \
+            -DPLUGIN_OQGRAPH=NO \
+            -DPLUGIN_PASSWORD_REUSE_CHECK=NO \
+            -DPLUGIN_PERFSCHEMA=NO \
+            -DPLUGIN_QA_AUTH_INTERFACE=NO \
+            -DPLUGIN_QA_AUTH_SERVER=NO \
+            -DPLUGIN_QA_AUTH_CLIENT=NO \
+            -DPLUGIN_QUERY_CACHE_INFO=NO \
+            -DPLUGIN_QUERY_RESPONSE_TIME=NO \
+            -DPLUGIN_ROCKSDB=NO \
+            -DPLUGIN_SEQUENCE=NO \
+            -DPLUGIN_SERVER_AUDIT=NO \
+            -DPLUGIN_SIMPLE_PASSWORD_CHECK=NO \
+            -DPLUGIN_SPHINX=NO \
+            -DPLUGIN_SPIDER=NO \
+            -DPLUGIN_SQL_ERRLOG=NO \
+            -DPLUGIN_TEST_SQL_DISCOVERY=NO \
+            -DPLUGIN_TEST_SQL_SERVICE=NO \
+            -DPLUGIN_TEST_VERSIONING=NO \
+            -DPLUGIN_TYPE_TEST=NO \
+            -DPROVIDER_LZ4=NO \
+            -DWITH_EMBEDDED_SERVER=NO \
+            -DWITH_UNIT_TESTS=OFF \
+            -DWITH_MARIABACKUP=OFF \
+            -DWITH_SAFEMALLOC=OFF \
+            -DWITH_WSREP=OFF
+      - name: Build MariaDB
+        run: |
+          cmake --build mariadb.build
