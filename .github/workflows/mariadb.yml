@@ -7,7 +7,6 @@ on:
       - "**/*.hpp"
       - "**/CMakeLists.txt"
       - ".github/workflows/mariadb.yml"
-      - "mysql-test/**"
       - "packages/**"
       - "version_*"
   pull_request:
@@ -17,7 +16,6 @@ on:
       - "**/*.hpp"
       - "**/CMakeLists.txt"
       - ".github/workflows/mariadb.yml"
-      - "mysql-test/**"
       - "packages/**"
       - "version_*"
   schedule:
