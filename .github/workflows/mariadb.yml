@@ -7,7 +7,6 @@ on:
       - "**/*.hpp"
       - "**/CMakeLists.txt"
       - ".github/workflows/mariadb.yml"
-      - "packages/**"
       - "version_*"
   pull_request:
     paths:
@@ -16,7 +15,6 @@ on:
       - "**/*.hpp"
       - "**/CMakeLists.txt"
       - ".github/workflows/mariadb.yml"
-      - "packages/**"
       - "version_*"
   schedule:
     - cron: |
