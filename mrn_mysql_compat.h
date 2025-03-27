@@ -176,7 +176,7 @@ typedef MYSQL_LEX_STRING mrn_thd_lex_string;
     init_alloc_root(mrn_memory_key, root, block_size, pre_alloc_size)
 #endif
 
-#if MYSQL_VERSION_ID < 100002 || !defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define GTS_TABLE 0
 #endif
 
