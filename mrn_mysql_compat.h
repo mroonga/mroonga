@@ -708,7 +708,7 @@ typedef SELECT_LEX_UNIT mrn_query_expression;
 #  endif
 #endif
 
-#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define mrn_thd_set_ha_data(thd, hton, ha_data)                              \
     thd_set_ha_data(thd, hton, ha_data)
 #else
