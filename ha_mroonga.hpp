@@ -247,7 +247,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_ST_MYSQL_PLUGIN_HAVE_CHECK_UNINSTALL
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_OPEN_HAVE_TABLE_DEFINITION
 #  define MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
 #endif
