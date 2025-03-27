@@ -235,7 +235,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_RECORDS_RETURN_ERROR
 #endif
 
-#if MYSQL_VERSION_ID < 80002 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_KEYS_TO_USE_FOR_SCANNING
 #endif
 
