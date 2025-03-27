@@ -49,7 +49,7 @@ jobs:
     env:
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
-    runs-on: windows-2019
+    runs-on: windows-2022
     timeout-minutes: 45
     steps:
       - name: Disable crash dialog
@@ -207,7 +207,7 @@ jobs:
       - name: Run CMake
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           cmake ^
             -S mariadb ^
             -B build ^
@@ -223,7 +223,7 @@ jobs:
       - name: Install
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
             --build build ^
@@ -234,7 +234,7 @@ jobs:
       - name: Create package
         shell: cmd
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
           set CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%
           cmake ^
             --build build ^
