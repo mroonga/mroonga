@@ -108,8 +108,7 @@ jobs:
             -DWITH_UNIT_TESTS=OFF \
             -DWITH_MARIABACKUP=OFF \
             -DWITH_SAFEMALLOC=OFF \
-            -DWITH_WSREP=OFF \
-            -DWITHOUT_DYNAMIC_PLUGIN=ON
+            -DWITH_WSREP=OFF
       - name: Build MariaDB
         run: |
           cmake --build mariadb.build
