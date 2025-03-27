@@ -374,7 +374,7 @@ typedef uchar* mrn_write_row_buf_t;
 #  define MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
 #endif
 
-#if MYSQL_VERSION_ID < 80000 || defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_NEED_OVERRIDE_UNBIND_PSI
 #  define MRN_HANDLER_NEED_OVERRIDE_REBIND_PSI
 #endif
