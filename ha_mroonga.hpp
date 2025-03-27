@@ -302,8 +302,7 @@ typedef uint mrn_alter_table_flags;
 #  define MRN_HANDLER_HAVE_GET_FOREIGN_DUP_KEY
 #endif
 
-#if !defined(MRN_MARIADB_P) ||                                                 \
-  (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100500)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_NOTIFY_TABLE_CHANGED
 #  define MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
 #endif
