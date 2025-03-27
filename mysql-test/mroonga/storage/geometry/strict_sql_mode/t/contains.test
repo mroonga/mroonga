@@ -17,7 +17,6 @@
 --source ../../../../include/mroonga/have_geometry.inc
 --source ../../../../include/mroonga/have_strict_sql_mode.inc
 --source ../../../../include/mroonga/have_mysql.inc
---source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings

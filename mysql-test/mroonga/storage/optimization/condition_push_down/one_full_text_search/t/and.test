@@ -16,7 +16,7 @@
 
 # MySQL doesn't use condition push down with test case.
 # qep_tab->type() is JT_FT in make_join_readinfo().
---source ../../../../../include/mroonga/skip_mysql_8_0_or_later.inc
+--source ../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings

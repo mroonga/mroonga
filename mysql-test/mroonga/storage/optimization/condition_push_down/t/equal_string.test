@@ -16,7 +16,7 @@
 
 # MySQL doesn't use condition push down with test case.
 # condition() in QEP_TAB::push_index_cond() is nullptr.
---source ../../../../include/mroonga/skip_mysql_8_0_or_later.inc
+--source ../../../../include/mroonga/have_mariadb.inc
 --source ../../../../include/mroonga/have_mroonga.inc
 
 --disable_warnings
