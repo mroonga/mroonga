@@ -552,14 +552,6 @@ typedef my_bool mrn_bool;
     (table->update_virtual_field(field, false))
 #endif
 
-#ifdef MRN_PERCONA_P
-#  if MYSQL_VERSION_ID < 80000 &&                                              \
-    (((MYSQL_VERSION_ID >= 50634) && (MYSQL_VERSION_ID < 50700)) ||            \
-     (MYSQL_VERSION_ID >= 50721))
-#    define MRN_NEED_ROCKSDB_DB_TYPE_FIX
-#  endif
-#endif
-
 #ifdef MRN_MARIADB_P
 #  define MRN_TABLE_LIST_TABLE_NAME_DATA(table_list)                           \
     (table_list)->table_name.str
