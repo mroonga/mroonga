@@ -53,6 +53,9 @@ jobs:
         # The following options disable all other storage engines, module-type
         # plugins, and some core options to reduce compile time and external
         # dependencies.
+        #
+        # To list available plugins, you can run:
+        #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
         run: |
           cmake \
             -Smariadb \
