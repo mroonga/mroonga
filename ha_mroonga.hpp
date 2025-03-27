@@ -89,7 +89,7 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
 #endif
 
-#if (!defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 80002)
+#ifndef MRN_MARIADB_P
 #  define MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
 #endif
 
