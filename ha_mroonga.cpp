@@ -440,7 +440,7 @@ static mysql_mutex_t mrn_context_pool_mutex;
 mrn::ContextPool* mrn_context_pool = NULL;
 static mysql_mutex_t mrn_operations_mutex;
 
-#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 static inline my_ptrdiff_t mrn_compute_ptr_diff_for_key(const uchar* data,
                                                         const uchar* base)
 {
