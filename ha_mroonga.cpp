@@ -8201,7 +8201,7 @@ int ha_mroonga::storage_update_row_index(const uchar* old_data,
       field->move_field_offset(ptr_diff);
     }
     key_copy((uchar*)(GRN_TEXT_VALUE(&old_key)),
-             const_cast<mrn_key_copy_from_record_t>(old_data),
+             const_cast<const uchar*>(old_data),
              key_info,
              key_info->key_length);
     for (uint j = 0; j < KEY_N_KEY_PARTS(key_info); j++) {

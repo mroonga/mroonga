@@ -312,16 +312,6 @@ typedef uint mrn_alter_table_flags;
 #endif
 
 #ifdef MRN_MARIADB_P
-typedef const uchar* mrn_key_copy_from_record_t;
-#else
-#  if MYSQL_VERSION_ID >= 80000
-using mrn_key_copy_from_record_t = const uchar*;
-#  else
-typedef uchar* mrn_key_copy_from_record_t;
-#  endif
-#endif
-
-#ifdef MRN_MARIADB_P
 typedef const uchar* mrn_update_row_new_data_t;
 #else
 typedef uchar* mrn_update_row_new_data_t;
