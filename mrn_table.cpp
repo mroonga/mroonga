@@ -51,27 +51,6 @@
 #include <cstring>
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100300
-     typedef LEX_CSTRING mrn_resolve_name;
-#  else
-     typedef LEX_STRING mrn_resolve_name;
-#  endif
-#  if MYSQL_VERSION_ID >= 100100
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
-#  else
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name))
-#  endif
-#else
-#  if MYSQL_VERSION_ID >= 80017
-     using mrn_resolve_name = LEX_CSTRING;
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
-#  else
-     typedef LEX_STRING mrn_resolve_name;
-#    define MRN_HA_RESOLVE_BY_NAME(name) ha_resolve_by_name(NULL, (name), true)
-#  endif
-#endif
-
-#ifdef MRN_MARIADB_P
 #  define MRN_PLUGIN_DATA(plugin, type) plugin_data(plugin, type)
 #else
 #  define MRN_PLUGIN_DATA(plugin, type) plugin_data<type>(plugin)
@@ -513,7 +492,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->engine)
   {
-    mrn_resolve_name engine_name;
+    LEX_CSTRING engine_name;
     if (
       (
         share->engine_length == MRN_DEFAULT_LEN &&
@@ -530,7 +509,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     } else {
       engine_name.str = share->engine;
       engine_name.length = share->engine_length;
-      if (!(share->plugin = MRN_HA_RESOLVE_BY_NAME(&engine_name)))
+      if (!(share->plugin = ha_resolve_by_name(nullptr, &engine_name, true)))
       {
         my_error(ER_UNKNOWN_STORAGE_ENGINE, MYF(0), share->engine);
         error = ER_UNKNOWN_STORAGE_ENGINE;
