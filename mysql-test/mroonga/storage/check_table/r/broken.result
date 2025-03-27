@@ -9,11 +9,11 @@ INSERT INTO diaries VALUES ('Hello');
 FLUSH TABLES;
 CHECK TABLE diaries;
 Table	Op	Msg_type	Msg_text
-check_test.diaries	check	Error	[pat][open] failed to open grn_io: <check_test.mrn.000010C>
+check_test.diaries	check	Error	[pat][open] failed to open grn_io: <check_test.mrn.000010D>
 check_test.diaries	check	error	Corrupt
 REPAIR TABLE diaries;
 Table	Op	Msg_type	Msg_text
-check_test.diaries	repair	Error	[pat][open] failed to open grn_io: <check_test.mrn.000010C>
+check_test.diaries	repair	Error	[pat][open] failed to open grn_io: <check_test.mrn.000010D>
 check_test.diaries	repair	status	OK
 SELECT *
 FROM diaries

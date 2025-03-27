@@ -1,4 +1,4 @@
-# Copyright(C) 2014 Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -35,11 +35,11 @@ INSERT INTO diaries (title, body) VALUES ("Groonga (2)", "started Groonga.");
 
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("+starting" IN BOOLEAN MODE);
 
---remove_file $MYSQLD_DATADIR/repair_test.mrn.000010F.c
+--remove_file $MYSQLD_DATADIR/repair_test.mrn.0000110.c
 
 FLUSH TABLES;
 
-# Error ER_CANT_OPEN_FILE system call error: No such file or directory: [io][open] failed to open path: <repair_test.mrn.000010F.c>
+# Error ER_CANT_OPEN_FILE system call error: No such file or directory: [io][open] failed to open path: <repair_test.mrn.0000110.c>
 --replace_result "[io][open] " ""
 --error ER_CANT_OPEN_FILE
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("+starting" IN BOOLEAN MODE);
