@@ -61,6 +61,9 @@ jobs:
           path: mariadb/ccache
           key: mariadb-linux-ccache-${{ hashFiles('**/*.cpp', '**/*.h', '**/*.hpp') }}
           restore-keys:  mariadb-linux-ccache-
+      - name: Show ccache stats (before configuration)
+        run: |
+          ccache --show-stats --verbose --version || :
       - name: Configure MariaDB
         # To reduce build time, we build only the MariaDB core and Mroonga.
         # The following options disable all other storage engines, module-type
@@ -70,7 +73,6 @@ jobs:
         # To list available plugins, you can run:
         #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
         run: |
-          ccache --show-stats --verbose --version || :
           cmake \
             -Smariadb \
             -Bmariadb.build \
@@ -131,4 +133,6 @@ jobs:
       - name: Build MariaDB
         run: |
           cmake --build mariadb.build
+      - name: Show ccache stats (after build)
+        run: |
           ccache --show-stats --verbose --version || :
