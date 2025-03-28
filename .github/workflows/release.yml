@@ -7,11 +7,11 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
-    # timeout-minutes: 10
     environment: release
     steps:
       - uses: actions/checkout@v4
       - name: Download artifacts
+        timeout-minutes: 90
         run: |
           workflows=(linux.yml windows.yml)
           for workflow in "${workflows[@]}"; do
