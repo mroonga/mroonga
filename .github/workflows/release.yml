@@ -79,7 +79,10 @@ jobs:
         run: |
           cp release-artifacts/release-source/mroonga-*.tar.gz ./
           sudo apt update
-          sudo apt install -y gpg
+          sudo apt install -y \
+            build-essential \
+            debhelper \
+            devscripts
       - uses: actions/checkout@v4
         with:
           path: groonga
