@@ -60,7 +60,7 @@ jobs:
         with:
           path: ccache
           key: mariadb-linux-ccache-${{ hashFiles('mariadb/**/*.cpp', 'mariadb/**/*.h', 'mariadb/**/*.hpp') }}
-          restore-keys:  mariadb-linux-ccache-
+          restore-keys: mariadb-linux-ccache-
       - name: Show ccache stats (before configuration)
         run: |
           ccache --show-stats --verbose --version || :
