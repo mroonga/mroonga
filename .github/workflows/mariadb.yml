@@ -59,8 +59,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: mariadb/ccache
-          key: cmake-linux-ccache-${{ hashFiles('**/*.cpp', '**/*.h', '**/*.hpp') }}
-          restore-keys:  cmake-linux-ccache-
+          key: mariadb-linux-ccache-${{ hashFiles('**/*.cpp', '**/*.h', '**/*.hpp') }}
+          restore-keys:  mariadb-linux-ccache-
       - name: Configure MariaDB
         # To reduce build time, we build only the MariaDB core and Mroonga.
         # The following options disable all other storage engines, module-type
