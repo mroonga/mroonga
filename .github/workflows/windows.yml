@@ -63,6 +63,9 @@ jobs:
         run: |
           Set-TimeZone -Id "Tokyo Standard Time"
       - uses: actions/setup-ruby@v1
+      - name: Install patch
+        run: |
+          ridk exec pacman --needed --noconfirm --sync patch
       - name: Detect MariaDB version
         run: |
           $releasesResponse = `
