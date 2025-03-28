@@ -60,8 +60,8 @@ MRN_API mrn_bool mroonga_last_insert_grn_id_init(UDF_INIT *init,
 
 MRN_API longlong mroonga_last_insert_grn_id(UDF_INIT *init,
                                             UDF_ARGS *args,
-                                            char *is_null,
-                                            char *error)
+                                            uchar *is_null,
+                                            uchar *error)
 {
   THD *thd = current_thd;
   mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
@@ -87,8 +87,8 @@ MRN_API mrn_bool last_insert_grn_id_init(UDF_INIT *init,
 
 MRN_API longlong last_insert_grn_id(UDF_INIT *init,
                                     UDF_ARGS *args,
-                                    char *is_null,
-                                    char *error)
+                                    uchar *is_null,
+                                    uchar *error)
 {
   return mroonga_last_insert_grn_id(init, args, is_null, error);
 }
