@@ -164,12 +164,9 @@ jobs:
           cd mariadb
           if ("${{ matrix.use-main }}" -eq "yes") {
             pushd extra\groonga\vendor
-            ruby download_lz4.rb
             ruby download_mecab.rb
-            ruby download_message_pack.rb
-            ruby download_rapidjson.rb
             ruby download_xxhash.rb
-            ruby download.rb zstd
+            ruby download.rb
             popd
           } else {
             Invoke-WebRequest `
