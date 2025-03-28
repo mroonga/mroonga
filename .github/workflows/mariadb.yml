@@ -48,6 +48,19 @@ jobs:
         with:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
+      - name: Install ccache
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ccache
+      - name: Prepare ccache
+        run: |
+          echo "CCACHE_DIR=${PWD}/mariadb/ccache" >> ${GITHUB_ENV}
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: mariadb/ccache
+          key: cmake-linux-ccache-${{ hashFiles('**/*.cpp', '**/*.h', '**/*.hpp') }}
+          restore-keys:  cmake-linux-ccache-
       - name: Configure MariaDB
         # To reduce build time, we build only the MariaDB core and Mroonga.
         # The following options disable all other storage engines, module-type
@@ -57,11 +70,14 @@ jobs:
         # To list available plugins, you can run:
         #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
         run: |
+          ccache --show-stats --verbose --version || :
           cmake \
             -Smariadb \
             -Bmariadb.build \
             -GNinja \
             -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCONC_WITH_UNITTEST=OFF \
             -DMYSQL_MAINTAINER_MODE=OFF \
             -DPLUGIN_ARCHIVE=NO \
@@ -115,3 +131,4 @@ jobs:
       - name: Build MariaDB
         run: |
           cmake --build mariadb.build
+          ccache --show-stats --verbose --version || :
