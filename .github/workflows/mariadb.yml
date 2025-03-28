@@ -54,12 +54,12 @@ jobs:
           sudo apt-get install -y ccache
       - name: Prepare ccache
         run: |
-          echo "CCACHE_DIR=${PWD}/mariadb/ccache" >> ${GITHUB_ENV}
+          echo "CCACHE_DIR=${PWD}/ccache" >> ${GITHUB_ENV}
       - name: Cache ccache
         uses: actions/cache@v4
         with:
-          path: mariadb/ccache
-          key: mariadb-linux-ccache-${{ hashFiles('**/*.cpp', '**/*.h', '**/*.hpp') }}
+          path: ccache
+          key: mariadb-linux-ccache-${{ hashFiles('mariadb/**/*.cpp', 'mariadb/**/*.h', 'mariadb/**/*.hpp') }}
           restore-keys:  mariadb-linux-ccache-
       - name: Show ccache stats (before configuration)
         run: |
