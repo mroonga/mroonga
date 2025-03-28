@@ -126,6 +126,9 @@ Documentation for Mroonga
 %doc mysql-community-8.0-mroonga-doc/*
 
 %changelog
+* Fri Mar 28 2025 Sutou Kouhei <kou@clear-code.com> - 15.04-1
+- New upstream release.
+
 * Sun Feb 09 2025 Sutou Kouhei <kou@clear-code.com> - 15.00-1
 - New upstream release.
 
