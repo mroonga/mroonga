@@ -46,6 +46,10 @@ jobs:
           submodules: recursive
       - uses: actions/checkout@v4
         with:
+          path: mariadb/extra/groonga-normalizer-mysql
+          repository: groonga/groonga-normalizer-mysql
+      - uses: actions/checkout@v4
+        with:
           path: mariadb/storage/mroonga
           repository: mroonga/mroonga
       - name: Install ccache
@@ -77,6 +81,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCONC_WITH_UNITTEST=OFF \
             -DMYSQL_MAINTAINER_MODE=OFF \
             -DPLUGIN_ARCHIVE=NO \
@@ -99,7 +104,6 @@ jobs:
             -DPLUGIN_FTEXAMPLE=NO \
             -DPLUGIN_FUNC_TEST=NO \
             -DPLUGIN_HANDLERSOCKET=NO \
-            -DPLUGIN_INNOBASE=NO \
             -DPLUGIN_LOCALES=NO \
             -DPLUGIN_METADATA_LOCK_INFO=NO \
             -DPLUGIN_OQGRAPH=NO \
@@ -136,3 +140,10 @@ jobs:
       - name: Show ccache stats (after build)
         run: |
           ccache --show-stats --verbose --version || :
+      - name: Run test
+        run: |
+          cd mariadb.build/storage/mroonga
+          NO_MAKE=yes \
+          MYSQL_SOURCE_DIR=../../../mariadb \
+          MYSQL_BUILD_DIR=../../../mariadb.build \
+          ../../../mariadb/storage/mroonga/test/run-sql-test.sh
