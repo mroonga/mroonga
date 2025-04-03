@@ -171,6 +171,21 @@ namespace mrn {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 4)";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec = "NormalizerMySQLUnicode('version', '14.0.0')";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_cs") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec =
+        "NormalizerMySQLUnicode('version', '14.0.0', 'case_sensitive', true)";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_as_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec =
+        "NormalizerMySQLUnicode('version', '14.0.0', 'accent_sensitive', true)";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_as_cs") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec =
+        "NormalizerMySQLUnicode('version', '14.0.0', 'accent_sensitive', true, 'case_sensistive', true)";
     }
 
     if (normalizer_name) {
