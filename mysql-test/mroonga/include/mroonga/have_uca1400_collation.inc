@@ -1,6 +1,4 @@
-# -*- mode: sql; sql-product: mysql -*-
-#
-# Copyright (C) 2012-2024  Sutou Kouhei <kou@clear-code.com>
+# Copyright(C) 2025 Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,27 +14,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---disable_query_log
-let $version_major_minor =
-  `SELECT CAST(
-    CONCAT(
-      SUBSTRING_INDEX(@@global.version, '.', 1),
-      '.',
-      LPAD(
-        SUBSTRING_INDEX(
-          SUBSTRING_INDEX(@@global.version, '.', 2),
-          '.',
-          -1),
-        2,
-        '0'
-      )
-    )
-    AS DECIMAL(4, 2)
-  )`;
+--source ../../include/mroonga/check_version.inc
+--source ../../include/mroonga/check_mariadb.inc
 
-let $version_8_0           = `SELECT $version_major_minor = 8.00`;
+if (!$mariadb) {
+  --skip This test needs utf8mb4_uca1400 family collations
+}
 
-let $version_8_0_or_later   = `SELECT $version_major_minor >= 8.00`;
-let $version_10_11_or_later  = `SELECT $version_major_minor >= 10.11`;
-let $version_11_5_or_later  = `SELECT $version_major_minor >= 11.5`;
---enable_query_log
+if (!$version_11_5_or_later) {
+  --skip This test needs utf8mb4_uca1400 family collations
+}
