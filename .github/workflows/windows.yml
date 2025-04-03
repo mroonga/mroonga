@@ -212,6 +212,7 @@ jobs:
             -G "Ninja" ^
             -DBUILD_CONFIG=mroonga_windows ^
             -DCMAKE_INSTALL_PREFIX=install ^
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ^
             -DCONNECT_WITH_LIBXML2=OFF ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
