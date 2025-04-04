@@ -108,7 +108,6 @@ jobs:
             -DPLUGIN_METADATA_LOCK_INFO=NO \
             -DPLUGIN_OQGRAPH=NO \
             -DPLUGIN_PASSWORD_REUSE_CHECK=NO \
-            -DPLUGIN_PERFSCHEMA=NO \
             -DPLUGIN_QA_AUTH_INTERFACE=NO \
             -DPLUGIN_QA_AUTH_SERVER=NO \
             -DPLUGIN_QA_AUTH_CLIENT=NO \
