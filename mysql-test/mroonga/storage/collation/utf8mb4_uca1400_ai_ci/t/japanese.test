@@ -28,9 +28,15 @@ CREATE TABLE diaries (
   FULLTEXT INDEX (content)
 ) DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO diaries VALUES ("Je suis un garçon.");
+INSERT INTO diaries VALUES ("はひふへほ");
+INSERT INTO diaries VALUES ("ばびぶべぼ");
+INSERT INTO diaries VALUES ("ハヒフヘホ");
+INSERT INTO diaries VALUES ("バビブベボ");
+INSERT INTO diaries VALUES ("ﾊﾋﾌﾍﾎ");
+INSERT INTO diaries VALUES ("ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ");
 
-SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+Garcon" IN BOOLEAN MODE);
+SELECT * FROM diaries
+         WHERE MATCH (content) AGAINST ("+バビブベボ" IN BOOLEAN MODE);
 
 DROP TABLE diaries;
 
