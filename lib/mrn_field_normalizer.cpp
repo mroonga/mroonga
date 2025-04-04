@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2013-2018  Kouhei Sutou <kou@clear-code.com>
-  Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2021-2025  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -174,18 +174,6 @@ namespace mrn {
     } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode";
       normalizer_spec = "NormalizerMySQLUnicode('version', '14.0.0')";
-    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_cs") == 0)) {
-      normalizer_name = "NormalizerMySQLUnicode";
-      normalizer_spec =
-        "NormalizerMySQLUnicode('version', '14.0.0', 'case_sensitive', true)";
-    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_as_ci") == 0)) {
-      normalizer_name = "NormalizerMySQLUnicode";
-      normalizer_spec =
-        "NormalizerMySQLUnicode('version', '14.0.0', 'accent_sensitive', true)";
-    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_as_cs") == 0)) {
-      normalizer_name = "NormalizerMySQLUnicode";
-      normalizer_spec =
-        "NormalizerMySQLUnicode('version', '14.0.0', 'accent_sensitive', true, 'case_sensistive', true)";
     }
 
     if (normalizer_name) {
