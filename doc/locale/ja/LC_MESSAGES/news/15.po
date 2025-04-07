@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mroonga 15.00\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-03-28 11:53+0900\n"
+"PO-Revision-Date: 2025-04-08 08:59+0900\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,11 +17,20 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.04 - 2025-03-29"
-msgstr "15.04リリース - 2025-03-29"
+msgid "Release 15.05 - 2025-04-08"
+msgstr "15.05リリース - 2025-04-08"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for MraiaDB 10.6.21 and 10.11.11"
+msgstr "MraiaDB 10.6.21と10.11.11をサポート"
+
+msgid "The are the latest MariaDB releases."
+msgstr "これらは最新のMariaDBのリリースです。"
+
+msgid "Release 15.04 - 2025-03-29"
+msgstr "15.04リリース - 2025-03-29"
 
 msgid "{doc}`/install/ubuntu`: Dropped support for Ubuntu 20.04"
 msgstr "{doc}`/install/ubuntu`: Ubuntu 20.04サポートを終了"
