@@ -45,9 +45,8 @@ $ release_id=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/ \
     | jq -r '.major_releases[] | select(.release_support_type == "Long Term Support" and .release_status == "Stable") | .release_id' \
     | head -n1)
 $ version=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/$release_id \
-    | jq -r '.releases | keys[]' \
-    | sort -V \
-    | tail -n1)
+    | jq -r '.releases[].release_id' \
+    | head -n1)
 $ wget https://downloads.mariadb.org/rest-api/mariadb/$version/mariadb-$version.tar.gz
 $ tar xf mariadb-$version.tar.gz
 $ rm -rf mariadb-$version/storage/mroonga
