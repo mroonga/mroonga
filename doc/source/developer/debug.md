@@ -41,11 +41,10 @@ The procedure from download to build is the following:
 ```console
 $ mkdir -p ~/work/
 $ cd ~/work/
-$ minor_version=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/ \
-    | jq -r '.major_releases[] | select(.release_support_type == "Long Term Support" and .release_status=="Stable") | .release_name' \
-    | sort -V \
-    | tail -n1)
-$ version=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/$minor_version \
+$ release_id=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/ \
+    | jq -r '.major_releases[] | select(.release_support_type == "Long Term Support" and .release_status == "Stable") | .release_id' \
+    | head -n1)
+$ version=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/$release_id \
     | jq -r '.releases | keys[]' \
     | sort -V \
     | tail -n1)
