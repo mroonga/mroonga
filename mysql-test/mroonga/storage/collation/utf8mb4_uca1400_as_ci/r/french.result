@@ -8,7 +8,6 @@ INSERT INTO diaries VALUES ('Le fruit est mûr.');
 INSERT INTO diaries VALUES ('LE FRUIT EST MÛR.');
 INSERT INTO diaries VALUES ('Le mur est blanc.');
 INSERT INTO diaries VALUES ('LE MUR EST BLANC.');
-INSERT INTO diaries VALUES ('L''homme n''est qu''un roseau.');
 SELECT * FROM diaries WHERE MATCH (content) AGAINST ('+mur' IN BOOLEAN MODE);
 content
 Le mur est blanc.
