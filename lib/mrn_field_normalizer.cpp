@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
   Copyright(C) 2013-2018  Kouhei Sutou <kou@clear-code.com>
-  Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright(C) 2021-2025  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -171,6 +171,9 @@ namespace mrn {
       normalizer_name = "NormalizerMySQLUnicode900";
       normalizer_spec =
         "NormalizerMySQLUnicode900('locale', 'ja', 'weight_level', 4)";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec = "NormalizerMySQLUnicode('version', '14.0.0')";
     }
 
     if (normalizer_name) {
