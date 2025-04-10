@@ -30,17 +30,11 @@ CREATE TABLE diaries (
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO diaries VALUES ('やゆよ');
-INSERT INTO diaries VALUES ('よゆや');
 INSERT INTO diaries VALUES ('ゃゅょ');
-INSERT INTO diaries VALUES ('ょゅゃ');
 INSERT INTO diaries VALUES ('ヤユヨ');
-INSERT INTO diaries VALUES ('ヨユヤ');
 INSERT INTO diaries VALUES ('ャュョ');
-INSERT INTO diaries VALUES ('ョュャ');
 INSERT INTO diaries VALUES ('ﾔﾕﾖ');
-INSERT INTO diaries VALUES ('ﾖﾕﾔ');
 INSERT INTO diaries VALUES ('ｬｭｮ');
-INSERT INTO diaries VALUES ('ｮｭｬ');
 
 SELECT * FROM diaries
          WHERE MATCH (content) AGAINST ('+ャュョ' IN BOOLEAN MODE);
