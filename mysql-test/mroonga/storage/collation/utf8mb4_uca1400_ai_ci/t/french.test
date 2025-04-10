@@ -29,7 +29,7 @@ CREATE TABLE diaries (
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO diaries VALUES ("Je suis un garçon.");
-INSERT INTO diaries VALUES ("noçrag nu sius eJ");
+INSERT INTO diaries VALUES ("L'homme n'est qu'un roseau.");
 
 SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+Garcon" IN BOOLEAN MODE);
 
