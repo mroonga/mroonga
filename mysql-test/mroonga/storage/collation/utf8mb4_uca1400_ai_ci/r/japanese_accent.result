@@ -4,20 +4,20 @@ CREATE TABLE diaries (
 content varchar(256) COLLATE utf8mb4_uca1400_ai_ci,
 FULLTEXT INDEX (content)
 ) DEFAULT CHARSET=utf8mb4;
-INSERT INTO diaries VALUES ("はひふへほ");
-INSERT INTO diaries VALUES ("ほへふひは");
-INSERT INTO diaries VALUES ("ばびぶべぼ");
-INSERT INTO diaries VALUES ("ぼべぶびば");
-INSERT INTO diaries VALUES ("ハヒフヘホ");
-INSERT INTO diaries VALUES ("ホヘフヒハ");
-INSERT INTO diaries VALUES ("バビブベボ");
-INSERT INTO diaries VALUES ("ボベブビバ");
-INSERT INTO diaries VALUES ("ﾊﾋﾌﾍﾎ");
-INSERT INTO diaries VALUES ("ﾎﾍﾌﾋﾊ");
-INSERT INTO diaries VALUES ("ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ");
-INSERT INTO diaries VALUES ("ﾎﾞﾍﾞﾌﾞﾋﾞﾊﾞ");
+INSERT INTO diaries VALUES ('はひふへほ');
+INSERT INTO diaries VALUES ('ほへふひは');
+INSERT INTO diaries VALUES ('ばびぶべぼ');
+INSERT INTO diaries VALUES ('ぼべぶびば');
+INSERT INTO diaries VALUES ('ハヒフヘホ');
+INSERT INTO diaries VALUES ('ホヘフヒハ');
+INSERT INTO diaries VALUES ('バビブベボ');
+INSERT INTO diaries VALUES ('ボベブビバ');
+INSERT INTO diaries VALUES ('ﾊﾋﾌﾍﾎ');
+INSERT INTO diaries VALUES ('ﾎﾍﾌﾋﾊ');
+INSERT INTO diaries VALUES ('ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ');
+INSERT INTO diaries VALUES ('ﾎﾞﾍﾞﾌﾞﾋﾞﾊﾞ');
 SELECT * FROM diaries
-WHERE MATCH (content) AGAINST ("+バビブベボ" IN BOOLEAN MODE);
+WHERE MATCH (content) AGAINST ('+バビブベボ' IN BOOLEAN MODE);
 content
 はひふへほ
 ﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞ

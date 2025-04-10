@@ -4,9 +4,9 @@ CREATE TABLE diaries (
 content varchar(256) COLLATE utf8mb4_uca1400_ai_ci,
 FULLTEXT INDEX (content)
 ) DEFAULT CHARSET=utf8mb4;
-INSERT INTO diaries VALUES ("Je suis un garçon.");
-INSERT INTO diaries VALUES ("L'homme n'est qu'un roseau.");
-SELECT * FROM diaries WHERE MATCH (content) AGAINST ("+Garcon" IN BOOLEAN MODE);
+INSERT INTO diaries VALUES ('Je suis un garçon.');
+INSERT INTO diaries VALUES ('L\'homme n\'est qu\'un roseau.');
+SELECT * FROM diaries WHERE MATCH (content) AGAINST ('+Garcon' IN BOOLEAN MODE);
 content
 Je suis un garçon.
 DROP TABLE diaries;
