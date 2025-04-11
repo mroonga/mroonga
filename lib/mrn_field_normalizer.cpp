@@ -174,6 +174,9 @@ namespace mrn {
     } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_ai_ci") == 0)) {
       normalizer_name = "NormalizerMySQLUnicode";
       normalizer_spec = "NormalizerMySQLUnicode('version', '14.0.0')";
+    } else if ((strcmp(MRN_CHARSET_NAME(charset_info), "utf8mb4_uca1400_as_ci") == 0)) {
+      normalizer_name = "NormalizerMySQLUnicode";
+      normalizer_spec = "NormalizerMySQLUnicode('version', '14.0.0', 'accent_sensitive', true)";
     }
 
     if (normalizer_name) {
