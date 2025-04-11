@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS diaries;
+SET NAMES utf8mb4;
+CREATE TABLE diaries (
+content varchar(256) COLLATE utf8mb4_uca1400_ai_cs,
+FULLTEXT INDEX (content)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO diaries VALUES ('Le fruit est mûr.');
+INSERT INTO diaries VALUES ('LE FRUIT EST MÛR.');
+INSERT INTO diaries VALUES ('Le mur est blanc.');
+INSERT INTO diaries VALUES ('LE MUR EST BLANC.');
+SELECT * FROM diaries WHERE MATCH (content) AGAINST ('+mur' IN BOOLEAN MODE);
+content
+Le fruit est mûr.
+Le mur est blanc.
+DROP TABLE diaries;
