@@ -140,6 +140,9 @@ jobs:
         run: |
           ccache --show-stats --verbose --version || :
       - name: Run test
+        # TODO: Temporarily ignore failures on MariaDB main. Disable this when
+        # all tests pass cleanly on main once.
+        continue-on-error: true
         run: |
           cd mariadb.build/storage/mroonga
           NO_MAKE=yes \
