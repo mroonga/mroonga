@@ -26,7 +26,7 @@ msgstr "改良"
 msgid "Added support for `utf8mb4_uca1400_*` collations"
 msgstr "utf8mb4_uca1400_*`照合順序サポートを追加"
 
-msgid "Now, Mroonga is integrated with the latest groonga‑normalizer‑mysql 1.2.6, so Mroonga supports the following `utf8mb4_uca1400_*` collations now."
+msgid "Now, Mroonga is integrated with the latest groonga‑normalizer‑mysql 1.2.6, so Mroonga supports the following `utf8mb4_uca1400_*` collations."
 msgstr "最新のgroonga‑normalizer‑mysql 1.2.6を利用することで、Mroongaでも次の`utf8mb4_uca1400_*`照合順序を利用できるようになりました。"
 
 msgid "`utf8mb4_uca1400_ai_ci`"
