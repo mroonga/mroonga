@@ -17,11 +17,38 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.05 - 2025-04-08"
-msgstr "15.05リリース - 2025-04-08"
+msgid "Release 15.06 - 2025-04-21"
+msgstr "15.06リリース - 2025-04-21"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for `utf8mb4_uca1400_*` collations"
+msgstr "`utf8mb4_uca1400_*`照合順序をサポート"
+
+msgid "Now, Mroonga is integrated with the latest groonga‑normalizer‑mysql 1.2.6, so Mroonga supports the following `utf8mb4_uca1400_*` collations."
+msgstr "最新のgroonga‑normalizer‑mysql 1.2.6を利用することで、Mroongaでも次の`utf8mb4_uca1400_*`照合順序を利用できるようになりました。"
+
+msgid "`utf8mb4_uca1400_ai_ci`"
+msgstr ""
+
+msgid "`utf8mb4_uca1400_ai_cs`"
+msgstr ""
+
+msgid "`utf8mb4_uca1400_as_ci`"
+msgstr ""
+
+msgid "`utf8mb4_uca1400_as_cs`"
+msgstr ""
+
+msgid "Added support for MySQL 8.0.42"
+msgstr "MraiaDB 8.0.42をサポート"
+
+msgid "This is the latest MySQL release."
+msgstr "これらは最新のMySQLのリリースです。"
+
+msgid "Release 15.05 - 2025-04-08"
+msgstr "15.05リリース - 2025-04-08"
 
 msgid "Added support for MraiaDB 10.6.21 and 10.11.11"
 msgstr "MraiaDB 10.6.21と10.11.11をサポート"
