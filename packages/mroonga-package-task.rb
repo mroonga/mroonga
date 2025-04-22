@@ -237,20 +237,19 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
-    # Disable CDN edge caching to ensure we always fetch the latest SRPM list.
-    headers = { "Cache-Control" => "no-cache" }
+    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS/"
-    index_html = URI.open(srpms_url, headers) do |response|
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS?ts=#{Time.now.to_i}"
+    index_html = URI.open(srpms_url) do |response|
       response.read
     end
     latest_target_srpm =
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\Amysql-community-/).
+        grep(/\ASRPMS\/mysql-community-/).
         last
-    latest_target_srpm[/\Amysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\ASRPMS\/mysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
   def mysql_community_rpm_version
@@ -259,20 +258,19 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
-    # Disable CDN edge caching to ensure we always fetch the latest SRPM list.
-    headers = { "Cache-Control" => "no-cache" }
+    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS/"
-    index_html = URI.open(srpms_url, headers) do |response|
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS?ts=#{Time.now.to_i}"
+    index_html = URI.open(srpms_url) do |response|
       response.read
     end
     latest_target_srpm =
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\Amysql-community-minimal-/).
+        grep(/\ASRPMS\/mysql-community-minimal-/).
         last
-    latest_target_srpm[/\Amysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\ASRPMS\/mysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
   def mysql_community_minimal_rpm_version
