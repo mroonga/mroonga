@@ -237,8 +237,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
+    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
+    # yet. Using the no‑slash URL ensures we get the latest listing.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS/"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -246,9 +249,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\Amysql-community-/).
+        grep(/\ASRPMS\/mysql-community-/).
         last
-    latest_target_srpm[/\Amysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\ASRPMS\/mysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
   def mysql_community_rpm_version
@@ -257,8 +260,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
+    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
+    # yet. Using the no‑slash URL ensures we get the latest listing.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS/"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -266,9 +272,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\Amysql-community-minimal-/).
+        grep(/\ASRPMS\/mysql-community-minimal-/).
         last
-    latest_target_srpm[/\Amysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\ASRPMS\/mysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
   def mysql_community_minimal_rpm_version
