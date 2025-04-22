@@ -237,10 +237,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
-    # CDN edge nodes may return old cached list without a cache‑buster.
+    # Disable CDN edge caching to ensure we always fetch the latest SRPM list.
+    headers = { "Cache-Control" => "no-cache" }
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS?_ts=#{Time.now.to_i}"
-    index_html = URI.open(srpms_url) do |response|
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS/"
+    index_html = URI.open(srpms_url, headers) do |response|
       response.read
     end
     latest_target_srpm =
@@ -258,10 +259,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
-    # CDN edge nodes may return old cached list without a cache‑buster.
+    # Disable CDN edge caching to ensure we always fetch the latest SRPM list.
+    headers = { "Cache-Control" => "no-cache" }
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS?_ts=#{Time.now.to_i}"
-    index_html = URI.open(srpms_url) do |response|
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS/"
+    index_html = URI.open(srpms_url, headers) do |response|
       response.read
     end
     latest_target_srpm =
