@@ -239,7 +239,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     series = split_mysql_package[1]
     # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS?ts=#{Time.now.to_i}"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -260,7 +260,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     series = split_mysql_package[1]
     # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS?ts=#{Time.now.to_i}"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
