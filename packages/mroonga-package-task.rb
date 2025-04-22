@@ -284,9 +284,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     if short_series == "84"
       short_series = "84-lts"
     end
-    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS?_ts=#{Time.now.to_i}"
+      "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
