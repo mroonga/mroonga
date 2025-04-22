@@ -238,7 +238,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
     # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and “…/SRPMS/”, but the cache for the “/SRPMS/” path hasn't been expired
+    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
     # yet. Using the no‑slash URL ensures we get the latest listing.
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
@@ -261,7 +261,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
     # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and “…/SRPMS/”, but the cache for the “/SRPMS/” path hasn't been expired
+    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
     # yet. Using the no‑slash URL ensures we get the latest listing.
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
