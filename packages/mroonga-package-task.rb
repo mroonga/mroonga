@@ -237,8 +237,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
+    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS/"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS?_ts=#{Time.now.to_i}"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -257,8 +258,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
+    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS/"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS?_ts=#{Time.now.to_i}"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -282,8 +284,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     if short_series == "84"
       short_series = "84-lts"
     end
+    # CDN edge nodes may return old cached list without a cache‑buster.
     srpms_url =
-      "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS"
+      "https://repo.percona.com/ps-#{short_series}/yum/release/9/SRPMS?_ts=#{Time.now.to_i}"
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
