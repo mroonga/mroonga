@@ -11,40 +11,21 @@ We plan to release x.xx in a few days.
 
 guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
 
-- [ ] NEWS
-  - [ ] Update news
+- [ ] Add a release note
+  - [ ] Update `doc/source/news/XX.md`
   - [ ] Translate news
-- [ ] Prepare Release Note and announcement
-  - [ ] Blog https://github.com/mroonga/mroonga.github.com
-    - [ ] English
-    - [ ] Japanese
-  - [ ] Announce on mailing lists
-    - [ ] [GitHub Dicussions](https://github.com/mroonga/groonga/discussions/categories/releases) (Japanese)
-    - [ ] [GitHub Dicussions](https://github.com/mroonga/groonga/discussions/categories/releases) (English)
-    - [ ] mysql@mysql.gr.jp
-    - [ ] Twitter (Japanese/English)
+- [ ] Prepare announcement text
+  - [ ] Announce
+    - [ ] X (Japanese/English)
     - [ ] Facebook (Japanese/English)
 - [ ] Update documentation
   - [ ] Update .rst
   - [ ] Translate (Update .po)
 - [ ] Check CI https://github.com/mroonga/mroonga/actions
 - [ ] Check LaunchPad Nightly https://launchpad.net/~groonga/+archive/ubuntu/nightly/+packages
-- [ ] Tagging
-- [ ] Upload source archives (.tar.gz、.zip)
-- [ ] Upload packages
-  - [ ] Debian
-  - [ ] Ubuntu (launchpad)
-  - [ ] AlmaLinux
-  - [ ] Windows
-- [ ] Upload documentation for http://mroonga.org
-- [ ] Blog https://github.com/mroonga/mroonga.github.com
-  - [ ] English
-  - [ ] Japanese
-- [ ] Announce on mailing lists
-  - [ ] [GitHub Dicussions](https://github.com/mroonga/mroonga/discussions/categories/releases) (Japanese)
-  - [ ] [GitHub Dicussions](https://github.com/mroonga/mroonga/discussions/categories/releases) (English)
-  - [ ] mysql@mysql.gr.jp
-- [ ] Announce on X
-- [ ] Announce on Facebook
-- [ ] Update `base_version`
-- [ ] Update Docker image
+- [ ] Release: `rake release`
+- [ ] Tagging on mroonga/mroonga.org: `rake release`
+- [ ] Announce
+  - [ ] X (Japanese/English)
+  - [ ] Facebook (Japanese/English)
+- [ ] Update Docker image on groonga/docker: `./update.sh`
