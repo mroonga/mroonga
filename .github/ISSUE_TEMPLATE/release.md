@@ -28,4 +28,4 @@ guide: http://mroonga.org/ja/docs/developer/release.html (Japanese)
 - [ ] Announce
   - [ ] X (Japanese/English)
   - [ ] Facebook (Japanese/English)
-- [ ] Update Docker image on groonga/docker: `./update.sh`
+- [ ] Update Docker image on mroonga/docker: `./update.sh`
