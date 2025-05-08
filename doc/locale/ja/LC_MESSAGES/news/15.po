@@ -29,6 +29,12 @@ msgstr "Ubuntuで、MySQL 8.0.42をサポート"
 msgid "This is the latest MySQL release."
 msgstr "これは最新のMySQLのリリースです。"
 
+msgid "Added support for MariaDB 10.6.22"
+msgstr "MariaDB 10.6.22をサポート"
+
+msgid "This is the latest MariaDB release."
+msgstr "これらは最新のMariaDBのリリースです。"
+
 msgid "Release 15.07 - 2025-04-23"
 msgstr "15.07リリース - 2025-04-23"
 
