@@ -17,11 +17,20 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.07 - 2025-04-23"
-msgstr "15.07リリース - 2025-04-23"
+msgid "Release 15.08 - 2025-05-08"
+msgstr "15.08リリース - 2025-05-08"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for MySQL 8.0.42 on Ubuntu"
+msgstr "Ubuntuで、MySQL 8.0.42をサポート"
+
+msgid "This is the latest MySQL release."
+msgstr "これは最新のMySQLのリリースです。"
+
+msgid "Release 15.07 - 2025-04-23"
+msgstr "15.07リリース - 2025-04-23"
 
 msgid "Added support for `utf8mb4_uca1400_*` collations"
 msgstr "`utf8mb4_uca1400_*`照合順序をサポート"
@@ -43,9 +52,6 @@ msgstr ""
 
 msgid "Added support for MySQL 8.0.42"
 msgstr "MraiaDB 8.0.42をサポート"
-
-msgid "This is the latest MySQL release."
-msgstr "これらは最新のMySQLのリリースです。"
 
 msgid "Release 15.05 - 2025-04-08"
 msgstr "15.05リリース - 2025-04-08"
