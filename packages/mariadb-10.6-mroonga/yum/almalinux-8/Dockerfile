@@ -14,6 +14,7 @@ RUN \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   dnf install -y \
+    https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm \
     https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=powertools -y ${quiet} \

@@ -11,6 +11,7 @@ RUN \
   dnf update -y ${quiet} && \
   dnf install -y \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
+    https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm \
     https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm && \
   dnf module disable -y mysql && \
   percona-release setup ps80 && \
