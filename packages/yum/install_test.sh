@@ -13,11 +13,12 @@ case "${os_version}" in
     ;;
   *)
     DNF_INSTALL="dnf install -y"
-    sudo ${DNF_INSTALL} "https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm"
     ;;
 esac
 
-sudo ${DNF_INSTALL} "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
+sudo ${DNF_INSTALL} \
+     "https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm" \
+     "https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm"
 
 case "${package}" in
   mariadb-*)

@@ -15,14 +15,10 @@ major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
 case ${major_version} in
   9)
     DNF="dnf --enablerepo=crb"
-    sudo ${DNF} install -y \
-      https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
     ;;
   *)
     if [ ${os} = "linux" ]; then
       DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
-      sudo ${DNF} install -y \
-        https://apache.jfrog.io/artifactory/arrow/almalinux/${major_version}/apache-arrow-release-latest.rpm
       os=almalinux # Because we can use packages for AlmaLinux on Oracle Linux.
     else
       DNF="dnf --enablerepo=powertools"
@@ -34,6 +30,7 @@ case ${major_version} in
 esac
 
 sudo ${DNF} install -y \
+  https://packages.apache.org/artifactory/arrow/${os}/${major_version}/apache-arrow-release-latest.rpm \
   https://packages.groonga.org/${os}/${major_version}/groonga-release-latest.noarch.rpm
 
 echo "::endgroup::"
