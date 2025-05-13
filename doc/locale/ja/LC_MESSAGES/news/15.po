@@ -65,8 +65,8 @@ msgstr "これは最新のMySQL Communityのリリースです。"
 msgid "Release 15.05 - 2025-04-08"
 msgstr "15.05リリース - 2025-04-08"
 
-msgid "Added support for MraiaDB 10.6.21 and 10.11.11"
-msgstr "MraiaDB 10.6.21と10.11.11をサポート"
+msgid "Added support for MariaDB 10.6.21 and 10.11.11"
+msgstr "MariaDB 10.6.21と10.11.11をサポート"
 
 msgid "They are the latest MariaDB releases."
 msgstr "これらは最新のMariaDBのリリースです。"
