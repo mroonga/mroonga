@@ -24,7 +24,7 @@ msgid "Improvements"
 msgstr "改良"
 
 msgid "Added support for MySQL 8.0.42 on Ubuntu"
-msgstr "Ubuntu向けにMySQL 8.0.42をサポート"
+msgstr "UbuntuのMySQL 8.0.42をサポート"
 
 msgid "This is the latest MySQL release."
 msgstr "これは最新のMySQLのリリースです。"
