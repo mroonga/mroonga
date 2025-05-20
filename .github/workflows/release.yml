@@ -1,8 +1,13 @@
 name: Release
 on:
   push:
-    tags:
-      - "*"
+    paths:
+      - ".github/workflows/release.yml"
+      - "doc/source/news/*"
+  pull_request:
+    paths:
+      - ".github/workflows/release.yml"
+      - "doc/source/news/*"
 jobs:
   publish:
     name: Publish
@@ -11,7 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Download artifacts
+        if: |
+          github.ref_type == 'tag'
         timeout-minutes: 90
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           workflows=(linux.yml windows.yml)
           for workflow in "${workflows[@]}"; do
@@ -37,9 +46,9 @@ jobs:
               --dir release-artifacts \
               --pattern "release-*"
           done
+      - name: Generate release note
         env:
           GH_TOKEN: ${{ github.token }}
-      - name: Publish to GitHub
         run: |
           (cd doc/source/news && \
            ruby \
@@ -56,16 +65,28 @@ jobs:
                         gsub(/{ref}`(.+?)`/) {$1}.
                         gsub(/\[(GH-\d+)\]\(.+?\)/) {$1}.
                         strip)' \
-             $(ls *.md | sort --human-numeric-sort | tail -n1)) > \
-            release-note.md
-          echo "" >> release-note.md
-          echo "### Translations" >> release-note.md
-          echo "" >> release-note.md
-          version=${GITHUB_REF_NAME#v}
+             $(ls *.md | sort --human-numeric-sort | tail -n1)) | \
+            tee release-note.md
+          echo "" | tee -a release-note.md
+          echo "### Translations" | tee -a release-note.md
+          echo "" | tee -a release-note.md
+
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            version=${GITHUB_REF_NAME#v}
+          else
+            version=$(head -n1 release-note.md | \
+                        grep -E -o '[0-9]+\.[0-9]+\.[0-9]+')
+          fi
           major_version=${version%%.*}
           version_hyphen=$(echo ${version} | tr . -)
           ja_release_note_url="https://mroonga.org/ja/docs/news/${major_version}.html#release-${version_hyphen}"
-          echo " * [Japanese](${ja_release_note_url})" >> release-note.md
+          echo " * [Japanese](${ja_release_note_url})" | tee -a release-note.md
+      - name: Publish to GitHub
+        if: |
+          github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
           title="$(head -n1 release-note.md | sed -e 's/^## //')"
           tail -n +2 release-note.md > release-note-without-version.md
           gh release create ${GITHUB_REF_NAME} \
@@ -73,9 +94,9 @@ jobs:
             --notes-file release-note-without-version.md \
             --title "${title}" \
             release-artifacts/*/*
-        env:
-          GH_TOKEN: ${{ github.token }}
       - name: Prepare for Launchpad publishing
+        if: |
+          github.ref_type == 'tag'
         run: |
           cp release-artifacts/release-source/mroonga-*.tar.gz ./
           sudo apt update
@@ -92,6 +113,8 @@ jobs:
           path: apache-arrow
           repository: apache/arrow
       - name: Publish to Launchpad
+        if: |
+          github.ref_type == 'tag'
         env:
           APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
           GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
