@@ -34,7 +34,7 @@ override_dh_auto_configure:
 	wget $${security_base_url}/$${path}/$${debian} ||		\
 	  wget $${base_url}/$${path}/$${debian};			\
 	tar xf $${archive};						\
-	(cd $${source_base} &&						\
+	(cd $${archive_base} &&						\
 	  tar xf ../$${debian});					\
 	dpkg-source --before-build $${source_base};			\
 	(cd $${source_base} &&						\
