@@ -34,6 +34,9 @@ INSERT INTO items VALUES (3, 'green');
 
 # For MariaDB < 11
 -- replace_result 4 3
+
+# For MariaDB < master
+-- replace_result 18 66
 EXPLAIN SELECT DISTINCT color FROM items;
 
 DROP TABLE items;
