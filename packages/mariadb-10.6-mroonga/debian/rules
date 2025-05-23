@@ -16,19 +16,11 @@ override_dh_auto_configure:
 	archive_base=mariadb-10.6_$(MARIADB_VERSION);			\
 	archive=$${archive_base}.orig.tar.gz;				\
 	debian=mariadb-10.6_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
-	source_base=mariadb-$(MARIADB_VERSION);			\
+	source_base=mariadb-10.6-$(MARIADB_VERSION);			\
 	build_dir=$${source_base}/builddir;				\
-	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
-	  path=universe/m/mariadb-10.6;					\
-	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
-	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
-	  source_base=mariadb-10.6-$(MARIADB_VERSION);		\
-	  build_dir=$${source_base}/builddir;				\
-	else								\
-	  path=main/m/mariadb-10.6;					\
-	  base_url=http://ftp.debian.org/debian/pool;			\
-	  security_base_url=http://security.debian.org/pool/updates;	\
-	fi;								\
+	path=universe/m/mariadb-10.6;					\
+	base_url=http://archive.ubuntu.com/ubuntu/pool;		\
+	security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
 	wget $${security_base_url}/$${path}/$${archive} ||		\
 	  wget $${base_url}/$${path}/$${archive};			\
 	wget $${security_base_url}/$${path}/$${debian} ||		\
