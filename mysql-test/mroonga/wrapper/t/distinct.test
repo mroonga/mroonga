@@ -26,7 +26,7 @@ CREATE TABLE items (
   id int PRIMARY KEY,
   color VARCHAR(16) NOT NULL,
   INDEX (color)
-) COMMENT='ENGINE "InnoDB"';
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO items VALUES (1, 'red');
 INSERT INTO items VALUES (2, 'blue');
@@ -35,8 +35,6 @@ INSERT INTO items VALUES (3, 'green');
 # For MariaDB < 11
 -- replace_result 4 3
 
-# For MariaDB < master
--- replace_result 18 66
 EXPLAIN SELECT DISTINCT color FROM items;
 
 DROP TABLE items;
