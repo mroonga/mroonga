@@ -25,7 +25,7 @@ override_dh_auto_configure:
 	  wget $${base_url}/$${path}/$${archive};			\
 	wget $${security_base_url}/$${path}/$${debian} ||		\
 	  wget $${base_url}/$${path}/$${debian};			\
-	rm -rf $${source_base} && mkdir -p $${source_base};		\
+	mkdir -p $${source_base};					\
 	(cd $${source_base} &&						\
 	  tar xf ../$${archive} --strip-components 1 &&			\
 	  tar xf ../$${debian});					\
