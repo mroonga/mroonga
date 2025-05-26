@@ -16,7 +16,7 @@ override_dh_auto_configure:
 	archive_base=mariadb-10.6_$(MARIADB_VERSION);			\
 	archive=$${archive_base}.orig.tar.gz;				\
 	debian=mariadb-10.6_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
-	source_base=mariadb-$(MARIADB_VERSION);			\
+	source_base=mariadb-$(MARIADB_VERSION);		\
 	build_dir=$${source_base}/builddir;				\
 	path=universe/m/mariadb-10.6;					\
 	base_url=http://archive.ubuntu.com/ubuntu/pool;		\
