@@ -18,23 +18,16 @@ override_dh_auto_configure:
 	debian=mariadb-10.6_$(MARIADB_VERSION_FULL).debian.tar.xz;	\
 	source_base=mariadb-$(MARIADB_VERSION);				\
 	build_dir=$${source_base}/builddir;				\
-	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
-	  path=universe/m/mariadb-10.6;					\
-	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
-	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
-	  source_base=mariadb-$(MARIADB_VERSION);		\
-	  build_dir=$${source_base}/builddir;				\
-	else								\
-	  path=main/m/mariadb-10.6;					\
-	  base_url=http://ftp.debian.org/debian/pool;			\
-	  security_base_url=http://security.debian.org/pool/updates;	\
-	fi;								\
+	path=universe/m/mariadb-10.6;					\
+	base_url=http://archive.ubuntu.com/ubuntu/pool;       		\
+	security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
 	wget $${security_base_url}/$${path}/$${archive} ||		\
 	  wget $${base_url}/$${path}/$${archive};			\
 	wget $${security_base_url}/$${path}/$${debian} ||		\
 	  wget $${base_url}/$${path}/$${debian};			\
-	tar xf $${archive};						\
+	mkdir -p $${source_base};					\
 	(cd $${source_base} &&						\
+	  tar xf ../$${archive} --strip-components 1 &&			\
 	  tar xf ../$${debian});					\
 	dpkg-source --before-build $${source_base};			\
 	(cd $${source_base} &&						\
