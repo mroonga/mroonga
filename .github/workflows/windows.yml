@@ -152,6 +152,7 @@ jobs:
           ridk exec patch -p1 -i `
             storage\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           if ("${Env:MARIADB_VERSION}" -match "11.4") {
+            # Workaround for: https://jira.mariadb.org/browse/MDEV-36904
             ridk exec patch -p1 -i `
               storage\mroonga\packages\source\patches\mariadb-11.4.7-enable-install-runtime-dependency-default-when-use-vcpkg.diff
           }
