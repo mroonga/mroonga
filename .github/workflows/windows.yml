@@ -151,6 +151,10 @@ jobs:
           cd mariadb
           ridk exec patch -p1 -i `
             storage\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
+          if ("${Env:MARIADB_VERSION}" -match "11.4") {
+            ridk exec patch -p1 -i `
+              storage\mroonga\packages\source\patches\mariadb-11.4.7-enable-install-runtime-dependency-default-when-use-vcpkg.diff
+          }
           Copy-Item storage\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
       - uses: actions/checkout@v4
         if: |
@@ -218,7 +222,6 @@ jobs:
             -DCONNECT_WITH_LIBXML2=OFF ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
-            -DINSTALL_RUNTIME_DEPENDENCIES_DEFAULT=OFF ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
             -DGRN_WITH_XSIMD=no || exit /B
