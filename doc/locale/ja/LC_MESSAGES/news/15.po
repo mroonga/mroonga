@@ -17,11 +17,23 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.10 - 2025-05-14"
-msgstr "15.10リリース - 2025-05-14"
+msgid "Release 15.11 - 2025-06-05"
+msgstr "15.11リリース - 2025-06-05"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for MariaDB 10.6.22 and 10.11.13 on Ubuntu"
+msgstr "UbuntuのMariaDB 10.6.22, 10.11.13 をサポート"
+
+msgid "These are the latest MariaDB release."
+msgstr "これらは最新のMariaDBのリリースです。"
+
+msgid "Added support for MariaDB 10.11.13 and 11.4.7 on AlmaLinux"
+msgstr "AlmaLinuxのMariaDB 10.11.13と11.4.7をサポート"
+
+msgid "Release 15.10 - 2025-05-14"
+msgstr "15.10リリース - 2025-05-14"
 
 msgid "Added support for MySQL 8.0.42 on Ubuntu"
 msgstr "UbuntuのMySQL 8.0.42をサポート"
@@ -31,9 +43,6 @@ msgstr "これは最新のMySQLのリリースです。"
 
 msgid "Added support for MariaDB 10.5.29 and 10.6.22"
 msgstr "MariaDB 10.5.29と10.6.22をサポート"
-
-msgid "These are the latest MariaDB release."
-msgstr "これらは最新のMariaDBのリリースです。"
 
 msgid "Release 15.07 - 2025-04-23"
 msgstr "15.07リリース - 2025-04-23"
