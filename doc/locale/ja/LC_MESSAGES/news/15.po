@@ -29,6 +29,9 @@ msgstr "UbuntuのMariaDB 10.6.22, 10.11.13 をサポート"
 msgid "These are the latest MariaDB release."
 msgstr "これらは最新のMariaDBのリリースです。"
 
+msgid "Added support for MariaDB 10.11.13 and 11.4.7"
+msgstr "MariaDB 10.11.13と11.4.7をサポート"
+
 msgid "Release 15.10 - 2025-05-14"
 msgstr "15.10リリース - 2025-05-14"
 
