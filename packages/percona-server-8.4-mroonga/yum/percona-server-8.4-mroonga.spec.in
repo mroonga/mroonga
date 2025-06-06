@@ -128,6 +128,9 @@ Documentation for Mroonga
 %doc percona-server-8.4-mroonga-doc/*
 
 %changelog
+* Fri Jun 06 2025 Horimoto Yasuhiro <horimoto@clear-code.com> - 15.11-1
+- New upstream release.
+
 * Wed May 14 2025 Abe Tomoaki <abe@clear-code.com> - 15.10-1
 - New upstream release.
 
