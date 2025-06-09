@@ -15,6 +15,8 @@ jobs:
     environment: release
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Download artifacts
         if: |
           github.ref_type == 'tag'
@@ -50,6 +52,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -o pipefail
+
           (cd doc/source/news && \
            ruby \
              -e 'print("## Mroonga ");
@@ -67,6 +71,20 @@ jobs:
                         strip)' \
              $(ls *.md | sort --human-numeric-sort | tail -n1)) | \
             tee release-note.md
+
+          previous_tag=$(gh release list \
+                           --jq '.[].tagName' \
+                           --json tagName \
+                           --limit 1)
+
+          echo "### Contributors" | tee -a release-note.md
+          echo | tee -a release-note.md
+          command_line="git shortlog -sn ${previous_tag}.."
+          echo '```console' | tee -a release-note.md
+          echo "\$ ${command_line}" | tee -a release-note.md
+          ${command_line} | tee -a release-note.md
+          echo '```' | tee -a release-note.md
+
           echo "" | tee -a release-note.md
           echo "### Translations" | tee -a release-note.md
           echo "" | tee -a release-note.md
