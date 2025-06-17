@@ -9,7 +9,7 @@ CREATE TABLE bugs (
 id INT UNSIGNED PRIMARY KEY,
 tags VARCHAR(40) COMMENT 'groonga_type "tags"',
 FULLTEXT INDEX bugs_tags_index (tags) COMMENT 'lexicon "tags"'
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 SELECT mroonga_command("dump --dump_plugins no");
 mroonga_command("dump --dump_plugins no")
 table_create bugs TABLE_PAT_KEY UInt32

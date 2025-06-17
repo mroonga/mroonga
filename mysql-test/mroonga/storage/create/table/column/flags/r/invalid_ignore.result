@@ -1,9 +1,9 @@
 CREATE TABLE tags (
 name VARCHAR(64) PRIMARY KEY COLLATE 'utf8mb4_general_ci'
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 CREATE TABLE bugs (
 tag TEXT COMMENT 'flags "COLUMN_SCALAR|MISSING_NIL|INVALID_IGNORE", type "tags"'
-) DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 SET GLOBAL mroonga_log_file = "groonga-new.log";
 INSERT INTO bugs VALUES ('nonexistent');
 log file is changed: <groonga.log> -> <groonga-new.log>

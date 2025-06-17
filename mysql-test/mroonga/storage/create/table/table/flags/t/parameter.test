@@ -27,7 +27,7 @@ SET NAMES utf8mb4;
 CREATE TABLE terms (
   term VARCHAR(64) NOT NULL PRIMARY KEY
 ) FLAGS='TABLE_HASH_KEY|KEY_LARGE'
-  DEFAULT CHARSET=utf8mb4;
+  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 SELECT mroonga_command("dump --dump_plugins no");
 
