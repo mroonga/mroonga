@@ -16,6 +16,10 @@
 
 --source ../../../../../../include/mroonga/not_embedded.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+# This test is MySQL-only because MariaDB's handling of the deprecated 'parser'
+# syntax has changed over time. Different MariaDB versions show different
+# warning messages or automatically convert 'parser' to 'tokenizer'.
+--source ../../../../../../include/mroonga/have_mysql.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
