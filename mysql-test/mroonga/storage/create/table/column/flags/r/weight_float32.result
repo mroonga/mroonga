@@ -1,11 +1,11 @@
 CREATE TABLE tags (
 name VARCHAR(64) PRIMARY KEY COLLATE 'utf8mb4_general_ci'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 CREATE TABLE bugs (
 tags TEXT
 COMMENT 'flags "COLUMN_VECTOR|WITH_WEIGHT|WEIGHT_FLOAT32", type "tags"',
 FULLTEXT INDEX bugs_tags (tags) COMMENT 'table "tags", flags "WITH_WEIGHT"'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO bugs VALUES ('{"package": 10.1, "priority": 5.5}');
 SELECT mroonga_command('dump --dump_plugins no');
 mroonga_command('dump --dump_plugins no')

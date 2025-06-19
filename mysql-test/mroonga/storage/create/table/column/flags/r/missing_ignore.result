@@ -1,9 +1,9 @@
 CREATE TABLE tags (
 name VARCHAR(64) PRIMARY KEY COLLATE 'utf8mb4_general_ci'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 CREATE TABLE bugs (
 tags TEXT COMMENT 'flags "COLUMN_VECTOR|MISSING_IGNORE", type "tags"'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO tags VALUES ('existent1'), ('existent2');
 INSERT INTO bugs VALUES ('["existent1", "nonexistent", "existent2"]');
 SELECT mroonga_command('dump --dump_plugins no');

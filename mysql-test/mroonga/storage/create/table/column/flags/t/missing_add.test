@@ -29,11 +29,11 @@ USE test;
 
 CREATE TABLE tags (
   name VARCHAR(64) PRIMARY KEY COLLATE 'utf8mb4_general_ci'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE bugs (
   tags TEXT COMMENT 'flags "COLUMN_VECTOR|MISSING_ADD", type "tags"'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO tags VALUES ('existent1'), ('existent2');
 

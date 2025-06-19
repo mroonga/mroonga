@@ -29,7 +29,7 @@ CREATE TABLE variables (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name TEXT,
   FULLTEXT INDEX (name) COMMENT 'parser "off"'
-) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO variables (name) VALUES ("mroonga_database_path_prefix");
 INSERT INTO variables (name) VALUES ("mroonga_default_parser");
