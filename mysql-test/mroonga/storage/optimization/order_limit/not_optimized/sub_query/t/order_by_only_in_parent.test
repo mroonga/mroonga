@@ -16,13 +16,16 @@
 
 --source ../../../../../../include/mroonga/have_innodb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/have_flush_global_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS memos;
 DROP TABLE IF EXISTS users;
 --enable_warnings
 
-FLUSH STATUS;
+# Normalize FLUSH STATUS output for MariaDB version compatibility
+--replace_result "FLUSH GLOBAL STATUS" "FLUSH STATUS"
+--eval $flush_status_command
 
 SET NAMES utf8mb4;
 
