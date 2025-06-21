@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS channels;
 DROP TABLE IF EXISTS permissions;
 DROP TABLE IF EXISTS messages;
-FLUSH STATUS;
 CREATE TABLE channels (
 id int PRIMARY KEY,
 name varchar(255)

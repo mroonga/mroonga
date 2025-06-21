@@ -18,15 +18,11 @@
 # MySQL doesn't use condition push down with test case.
 --source ../../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../../include/mroonga/have_flush_global_status.inc
+--source ../../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS mroonga_releases;
 --enable_warnings
-
-# Normalize FLUSH STATUS output for MariaDB version compatibility
---replace_result "FLUSH GLOBAL STATUS" "FLUSH STATUS"
---eval $flush_status_command
 
 CREATE TABLE mroonga_releases (
   id INT PRIMARY KEY AUTO_INCREMENT,

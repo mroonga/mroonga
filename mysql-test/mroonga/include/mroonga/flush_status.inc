@@ -1,4 +1,6 @@
-# Copyright (C) 2025  Kodama Takuya <otegami@clear-code.com>
+# -*- mode: sql; sql-product: mysql -*-
+#
+# Copyright (C) 2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,10 +20,17 @@
 --source ../../include/mroonga/check_version.inc
 
 --disable_query_log
-let $flush_status_command = FLUSH STATUS;
+let $have_flush_global_status = no;
 if ($mariadb) {
   if ($version_11_5_or_later) {
-    let $flush_status_command = FLUSH GLOBAL STATUS;
+    let $have_flush_global_status = yes;
   }
+}
+
+if ($have_flush_global_status == yes) {
+  FLUSH GLOBAL STATUS;
+}
+if ($have_flush_global_status == no) {
+  FLUSH STATUS;
 }
 --enable_query_log

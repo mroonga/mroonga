@@ -15,15 +15,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/have_flush_global_status.inc
+--source ../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS users;
 --enable_warnings
-
-# Normalize FLUSH STATUS output for MariaDB version compatibility
---replace_result "FLUSH GLOBAL STATUS" "FLUSH STATUS"
---eval $flush_status_command
 
 CREATE TABLE users (
   id INT PRIMARY KEY

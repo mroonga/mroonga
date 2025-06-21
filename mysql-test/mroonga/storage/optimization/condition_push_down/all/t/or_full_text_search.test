@@ -18,15 +18,11 @@
 # qep_tab->type() is JT_ALL in make_join_readinfo().
 --source ../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/have_flush_global_status.inc
+--source ../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS memos;
 --enable_warnings
-
-# Normalize FLUSH STATUS output for MariaDB version compatibility
---replace_result "FLUSH GLOBAL STATUS" "FLUSH STATUS"
---eval $flush_status_command
 
 SET NAMES UTF8MB4;
 CREATE TABLE memos (
