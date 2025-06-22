@@ -16,14 +16,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS channels;
 DROP TABLE IF EXISTS permissions;
 DROP TABLE IF EXISTS messages;
 --enable_warnings
-
-FLUSH STATUS;
 
 CREATE TABLE channels (
   id int PRIMARY KEY,

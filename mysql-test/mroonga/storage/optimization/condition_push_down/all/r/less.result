@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS years;
-FLUSH STATUS;
 CREATE TABLE years (
 id int,
 year int

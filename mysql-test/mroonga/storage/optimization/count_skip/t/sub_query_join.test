@@ -15,13 +15,12 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 --source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 --enable_warnings
-
-FLUSH STATUS;
 
 CREATE TABLE roles (
   id INT

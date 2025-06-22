@@ -1,4 +1,6 @@
-# Copyright(C) 2016 Kouhei Sutou <kou@clear-code.com>
+# -*- mode: sql; sql-product: mysql -*-
+#
+# Copyright (C) 2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,30 +16,21 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
---source ../../../../../include/mroonga/have_mroonga.inc
---source ../../../../../include/mroonga/flush_status.inc
+--source ../../include/mroonga/check_mariadb.inc
+--source ../../include/mroonga/check_version.inc
 
---disable_warnings
-DROP TABLE IF EXISTS users;
---enable_warnings
+--disable_query_log
+let $have_flush_global_status = no;
+if ($mariadb) {
+  if ($version_11_5_or_later) {
+    let $have_flush_global_status = yes;
+  }
+}
 
-CREATE TABLE users (
-  age INT,
-  INDEX (age)
-) DEFAULT CHARSET=UTF8MB4;
-
-INSERT INTO users (age) VALUES (28);
-INSERT INTO users (age) VALUES (28);
-INSERT INTO users (age) VALUES (29);
-INSERT INTO users (age) VALUES (29);
-INSERT INTO users (age) VALUES (29);
-
---disable_ps_protocol
-SELECT COUNT(*) FROM users WHERE age = 29;
---enable_ps_protocol
-
-SHOW STATUS LIKE 'mroonga_count_skip';
-
-DROP TABLE users;
-
---source ../../../../../include/mroonga/have_mroonga_deinit.inc
+if ($have_flush_global_status == yes) {
+  FLUSH GLOBAL STATUS;
+}
+if ($have_flush_global_status == no) {
+  FLUSH STATUS;
+}
+--enable_query_log

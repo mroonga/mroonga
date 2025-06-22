@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS users;
-FLUSH STATUS;
 CREATE TABLE users (
 age INT,
 INDEX (age)

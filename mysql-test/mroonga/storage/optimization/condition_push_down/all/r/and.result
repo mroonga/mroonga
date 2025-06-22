@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS months;
-FLUSH STATUS;
 CREATE TABLE months (
 id int,
 year int,

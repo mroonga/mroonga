@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS memos;
-FLUSH STATUS;
 CREATE TABLE memos (
 id int PRIMARY KEY,
 content TEXT,

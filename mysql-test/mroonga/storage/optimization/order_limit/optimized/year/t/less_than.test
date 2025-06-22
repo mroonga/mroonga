@@ -18,12 +18,11 @@
 # MySQL doesn't use condition push down with test case.
 --source ../../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS mroonga_releases;
 --enable_warnings
-
-FLUSH STATUS;
 
 CREATE TABLE mroonga_releases (
   id INT PRIMARY KEY AUTO_INCREMENT,

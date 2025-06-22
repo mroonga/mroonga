@@ -18,12 +18,11 @@
 # MySQL doesn't use condition push down with test case.
 --source ../../../../../../include/mroonga/have_mariadb.inc
 --source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/flush_status.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS memos;
 --enable_warnings
-
-FLUSH STATUS;
 
 SET NAMES UTF8MB4;
 CREATE TABLE memos (
