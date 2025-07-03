@@ -31,7 +31,7 @@ CREATE TABLE memos (
   content VARCHAR(64) NOT NULL PRIMARY KEY,
   FULLTEXT INDEX (content)
 ) COMMENT='engine "InnoDB", flags "TABLE_HASH_KEY|KEY_LARGE"'
-  DEFAULT CHARSET=utf8mb4;
+  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 SELECT mroonga_command("dump --dump_plugins no --dump_indexes no");
 
