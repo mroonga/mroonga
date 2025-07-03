@@ -26,7 +26,7 @@ CREATE TABLE items (
   id int PRIMARY KEY,
   color VARCHAR(16) NOT NULL,
   INDEX (color)
-) COMMENT='ENGINE "InnoDB"';
+) COMMENT='ENGINE "InnoDB"' DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO items VALUES (1, 'red');
 INSERT INTO items VALUES (2, 'blue');
