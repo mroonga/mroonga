@@ -25,6 +25,8 @@
 DROP TABLE IF EXISTS memos;
 --enable_warnings
 
+FLUSH GLOBAL STATUS;
+
 SET NAMES UTF8MB4;
 CREATE TABLE memos (
   id INT UNSIGNED,
