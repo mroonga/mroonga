@@ -1,5 +1,4 @@
 drop table if exists t1;
-flush status;
 create table t1 (
 c1 int primary key,
 c2 int,
