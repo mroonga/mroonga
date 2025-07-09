@@ -40,9 +40,10 @@ jobs:
           - mariadb-release: "10.6"
           - mariadb-release: "10.11"
           - mariadb-release: "11.4"
-          - mariadb-release: "11.4"
+          - mariadb-release: "11.8"
+          - mariadb-release: "11.8"
             use-main: "yes"
-          - mariadb-release: "11.4"
+          - mariadb-release: "11.8"
             use-main: "yes"
             embed: "ON"
     env:
