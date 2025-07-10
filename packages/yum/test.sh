@@ -240,7 +240,8 @@ sudo \
   --no-check-testcases \
   --parallel=${parallel} \
   --retry=3 \
-  --suite="${test_suite_names}"
+  --suite="${test_suite_names}" \
+  --max-test-fail=0
 
 echo "::endgroup::"
 
@@ -258,7 +259,8 @@ case ${package} in
       --parallel=${parallel} \
       --ps-protocol \
       --retry=3 \
-      --suite="${test_suite_names}"
+      --suite="${test_suite_names}" \
+      --max-test-fail=0
     ;;
 esac
 
