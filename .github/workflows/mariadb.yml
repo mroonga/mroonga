@@ -26,9 +26,90 @@ concurrency:
   cancel-in-progress: true
 jobs:
   main:
-    name: main
+    name: ${{ matrix.id }}
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # To reduce build time, we build only the MariaDB core and Mroonga.
+          # The following options disable all other storage engines, module-type
+          # plugins, and some core options to reduce compile time and external
+          # dependencies.
+          #
+          # To list available plugins, you can run:
+          #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
+          - id: amd64-compile-only-core
+            compile_options:
+              - -GNinja
+              - -DCMAKE_BUILD_TYPE=Debug
+              - -DCMAKE_C_COMPILER_LAUNCHER=ccache
+              - -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+              - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+              - -DCONC_WITH_UNITTEST=OFF
+              - -DMYSQL_MAINTAINER_MODE=OFF
+              - -DPLUGIN_ARCHIVE=NO
+              - -DPLUGIN_AUDIT_NULL=NO
+              - -DPLUGIN_AUTH_ED25519=NO
+              - -DPLUGIN_AUTH_TEST_PLUGIN=NO
+              - -DPLUGIN_AUTH_0X0100=NO
+              - -DPLUGIN_BLACKHOLE=NO
+              - -DPLUGIN_COLUMNSTORE=NO
+              - -DPLUGIN_CONNECT=NO
+              - -DPLUGIN_DAEMON_EXAMPLE=NO
+              - -DPLUGIN_DEBUG_KEY_MANAGEMENT=NO
+              - -DPLUGIN_DIALOG_EXAMPLES=NO
+              - -DPLUGIN_DISKS=NO
+              - -DPLUGIN_EXAMPLE=NO
+              - -DPLUGIN_EXAMPLE_KEY_MANAGEMENT=NO
+              - -DPLUGIN_FEDERATED=NO
+              - -DPLUGIN_FEDERATEDX=NO
+              - -DPLUGIN_FILE_KEY_MANAGEMENT=NO
+              - -DPLUGIN_FTEXAMPLE=NO
+              - -DPLUGIN_FUNC_TEST=NO
+              - -DPLUGIN_HANDLERSOCKET=NO
+              - -DPLUGIN_LOCALES=NO
+              - -DPLUGIN_METADATA_LOCK_INFO=NO
+              - -DPLUGIN_OQGRAPH=NO
+              - -DPLUGIN_PASSWORD_REUSE_CHECK=NO
+              - -DPLUGIN_QA_AUTH_INTERFACE=NO
+              - -DPLUGIN_QA_AUTH_SERVER=NO
+              - -DPLUGIN_QA_AUTH_CLIENT=NO
+              - -DPLUGIN_QUERY_CACHE_INFO=NO
+              - -DPLUGIN_QUERY_RESPONSE_TIME=NO
+              - -DPLUGIN_ROCKSDB=NO
+              - -DPLUGIN_SEQUENCE=NO
+              - -DPLUGIN_SERVER_AUDIT=NO
+              - -DPLUGIN_SIMPLE_PASSWORD_CHECK=NO
+              - -DPLUGIN_SPHINX=NO
+              - -DPLUGIN_SPIDER=NO
+              - -DPLUGIN_SQL_ERRLOG=NO
+              - -DPLUGIN_TEST_SQL_DISCOVERY=NO
+              - -DPLUGIN_TEST_SQL_SERVICE=NO
+              - -DPLUGIN_TEST_VERSIONING=NO
+              - -DPLUGIN_TYPE_TEST=NO
+              - -DPROVIDER_LZ4=NO
+              - -DWITH_EMBEDDED_SERVER=NO
+              - -DWITH_UNIT_TESTS=OFF
+              - -DWITH_MARIABACKUP=OFF
+              - -DWITH_SAFEMALLOC=OFF
+              - -DWITH_WSREP=OFF
+
+          # https://github.com/MariaDB/buildbot/blob/cca6638494b6d774ec89f10adc3512d2152b56dc/configuration/builders/sequences/compile_only.py#L45-L70
+          - id: amd64-compile-only-minimal
+            compile_options:
+              - -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+              - -DCMAKE_C_COMPILER_LAUNCHER=ccache
+              - -DPLUGIN_FEEDBACK=NO
+              - -DPLUGIN_INNOBASE=NO
+              - -DPLUGIN_PARTITION=NO
+              - -DPLUGIN_PERFSCHEMA=NO
+              - -DPLUGIN_SEQUENCE=NO
+              - -DPLUGIN_THREAD_POOL_INFO=NO
+              - -DPLUGIN_USER_VARIABLES=NO
+              - -DWITH_NONE=ON
+              - -DWITH_WSREP=OFF
     steps:
       - uses: ruby/setup-ruby@v1
         with:
@@ -68,80 +149,25 @@ jobs:
           key: mariadb-linux-ccache-${{ hashFiles('mariadb/**/*.cpp', 'mariadb/**/*.h', 'mariadb/**/*.hpp') }}
           restore-keys: mariadb-linux-ccache-
       - name: Configure MariaDB
-        # To reduce build time, we build only the MariaDB core and Mroonga.
-        # The following options disable all other storage engines, module-type
-        # plugins, and some core options to reduce compile time and external
-        # dependencies.
-        #
-        # To list available plugins, you can run:
-        #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
+        continue-on-error: ${{ matrix.id != 'amd64-compile-only-core' && false || true }}
         run: |
           cmake \
             -Smariadb \
             -Bmariadb.build \
-            -GNinja \
-            -DCMAKE_BUILD_TYPE=Debug \
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-            -DCONC_WITH_UNITTEST=OFF \
-            -DMYSQL_MAINTAINER_MODE=OFF \
-            -DPLUGIN_ARCHIVE=NO \
-            -DPLUGIN_AUDIT_NULL=NO \
-            -DPLUGIN_AUTH_ED25519=NO \
-            -DPLUGIN_AUTH_TEST_PLUGIN=NO \
-            -DPLUGIN_AUTH_0X0100=NO \
-            -DPLUGIN_BLACKHOLE=NO \
-            -DPLUGIN_COLUMNSTORE=NO \
-            -DPLUGIN_CONNECT=NO \
-            -DPLUGIN_DAEMON_EXAMPLE=NO \
-            -DPLUGIN_DEBUG_KEY_MANAGEMENT=NO \
-            -DPLUGIN_DIALOG_EXAMPLES=NO \
-            -DPLUGIN_DISKS=NO \
-            -DPLUGIN_EXAMPLE=NO \
-            -DPLUGIN_EXAMPLE_KEY_MANAGEMENT=NO \
-            -DPLUGIN_FEDERATED=NO \
-            -DPLUGIN_FEDERATEDX=NO \
-            -DPLUGIN_FILE_KEY_MANAGEMENT=NO \
-            -DPLUGIN_FTEXAMPLE=NO \
-            -DPLUGIN_FUNC_TEST=NO \
-            -DPLUGIN_HANDLERSOCKET=NO \
-            -DPLUGIN_LOCALES=NO \
-            -DPLUGIN_METADATA_LOCK_INFO=NO \
-            -DPLUGIN_OQGRAPH=NO \
-            -DPLUGIN_PASSWORD_REUSE_CHECK=NO \
-            -DPLUGIN_QA_AUTH_INTERFACE=NO \
-            -DPLUGIN_QA_AUTH_SERVER=NO \
-            -DPLUGIN_QA_AUTH_CLIENT=NO \
-            -DPLUGIN_QUERY_CACHE_INFO=NO \
-            -DPLUGIN_QUERY_RESPONSE_TIME=NO \
-            -DPLUGIN_ROCKSDB=NO \
-            -DPLUGIN_SEQUENCE=NO \
-            -DPLUGIN_SERVER_AUDIT=NO \
-            -DPLUGIN_SIMPLE_PASSWORD_CHECK=NO \
-            -DPLUGIN_SPHINX=NO \
-            -DPLUGIN_SPIDER=NO \
-            -DPLUGIN_SQL_ERRLOG=NO \
-            -DPLUGIN_TEST_SQL_DISCOVERY=NO \
-            -DPLUGIN_TEST_SQL_SERVICE=NO \
-            -DPLUGIN_TEST_VERSIONING=NO \
-            -DPLUGIN_TYPE_TEST=NO \
-            -DPROVIDER_LZ4=NO \
-            -DWITH_EMBEDDED_SERVER=NO \
-            -DWITH_UNIT_TESTS=OFF \
-            -DWITH_MARIABACKUP=OFF \
-            -DWITH_SAFEMALLOC=OFF \
-            -DWITH_WSREP=OFF
+            ${{ join(matrix.compile_options, ' ') }}
       - name: Show ccache stats (before build)
         run: |
           ccache --show-stats --verbose --version || :
       - name: Build MariaDB
+        if: matrix.id == 'amd64-compile-only-core'
         run: |
           cmake --build mariadb.build
       - name: Show ccache stats (after build)
+        if: matrix.id == 'amd64-compile-only-core'
         run: |
           ccache --show-stats --verbose --version || :
       - name: Run test
+        if: matrix.id == 'amd64-compile-only-core'
         # TODO: Temporarily ignore failures on MariaDB main. Disable this when
         # all tests pass cleanly on main once.
         continue-on-error: true
