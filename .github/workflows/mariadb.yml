@@ -149,7 +149,7 @@ jobs:
           key: mariadb-linux-ccache-${{ hashFiles('mariadb/**/*.cpp', 'mariadb/**/*.h', 'mariadb/**/*.hpp') }}
           restore-keys: mariadb-linux-ccache-
       - name: Configure MariaDB
-        continue-on-error: ${{ matrix.id != 'amd64-compile-only-core' && false || true }}
+        continue-on-error: ${{ matrix.id != 'amd64-compile-only-core' }}
         run: |
           cmake \
             -Smariadb \
