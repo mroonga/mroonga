@@ -158,15 +158,15 @@ jobs:
         run: |
           ccache --show-stats --verbose --version || :
       - name: Build MariaDB
-        if: matrix.id == 'amd64-compile-only-core'
+        if: matrix.id == 'core'
         run: |
           cmake --build mariadb.build
       - name: Show ccache stats (after build)
-        if: matrix.id == 'amd64-compile-only-core'
+        if: matrix.id == 'core'
         run: |
           ccache --show-stats --verbose --version || :
       - name: Run test
-        if: matrix.id == 'amd64-compile-only-core'
+        if: matrix.id == 'core'
         # TODO: Temporarily ignore failures on MariaDB main. Disable this when
         # all tests pass cleanly on main once.
         continue-on-error: true
