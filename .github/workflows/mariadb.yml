@@ -40,7 +40,7 @@ jobs:
           #
           # To list available plugins, you can run:
           #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
-          - id: amd64-compile-only-core
+          - id: core
             compile_options:
               - -GNinja
               - -DCMAKE_BUILD_TYPE=Debug
@@ -97,7 +97,7 @@ jobs:
               - -DWITH_WSREP=OFF
 
           # https://github.com/MariaDB/buildbot/blob/cca6638494b6d774ec89f10adc3512d2152b56dc/configuration/builders/sequences/compile_only.py#L45-L70
-          - id: amd64-compile-only-minimal
+          - id: compile-only-minimal
             compile_options:
               - -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
               - -DCMAKE_C_COMPILER_LAUNCHER=ccache
@@ -134,7 +134,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: mariadb/storage/mroonga
-          repository: mroonga/mroonga
+          repository: ${{ github.repository }}
       - name: Install ccache
         run: |
           sudo apt-get update
