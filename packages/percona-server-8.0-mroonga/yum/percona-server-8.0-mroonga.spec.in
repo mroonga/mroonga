@@ -56,7 +56,7 @@ fi
 rpm -Uvh percona-server-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-sed -i'' -e 's/%%if 0%%{?rhel} == 7 || 0%%{?rhel} == 8/%%if 0%%{?rhel} == 7/' ~/rpmbuild/SPECS/%{_mysql_spec_file}
+sed -i'' -e 's/www.percona.com/download.percona.com/' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 
 %build
 rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
