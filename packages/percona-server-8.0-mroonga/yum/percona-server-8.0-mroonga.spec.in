@@ -60,6 +60,7 @@ sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 # Currently, the download URL of dependency package is incorrect.
 # So, we replace to correct URL.
 # We will remove this when use correct URL in upstream.
+# See: https://github.com/percona/percona-server/pull/5663
 sed -i'' -e 's/www\.percona\.com/download\.percona\.com/' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 
 %build
