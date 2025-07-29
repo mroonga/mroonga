@@ -56,7 +56,7 @@ fi
 rpm -Uvh percona-server-*.src.rpm
 sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
-# This is workaround
+# This is workaround.
 # Currently, the download URL of dependency package is incorrect.
 # So, we replace to correct URL.
 # We will remove this when use correct URL in upstream.
