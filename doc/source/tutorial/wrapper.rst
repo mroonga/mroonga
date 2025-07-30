@@ -3,6 +3,10 @@ Wrapper mode
 
 Here we explain how to use wrapper mode of Mroonga
 
+.. versionchanged:: 12.02
+
+   Dropped support wrapper mode with MySQL 8.0 or later.
+
 How to use wrapper mode
 -----------------------
 

@@ -151,6 +151,9 @@ msgstr "ラッパーモード"
 msgid "Here we explain how to use wrapper mode of Mroonga"
 msgstr "ここでは Mroonga におけるラッパーモードの利用方法を説明します。"
 
+msgid "Dropped support wrapper mode with MySQL 8.0 or later."
+msgstr "MySQL 8.0以降でラッパーモードのサポートをやめました。"
+
 msgid "How to use wrapper mode"
 msgstr "ラッパーモードの利用方法"
 
