@@ -238,6 +238,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   def latest_target_version(series, trailing_slash, minimal_or_not = nil)
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
+    if minimal_or_not == :minimal
+      srpms_url =
+        "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
+    end
     pattern = "SRPMS\/mysql-community-"
     if trailing_slash == :with_trailing_slash
       srpms_url << "/"
