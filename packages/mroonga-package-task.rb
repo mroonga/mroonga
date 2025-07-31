@@ -264,8 +264,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     [
-      latest_target_version(series, :with_trailing_slash, :minimal),
-      latest_target_version(series, :without_trailing_slash, :minimal)
+      latest_target_version(series, :with_trailing_slash),
+      latest_target_version(series, :without_trailing_slash)
     ].max
   end
 
@@ -278,8 +278,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     [
-      latest_target_version(series, :with_trailing_slash),
-      latest_target_version(series, :without_trailing_slash)
+      latest_target_version(series, :with_trailing_slash, :minimal),
+      latest_target_version(series, :without_trailing_slash, :minimal)
     ].max
 
     srpms_url =
