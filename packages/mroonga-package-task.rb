@@ -281,19 +281,6 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       latest_target_version(series, :with_trailing_slash, :minimal),
       latest_target_version(series, :without_trailing_slash, :minimal)
     ].max
-
-    srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
-    index_html = URI.open(srpms_url) do |response|
-      response.read
-    end
-    latest_target_srpm =
-      index_html.
-        scan(/href="(.+?)"/i).
-        flatten.
-        grep(/\ASRPMS\/mysql-community-minimal-/).
-        last
-    latest_target_srpm[/\ASRPMS\/mysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
   def mysql_community_minimal_rpm_version
