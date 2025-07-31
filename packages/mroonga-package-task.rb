@@ -235,13 +235,18 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     [names.join("-"), series]
   end
 
-  def detect_mysql_community_rpm_version
-    series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
+  def latest_target_version(series, trailing_slash, minimal_or_not = nil)
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
+    pattern = "SRPMS\/mysql-community-"
+    if trailing_slash == :with_trailing_slash
+      srpms_url << "/"
+      pattern = "mysql-community-"
+    end
+    if minimal_or_not == :minimal
+      pattern << "minimal-"
+    end
+
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -249,9 +254,19 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\ASRPMS\/mysql-community-/).
+        grep(/\A#{pattern}/).
         last
-    latest_target_srpm[/\ASRPMS\/mysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\A#{pattern}(\d+\.\d+\.\d+-\d+)/, 1]
+  end
+
+  def detect_mysql_community_rpm_version
+    series = split_mysql_package[1]
+    # Use the URL returns newer version because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but one of caches may return old version.
+    [
+      latest_target_version(series, :with_trailing_slash, :minimal),
+      latest_target_version(series, :without_trailing_slash, :minimal)
+    ].max
   end
 
   def mysql_community_rpm_version
@@ -260,9 +275,13 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
+    # Use the URL returns newer version because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but one of caches may return old version.
+    [
+      latest_target_version(series, :with_trailing_slash),
+      latest_target_version(series, :without_trailing_slash)
+    ].max
+
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
     index_html = URI.open(srpms_url) do |response|
