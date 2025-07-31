@@ -235,19 +235,19 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     [names.join("-"), series]
   end
 
-  def latest_target_version(series, trailing_slash, minimal_or_not = nil)
+  def latest_target_version(series, trailing_slash: false, minimal: false)
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
-    if minimal_or_not == :minimal
+    if minimal
       srpms_url =
         "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
     end
     pattern = "SRPMS\/mysql-community-"
-    if trailing_slash == :with_trailing_slash
+    if trailing_slash
       srpms_url << "/"
       pattern = "mysql-community-"
     end
-    if minimal_or_not == :minimal
+    if minimal
       pattern << "minimal-"
     end
 
@@ -268,8 +268,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     [
-      latest_target_version(series, :with_trailing_slash),
-      latest_target_version(series, :without_trailing_slash)
+      latest_target_version(series, trailing_slash: true),
+      latest_target_version(series, trailing_slash: false)
     ].max
   end
 
@@ -282,8 +282,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     [
-      latest_target_version(series, :with_trailing_slash, :minimal),
-      latest_target_version(series, :without_trailing_slash, :minimal)
+      latest_target_version(series, trailing_slash: true, minimal: true),
+      latest_target_version(series, trailing_slash: false, minimal: true)
     ].max
   end
 
