@@ -235,7 +235,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     [names.join("-"), series]
   end
 
-  def latest_target_version(series, trailing_slash: false, minimal: false)
+  def target_version(series, trailing_slash: false, minimal: false)
     path = minimal ? "docker/el/9/SRPMS" : "el/9/SRPMS"
     path += "/" if trailing_slash
     srpms_url =
@@ -255,14 +255,21 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     latest_target_srpm[/\A#{pattern}(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
+  def latest_target_version(target_versions)
+    Gem::Version.new(target_versions[0]) >= Gem::Version.new(target_versions[1])
+      ? Gem::Version.new(target_versions[0]) : Gem::Version.new(target_versions[1])
+  end
+
   def detect_mysql_community_rpm_version
     series = split_mysql_package[1]
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
-    [
-      latest_target_version(series, trailing_slash: true),
-      latest_target_version(series, trailing_slash: false)
-    ].max
+    latest_target_version(
+      [
+        target_version(series, trailing_slash: true),
+        target_version(series, trailing_slash: false)
+      ]
+    )
   end
 
   def mysql_community_rpm_version
@@ -273,10 +280,12 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     series = split_mysql_package[1]
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
-    [
-      latest_target_version(series, trailing_slash: true, minimal: true),
-      latest_target_version(series, trailing_slash: false, minimal: true)
-    ].max
+    latest_target_version (
+      [
+        target_version(series, trailing_slash: true, minimal: true),
+        target_version(series, trailing_slash: false, minimal: true)
+      ]
+    )
   end
 
   def mysql_community_minimal_rpm_version
