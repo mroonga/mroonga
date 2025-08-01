@@ -255,10 +255,10 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     latest_target_srpm[/\A#{pattern}(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
-  def latest_target_version(target_versions)
-    v1 = Gem::Version.new(target_versions[0])
-    v2 = Gem::Version.new(target_versions[1])
-    v1 >= v2 ? v1 : v2
+  def latest_target_version(version1, version2)
+    version1 = Gem::Version.new(version1)
+    version2 = Gem::Version.new(version2)
+    version1 >= version2 ? version1 : version2
   end
 
   def detect_mysql_community_rpm_version
@@ -266,10 +266,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     latest_target_version(
-      [
-        target_version(series, trailing_slash: true),
-        target_version(series, trailing_slash: false)
-      ]
+      target_version(series, trailing_slash: true),
+      target_version(series, trailing_slash: false)
     )
   end
 
@@ -282,10 +280,8 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
     latest_target_version(
-      [
-        target_version(series, trailing_slash: true, minimal: true),
-        target_version(series, trailing_slash: false, minimal: true)
-      ]
+      target_version(series, trailing_slash: true, minimal: true),
+      target_version(series, trailing_slash: false, minimal: true)
     )
   end
 
