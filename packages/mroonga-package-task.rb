@@ -256,8 +256,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def latest_target_version(target_versions)
-    Gem::Version.new(target_versions[0]) >= Gem::Version.new(target_versions[1])
-      ? Gem::Version.new(target_versions[0]) : Gem::Version.new(target_versions[1])
+    v1 = Gem::Version.new(target_versions[0])
+    v2 = Gem::Version.new(target_versions[1])
+    v1 >= v2 ? v1 : v2
   end
 
   def detect_mysql_community_rpm_version
