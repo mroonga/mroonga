@@ -256,6 +256,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
   end
 
   def latest_target_version(version1, version2)
+    unless version1.is_a?(String) && version2.is_a?(String)
+      raise ArgumentError,
+            "latest_target_version expects two version strings as arguments
+             : <#{version1}>, <#{version2}>"
+    end
     version1 = Gem::Version.new(version1)
     version2 = Gem::Version.new(version2)
     version1 >= version2 ? version1 : version2
