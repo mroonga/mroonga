@@ -240,7 +240,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     path += "/" if trailing_slash
     srpms_url =
       "https://repo.mysql.com/yum/mysql-#{series}-community/#{path}"
-    pattern =  trailing_slash ? "SRPMS\/mysql-community-" : "mysql-community-"
+    pattern = trailing_slash ? "SRPMS\/mysql-community-" : "mysql-community-"
     pattern += "minimal-" if minimal
 
     index_html = URI.open(srpms_url) do |response|
