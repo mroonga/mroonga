@@ -280,7 +280,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     series = split_mysql_package[1]
     # Use the URL returns newer version because the CDN caches both “…/SRPMS”
     # and "…/SRPMS/", but one of caches may return old version.
-    latest_target_version (
+    latest_target_version(
       [
         target_version(series, trailing_slash: true, minimal: true),
         target_version(series, trailing_slash: false, minimal: true)
