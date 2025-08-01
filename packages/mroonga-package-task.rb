@@ -235,13 +235,14 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     [names.join("-"), series]
   end
 
-  def detect_mysql_community_rpm_version
-    series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
+  def target_version(series, trailing_slash: false, minimal: false)
+    path = minimal ? "docker/el/9/SRPMS" : "el/9/SRPMS"
+    path += "/" if trailing_slash
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/#{path}"
+    pattern = trailing_slash ? "SRPMS\/mysql-community-" : "mysql-community-"
+    pattern += "minimal-" if minimal
+
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
@@ -249,9 +250,30 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
       index_html.
         scan(/href="(.+?)"/i).
         flatten.
-        grep(/\ASRPMS\/mysql-community-/).
+        grep(/\A#{pattern}/).
         last
-    latest_target_srpm[/\ASRPMS\/mysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+    latest_target_srpm[/\A#{pattern}(\d+\.\d+\.\d+-\d+)/, 1]
+  end
+
+  def latest_target_version(version1, version2)
+    unless version1.is_a?(String) && version2.is_a?(String)
+      raise ArgumentError,
+            "latest_target_version expects two version strings as arguments
+             : <#{version1}>, <#{version2}>"
+    end
+    version1 = Gem::Version.new(version1)
+    version2 = Gem::Version.new(version2)
+    version1 >= version2 ? version1 : version2
+  end
+
+  def detect_mysql_community_rpm_version
+    series = split_mysql_package[1]
+    # Use the URL returns newer version because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but one of caches may return old version.
+    latest_target_version(
+      target_version(series, trailing_slash: true),
+      target_version(series, trailing_slash: false)
+    )
   end
 
   def mysql_community_rpm_version
@@ -260,21 +282,12 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_community_minimal_rpm_version
     series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
-    srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
-    index_html = URI.open(srpms_url) do |response|
-      response.read
-    end
-    latest_target_srpm =
-      index_html.
-        scan(/href="(.+?)"/i).
-        flatten.
-        grep(/\ASRPMS\/mysql-community-minimal-/).
-        last
-    latest_target_srpm[/\ASRPMS\/mysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
+    # Use the URL returns newer version because the CDN caches both “…/SRPMS”
+    # and "…/SRPMS/", but one of caches may return old version.
+    latest_target_version(
+      target_version(series, trailing_slash: true, minimal: true),
+      target_version(series, trailing_slash: false, minimal: true)
+    )
   end
 
   def mysql_community_minimal_rpm_version
