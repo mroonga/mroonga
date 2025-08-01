@@ -239,7 +239,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     path = minimal ? "docker/el/9/SRPMS" : "el/9/SRPMS"
     path += "/" if trailing_slash
     srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/${path}"
+      "https://repo.mysql.com/yum/mysql-#{series}-community/#{path}"
     pattern =  trailing_slash ? "SRPMS\/mysql-community-" : "mysql-community-"
     pattern += "minimal-" if minimal
 
