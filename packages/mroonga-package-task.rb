@@ -255,15 +255,15 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     latest_target_srpm[/\A#{pattern}(\d+\.\d+\.\d+-\d+)/, 1]
   end
 
-  def latest_target_version(version1, version2)
-    unless version1.is_a?(String) && version2.is_a?(String)
+  def latest_target_version(version1_raw, version2_raw)
+    unless version1_raw.is_a?(String) && version2_raw.is_a?(String)
       raise ArgumentError,
             "latest_target_version expects two version strings as arguments
-             : <#{version1}>, <#{version2}>"
+             : <#{version1_raw}>, <#{version2_raw}>"
     end
-    version1 = Gem::Version.new(version1)
-    version2 = Gem::Version.new(version2)
-    version1 >= version2 ? version1 : version2
+    version1 = Gem::Version.new(version1_raw)
+    version2 = Gem::Version.new(version2_raw)
+    version1 >= version2 ? version1_raw : version2_raw
   end
 
   def detect_mysql_community_rpm_version
