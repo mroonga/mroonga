@@ -64,6 +64,12 @@ msgstr "最大インデックスサイズ: 256GiB"
 msgid "Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your table data matches to this limitations."
 msgstr "テーブルがこの制限に該当するかは ``SHOW TABLE STATUS`` や ``SHOW INDEX FROM ...`` などで確認してください。"
 
+msgid "Limitations about the primary key"
+msgstr "プライマリーキーに関する制限事項"
+
+msgid "Empty data (0 byte data) is not allowed in the primary key."
+msgstr "プライマリーキーに空データ（0バイトのデータ）は使用できません。"
+
 msgid "Limitations about the value of columns"
 msgstr "カラムの値に関する制限事項"
 
