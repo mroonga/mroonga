@@ -33,6 +33,10 @@ Keep in mind that these limitations may vary depending on conditions.
 
 Confirm by ``SHOW TABLE STATUS`` or ``SHOW INDEX FROM ...`` whether your table data matches to this limitations.
 
+Limitations about the primary key
+---------------------------------
+
+Empty data (0 byte data) is not allowed in the primary key.
 
 Limitations about the value of columns
 --------------------------------------
