@@ -259,6 +259,19 @@ jobs:
             if [ ${exit_status} -eq 0 ]; then
               break
             fi
+            if [ "${PACKAGE_TYPE}" = "yum" ] && [[ "${{ matrix.package }}" == "mysql-community-"*  ]]; then
+              export mysql_community_src_rpm_version=$(
+                docker container run --rm \
+                "ghcr.io/mroonga/package-ghcr.io/mroonga/mroonga-package:${{ matrix.package }}-mroonga-${{ matrix.os }}" \
+                dnf info mysql-community-devel | grep -oP '^Source\s*:\s*\K.*'
+              )
+            elif [ "${PACKAGE_TYPE}" = "yum" ] && [[ "${{ matrix.package }}" == "mariadb-"*  ]]; then
+              export mariadb_src_rpm_version=$(
+                docker container run --rm \
+                "ghcr.io/mroonga/package-ghcr.io/mroonga/mroonga-package:${{ matrix.package }}-mroonga-${{ matrix.os }}" \
+                dnf info MariaDB-devel | grep -oP '^Source\s*:\s*\K.*'
+              )
+            fi
           done
           rake docker:push || :
           exit ${exit_status}
