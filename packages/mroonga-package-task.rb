@@ -3,8 +3,7 @@ require "json"
 require "open-uri"
 require "pathname"
 require "pp"
-require "rexml/document"
-require "rexml/xpath"
+require "rexml"
 require "zlib"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
