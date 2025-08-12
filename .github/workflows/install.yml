@@ -24,8 +24,6 @@ jobs:
         include:
           # AlmaLinux 8
           - image: "images:almalinux/8"
-            package: mariadb-10.5
-          - image: "images:almalinux/8"
             package: mariadb-10.6
           - image: "images:almalinux/8"
             package: mariadb-10.11
@@ -39,8 +37,6 @@ jobs:
             package: percona-server-8.0
 
           # AlmaLinux 9
-          - image: "images:almalinux/9"
-            package: mariadb-10.5
           - image: "images:almalinux/9"
             package: mariadb-10.6
           - image: "images:almalinux/9"
