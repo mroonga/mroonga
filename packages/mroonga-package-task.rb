@@ -273,13 +273,9 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     @mysql_community_rpm_version ||= detect_mysql_community_rpm_version
   end
 
-  def detect_mysql_community_minimal_rpm_version
-    detect_mysql_community_rpm_version(minimal: true)
-  end
-
   def mysql_community_minimal_rpm_version
     @mysql_community_minimal_rpm_version ||=
-      detect_mysql_community_minimal_rpm_version
+      detect_mysql_community_rpm_version(minimal: true)
   end
 
   def detect_percona_server_rpm_version
