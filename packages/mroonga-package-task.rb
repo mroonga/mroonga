@@ -47,23 +47,22 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_rpm_version(base_url, name)
     repomd_url = base_url + "repodata/repomd.xml"
-    doc = REXML::Document.new(URI.open(repomd_url).read)
-    href = REXML::XPath.first(doc, "/repomd/data[@type='primary']").elements["location"].attributes["href"]
-
-    gzip_data = URI.open(base_url + href).read
-    xml = Zlib::GzipReader.new(StringIO.new(gzip_data)).read
-    doc = REXML::Document.new(xml)
-
-    version = "0-0"
-    doc.elements.each('metadata/package') do |elem|
-      next if elem.elements["name"].text != name
-      attrs = elem.elements["version"].attributes
-      current_version = "#{attrs['ver']}-#{attrs['rel'].split(".").first}"
-      if Gem::Version.new(current_version) > Gem::Version.new(version)
-        version = current_version
+    repomd_doc = URI.open(repomd_url) do |repomd|
+      REXML::Document.new(repomd)
+    end
+    primary_xml_gz_href = repomd_doc.elements["/repomd/data[@type='primary']/location"]["href"]
+    primary_doc = URI.open(base_url + primary_xml_gz_href) do |primary_xml_gz|
+      Zlib::GzipReader.wrap(primary_xml_gz) do |reader|
+        REXML::Document.new(reader.read)
       end
     end
-    version
+    versions = primary_doc.elements.to_a("metadata/package[name='#{name}']/version").map do |version|
+      ver = version["ver"]
+      # "1.el9" -> "1"
+      rel_without_dist = version["rel"].split(".").first
+      "#{ver}-#{rel_without_dist}"
+    end
+    versions.sort_by {|version| Gem::Version.new(version)}.last
   end
 
   def detect_mysql_version_oracle(distribution, code_name)
