@@ -210,7 +210,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: release-source
       - name: Update version
@@ -305,7 +305,7 @@ jobs:
     env:
       BUNDLER_GEMFILE: doc/Gemfile
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: release-source
       - name: Extract
@@ -342,7 +342,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           path: packages
           pattern: packages-*
