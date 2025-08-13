@@ -3,6 +3,7 @@ require "json"
 require "open-uri"
 require "pathname"
 require "pp"
+require "rexml"
 require "zlib"
 
 groonga_repository = ENV["GROONGA_REPOSITORY"]
@@ -42,6 +43,26 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_version(distribution, code_name)
     __send__("detect_mysql_version_#{distribution}", code_name)
+  end
+
+  def detect_rpm_version(base_url, name)
+    repomd_url = base_url + "repodata/repomd.xml"
+    repomd_doc = URI.open(repomd_url) do |repomd|
+      REXML::Document.new(repomd)
+    end
+    primary_xml_gz_href = repomd_doc.elements["/repomd/data[@type='primary']/location"]["href"]
+    primary_doc = URI.open(base_url + primary_xml_gz_href) do |primary_xml_gz|
+      Zlib::GzipReader.wrap(primary_xml_gz) do |reader|
+        REXML::Document.new(reader.read)
+      end
+    end
+    versions = primary_doc.elements.to_a("metadata/package[name='#{name}']/version").map do |version|
+      ver = version["ver"]
+      # "1.el9" -> "1"
+      rel_without_dist = version["rel"].split(".").first
+      "#{ver}-#{rel_without_dist}"
+    end
+    versions.sort_by {|version| Gem::Version.new(version)}.last
   end
 
   def detect_mysql_version_oracle(distribution, code_name)
@@ -217,17 +238,22 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     @original_archive_name
   end
 
+  def detect_mariadb_rpm_version
+    series = @mysql_package.split("-", 2)[1]
+    base_url = "https://yum.mariadb.org/#{series}/rhel/9/x86_64/"
+    detect_rpm_version(base_url, "MariaDB")
+  end
+
+  def mariadb_rpm_version
+    @mariadb_rpm_version ||= detect_mariadb_rpm_version
+  end
+
   def detect_mariadb_release_yum
-    "1" # We can detect this when MariaDB starts using other value.
+    mariadb_rpm_version.split("-")[1]
   end
 
   def detect_mariadb_version_yum
-    series = @mysql_package.split("-", 2)[1]
-    api_url = "https://downloads.mariadb.org/rest-api/mariadb/#{series}"
-    releases = URI.open(api_url) do |response|
-      JSON.parse(response.read)["releases"]
-    end
-    releases.first[0]
+    mariadb_rpm_version.split("-")[0]
   end
 
   def split_mysql_package
@@ -235,51 +261,20 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     [names.join("-"), series]
   end
 
-  def detect_mysql_community_rpm_version
+  def detect_mysql_community_rpm_version(minimal: false)
+    name = split_mysql_package[0]
     series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
-    srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/el/9/SRPMS"
-    index_html = URI.open(srpms_url) do |response|
-      response.read
-    end
-    latest_target_srpm =
-      index_html.
-        scan(/href="(.+?)"/i).
-        flatten.
-        grep(/\ASRPMS\/mysql-community-/).
-        last
-    latest_target_srpm[/\ASRPMS\/mysql-community-(\d+\.\d+\.\d+-\d+)/, 1]
+    base_url = "https://repo.mysql.com/yum/mysql-#{series}-community/#{minimal ? "docker/" : ""}el/9/SRPMS/"
+    detect_rpm_version(base_url, name)
   end
 
   def mysql_community_rpm_version
     @mysql_community_rpm_version ||= detect_mysql_community_rpm_version
   end
 
-  def detect_mysql_community_minimal_rpm_version
-    series = split_mysql_package[1]
-    # Use the URL without a trailing slash because the CDN caches both “…/SRPMS”
-    # and "…/SRPMS/", but the cache for the "/SRPMS/" path hasn't been expired
-    # yet. Using the no‑slash URL ensures we get the latest listing.
-    srpms_url =
-      "https://repo.mysql.com/yum/mysql-#{series}-community/docker/el/9/SRPMS"
-    index_html = URI.open(srpms_url) do |response|
-      response.read
-    end
-    latest_target_srpm =
-      index_html.
-        scan(/href="(.+?)"/i).
-        flatten.
-        grep(/\ASRPMS\/mysql-community-minimal-/).
-        last
-    latest_target_srpm[/\ASRPMS\/mysql-community-minimal-(\d+\.\d+\.\d+-\d+)/, 1]
-  end
-
   def mysql_community_minimal_rpm_version
     @mysql_community_minimal_rpm_version ||=
-      detect_mysql_community_minimal_rpm_version
+      detect_mysql_community_rpm_version(minimal: true)
   end
 
   def detect_percona_server_rpm_version
