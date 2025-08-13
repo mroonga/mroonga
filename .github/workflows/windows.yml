@@ -37,7 +37,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - mariadb-release: "10.5"
           - mariadb-release: "10.6"
           - mariadb-release: "10.11"
           - mariadb-release: "11.4"

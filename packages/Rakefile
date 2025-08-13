@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 packages = [
-  "mariadb-10.5-mroonga",
   "mariadb-10.6-mroonga",
   "mariadb-10.11-mroonga",
   "mariadb-11.4-mroonga",
