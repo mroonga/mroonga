@@ -276,7 +276,7 @@ static mysql_mutex_t* mrn_LOCK_open;
     while (false)
 #endif
 
-#if MYSQL_VERSION_ID >= 100504 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_COLUMN(name, type_length, type_id, type_object)                  \
     Show::Column((name), (type_object), NOT_NULL)
 #  define MRN_COLUMN_END() Show::CEnd()
@@ -288,8 +288,7 @@ static mysql_mutex_t* mrn_LOCK_open;
 #  define MRN_COLUMN_END() MRN_COLUMN(NULL, 0, MYSQL_TYPE_LONG, )
 #endif
 
-#if !defined(MRN_MARIADB_P) ||                                                 \
-  MYSQL_VERSION_ID < 100500 && defined(MRN_MARIADB_P)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLERTON_HAVE_STATE
 #endif
 
@@ -1515,7 +1514,7 @@ static void mrn_hton_drop_database(handlerton* hton, char* path)
   DBUG_VOID_RETURN;
 }
 
-#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
+#ifndef MRN_MARIADB_P
 #  define MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
 #endif
 

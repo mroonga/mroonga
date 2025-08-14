@@ -380,8 +380,7 @@ typedef uchar* mrn_write_row_buf_t;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100525 && MYSQL_VERSION_ID < 100600) ||                \
-   (MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||                \
+  ((MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||                \
    (MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110402))
 #  define MRN_HANDLER_ENABLE_INDEXES_PARAMETERS       key_map map, bool persist
@@ -438,8 +437,7 @@ using mrn_io_and_cpu_cost = double;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100527 && MYSQL_VERSION_ID < 100600) ||                \
-   (MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||                \
+  ((MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||                \
    (MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110400))
 using mrn_handler_referenced_by_foreign_key_bool = bool;
