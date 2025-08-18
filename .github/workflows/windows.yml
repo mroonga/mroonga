@@ -217,7 +217,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=install ^
             -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ^
             -DCONNECT_WITH_LIBXML2=OFF ^
-            -DINSTALL_RUNTIME_DEPENDENCIES_DEFAULT=OFF ^
+            -DINSTALL_RUNTIME_DEPENDENCIES=OFF ^
             -DMRN_GROONGA_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
