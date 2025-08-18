@@ -208,7 +208,8 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
-          # -DINSTALL_RUNTIME_DEPENDENCIES_DEFAULT=OFF is workaround for: https://jira.mariadb.org/browse/MDEV-36904
+          # -DINSTALL_RUNTIME_DEPENDENCIES=OFF is workaround for: https://github.com/mroonga/mroonga/issues/967
+          # We can remove this workaround after supporting vcpkg in Groonga.
           cmake ^
             -S mariadb ^
             -B build ^
