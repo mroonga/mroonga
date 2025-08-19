@@ -158,12 +158,9 @@ typedef MYSQL_CONST_LEX_STRING mrn_thd_lex_string;
 typedef MYSQL_LEX_STRING mrn_thd_lex_string;
 #endif
 
-#if defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504
+#ifdef MRN_MARIADB_P
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags)   \
     init_alloc_root(mrn_memory_key, root, block_size, pre_alloc_size, flags)
-#elif defined(MRN_MARIADB_P)
-#  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags)   \
-    init_alloc_root(root, name, block_size, pre_alloc_size, flags)
 #elif MYSQL_VERSION_ID >= 80027
 #  define mrn_init_alloc_root(root, name, block_size, pre_alloc_size, flags)   \
     ::new ((void*)root) MEM_ROOT(mrn_memory_key, block_size)
@@ -291,7 +288,7 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_HAVE_SQL_DERROR_H
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 100504)
+#ifdef MRN_MARIADB_P
 #  define MRN_HAVE_SQL_TYPE_GEOM_H
 #endif
 
@@ -400,21 +397,13 @@ typedef uint mrn_srid;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100504
-#    define mrn_init_sql_alloc(thd, name, mem_root)                            \
-      init_sql_alloc(mrn_memory_key,                                           \
-                     mem_root,                                                 \
-                     TABLE_ALLOC_BLOCK_SIZE,                                   \
-                     0,                                                        \
-                     MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
-#  else
-#    define mrn_init_sql_alloc(thd, name, mem_root)                            \
-      init_sql_alloc(mem_root,                                                 \
-                     name,                                                     \
-                     TABLE_ALLOC_BLOCK_SIZE,                                   \
-                     0,                                                        \
-                     MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
-#  endif
+#  define mrn_init_sql_alloc(thd, name, mem_root)                              \
+    init_sql_alloc(mrn_memory_key,                                             \
+                   mem_root,                                                   \
+                   TABLE_ALLOC_BLOCK_SIZE,                                     \
+                   0,                                                          \
+                   MYF(thd->slave_thread ? 0 : MY_THREAD_SPECIFIC))
+
 #else
 #  define mrn_init_sql_alloc(thd, name, mem_root)                              \
     init_sql_alloc(mrn_memory_key, mem_root, TABLE_ALLOC_BLOCK_SIZE, 0)
@@ -885,8 +874,7 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100526 && MYSQL_VERSION_ID < 100600) ||                \
-   (MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||                \
+  ((MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||                \
    (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110403))
 #  define MRN_GET_TABLE_NAME(query_tables) (query_tables->get_table_name().str)
