@@ -17,29 +17,47 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.14 - 2025-07-30"
-msgstr "15.14リリース - 2025-07-30"
+msgid "Release 15.16 - 2025-09-03"
+msgstr "15.16リリース - 2025-09-03"
 
 msgid "Improvements"
 msgstr "改良"
 
-msgid "Added support for MySQL Community 8.0.43"
-msgstr "MySQL Community8.0.43をサポート"
+msgid "Added support for MySQL Community 8.0.43 on AlmaLinux, Debian, and Ubuntu"
+msgstr "AlmaLinux、Debian、UbuntuのMySQL Community 8.0.43をサポート"
 
 msgid "This is the latest MySQL Community 8.0 release."
 msgstr "これは最新のMySQL Community 8.0のリリースです。"
 
-msgid "Added support for MySQL Community 8.4.6"
-msgstr "MySQL Community8.4.6をサポート"
+msgid "Added support for MySQL Community 8.4.6 on AlmaLinux, Debian, and Ubuntu"
+msgstr "AlmaLinux、Debian、UbuntuのMySQL Community8.4.6をサポート"
 
 msgid "This is the latest MySQL Community 8.4 release."
 msgstr "これは最新のMySQL Community 8.4のリリースです。"
 
-msgid "Added support for MySQL 8.0.42-0ubuntu0.22.04.2 on Ubuntu"
-msgstr "UbuntuのMySQL 8.0.42-0ubuntu0.22.04.2をサポート"
+msgid "Dropped support for MariaDB 10.5"
+msgstr "MariaDB 10.5のサポートをやめました。"
 
-msgid "This is the latest MySQL 8.0 release."
-msgstr "これは最新のMySQL 8.0のリリースです。"
+msgid "It will reach EOL."
+msgstr "MariaDB 10.5は、EOLになったためです。"
+
+msgid "Added documentation for limitations of the primary key"
+msgstr "プライマリーキーの制限事項をドキュメントに追加しました。"
+
+msgid "[[MDEV-37317]( https://jira.mariadb.org/browse/MDEV-37317 )][Reported by Elena Stepanova]"
+msgstr "[[MDEV-37317]( https://jira.mariadb.org/browse/MDEV-37317 )][Elena Stepanovaさんの報告]"
+
+msgid "We added the following description in documentation of {doc}`/reference/limitations`:"
+msgstr "{doc}`/reference/limitations` のドキュメントに以下の内容を追記しました:"
+
+msgid "\"Empty data (0 byte data) is not allowed in the primary key\""
+msgstr "\"プライマリーキーに空データ（0バイトのデータ）は使用できません\""
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Elena Stepanova"
+msgstr "Elena Stepanovaさん"
 
 msgid "Release 15.11 - 2025-06-06"
 msgstr "15.11リリース - 2025-06-06"
