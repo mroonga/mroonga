@@ -36,7 +36,7 @@ msgid "This is the latest MySQL Community 8.4 release."
 msgstr "これは最新のMySQL Community 8.4のリリースです。"
 
 msgid "Dropped support for MariaDB 10.5"
-msgstr "MariaDB 10.5のサポートをやめました。"
+msgstr "MariaDB 10.5のサポートを終了"
 
 msgid "It will reach EOL."
 msgstr "MariaDB 10.5は、EOLになったためです。"
