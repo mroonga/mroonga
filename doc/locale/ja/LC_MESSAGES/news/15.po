@@ -38,8 +38,8 @@ msgstr "これは最新のMySQL Community 8.4のリリースです。"
 msgid "Dropped support for MariaDB 10.5"
 msgstr "MariaDB 10.5のサポートを終了"
 
-msgid "It will reach EOL."
-msgstr "MariaDB 10.5は、EOLになったためです。"
+msgid "Support for MariaDB 10.5 has been dropped because it has reached EOL."
+msgstr "MariaDB 10.5がEOLになったため、サポートをやめました。"
 
 msgid "Added documentation for limitations of the primary key"
 msgstr "プライマリーキーの制限事項をドキュメントに追加しました。"
