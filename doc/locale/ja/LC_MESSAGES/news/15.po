@@ -42,7 +42,7 @@ msgid "Support for MariaDB 10.5 has been dropped because it has reached EOL."
 msgstr "MariaDB 10.5がEOLになったため、サポートをやめました。"
 
 msgid "Added documentation for limitations of the primary key"
-msgstr "プライマリーキーの制限事項をドキュメントに追加しました。"
+msgstr "プライマリーキーの制限事項をドキュメントに追加"
 
 msgid "[[MDEV-37317]( https://jira.mariadb.org/browse/MDEV-37317 )][Reported by Elena Stepanova]"
 msgstr "[[MDEV-37317]( https://jira.mariadb.org/browse/MDEV-37317 )][Elena Stepanovaさんの報告]"
