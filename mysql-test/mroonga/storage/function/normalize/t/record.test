@@ -24,9 +24,11 @@ DROP TABLE IF EXISTS memos;
 --enable_query_log
 --enable_warnings
 
+SET NAMES utf8mb4;
+
 CREATE TABLE memos (
   content text
-);
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO memos VALUES ('aBcＡｂＣ㍑');
 

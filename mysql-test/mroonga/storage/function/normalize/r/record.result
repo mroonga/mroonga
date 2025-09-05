@@ -1,6 +1,7 @@
+SET NAMES utf8mb4;
 CREATE TABLE memos (
 content text
-);
+) DEFAULT CHARSET=utf8mb4;
 INSERT INTO memos VALUES ('aBcＡｂＣ㍑');
 SELECT mroonga_normalize(content) FROM memos;
 mroonga_normalize(content)
