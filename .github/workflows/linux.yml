@@ -39,7 +39,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: 3
       - name: Install dependencies
@@ -315,7 +315,7 @@ jobs:
         with:
           ruby-version: ruby
           bundler-cache: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: 3
           cache: pip
