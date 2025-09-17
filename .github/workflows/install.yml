@@ -93,7 +93,7 @@ jobs:
       - name: Install Mroonga
         run: |
           case "${{ matrix.image }}" in
-            images:ubuntu/*)
+            images:ubuntu/* | images:debian/*)
               package_type=apt
               ;;
             *)
