@@ -52,6 +52,10 @@ jobs:
           - image: "images:almalinux/9"
             package: percona-server-8.0
 
+          # Debian 12
+          - image: "images:debian/12"
+            package: mariadb
+
           # Ubuntu 22.04
           - image: "images:ubuntu/22.04"
             package: mariadb
