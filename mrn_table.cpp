@@ -864,6 +864,9 @@ MRN_SHARE *mrn_get_share(const char *table_name, TABLE *table, int *error)
       wrap_table_share->keys = share->wrap_keys;
       wrap_table_share->key_info = share->wrap_key_info;
       wrap_table_share->primary_key = share->wrap_primary_key;
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
+      wrap_table_share->total_keys = share->wrap_keys;
+#endif
       wrap_table_share->keys_in_use.init(share->wrap_keys);
       wrap_table_share->keys_for_keyread.init(share->wrap_keys);
 #  ifdef MRN_TABLE_SHARE_HAVE_LOCK_SHARE
