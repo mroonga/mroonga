@@ -5,14 +5,20 @@ set -exu
 package=$1
 
 sudo apt update
-sudo apt install -y -V software-properties-common lsb-release
-sudo add-apt-repository -y universe
-sudo add-apt-repository \
-     "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
+sudo apt install -V -y lsb-release wget
 
-sudo add-apt-repository -y ppa:groonga/ppa
+distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
+code_name=$(lsb_release --codename --short)
+
+wget https://packages.apache.org/artifactory/arrow/${distribution}/apache-arrow-apt-source-latest-${code_name}.deb
+sudo apt install -y -V ./apache-arrow-apt-source-latest-${code_name}.deb
+rm -f apache-arrow-apt-source-latest-${code_name}.deb
+wget https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
+sudo apt install -y -V ./groonga-apt-source-latest-${code_name}.deb
+rm -f groonga-apt-source-latest-${code_name}.deb
+
 sudo apt update
-
 sudo apt install -V -y ${package}
+sudo apt install -y -V groonga-tokenizer-mecab
 
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
