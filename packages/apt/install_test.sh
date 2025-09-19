@@ -5,13 +5,12 @@ set -exu
 package=$1
 
 sudo apt update
-sudo apt install -V -y lsb-release
+sudo apt install -V -y lsb-release wget
 
 distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z')
 code_name=$(lsb_release --codename --short)
 
-sudo apt install -y -V wget
-wget https://packages.apache.org/artifactory/arrow/${distribution}/apache-arrow-apt-source-latest-${code_name}.deb
+wget https://apache.jfrog.io/artifactory/arrow/${distribution}/apache-arrow-apt-source-latest-${code_name}.deb
 sudo apt install -y -V ./apache-arrow-apt-source-latest-${code_name}.deb
 wget https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb
 sudo apt install -y -V ./groonga-apt-source-latest-${code_name}.deb
