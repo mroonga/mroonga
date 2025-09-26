@@ -17,11 +17,26 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.16 - 2025-09-03"
-msgstr "15.16リリース - 2025-09-03"
+msgid "Release 15.17 - 2025-09-29"
+msgstr "15.17リリース - 2025-09-29"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for MariaDB 10.11.14 on Debian"
+msgstr "DebianのMariaDB 10.11.14をサポート"
+
+msgid "This is the latest MariaDB 10.11 release."
+msgstr "これらは最新のMariaDB 10.11のリリースです。"
+
+msgid "Added support for MySQL 8.0.43 on Ubuntu"
+msgstr "UbuntuのMySQL 8.0.43をサポート"
+
+msgid "This is the latest MySQL 8.0.43 release."
+msgstr "これは最新のMySQL 8.0.43のリリースです。"
+
+msgid "Release 15.16 - 2025-09-03"
+msgstr "15.16リリース - 2025-09-03"
 
 msgid "Added support for MySQL Community 8.0.43 on AlmaLinux, Debian, and Ubuntu"
 msgstr "AlmaLinux、Debian、UbuntuのMySQL Community 8.0.43をサポート"
