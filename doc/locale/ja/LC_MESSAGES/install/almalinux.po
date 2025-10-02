@@ -40,14 +40,14 @@ msgstr ":doc:`/tutorial/storage` ストレージモードは以下の機能が�
 msgid "The feature of relevant to the optimization."
 msgstr "最適化関連の機能"
 
-msgid "Install::"
-msgstr "インストール::"
+msgid "Install:"
+msgstr "インストール:"
 
 msgid "If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package."
 msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい場合はgroonga-tokenizer-mecabをインストールしてください。"
 
-msgid "Install groonga-tokenizer-mecab package::"
-msgstr "groonga-tokenizer-mecabをインストール::"
+msgid "Install groonga-tokenizer-mecab package:"
+msgstr "groonga-tokenizer-mecabをインストール:"
 
 msgid "AlmaLinux 8 (with Percona Server 8.0 package)"
 msgstr "AlmaLinux 8（Percona Server 8.0パッケージを利用）"

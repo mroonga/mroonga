@@ -21,24 +21,29 @@ Mroonga 11.10 release.
 
      * The feature of relevant to the optimization.
 
-Install::
+Install:
 
-  % sudo dnf -y module disable mysql
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el8.rpm
-  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,powertools mysql-community-8.0-mroonga
-  (% sudo systemctl start mysqld)
-  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
-  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+.. code-block:: console
+
+   $ sudo dnf -y module disable mysql
+   $ sudo dnf install -y  https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el8.rpm
+   $ sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,powertools mysql-community-8.0-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf -y module enable mysql
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf -y module disable mysql
+.. code-block:: console
+
+   $ sudo dnf -y module enable mysql
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf -y module disable mysql
 
 .. _almalinux-8-percona-8-0:
 
@@ -48,22 +53,27 @@ AlmaLinux 8 (with Percona Server 8.0 package)
 You can use Percona Server packages version 8.0 on AlmaLinux 8
 since Mroonga 11.10 release.
 
-Install::
+Install:
 
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-  % sudo percona-release setup ps80
-  % sudo dnf install -y --enablerepo=epel,powertools percona-server-8.0-mroonga
-  (% sudo systemctl start mysqld)
-  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
-  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+   $ sudo percona-release setup ps80
+   $ sudo dnf install -y --enablerepo=epel,powertools percona-server-8.0-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-8-mariadb-10-6:
 
@@ -81,24 +91,29 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
   gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck = 1
 
-Install::
+Install:
 
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.6-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+   $ sudo dnf module -y disable mariadb
+   $ sudo dnf module -y disable mysql
+   $ sudo dnf install -y --enablerepo=powertools mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y --enablerepo=powertools mariadb-10.6-mroonga
+   ($ sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf module -y enable mysql
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
+.. code-block:: console
+
+   $ sudo dnf module -y enable mysql
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-10-11:
 
@@ -116,24 +131,29 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
   gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck = 1
 
-Install::
+Install:
 
-  % sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
-  % sudo dnf module -y disable mariadb
-  % sudo dnf module -y disable mysql
-  % sudo dnf install -y --enablerepo=powertools mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y --enablerepo=powertools mariadb-10.11-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
+   $ sudo dnf module -y disable mariadb
+   $ sudo dnf module -y disable mysql
+   $ sudo dnf install -y --enablerepo=powertools mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y --enablerepo=powertools mariadb-10.11-mroonga
+   ($ sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf module -y enable mysql
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
-  % sudo dnf module -y disable mysql
+.. code-block:: console
+
+   $ sudo dnf module -y enable mysql
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+   $ sudo dnf module -y disable mysql
 
 .. _almalinux-8-mariadb-11-4:
 
@@ -155,6 +175,7 @@ Install:
 
 .. code-block:: console
 
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm
    $ sudo dnf install -y https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm
    $ sudo dnf module -y disable mariadb
    $ sudo dnf module -y disable mysql
@@ -191,22 +212,26 @@ Mroonga 12.12 release.
 
      * The feature of relevant to the optimization.
 
-Install::
+Install:
 
-  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
-  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el9.rpm
-  % sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,crb mysql-community-8.0-mroonga
-  (% sudo systemctl start mysqld)
-  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
-  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.mysql.com/mysql80-community-release-el9.rpm
+   $ sudo dnf install --disablerepo=AppStream -y --enablerepo=epel,crb mysql-community-8.0-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-9-percona-8-0:
 
@@ -216,23 +241,27 @@ AlmaLinux 9 (with Percona Server 8.0 package)
 You can use Percona Server packages version 8.0 on AlmaLinux 9
 since Mroonga 12.12 release.
 
-Install::
+Install:
 
-  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
-  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-  % sudo percona-release setup ps80
-  % sudo dnf install -y --enablerepo=epel percona-server-8.0-mroonga
-  (% sudo systemctl start mysqld)
-  (% tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
-  (% sudo mysqladmin -u root --password="${tmp_password}" password)
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+   $ sudo percona-release setup ps80
+   $ sudo dnf install -y --enablerepo=epel percona-server-8.0-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-9-mariadb-10-6:
 
@@ -250,21 +279,25 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
   gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck = 1
 
-Install::
+Install:
 
-  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
-  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y mariadb-10.6-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y mariadb-10.6-mroonga
+   ($ sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-9-mariadb-10-11:
 
@@ -282,21 +315,25 @@ Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::
   gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
   gpgcheck = 1
 
-Install::
+Install:
 
-  % sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
-  % sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
-  % sudo dnf install -y mariadb-server
-  % sudo systemctl start mariadb
-  % sudo dnf install -y mariadb-10.11-mroonga
-  (% sudo mysqladmin -u root password 'new-password')
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y mariadb-server
+   $ sudo systemctl start mariadb
+   $ sudo dnf install -y mariadb-10.11-mroonga
+   ($ sudo mysqladmin -u root password 'new-password')
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
 tokenizer, install groonga-tokenizer-mecab package.
 
-Install groonga-tokenizer-mecab package::
+Install groonga-tokenizer-mecab package:
 
-  % sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
 .. _almalinux-9-mariadb-11-4:
 
@@ -318,7 +355,7 @@ Install:
 
 .. code-block:: console
 
-   $ sudo dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
    $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
    $ sudo dnf install -y mariadb-server
    $ sudo systemctl start mariadb
