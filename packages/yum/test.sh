@@ -13,10 +13,7 @@ os=$(cut -d: -f4 /etc/system-release-cpe)
 
 major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
 case ${major_version} in
-  9)
-    DNF="dnf --enablerepo=crb"
-    ;;
-  *)
+  8)
     if [ ${os} = "linux" ]; then
       DNF="dnf --enablerepo=ol${major_version}_codeready_builder"
       os=almalinux # Because we can use packages for AlmaLinux on Oracle Linux.
@@ -26,6 +23,9 @@ case ${major_version} in
     sudo ${DNF} update -y
     sudo dnf module -y disable mariadb
     sudo dnf module -y disable mysql
+    ;;
+  *)
+    DNF="dnf --enablerepo=crb"
     ;;
 esac
 
