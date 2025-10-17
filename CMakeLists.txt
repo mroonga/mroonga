@@ -272,7 +272,10 @@ set(MRN_ALL_SOURCES
   ${LIBMRN_NO_MYSQL_SOURCES}
   ${LIBMRN_NEED_MYSQL_SOURCES})
 
+mrn_build_flag("-Wno-frame-larger-than")
 if(MRN_BUNDLED)
+  set_source_files_properties(${MRN_ALL_SOURCES} PROPERTIES
+    COMPILE_FLAGS "${MRN_CXX_COMPILE_FLAGS}")
   mysql_add_plugin(mroonga
     ${MRN_ALL_SOURCES}
     STORAGE_ENGINE MODULE_ONLY
