@@ -635,18 +635,18 @@ public:
            const dd::Table* table_def
 #endif
            ) override;
-  int info(uint flag); // required
+  int info(uint flag) override; // required
 
-  uint lock_count() const;
+  uint lock_count() const override;
   THR_LOCK_DATA** store_lock(THD* thd, // required
                              THR_LOCK_DATA** to,
-                             enum thr_lock_type lock_type);
-  int external_lock(THD* thd, int lock_type);
+                             enum thr_lock_type lock_type) override;
+  int external_lock(THD* thd, int lock_type) override;
 
-  int rnd_init(bool scan); // required
-  int rnd_end();
-  void position(const uchar* record); // required
-  int extra_opt(enum ha_extra_function operation, ulong cache_size);
+  int rnd_init(bool scan) override; // required
+  int rnd_end() override;
+  void position(const uchar* record) override; // required
+  int extra_opt(enum ha_extra_function operation, ulong cache_size) override;
 
   int delete_table(const char* name
 #ifdef MRN_HANDLER_DELETE_TABLE_HAVE_TABLE_DEFINITION
@@ -657,7 +657,7 @@ public:
   int write_row(mrn_write_row_buf_t buf) override;
   int update_row(const uchar* old_data,
                  mrn_update_row_new_data_t new_data) override;
-  int delete_row(const uchar* buf);
+  int delete_row(const uchar* buf) override;
 
   uint max_supported_record_length() const override;
   uint max_supported_keys() const override;
