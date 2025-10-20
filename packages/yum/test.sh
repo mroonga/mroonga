@@ -11,7 +11,7 @@ mysql_version=$(echo "${package}" | grep -o '[0-9]*\.[0-9]*')
 
 os=$(cut -d: -f4 /etc/system-release-cpe)
 
-major_version=$(cut -d: -f5 /etc/system-release-cpe | grep -o "^[0-9]")
+major_version=$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)
 case ${major_version} in
   8)
     if [ ${os} = "linux" ]; then
