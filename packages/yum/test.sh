@@ -188,7 +188,7 @@ sudo ${DNF} install -y \
   patch
 
 case ${os}-${major_version} in
-  almalinux-9)
+  almalinux-9 | almalinux-10)
     sudo ${DNF} install -y perl-lib
     ;;
 esac
