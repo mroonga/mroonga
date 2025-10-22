@@ -297,7 +297,7 @@ typedef HASH mrn_table_def_cache_type;
 #  define MRN_HAVE_SRID
 #  include <sql/gis/srid.h>
 using mrn_srid = gis::srid_t;
-#  define MRN_FIELD_GEOM_GET_SRID(field)                                     \
+#  define MRN_FIELD_GEOM_GET_SRID(field)                                       \
     (field->get_srid().has_value() ? field->get_srid().value() : 0)
 #  define MRN_HAVE_SRS
 #elif (MYSQL_VERSION_ID >= 110800 || defined(HAVE_SPATIAL))
