@@ -272,6 +272,7 @@ set(MRN_ALL_SOURCES
   ${LIBMRN_NO_MYSQL_SOURCES}
   ${LIBMRN_NEED_MYSQL_SOURCES})
 
+mrn_build_flag("-Wno-frame-larger-than")
 if(MRN_BUNDLED)
   mysql_add_plugin(mroonga
     ${MRN_ALL_SOURCES}
@@ -280,6 +281,8 @@ if(MRN_BUNDLED)
   if(NOT TARGET mroonga)
     return()
   endif()
+  separate_arguments(MRN_CXX_COMPILE_FLAGS_LIST NATIVE_COMMAND "${MRN_CXX_COMPILE_FLAGS}")
+  target_compile_options(mroonga PRIVATE ${MRN_CXX_COMPILE_FLAGS_LIST})
 else()
   add_library(mroonga MODULE ${MRN_ALL_SOURCES})
 
