@@ -97,7 +97,12 @@ extern "C" {
 #  define MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
 #endif
 
-#if (defined(MRN_MARIADB_P) && MYSQL_VERSION_ID >= 101112)
+#if (defined(MRN_MARIADB_P) &&                                                 \
+     ((MYSQL_VERSION_ID >= 101112 && MYSQL_VERSION_ID < 101200) ||             \
+      (MYSQL_VERSION_ID >= 110406 && MYSQL_VERSION_ID < 110500) ||             \
+      (MYSQL_VERSION_ID >= 110802 && MYSQL_VERSION_ID < 110900) ||             \
+      (MYSQL_VERSION_ID >= 120001 && MYSQL_VERSION_ID < 120100) ||             \
+      (MYSQL_VERSION_ID >= 120101 && MYSQL_VERSION_ID < 120200)))
 #  define MRN_HAVE_HA_EXTRA_ABORT_ALTER_COPY
 #endif
 
