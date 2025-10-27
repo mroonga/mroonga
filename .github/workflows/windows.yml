@@ -263,7 +263,7 @@ jobs:
             -DestinationPath "${Env:ARTIFACT_NAME}.zip"
 
       # Artifact
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ${{ env.UPLOAD_ARTIFACT_NAME }}
           path: ${{ env.ARTIFACT_NAME }}.zip
