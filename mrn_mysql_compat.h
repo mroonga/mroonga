@@ -896,6 +896,7 @@ using TABLE_LIST = Table_ref;
 // the warn_deprecated<>() definition for details.
 #  define MRN_WARN_DEPRECATED(thd, what, to)                                   \
     (warn_deprecated<999999>(thd, what, to))
+#  define MRN_HAVE_SET_OPTIMAIZER_COSTS
 #else
 #  define MRN_WARN_DEPRECATED(thd, what, to)                                   \
     (push_warning_printf(thd,                                                  \
@@ -904,10 +905,6 @@ using TABLE_LIST = Table_ref;
                          MRN_GET_ERR_MSG(ER_WARN_DEPRECATED_SYNTAX),           \
                          what,                                                 \
                          to))
-#endif
-
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110400)
-#  define MRN_HAVE_SET_OPTIMAIZER_COSTS
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
