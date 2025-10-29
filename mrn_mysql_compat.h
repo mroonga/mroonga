@@ -907,7 +907,7 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110400)
-#  define MRN_HAVE_SET_OPTIMAIZE_COSTS
+#  define MRN_HAVE_SET_OPTIMAIZER_COSTS
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
