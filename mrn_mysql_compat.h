@@ -908,6 +908,7 @@ using TABLE_LIST = Table_ref;
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib()
+#  define MRN_NEED_SET_OPTIMAIZE_COSTS
 #else
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
 #endif
