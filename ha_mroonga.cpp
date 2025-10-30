@@ -5241,6 +5241,9 @@ int ha_mroonga::wrapper_open(const char* name,
 #  else
     error = wrap_handler->ha_open(table, name, mode, open_options);
 #  endif
+#  ifdef MRN_HAVE_SET_OPTIMAIZER_COSTS
+    wrap_handler->set_optimizer_costs(ha_thd());
+#  endif
   } else {
     if (!(wrap_handler =
             parent_for_clone->wrap_handler->clone(name, mem_root_for_clone))) {

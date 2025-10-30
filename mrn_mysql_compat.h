@@ -896,6 +896,7 @@ using TABLE_LIST = Table_ref;
 // the warn_deprecated<>() definition for details.
 #  define MRN_WARN_DEPRECATED(thd, what, to)                                   \
     (warn_deprecated<999999>(thd, what, to))
+#  define MRN_HAVE_SET_OPTIMAIZER_COSTS
 #else
 #  define MRN_WARN_DEPRECATED(thd, what, to)                                   \
     (push_warning_printf(thd,                                                  \
