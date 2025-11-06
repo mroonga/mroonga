@@ -916,7 +916,7 @@ namespace mrn {
                                        GRN_OP_GREATER);
       break;
     case Item_func::BETWEEN:
-      added = convert_between(func_item, expression);
+      added = convert_between(func_item, expression, encodings);
       break;
     case Item_func::IN_FUNC:
       added = convert_in(func_item, expression, have_condition);
@@ -965,7 +965,8 @@ namespace mrn {
   }
 
   bool ConditionConverter::convert_between(const Item_func* func_item,
-                                           grn_obj* expression)
+                                           grn_obj* expression,
+                                           std::vector<grn_encoding> &encodings)
   {
     MRN_DBUG_ENTER_METHOD();
 
@@ -979,6 +980,16 @@ namespace mrn {
 
     const Item_field* field_item = static_cast<const Item_field*>(target_item);
     append_field_value(field_item, expression);
+
+    enum_field_types field_type = field_item->field->real_type();
+    NormalizedType normalized_type = normalize_field_type(field_type);
+    if (normalized_type == STRING_TYPE) {
+      grn_encoding encoding = encoding::convert(field_item->field->charset());
+      if (!encodings.empty() && encodings[0] != encoding) {
+        DBUG_RETURN(false);
+      }
+      encodings.push_back(encoding);
+    }
 
     grn_obj include;
     mrn::SmartGrnObj smart_include(ctx_, &include);
