@@ -121,7 +121,7 @@ case ${package} in
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
-    wget https://repo.mysql.com/mysql-apt-config.deb
+    wget https://repo.mysql.com/apt/$(lsb_release --id --short | tr 'A-Z' 'a-z')/pool/mysql-apt-config/m/mysql-apt-config/mysql-apt-config_0.8.36-1_all.deb
     mysql_community_install_mysql_apt_config
     mysql_package_prefix=mysql
     client_dev_package=libmysqlclient-dev
