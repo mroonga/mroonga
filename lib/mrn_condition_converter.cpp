@@ -966,7 +966,7 @@ namespace mrn {
 
   bool ConditionConverter::convert_between(const Item_func* func_item,
                                            grn_obj* expression,
-                                           std::vector<grn_encoding> &encodings)
+                                           std::vector<grn_encoding>& encodings)
   {
     MRN_DBUG_ENTER_METHOD();
 
