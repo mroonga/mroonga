@@ -121,9 +121,9 @@ case ${package} in
     mysql_test_dir=/usr/share/mysql/mysql-test
     ;;
   mysql-community-*)
-    # This is This is workaround.
+    # This is a workaround.
     # We can use mysql-apt-config.deb when https://repo.mysql.com/mysql-apt-config.deb is updated to the latest version.
-    # About https://repo.mysql.com/mysql-apt-config.deb updating has already reported to upstream.
+    # The https://repo.mysql.com/mysql-apt-config.deb updating has already been reported to upstream.
     # See: https://bugs.mysql.com/bug.php?id=119212
     wget -O mysql-apt-config.deb \
          https://repo.mysql.com/apt/$(lsb_release --id --short | tr 'A-Z' 'a-z')/pool/mysql-apt-config/m/mysql-apt-config/mysql-apt-config_0.8.36-1_all.deb
