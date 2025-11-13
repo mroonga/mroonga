@@ -17,6 +17,66 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
+msgid "Release 15.20 - 2025-11-13"
+msgstr "15.20リリース - 2025-11-13"
+
+msgid "Added support for MySQL Community Server 8.0.44 in the following OSes."
+msgstr "以下のOSでMySQL Community Server 8.0.44をサポート"
+
+msgid "AlmaLinux 8, 9"
+msgstr ""
+
+msgid "Debian 12 (bookworm)"
+msgstr ""
+
+msgid "Ubuntu 22.04 (jammy), 24.04 (noble)"
+msgstr ""
+
+msgid "8.0.44 is the latest MySQL Community Server 8.0 relase."
+msgstr "8.0.44は最新のMySQL Community 8.0のリリースです。"
+
+msgid "Added support for MySQL Community Server 8.4.7 in the following OSes."
+msgstr "以下のOSでMySQL Community Server 8.4.7をサポート"
+
+msgid "AlmaLinux 8, 9, and 10"
+msgstr ""
+
+msgid "8.4.7 is the latest MySQL Community Server 8.4 relase."
+msgstr "8.4.7は最新のMySQL Community 8.4のリリースです。"
+
+msgid "Added support for MySQL Community Server minimal 8.0.44 in the following OS."
+msgstr "以下のOSでMySQL Community Server minimal 8.0.44をサポート"
+
+msgid "AlmaLinux 9"
+msgstr ""
+
+msgid "8.0.44 is the latest MySQL Community Server minimal 8.0 relase."
+msgstr "8.0.44は最新のMySQL Community Server minimal 8.0のリリースです。"
+
+msgid "Added support for MySQL Community Server minimal 8.4.8 in the following OS."
+msgstr "以下のOSでMySQL Community Server minimal 8.4.8をサポート"
+
+msgid "8.4.8 is the latest MySQL Community Server minimal 8.4 relase."
+msgstr "8.4.8は最新のMySQL Community Server minimal 8.4のリリースです。"
+
+msgid "Added support for MariaDB 10.6.24 in the following OSes."
+msgstr "以下のOSでMariaDB 10.6.24をサポート"
+
+msgid "10.6.24 is the latest MariaDB 10.6 release."
+msgstr "10.6.24は最新のMariaDB 10.6のリリースです。"
+
+msgid "Added support for MariaDB 10.11.16 in the following OSes."
+msgstr "以下のOSでMariaDB 10.11.16をサポート"
+
+msgid "10.11.16 is the latest MariaDB 10.11 release."
+msgstr "10.11.16は最新のMariaDB 10.11のリリースです。"
+
+msgid "Added support for MariaDB 11.4.10 in the following OSes."
+msgstr "以下のOSでMariaDB 11.4.10をサポート"
+
+msgid "11.4.10 is the latest MariaDB 11.4 release."
+msgstr "11.4.10は最新のMariaDB 11.4のリリースです。"
+
 msgid "Release 15.17 - 2025-09-29"
 msgstr "15.17リリース - 2025-09-29"
 
