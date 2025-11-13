@@ -32,7 +32,7 @@ msgstr ""
 msgid "Ubuntu 22.04 (jammy), 24.04 (noble)"
 msgstr ""
 
-msgid "8.0.44 is the latest MySQL Community Server 8.0 relase."
+msgid "8.0.44 is the latest MySQL Community Server 8.0 release."
 msgstr "8.0.44は最新のMySQL Community 8.0のリリースです。"
 
 msgid "Added support for MySQL Community Server 8.4.7 in the following OSes."
@@ -41,7 +41,7 @@ msgstr "以下のOSでMySQL Community Server 8.4.7をサポート"
 msgid "AlmaLinux 8, 9, and 10"
 msgstr ""
 
-msgid "8.4.7 is the latest MySQL Community Server 8.4 relase."
+msgid "8.4.7 is the latest MySQL Community Server 8.4 release."
 msgstr "8.4.7は最新のMySQL Community 8.4のリリースです。"
 
 msgid "Added support for MySQL Community Server minimal 8.0.44 in the following OS."
@@ -50,13 +50,13 @@ msgstr "以下のOSでMySQL Community Server minimal 8.0.44をサポート"
 msgid "AlmaLinux 9"
 msgstr ""
 
-msgid "8.0.44 is the latest MySQL Community Server minimal 8.0 relase."
+msgid "8.0.44 is the latest MySQL Community Server minimal 8.0 release."
 msgstr "8.0.44は最新のMySQL Community Server minimal 8.0のリリースです。"
 
 msgid "Added support for MySQL Community Server minimal 8.4.8 in the following OS."
 msgstr "以下のOSでMySQL Community Server minimal 8.4.8をサポート"
 
-msgid "8.4.8 is the latest MySQL Community Server minimal 8.4 relase."
+msgid "8.4.8 is the latest MySQL Community Server minimal 8.4 release."
 msgstr "8.4.8は最新のMySQL Community Server minimal 8.4のリリースです。"
 
 msgid "Added support for MariaDB 10.6.24 in the following OSes."
