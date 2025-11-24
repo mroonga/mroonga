@@ -114,7 +114,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ruby
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: mariadb
           repository: MariaDB/server
@@ -122,16 +122,16 @@ jobs:
         run: |
           rm -rf mariadb/extra/groonga
           rm -rf mariadb/storage/mroonga
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: mariadb/extra/groonga
           repository: groonga/groonga
           submodules: recursive
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: mariadb/extra/groonga-normalizer-mysql
           repository: groonga/groonga-normalizer-mysql
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: mariadb/storage/mroonga
           repository: ${{ github.repository }}

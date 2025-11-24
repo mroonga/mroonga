@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: 3
@@ -200,13 +200,13 @@ jobs:
               echo "PACKAGE_TYPE=yum" >> ${GITHUB_ENV}
               ;;
           esac
-      - uses: actions/checkout@v5
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           path: groonga
           repository: groonga/groonga
           submodules: recursive
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: apache-arrow
           repository: apache/arrow

@@ -98,7 +98,7 @@ jobs:
             --exclude=storage/spider/mysql-test/spider/bugfix/r/udf_mysql_func_early_init_file.result
           Move-Item mariadb-${Env:MARIADB_VERSION} mariadb
           Remove-Item mariadb\storage\mroonga -Recurse -Force
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: mariadb/storage/mroonga
           submodules: recursive
@@ -151,7 +151,7 @@ jobs:
           ridk exec patch -p1 -i `
             storage\mroonga\packages\source\patches\mariadb-10.5.5-add-a-missing-export-symbol.diff
           Copy-Item storage\mroonga\build\mroonga_windows.cmake cmake\build_configurations\
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         if: |
           matrix.use-main == 'yes'
         with:
@@ -183,7 +183,7 @@ jobs:
             -Uri "https://github.com/mruby/mruby/pull/6279.patch" `
             -OutFile 6279.patch
           ridk exec patch -p1 -i 6279.patch
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         if: |
           matrix.use-main == 'yes'
         with:
