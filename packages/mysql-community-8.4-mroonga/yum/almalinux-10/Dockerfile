@@ -22,6 +22,7 @@ RUN \
     intltool \
     libcurl-devel \
     libtool \
+    libquadmath-devel \
     make \
     pkgconfig \
     rpm-build \
