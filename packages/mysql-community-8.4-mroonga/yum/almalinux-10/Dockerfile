@@ -21,8 +21,8 @@ RUN \
     groonga-normalizer-mysql-devel \
     intltool \
     libcurl-devel \
-    libtool \
     libquadmath-devel \
+    libtool \
     make \
     pkgconfig \
     rpm-build \
