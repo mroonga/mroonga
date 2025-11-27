@@ -23,6 +23,7 @@
 drop table if exists diaries;
 --enable_warnings
 
+--replace_result "Please use tokenizer instead" "Please use 'tokenizer' instead"
 create table diaries (
   id int primary key auto_increment,
   body text,

@@ -6,7 +6,7 @@ fulltext index body_index (body)
 comment 'parser "TokenBigramSplitSymbolAlphaDigit"'
 ) comment = 'engine "innodb"' default charset utf8mb4;
 Warnings:
-Warning	1287	'parser' is deprecated and will be removed in a future release. Please use tokenizer instead
+Warning	1287	'parser' is deprecated and will be removed in a future release. Please use 'tokenizer' instead
 insert into diaries (body) values ("will start Groonga!");
 insert into diaries (body) values ("starting Groonga...");
 insert into diaries (body) values ("started Groonga.");
