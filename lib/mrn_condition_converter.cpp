@@ -981,10 +981,10 @@ namespace mrn {
     const Item_field* field_item = static_cast<const Item_field*>(target_item);
     append_field_value(field_item, expression);
 
-    enum_field_types field_type = field_item->field->real_type();
-    NormalizedType normalized_type = normalize_field_type(field_type);
+    auto field_type = field_item->field->real_type();
+    auto normalized_type = normalize_field_type(field_type);
     if (normalized_type == STRING_TYPE) {
-      grn_encoding encoding = encoding::convert(field_item->field->charset());
+      auto encoding = encoding::convert(field_item->field->charset());
       if (!encodings.empty() && encodings[0] != encoding) {
         DBUG_RETURN(false);
       }
