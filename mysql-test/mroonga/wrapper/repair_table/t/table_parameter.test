@@ -40,7 +40,7 @@ FLUSH TABLES;
 
 REPAIR TABLE memos;
 
---replace_result NormalizerMySQLGeneralCI "NormalizerMySQLUnicode(\\\"version\\\", \\\"14.0.0\\\")"
+--replace_result NormalizerMySQLGeneralCI "\"NormalizerMySQLUnicode(\\\"version\\\", \\\"14.0.0\\\")\""
 SELECT
   mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no');
 
