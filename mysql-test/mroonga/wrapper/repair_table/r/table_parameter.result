@@ -17,7 +17,7 @@ mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no');
 mroonga_command('dump --dump_plugins no --dump_records no --dump_indexes no')
 table_create memos TABLE_HASH_KEY|KEY_LARGE ShortText
 
-table_create memos#content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer "NormalizerMySQLUnicode(\"version\", \"14.0.0\")"
+table_create memos#content TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerMySQLGeneralCI
 
 table_create mroonga_operations TABLE_NO_KEY
 column_create mroonga_operations record COLUMN_SCALAR UInt32
