@@ -30,7 +30,7 @@ CREATE TABLE memos (
   FULLTEXT INDEX (content)
 ) COMMENT='engine "InnoDB"'
   FLAGS='TABLE_HASH_KEY|KEY_LARGE'
-  DEFAULT CHARSET=UTF8MB4;
+  DEFAULT CHARSET=UTF8MB4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO memos VALUES ('Mroonga is fast!');
 
