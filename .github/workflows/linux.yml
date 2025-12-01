@@ -118,6 +118,11 @@ jobs:
             package: mariadb-11.4
             test-image: "images:almalinux/9"
 
+          # MariaDB 11.8
+          - os: almalinux-8
+            package: mariadb-11.8
+            test-image: "images:almalinux/8"
+
           # MySQL 8.0
           - os: ubuntu-jammy
             package: mysql-8.0
