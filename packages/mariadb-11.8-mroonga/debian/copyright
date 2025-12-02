@@ -1,0 +1,44 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: mroonga
+Source: https://github.com/mroonga/mroonga
+
+Files: *
+License: LGPL-2.1+
+Copyright:
+ 2009 mir <mir@ir04.razil.jp>
+ 2009-2010 Tetsuro IKEDA <ikdttr@gmail.com>
+ 2010 Kentoku SHIBA <kentokushiba@gmail.com>
+ 2010 Tasuku SUENAGA <a@razil.jp>
+ 2010 Yoshinori Matsunobu <Yoshinori.Matsunobu@gmail.com>
+ 2010-2025 Sutou Kouhei <kou@clear-code.com>
+ 2011 Kazuhiko <kazuhiko@fdiary.net>
+ 2011 mooz <stillpedant@gmail.com>
+ 2012 HAYASHI Kentaro <hayashi@clear-code.com>
+ 2012 Haruka Yoshihara
+ 2012 IWAI, Masaharu <iwaim.sub@gmail.com>
+ 2013 Daijiro MORI <morita@razil.jp>
+ 2013 Kenji Maruyama <mmmaru777@gmail.com>
+ 2013 y-ken <y.ken.studio@gmail.com>
+ 2014 Hiroshi Hatake <cosmo0920.oucc@gmail.com>
+ 2014 Satoshi MITANI <mitans02@ybb.ne.jp>
+ 2014 miko <miko@cafelounge.net>
+ 2014 susumu.yata <susumu.yata@gmail.com>
+ 2014 yoku0825 <yoku0825@gmail.com>
+ 2015 Larry Kim <admin@relip.org>
+ 2015 Masafumi Yokoyama
+ 2017 Fujimoto Seiji
+ 2017 Naoya Murakami <naoya@createfield.com>
+ 2018-2025 Horimoto Yasuhiro <horimoto@clear-code.com>
+ 2019 ryfjwr <fjwr0516@gmail.com>
+ 2020 Kartik Soneji <kartiksoneji@rocketmail.com>
+ 2021 Tomohiro KATO <tomop@teamgedoh.net>
+ 2022 Takashi Hashida <hashida@clear-code.com>
+ 2023 Josep Sanz <josepsanzcamp@gmail.com>
+ 2024 Abe Tomoaki <abe@clear-code.com>
+ 2024 takuya kodama <otegami@clear-code.com>
+ 2025 Daniel Black <daniel@mariadb.org>
+
+Files: debian/*
+Copyright:
+ 2010-2018 Kouhei Sutou <kou@clear-code.com>
+License: public-domain
