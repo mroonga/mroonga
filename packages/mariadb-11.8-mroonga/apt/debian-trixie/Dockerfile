@@ -35,7 +35,7 @@ RUN \
     libmariadb-client-lgpl-dev-compat \
     libmariadbd-dev \
     libmecab-dev \
-    libpcre3-dev \
+    libpcre2-dev \
     libreadline-dev \
     libssl-dev \
     libxml2-dev \
