@@ -36,6 +36,7 @@ RUN \
     libmariadbd-dev \
     libmecab-dev \
     libpcre2-dev \
+    libpmem-dev \
     libreadline-dev \
     libssl-dev \
     libxml2-dev \
