@@ -125,6 +125,9 @@ jobs:
           - os: almalinux-9
             package: mariadb-11.8
             test-image: "images:almalinux/9"
+          - os: debian-trixie
+            package: mariadb-11.8
+            test-image: "images:debian/13"
 
           # MySQL 8.0
           - os: ubuntu-jammy

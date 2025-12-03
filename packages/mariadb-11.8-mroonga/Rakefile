@@ -5,8 +5,10 @@ class MariaDB118MroongaPackageTask < MroongaPackageTask
     super("mariadb-11.8-mroonga")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    [
+      "debian-trixie",
+    ]
   end
 
   def enable_ubuntu?

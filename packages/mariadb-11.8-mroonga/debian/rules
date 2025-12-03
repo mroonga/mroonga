@@ -1,0 +1,57 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export MARIADB_VERSION_FULL := $(shell apt-cache show mariadb-server | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2)
+export MARIADB_VERSION := $(shell apt-cache show mariadb-server | grep Version | head -n 1 | awk '{print $$2}' | cut -d: -f2 | awk -F '-' '{print $$1}')
+
+%:
+	dh $@ --without autoreconf
+
+override_dh_auto_configure:
+	archive_base=mariadb_$(MARIADB_VERSION);			\
+	archive=$${archive_base}.orig.tar.gz;				\
+	debian=mariadb_$(MARIADB_VERSION_FULL).debian.tar.xz;		\
+	source_base=mariadb-$(MARIADB_VERSION);				\
+	build_dir=$${source_base}/builddir;				\
+	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
+	  path=universe/m/mariadb;					\
+	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
+	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
+	else								\
+	  path=main/m/mariadb;						\
+	  base_url=http://ftp.debian.org/debian/pool;			\
+	  security_base_url=http://security.debian.org/pool/updates;	\
+	fi;								\
+	wget --no-verbose $${security_base_url}/$${path}/$${archive} ||	\
+	  wget --no-verbose $${base_url}/$${path}/$${archive};		\
+	wget --no-verbose $${security_base_url}/$${path}/$${debian} ||	\
+	  wget --no-verbose $${base_url}/$${path}/$${debian};		\
+	tar xf $${archive};						\
+	(cd $${source_base} &&						\
+	  rm -rf debian/ &&						\
+	  tar xf ../$${debian});					\
+	dpkg-source --before-build $${source_base};			\
+	(cd $${source_base} &&						\
+	  debian/rules override_dh_auto_configure);			\
+	(cd $${build_dir}/storage/perfschema &&				\
+	  $(MAKE) -j$$(nproc) perfschema);				\
+	dh_auto_configure						\
+	  --buildsystem=cmake+ninja					\
+	  --								\
+	  -DMRN_WITH_DOC=ON						\
+	  -DMYSQL_BUILD_DIR=$$(pwd)/$${build_dir}			\
+	  -DMYSQL_CONFIG=$$(pwd)/$${build_dir}/scripts/mysql_config	\
+	  -DMYSQL_SOURCE_DIR=$$(pwd)/$${source_base}
+
+# disable 'make check'.
+override_dh_auto_test:
+
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mariadb-11.8-mroonga-doc/
+	dh_install

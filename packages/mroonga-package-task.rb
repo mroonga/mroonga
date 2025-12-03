@@ -91,7 +91,7 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
 
   def detect_mysql_version_debian_debian(code_name)
     source_package_name = @mysql_package
-    if code_name == "bookworm" and @mysql_package.start_with?("mariadb-")
+    if @mysql_package.start_with?("mariadb-")
       source_package_name = "mariadb"
     end
     package_info_url =
