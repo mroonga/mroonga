@@ -13,12 +13,12 @@ ARG DEBUG
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "-qq") && \
+  apt update ${quiet} && \
+  apt install -y -V --no-install-recommends ${quiet} lsb-release && \
   distribution=$(lsb_release --id --short | tr 'A-Z' 'a-z') && \
   code_name=$(lsb_release --codename --short) && \
-  apt update ${quiet} && \
   apt install -y -V --no-install-recommends ${quiet} \
     ca-certificates \
-    lsb-release \
     wget && \
   wget https://packages.apache.org/artifactory/arrow/${distribution}/apache-arrow-apt-source-latest-${code_name}.deb && \
   apt install -y -V ${quiet} ./apache-arrow-apt-source-latest-${code_name}.deb && \
