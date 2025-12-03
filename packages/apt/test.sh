@@ -113,11 +113,17 @@ mysql_community_install_mysql_apt_config() {
 }
 
 case ${package} in
-  mariadb-*)
+  mariadb-10.6|mariadb-10.11)
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test
     mysql_test_dir=/usr/share/mysql/mysql-test
+    ;;
+  mariadb-*)
+    mysql_package_prefix=mariadb
+    client_dev_package=libmariadb-dev
+    test_package=mariadb-test
+    mysql_test_dir=/usr/share/mariadb/mariadb-test
     ;;
   mysql-community-*)
     # This is a workaround.
