@@ -113,7 +113,7 @@ mysql_community_install_mysql_apt_config() {
 }
 
 case ${package} in
-  mariadb-10.6|mariadb-10.11)
+  mariadb-10.6-*|mariadb-10.11-*)
     mysql_package_prefix=mariadb
     client_dev_package=libmariadb-dev
     test_package=mariadb-test
