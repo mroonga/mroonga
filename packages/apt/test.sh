@@ -63,11 +63,10 @@ echo "::group::Prepare local repository"
  echo "%no-protection") | \
   gpg --full-generate-key --batch
 GPG_KEY_ID=$(gpg --list-keys --with-colon test@example.com | grep fpr | cut -d: -f10)
-gpg --export --armor test@example.com > keys
-sudo gpg \
-  --no-default-keyring \
-  --keyring /usr/share/keyrings/${package}.gpg \
-  --import keys
+gpg \
+  --no-options \
+  --export \
+  --armor | sudo tee /usr/share/keyrings/${package}.asc
 
 sudo apt install -V -y reprepro
 repositories_dir=/host/packages/${package}/apt/repositories
@@ -82,7 +81,7 @@ DISTRIBUTIONS
 reprepro includedeb ${code_name} \
   ${repositories_dir}/${distribution}/pool/${code_name}/${repository}/*/*/*_{${architecture},all}.deb
 cat <<APT_SOURCES | sudo tee /etc/apt/sources.list.d/${package}.list
-deb [signed-by=/usr/share/keyrings/${package}.gpg] file://${PWD} ${code_name} main
+deb [signed-by=/usr/share/keyrings/${package}.asc] file://${PWD} ${code_name} main
 APT_SOURCES
 popd
 
