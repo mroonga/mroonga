@@ -22,7 +22,6 @@ RUN \
     wget && \
   wget https://packages.apache.org/artifactory/arrow/${distribution}/apache-arrow-apt-source-latest-${code_name}.deb && \
   apt install -y -V ${quiet} ./apache-arrow-apt-source-latest-${code_name}.deb && \
-  rm apache-arrow-apt-source-latest-${code_name}.deb && \
   wget https://packages.groonga.org/${distribution}/groonga-apt-source-latest-${code_name}.deb && \
   # This is a workaround.
   # We can use mysql-apt-config.deb when https://repo.mysql.com/mysql-apt-config.deb is updated to the latest version.
