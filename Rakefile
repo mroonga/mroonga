@@ -18,6 +18,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 require "date"
+require "json"
+require "open-uri"
 require "tmpdir"
 
 VERSION_FULL = File.read("version_full")
@@ -46,6 +48,32 @@ end
 
 def new_version_micro
   new_version.split(".")[1][1]
+end
+
+def version_major
+  version.split(".")[0]
+end
+
+def version_minor
+  version.split(".")[1][0]
+end
+
+def version_micro
+  version.split(".")[1][1]
+end
+
+def latest_groonga_version
+  @latest_groonga_version ||= begin
+    releases_url = "https://api.github.com/repos/groonga/groonga/releases/latest"
+    URI.open(releases_url) do |response|
+      Gem::Version.new(JSON.parse(response.read)["tag_name"].delete_prefix("v"))
+    end
+  end
+end
+
+def latest_groonga_version_in_mroonga_style
+  segments = latest_groonga_version.segments
+  "#{segments[0]}.#{segments[1]}#{segments[2]}"
 end
 
 def new_version_in_hex
@@ -112,6 +140,24 @@ namespace :release do
   end
 
   namespace :version do
+    desc "Validate version for release"
+    task :validate do
+      if ENV["VERSION"] && ENV["VERSION"] != VERSION_FULL
+        message = "You must NOT specify VERSION= for 'rake release'. "
+        message += "You must run 'rake dev:version:bump NEW_VERSION=#{ENV["VERSION"]}' "
+        message += "before 'rake release'."
+        raise message
+      end
+
+      mroonga_version = Gem::Version.new("#{version_major}.#{version_minor}.#{version_micro}")
+      if mroonga_version < latest_groonga_version
+        message = "Mroonga version (#{VERSION_FULL.chomp}) must be greater than or equal to "
+        message += "the latest Groonga version (#{latest_groonga_version}). "
+        message += "You must run 'rake dev:version:bump NEW_VERSION=#{latest_groonga_version_in_mroonga_style}'."
+        raise message
+      end
+    end
+
     desc "Update versions for a new release"
     task :update do
       new_release_date =
@@ -147,6 +193,7 @@ end
 
 desc "Release"
 task release: [
+  "release:version:validate",
   "release:version:update",
   "release:tag",
   "dev:version:bump"
