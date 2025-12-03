@@ -167,6 +167,9 @@ jobs:
           - os: debian-bookworm
             package: mysql-community-8.4
             test-image: "images:debian/12"
+          - os: debian-trixie
+            package: mysql-community-8.4
+            test-image: "images:debian/13"
           - os: ubuntu-jammy
             package: mysql-community-8.4
             test-image: "images:ubuntu/22.04"

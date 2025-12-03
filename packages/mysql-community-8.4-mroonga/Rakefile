@@ -8,6 +8,7 @@ class MySQLCommunity84MroongaPackageTask < MroongaPackageTask
   def apt_targets_default
     [
       "debian-bookworm",
+      "debian-trixie",
       "ubuntu-jammy",
       "ubuntu-noble",
     ]
