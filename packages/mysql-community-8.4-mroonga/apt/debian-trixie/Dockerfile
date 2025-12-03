@@ -27,7 +27,7 @@ RUN \
   # We can use mysql-apt-config.deb when https://repo.mysql.com/mysql-apt-config.deb is updated to the latest version.
   # The https://repo.mysql.com/mysql-apt-config.deb updating has already been reported to upstream.
   # See: https://bugs.mysql.com/bug.php?id=119212
-  wget https://repo.mysql.com/apt/${distibution}/pool/mysql-apt-config/m/mysql-apt-config/mysql-apt-config_0.8.36-1_all.deb && \
+  wget https://repo.mysql.com/apt/${distribution}/pool/mysql-apt-config/m/mysql-apt-config/mysql-apt-config_0.8.36-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
     ./*.deb && \
   rm *.deb && \
