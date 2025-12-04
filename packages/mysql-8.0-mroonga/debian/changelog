@@ -1,3 +1,9 @@
+mysql-8.0-mroonga (15.21-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Horimoto Yasuhiro <horimoto@clear-code.com>  Thu, 04 Dec 2025 08:39:56 -0000
+
 mysql-8.0-mroonga (15.18-1) unstable; urgency=low
 
   * New upstream release.
