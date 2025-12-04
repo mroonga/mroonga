@@ -32,7 +32,7 @@ INSERT INTO normalizations VALUES ('髙', '高');
 CREATE TABLE posts (
   id INT NOT NULL PRIMARY KEY,
   author TEXT NOT NULL,
-  FULLTEXT INDEX (author) NORMALIZER='NormalizerTable("normalized", "normalizations.normalized", "target", "_key")'
+  FULLTEXT INDEX (author) COMMENT 'normalizer "NormalizerTable(''normalized'', ''normalizations.normalized'', ''target'', ''_key'')"'
 ) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO posts VALUES (1, "髙橋");
