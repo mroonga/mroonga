@@ -20,7 +20,7 @@ msgstr "お知らせ - 15系"
 msgid "Release 15.21 - 2025-12-04"
 msgstr "15.21リリース - 2025-12-04"
 
-msgid "Added newly support for MariaDB 11.8 in the following OSes."
+msgid "Added new support for MariaDB 11.8 in the following OSes."
 msgstr "以下のOSで新規にMariaDB 11.8をサポート"
 
 msgid "AlmaLinux 8."
