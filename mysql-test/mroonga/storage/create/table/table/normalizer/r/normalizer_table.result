@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS normalizations;
+CREATE TABLE normalizations (
+target VARCHAR(64) NOT NULL PRIMARY KEY,
+normalized VARCHAR(64) NOT NULL
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+INSERT INTO normalizations VALUES ('髙', '高');
+CREATE TABLE posts (
+id INT NOT NULL PRIMARY KEY,
+author TEXT NOT NULL,
+FULLTEXT INDEX (author) NORMALIZER='NormalizerTable("normalized", "normalizations.normalized", "target", "_key")'
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO posts VALUES (1, "髙橋");
+INSERT INTO posts VALUES (2, "高橋");
+INSERT INTO posts VALUES (3, "中橋");
+SELECT * FROM posts
+WHERE MATCH (author) AGAINST ("高橋" IN BOOLEAN MODE);
+id	author
+1	髙橋
+2	高橋
+SELECT * FROM posts
+WHERE MATCH (author) AGAINST ("髙橋" IN BOOLEAN MODE);
+id	author
+1	髙橋
+2	高橋
+DROP TABLE posts;
+DROP TABLE normalizations;

@@ -1,0 +1,51 @@
+# Copyright(C) 2014  Naoya Murakami <naoya@createfield.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../../include/mroonga/load_mroonga_functions.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS normalizations;
+--enable_warnings
+
+CREATE TABLE normalizations (
+  target VARCHAR(64) NOT NULL PRIMARY KEY,
+  normalized VARCHAR(64) NOT NULL
+) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO normalizations VALUES ('髙', '高');
+
+CREATE TABLE posts (
+  id INT NOT NULL PRIMARY KEY,
+  author TEXT NOT NULL,
+  FULLTEXT INDEX (author) NORMALIZER='NormalizerTable("normalized", "normalizations.normalized", "target", "_key")'
+) DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO posts VALUES (1, "髙橋");
+INSERT INTO posts VALUES (2, "高橋");
+INSERT INTO posts VALUES (3, "中橋");
+
+SELECT * FROM posts
+  WHERE MATCH (author) AGAINST ("高橋" IN BOOLEAN MODE);
+SELECT * FROM posts
+  WHERE MATCH (author) AGAINST ("髙橋" IN BOOLEAN MODE);
+
+DROP TABLE posts;
+DROP TABLE normalizations;
+
+--source ../../../../../../include/mroonga/unload_mroonga_functions.inc
+--source ../../../../../../include/mroonga/have_mroonga_deinit.inc
