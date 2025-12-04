@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS normalizations;
 CREATE TABLE normalizations (
   target VARCHAR(64) NOT NULL PRIMARY KEY,
   normalized VARCHAR(64) NOT NULL
-) ENGINE=Mroonga DEFAULT CHARSET=utf8mb4;
+) DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO normalizations VALUES ('髙', '高');
 
