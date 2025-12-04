@@ -20,7 +20,7 @@ msgstr "お知らせ - 15系"
 msgid "Release 15.21 - 2025-12-04"
 msgstr "15.21リリース - 2025-12-04"
 
-msgid "Added new support for MariaDB 11.8 in the following OSes."
+msgid "Added new support for MariaDB 11.8 in the following OS."
 msgstr "以下のOSで新規にMariaDB 11.8をサポート"
 
 msgid "AlmaLinux 8."
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Debian 13 (trixie)."
 msgstr ""
 
-msgid "Added support for MySQL Community Server 8.0.44 in the following OSes."
+msgid "Added support for MySQL Community Server 8.0.44 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.0.44をサポート"
 
 msgid "AlmaLinux 8, 9"
@@ -47,7 +47,7 @@ msgstr ""
 msgid "8.0.44 is the latest MySQL Community Server 8.0 release."
 msgstr "8.0.44は最新のMySQL Community 8.0のリリースです。"
 
-msgid "Added support for MySQL Community Server 8.4.7 in the following OSes."
+msgid "Added support for MySQL Community Server 8.4.7 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.4.7をサポート"
 
 msgid "AlmaLinux 8, 9, and 10"
@@ -71,25 +71,25 @@ msgstr "以下のOSでMySQL Community Server minimal 8.4.7をサポート"
 msgid "8.4.7 is the latest MySQL Community Server minimal 8.4 release."
 msgstr "8.4.7は最新のMySQL Community Server minimal 8.4のリリースです。"
 
-msgid "Added support for MariaDB 10.6.24 in the following OSes."
+msgid "Added support for MariaDB 10.6.24 in the following OS."
 msgstr "以下のOSでMariaDB 10.6.24をサポート"
 
 msgid "10.6.24 is the latest MariaDB 10.6 release."
 msgstr "10.6.24は最新のMariaDB 10.6のリリースです。"
 
-msgid "Added support for MariaDB 10.11.15 in the following OSes."
+msgid "Added support for MariaDB 10.11.15 in the following OS."
 msgstr "以下のOSでMariaDB 10.11.15をサポート"
 
 msgid "10.11.15 is the latest MariaDB 10.11 release."
 msgstr "10.11.15は最新のMariaDB 10.11のリリースです。"
 
-msgid "Added support for MariaDB 11.4.9 in the following OSes."
+msgid "Added support for MariaDB 11.4.9 in the following OS."
 msgstr "以下のOSでMariaDB 11.4.9をサポート"
 
 msgid "11.4.9 is the latest MariaDB 11.4 release."
 msgstr "11.4.9は最新のMariaDB 11.4のリリースです。"
 
-msgid "Added support for Percona Server for MySQL 8.0.44-35 in the following OSes."
+msgid "Added support for Percona Server for MySQL 8.0.44-35 in the following OS."
 msgstr "以下のOSでPercona Server for MySQL 8.0.44-35をサポート"
 
 msgid "8.0.44-35 is the latest Percona Server for MySQL 8.0 release."
