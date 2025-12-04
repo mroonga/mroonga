@@ -89,6 +89,12 @@ msgstr "以下のOSでMariaDB 11.4.9をサポート"
 msgid "11.4.9 is the latest MariaDB 11.4 release."
 msgstr "11.4.9は最新のMariaDB 11.4のリリースです。"
 
+msgid "Added support for Percona Server for MySQL 8.0.44-35 in the following OSes."
+msgstr "以下のOSでPercona Server for MySQL 8.0.44-35をサポート"
+
+msgid "8.0.44-35 is the latest Percona Server for MySQL 8.0 release."
+msgstr "8.0.44-35は最新のPercona Server for MySQL 8.0のリリースです。"
+
 msgid "Release 15.17 - 2025-09-29"
 msgstr "15.17リリース - 2025-09-29"
 
