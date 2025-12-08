@@ -4,7 +4,7 @@ set -exu
 
 package="$1"
 
-os_version=$(cut -d: -f5 /etc/system-release-cpe)
+os_version=$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)
 
 case "${os_version}" in
   8)
