@@ -16,6 +16,7 @@ class PerconaServer84MroongaPackageTask < MroongaPackageTask
   def yum_targets_default
     [
       "almalinux-9",
+      "almalinux-10",
     ]
   end
 end
