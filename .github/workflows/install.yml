@@ -30,6 +30,8 @@ jobs:
           - image: "images:almalinux/8"
             package: mariadb-11.4
           - image: "images:almalinux/8"
+            package: mariadb-11.8
+          - image: "images:almalinux/8"
             package: mysql-community-8.0
           - image: "images:almalinux/8"
             package: mysql-community-8.4
@@ -44,6 +46,8 @@ jobs:
           - image: "images:almalinux/9"
             package: mariadb-11.4
           - image: "images:almalinux/9"
+            package: mariadb-11.8
+          - image: "images:almalinux/9"
             package: mysql-community-8.0
           - image: "images:almalinux/9"
             package: mysql-community-8.4
@@ -54,6 +58,10 @@ jobs:
 
           # Debian 12
           - image: "images:debian/12"
+            package: mariadb
+
+          # Debian 13
+          - image: "images:debian/13"
             package: mariadb
 
           # Ubuntu 22.04
