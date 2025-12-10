@@ -164,7 +164,7 @@ namespace :release do
     end
 
     desc "Update versions for a new release"
-    task :update do
+    task update: :validate do
       new_release_date =
         ENV["NEW_RELEASE_DATE"] || Date.today.strftime("%Y-%m-%d")
       cd("packages") do
@@ -185,7 +185,7 @@ namespace :release do
   end
 
   desc "Tag"
-  task :tag do
+  task tag: "version:validate" do
     sh("git",
        "tag",
        "v#{version}",
