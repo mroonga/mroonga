@@ -34,9 +34,9 @@ Install::
   $ sudo apt update
   $ sudo apt install -y -V wget
   $ wget https://packages.groonga.org/debian/groonga-apt-source-latest-bookworm.deb
-  $ wget https://repo.mysql.com/mysql-apt-config.deb
   $ sudo apt install -y -V ./groonga-apt-source-latest-bookworm.deb
   $ rm -rf groonga-apt-source-latest-bookworm.deb
+  $ wget https://repo.mysql.com/mysql-apt-config.deb
   $ sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.0 apt install -y ./mysql-apt-config.deb
   $ rm -rf mysql-apt-config.deb
   $ sudo apt update
@@ -78,9 +78,9 @@ Install::
   $ sudo apt update
   $ sudo apt install -y -V wget
   $ wget https://packages.groonga.org/debian/groonga-apt-source-latest-trixie.deb
-  $ wget https://repo.mysql.com/mysql-apt-config.deb
   $ sudo apt install -y -V ./groonga-apt-source-latest-trixie.deb
   $ rm -rf groonga-apt-source-latest-trixie.deb
+  $ wget https://repo.mysql.com/mysql-apt-config.deb
   $ sudo env DEBIAN_FRONTEND=noninteractive MYSQL_SERVER_VERSION=mysql-8.4-lts apt install -y ./mysql-apt-config.deb
   $ rm -rf mysql-apt-config.deb
   $ sudo apt update
