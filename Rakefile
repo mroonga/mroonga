@@ -38,33 +38,33 @@ def new_version
   env_var("NEW_VERSION", version.succ)
 end
 
-def version_components(version)
+def version_segments(version)
   major, minor_micro = version.split(".")
   [major, minor_micro[0], minor_micro[1]]
 end
 
 def new_version_major
-  version_components(new_version)[0]
+  version_segments(new_version)[0]
 end
 
 def new_version_minor
-  version_components(new_version)[1]
+  version_segments(new_version)[1]
 end
 
 def new_version_micro
-  version_components(new_version)[2]
+  version_segments(new_version)[2]
 end
 
 def version_major
-  version_components(version)[0]
+  version_segments(version)[0]
 end
 
 def version_minor
-  version_components(version)[1]
+  version_segments(version)[1]
 end
 
 def version_micro
-  version_components(version)[2]
+  version_segments(version)[2]
 end
 
 def latest_groonga_version
