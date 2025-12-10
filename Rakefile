@@ -68,11 +68,9 @@ def version_micro
 end
 
 def latest_groonga_version
-  @latest_groonga_version ||= begin
-    releases_url = "https://api.github.com/repos/groonga/groonga/releases/latest"
-    URI.open(releases_url) do |response|
-      Gem::Version.new(JSON.parse(response.read)["tag_name"].delete_prefix("v"))
-    end
+  releases_url = "https://api.github.com/repos/groonga/groonga/releases/latest"
+  URI.open(releases_url) do |response|
+    Gem::Version.new(JSON.parse(response.read)["tag_name"].delete_prefix("v"))
   end
 end
 
