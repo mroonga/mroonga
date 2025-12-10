@@ -156,7 +156,7 @@ namespace :release do
 
       mroonga_version = Gem::Version.new("#{version_major}.#{version_minor}.#{version_micro}")
       if mroonga_version < latest_groonga_version
-        message = "Mroonga version (#{VERSION_FULL.chomp}) must be greater than or equal to "
+        message = "Mroonga version (#{VERSION_FULL}) must be greater than or equal to "
         message += "the latest Groonga version (#{latest_groonga_version}). "
         message += "You must run 'rake dev:version:bump NEW_VERSION=#{latest_groonga_version_in_mroonga_style}'."
         raise message
