@@ -36,3 +36,9 @@ msgstr "groonga-tokenizer-mecabをインストール::"
 
 msgid "bookworm (with the Oracle MySQL 8.0 package)"
 msgstr "bookworm（OracleのMySQL 8.0パッケージを利用）"
+
+msgid "trixie (MariaDB)"
+msgstr ""
+
+msgid "trixie (with the Oracle MySQL 8.4 package)"
+msgstr "trixie （OracleのMySQL 8.4パッケージを利用）"
