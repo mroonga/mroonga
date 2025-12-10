@@ -22,7 +22,7 @@ require "json"
 require "open-uri"
 require "tmpdir"
 
-VERSION_FULL = File.read("version_full")
+VERSION_FULL = File.read("version_full").chomp
 
 def env_var(name, default=nil)
   value = ENV[name] || default
@@ -145,8 +145,8 @@ namespace :release do
   namespace :version do
     desc "Validate version for release"
     task :validate do
-      if ENV["VERSION"] && ENV["VERSION"] != VERSION_FULL
-        message = "You must NOT specify VERSION= for 'rake release'. "
+      if version != VERSION_FULL
+        message = "You must NOT specify VERSION=#{ENV["VERSION"]} for 'rake release'. "
         message += "You must run 'rake dev:version:bump NEW_VERSION=#{ENV["VERSION"]}' "
         message += "before 'rake release'."
         raise message
