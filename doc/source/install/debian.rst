@@ -11,7 +11,7 @@ Install::
 
   $ sudo apt update
   $ sudo apt install -y -V wget
-  $ wget https://apache.jfrog.io/artifactory/arrow/debian/apache-arrow-apt-source-latest-bookworm.deb
+  $ wget https://packages.apache.org/artifactory/arrow/debian/apache-arrow-apt-source-latest-bookworm.deb
   $ sudo apt install -y -V ./apache-arrow-apt-source-latest-bookworm.deb
   $ rm -rf apache-arrow-apt-source-latest-bookworm.deb
   $ wget https://packages.groonga.org/debian/groonga-apt-source-latest-bookworm.deb
