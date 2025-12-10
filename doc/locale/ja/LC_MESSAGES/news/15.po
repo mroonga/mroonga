@@ -17,11 +17,23 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.21 - 2025-12-04"
-msgstr "15.21リリース - 2025-12-04"
+msgid "Release 15.22 - 2025-12-10"
+msgstr "15.22リリース - 2025-12-10"
 
 msgid "Added new support for MariaDB 11.8 in the following OS."
 msgstr "以下のOSで新規にMariaDB 11.8をサポート"
+
+msgid "Windows"
+msgstr ""
+
+msgid "Added support for MySQL 8.0.44-0ubuntu0.22.04.2 on Ubuntu"
+msgstr "UbuntuのMySQL 8.0.44-0ubuntu0.22.04.2をサポート"
+
+msgid "This is the latest MySQL 8.0 release."
+msgstr "これは最新のMySQL 8.0のリリースです。"
+
+msgid "Release 15.21 - 2025-12-04"
+msgstr "15.21リリース - 2025-12-04"
 
 msgid "AlmaLinux 8."
 msgstr ""
