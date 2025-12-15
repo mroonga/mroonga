@@ -72,7 +72,7 @@ jobs:
           make dist
 
       # Artifact
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: release-source
           path: mroonga-*.tar.gz
@@ -276,7 +276,7 @@ jobs:
           YUM_TARGETS: ${{ matrix.os }}
 
       # Artifact
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: packages-${{ matrix.package }}-${{ matrix.os }}
           path: packages/${{ matrix.package }}-mroonga/${{ env.PACKAGE_TYPE }}/repositories/
@@ -346,7 +346,7 @@ jobs:
             release:document:update \
             MROONGA_ORG_DIR=documents-${version}
           tar -czf documents-${version}.tar.gz documents-${version}
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: release-documents
           path: documents-*.tar.gz
@@ -385,7 +385,7 @@ jobs:
             # almalinux-9/almalinux/9/source/
             tar czf ${os}.tar.gz -C $(dirname ${release_os_path}) ${os}
           done
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: release-linux-packages
           path: "*.tar.gz"
