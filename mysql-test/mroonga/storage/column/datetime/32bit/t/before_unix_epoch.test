@@ -16,6 +16,7 @@
 
 --source ../../../../../include/mroonga/skip_signed_64bit_time_t.inc
 --source ../../../../../include/mroonga/have_mroonga.inc
+--source ../../../../../include/mroonga/have_mariadb_11_5_or_earlier.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS diaries;
