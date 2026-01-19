@@ -348,17 +348,18 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
     &part_elem, &sub_elem);
 #endif
 #ifdef WITH_PARTITION_STORAGE_ENGINE
-  for (i = 4; i > 0; i--)
+  for (i = 3; i > 0; i--)
 #else
-  for (i = 2; i > 0; i--)
+  for (i = 1; i > 0; i--)
 #endif
   {
     const char *params_string_value = NULL;
     uint params_string_length = 0;
-    switch (i)
+    CommentType comment_type = (CommentType)i;
+    switch (comment_type)
     {
 #ifdef WITH_PARTITION_STORAGE_ENGINE
-      case 4:
+      case SUB_COMMENT:
         if (!sub_elem || !sub_elem->part_comment)
           continue;
         DBUG_PRINT("info", ("mroonga create sub comment string"));
@@ -367,7 +368,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         DBUG_PRINT("info",
                    ("mroonga sub comment string=%s", params_string_value));
         break;
-      case 3:
+      case PART_COMMENT:
         if (!part_elem || !part_elem->part_comment)
           continue;
         DBUG_PRINT("info", ("mroonga create part comment string"));
@@ -377,7 +378,7 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
                    ("mroonga part comment string=%s", params_string_value));
         break;
 #endif
-      case 2:
+      default:
         if (LEX_STRING_IS_EMPTY(table->s->comment))
           continue;
         DBUG_PRINT("info", ("mroonga create comment string"));
@@ -385,16 +386,6 @@ int mrn_parse_table_param(MRN_SHARE *share, TABLE *table)
         params_string_length = table->s->comment.length;
         DBUG_PRINT("info",
                    ("mroonga comment string=%.*s",
-                    params_string_length, params_string_value));
-        break;
-      default:
-        if (LEX_STRING_IS_EMPTY(table->s->connect_string))
-          continue;
-        DBUG_PRINT("info", ("mroonga create connect_string string"));
-        params_string_value = table->s->connect_string.str;
-        params_string_length = table->s->connect_string.length;
-        DBUG_PRINT("info",
-                   ("mroonga connect_string=%.*s",
                     params_string_length, params_string_value));
         break;
     }
