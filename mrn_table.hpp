@@ -233,3 +233,11 @@ KEY *mrn_create_key_info_for_table(MRN_SHARE *share, TABLE *table, int *error);
 #endif
 void mrn_set_bitmap_by_key(MY_BITMAP *map, KEY *key_info);
 mrn::SlotData *mrn_get_slot_data(THD *thd, bool can_create);
+
+enum CommentType {
+  COMMENT = 1,
+#ifdef WITH_PARTITION_STORAGE_ENGINE
+  PART_COMMENT,
+  SUB_COMMENT,
+#endif
+};
