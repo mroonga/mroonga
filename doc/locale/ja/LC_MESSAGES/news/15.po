@@ -17,6 +17,51 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
+msgid "Release 15.23 - 2026-01-26"
+msgstr "15.23リリース - 2026-01-26"
+
+msgid "Added support for MySQL Community Server 8.0.45 in the following OS."
+msgstr "以下のOSでMySQL Community Server 8.0.45をサポート"
+
+msgid "AlmaLinux 8, 9"
+msgstr ""
+
+msgid "Debian 12 (bookworm)"
+msgstr ""
+
+msgid "Ubuntu 22.04 (jammy), 24.04 (noble)"
+msgstr ""
+
+msgid "8.0.45 is the latest MySQL Community Server 8.0 release."
+msgstr "8.0.45は最新のMySQL Community 8.0のリリースです。"
+
+msgid "Added support for MySQL Community Server 8.4.8 in the following OS."
+msgstr "以下のOSでMySQL Community Server 8.4.8をサポート"
+
+msgid "AlmaLinux 8, 9, 10"
+msgstr ""
+
+msgid "Debian 12 (bookworm), 13 (trixie)"
+msgstr ""
+
+msgid "8.4.8 is the latest MySQL Community Server 8.4 release."
+msgstr "8.4.8は最新のMySQL Community 8.4のリリースです。"
+
+msgid "Added support for MySQL Community Server minimal 8.0.45 in the following OS."
+msgstr "以下のOSでMySQL Community Server minimal 8.0.45をサポート"
+
+msgid "AlmaLinux 9"
+msgstr ""
+
+msgid "8.0.45 is the latest MySQL Community Server minimal 8.0 release."
+msgstr "8.0.45は最新のMySQL Community Server minimal 8.0のリリースです。"
+
+msgid "Added support for MySQL Community Server minimal 8.4.8 in the following OS."
+msgstr "以下のOSでMySQL Community Server minimal 8.4.8をサポート"
+
+msgid "8.4.8 is the latest MySQL Community Server minimal 8.4 release."
+msgstr "8.4.8は最新のMySQL Community Server minimal 8.4のリリースです。"
+
 msgid "Release 15.22 - 2025-12-10"
 msgstr "15.22リリース - 2025-12-10"
 
@@ -47,15 +92,6 @@ msgstr ""
 msgid "Added support for MySQL Community Server 8.0.44 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.0.44をサポート"
 
-msgid "AlmaLinux 8, 9"
-msgstr ""
-
-msgid "Debian 12 (bookworm)"
-msgstr ""
-
-msgid "Ubuntu 22.04 (jammy), 24.04 (noble)"
-msgstr ""
-
 msgid "8.0.44 is the latest MySQL Community Server 8.0 release."
 msgstr "8.0.44は最新のMySQL Community 8.0のリリースです。"
 
@@ -70,9 +106,6 @@ msgstr "8.4.7は最新のMySQL Community 8.4のリリースです。"
 
 msgid "Added support for MySQL Community Server minimal 8.0.44 in the following OS."
 msgstr "以下のOSでMySQL Community Server minimal 8.0.44をサポート"
-
-msgid "AlmaLinux 9"
-msgstr ""
 
 msgid "8.0.44 is the latest MySQL Community Server minimal 8.0 release."
 msgstr "8.0.44は最新のMySQL Community Server minimal 8.0のリリースです。"
