@@ -84,7 +84,8 @@ REPO
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     if [ "${percona_package_version}" = "80" ]; then
-      sudo percona-release setup ps${percona_package_version}
+      echo "REPOSITORIES=\"tools\"" | sudo tee /etc/default/percona-release
+      sudo percona-release setup ps-${percona_package_version}
     else
       sudo percona-release enable-only ps-${percona_package_version}-lts release
     fi

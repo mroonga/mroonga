@@ -13,7 +13,8 @@ RUN \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
     https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm \
     https://apache.jfrog.io/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
-  percona-release setup -y ps80 && \
+  echo "REPOSITORIES=\"tools\"" | tee /etc/default/percona-release && \
+  percona-release setup -y ps-80 && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=crb -y ${quiet} \
     'dnf-command(builddep)' \
