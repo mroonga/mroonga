@@ -17,8 +17,8 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.23 - 2026-01-26"
-msgstr "15.23リリース - 2026-01-26"
+msgid "Release 15.23 - 2026-01-27"
+msgstr "15.23リリース - 2026-01-27"
 
 msgid "Added support for MySQL Community Server 8.0.45 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.0.45をサポート"
