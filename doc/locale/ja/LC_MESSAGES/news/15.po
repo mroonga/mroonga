@@ -38,8 +38,8 @@ msgstr "8.0.45は最新のMySQL Community 8.0のリリースです。"
 msgid "Added support for MySQL Community Server 8.4.8 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.4.8をサポート"
 
-msgid "AlmaLinux 8, 9, 10"
-msgstr ""
+msgid "AlmaLinux 8, 9, and 10"
+msgstr "AlmaLinux 8, 9, 10"
 
 msgid "Debian 12 (bookworm), 13 (trixie)"
 msgstr ""
@@ -97,9 +97,6 @@ msgstr "8.0.44は最新のMySQL Community 8.0のリリースです。"
 
 msgid "Added support for MySQL Community Server 8.4.7 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.4.7をサポート"
-
-msgid "AlmaLinux 8, 9, and 10"
-msgstr "AlmaLinux 8, 9, 10"
 
 msgid "8.4.7 is the latest MySQL Community Server 8.4 release."
 msgstr "8.4.7は最新のMySQL Community 8.4のリリースです。"
