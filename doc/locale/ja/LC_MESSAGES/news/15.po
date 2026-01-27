@@ -62,6 +62,18 @@ msgstr "以下のOSでMySQL Community Server minimal 8.4.8をサポート"
 msgid "8.4.8 is the latest MySQL Community Server minimal 8.4 release."
 msgstr "8.4.8は最新のMySQL Community Server minimal 8.4のリリースです。"
 
+msgid "Added support for MariaDB 10.11.14-0ubuntu0.24.04.1 on Ubuntu 24.04"
+msgstr "Ubuntu 24.04のMariaDB 10.11.14-0ubuntu0.24.04.1をサポート"
+
+msgid "This is the latest MariaDB 10.11 release."
+msgstr "これは最新のMariaDB 10.11のリリースです。"
+
+msgid "Added support for MariaDB 10.6.23-0ubuntu0.22.04.1 on Ubuntu 22.04"
+msgstr "Ubuntu 22.04のMariaDB 10.6.23-0ubuntu0.22.04.1をサポート"
+
+msgid "This is the latest MariaDB 10.6 release."
+msgstr "これは最新のMariaDB 10.6のリリースです。"
+
 msgid "Release 15.22 - 2025-12-10"
 msgstr "15.22リリース - 2025-12-10"
 
@@ -145,9 +157,6 @@ msgstr "改良"
 
 msgid "Added support for MariaDB 10.11.14 on Debian"
 msgstr "DebianのMariaDB 10.11.14をサポート"
-
-msgid "This is the latest MariaDB 10.11 release."
-msgstr "これらは最新のMariaDB 10.11のリリースです。"
 
 msgid "Added support for MySQL 8.0.43 on Ubuntu"
 msgstr "UbuntuのMySQL 8.0.43をサポート"
