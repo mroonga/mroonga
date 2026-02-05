@@ -62,10 +62,13 @@ msgid "You can use MariaDB's MariaDB packages version 10.6 on AlmaLinux 8 since 
 msgstr "AlmaLinux 8では、Mroonga 11.10からMariaDB提供のMariaDB 10.6パッケージを利用できます。"
 
 msgid "Create ``/etc/yum.repos.d/MariaDB.repo`` with the following content::"
-msgstr ""
+msgstr "以下の内容で ``/etc/yum.repos.d/MariaDB.repo`` を作成してください::"
 
 msgid "AlmaLinux 8 (with MariaDB 10.11 package)"
 msgstr "AlmaLinux 8（MariaDB 10.11のパッケージを利用）"
+
+msgid "You can use MariaDB's MariaDB packages version 10.11 on AlmaLinux 8 since Mroonga 13.01 release."
+msgstr "AlmaLinux 8では、Mroonga 13.01からMariaDB提供のMariaDB 10.11パッケージを利用できます。"
 
 msgid "AlmaLinux 8 (with MariaDB 11.4 package)"
 msgstr "AlmaLinux 8（MariaDB 11.4のパッケージを利用）"
@@ -102,3 +105,15 @@ msgstr "AlmaLinux 9（MariaDB 11.4のパッケージを利用）"
 
 msgid "You can use MariaDB's MariaDB packages version 11.4 on AlmaLinux 9 since Mroonga 14.07 release."
 msgstr "AlmaLinux 9では、Mroonga 14.07からMariaDB提供のMariaDB 11.4パッケージを利用できます。"
+
+msgid "AlmaLinux 10 (with the Oracle MySQL 8.4 package)"
+msgstr "AlmaLinux 10 （OracleのMySQL 8.4パッケージを利用）"
+
+msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 10 since Mroonga 15.18 release."
+msgstr "AlmaLinux 10では、Mroonga 15.18からOracleのMySQL 8.4パッケージを利用できます。"
+
+msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported"
+msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
+
+msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature of relevant to a optimization."
+msgstr ":doc:`/tutorial/storage` ストレージモードは最適化関連の機能が未対応です。"
