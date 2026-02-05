@@ -107,7 +107,7 @@ msgid "You can use MariaDB's MariaDB packages version 11.4 on AlmaLinux 9 since 
 msgstr "AlmaLinux 9では、Mroonga 14.07からMariaDB提供のMariaDB 11.4パッケージを利用できます。"
 
 msgid "AlmaLinux 10 (with the Oracle MySQL 8.4 package)"
-msgstr "AlmaLinux 10 （OracleのMySQL 8.4パッケージを利用）"
+msgstr "AlmaLinux 10（OracleのMySQL 8.4パッケージを利用）"
 
 msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 10 since Mroonga 15.18 release."
 msgstr "AlmaLinux 10では、Mroonga 15.18からOracleのMySQL 8.4パッケージを利用できます。"
@@ -115,5 +115,5 @@ msgstr "AlmaLinux 10では、Mroonga 15.18からOracleのMySQL 8.4パッケー�
 msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported"
 msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
 
-msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature of relevant to a optimization."
+msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization."
 msgstr ":doc:`/tutorial/storage` ストレージモードは最適化関連の機能が未対応です。"

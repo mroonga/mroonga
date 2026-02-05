@@ -382,7 +382,7 @@ Mroonga 15.18 release.
 .. note::
 
  * :doc:`/tutorial/wrapper` Wrapper mode is not supported
- * :doc:`/tutorial/storage`  Storage mode does not support a feature of relevant to a optimization.
+ * :doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization.
 
 Install:
 
