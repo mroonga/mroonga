@@ -17,6 +17,39 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
+msgid "Release 15.25 - 2026-02-05"
+msgstr "15.25リリース - 2026-02-05"
+
+msgid "Improvements"
+msgstr "改良"
+
+msgid "Added support for MySQL 8.0.45-0ubuntu0.24.04.1 on Ubuntu 24.04"
+msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
+
+msgid "This is the latest MySQL Community Server 8.0."
+msgstr "これは最新のMySQL Community Server 8.0のリリースです。"
+
+msgid "Added support for MySQL 8.0 8.0.45-0ubuntu0.22.04.1 on Ubuntu 22.04"
+msgstr "UbuntuのMySQL 8.0 8.0.45-0ubuntu0.22.04.1をサポート"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a crash bug that occurred when `mroonga_default_tokenizer` was set to `NULL`"
+msgstr "`mroonga_default_tokenizer` を `NULL` に設定した時にクラッシュする問題を修正"
+
+msgid "[[GH-1041]( https://github.com/mroonga/mroonga/pull/1041 )][Patched by Hadeer Ramadan]"
+msgstr "[[GH-1041]( https://github.com/mroonga/mroonga/pull/1041 )][Hadeer Ramadanさんがパッチ提供]"
+
+msgid "For example, this bug occurred when `mroonga_default_tokenizer` was set to `NULL`, as shown below."
+msgstr "例えば、以下のように `mroonga_default_tokenizer` を `NULL` に設定するとこの問題が発生します。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Hadeer Ramadan"
+msgstr "Hadeer Ramadanさん"
+
 msgid "Release 15.23 - 2026-01-27"
 msgstr "15.23リリース - 2026-01-27"
 
@@ -152,9 +185,6 @@ msgstr "8.0.44-35は最新のPercona Server for MySQL 8.0のリリースです�
 msgid "Release 15.17 - 2025-09-29"
 msgstr "15.17リリース - 2025-09-29"
 
-msgid "Improvements"
-msgstr "改良"
-
 msgid "Added support for MariaDB 10.11.14 on Debian"
 msgstr "DebianのMariaDB 10.11.14をサポート"
 
@@ -196,9 +226,6 @@ msgstr "{doc}`/reference/limitations` のドキュメントに以下の内容を
 
 msgid "\"Empty data (0 byte data) is not allowed in the primary key\""
 msgstr "\"プライマリーキーに空データ（0バイトのデータ）は使用できません\""
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Elena Stepanova"
 msgstr "Elena Stepanovaさん"
@@ -316,9 +343,6 @@ msgstr "MariaDB: MariaDB 10.5.28, 10.6.21, 10.11.11, 11.4.5をサポート"
 
 msgid "You can use Mroonga with the latest MariaDB releases."
 msgstr "最新のMariaDBのリリースでMroongaを使えます。"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "{doc}`/tutorial/wrapper`: Fixed a bug that wrapped engine's index information may not be used correctly"
 msgstr "{doc}`/tutorial/wrapper`: ラップしているエンジンのインデックス情報が正しく使われないことがある問題を修正"
