@@ -9,7 +9,7 @@ RUN \
   dnf update -y ${quiet} && \
   dnf install -y \
     https://repo.percona.com/yum/percona-release-latest.noarch.rpm \
-    https://packages.groonga.org/almalinux/10/groonga-release-latest.noarch.rpm \
+    https://packages.groonga.org/almalinux/${distribution}/groonga-release-latest.noarch.rpm \
     https://packages.apache.org/artifactory/arrow/almalinux/${distribution}/apache-arrow-release-latest.rpm && \
   percona-release enable-only ps-84-lts release && \
   percona-release enable tools release && \
