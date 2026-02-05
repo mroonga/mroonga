@@ -17,8 +17,8 @@ msgstr ""
 msgid "News - 15 series"
 msgstr "お知らせ - 15系"
 
-msgid "Release 15.25 - 2026-02-05"
-msgstr "15.25リリース - 2026-02-05"
+msgid "Release 15.25 - 2026-02-06"
+msgstr "15.25リリース - 2026-02-06"
 
 msgid "Improvements"
 msgstr "改良"
@@ -29,8 +29,17 @@ msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
 msgid "This is the latest MySQL Community Server 8.0."
 msgstr "これは最新のMySQL Community Server 8.0のリリースです。"
 
-msgid "Added support for MySQL 8.0 8.0.45-0ubuntu0.22.04.1 on Ubuntu 22.04"
-msgstr "UbuntuのMySQL 8.0 8.0.45-0ubuntu0.22.04.1をサポート"
+msgid "Added support for MySQL 8.0.45-0ubuntu0.22.04.1 on Ubuntu 22.04"
+msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
+
+msgid "Added support for MariaDB 10.6.25 in the following OS"
+msgstr "以下のOSでMariaDB 10.6.25をサポート"
+
+msgid "AlmaLinux 8, 9"
+msgstr ""
+
+msgid "This is the latest MariaDB 10.6 release."
+msgstr "これは最新のMariaDB 10.6のリリースです。"
 
 msgid "Fixes"
 msgstr "修正"
@@ -55,9 +64,6 @@ msgstr "15.23リリース - 2026-01-27"
 
 msgid "Added support for MySQL Community Server 8.0.45 in the following OS."
 msgstr "以下のOSでMySQL Community Server 8.0.45をサポート"
-
-msgid "AlmaLinux 8, 9"
-msgstr ""
 
 msgid "Debian 12 (bookworm)"
 msgstr ""
@@ -103,9 +109,6 @@ msgstr "これは最新のMariaDB 10.11のリリースです。"
 
 msgid "Added support for MariaDB 10.6.23-0ubuntu0.22.04.1 on Ubuntu 22.04"
 msgstr "Ubuntu 22.04のMariaDB 10.6.23-0ubuntu0.22.04.1をサポート"
-
-msgid "This is the latest MariaDB 10.6 release."
-msgstr "これは最新のMariaDB 10.6のリリースです。"
 
 msgid "Release 15.22 - 2025-12-10"
 msgstr "15.22リリース - 2025-12-10"
