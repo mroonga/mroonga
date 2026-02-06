@@ -120,6 +120,9 @@ jobs:
           - os: almalinux-9
             package: mariadb-11.4
             test-image: "images:almalinux/9"
+          - os: almalinux-10
+            package: mariadb-11.4
+            test-image: "images:almalinux/10"
 
           # MariaDB 11.8
           - os: almalinux-8
