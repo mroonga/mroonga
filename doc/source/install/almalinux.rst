@@ -378,6 +378,36 @@ Install groonga-tokenizer-mecab package:
 
    $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
+.. _almalinux-9-percona-8-4:
+
+AlmaLinux 9 (with Percona Server 8.4 package)
+---------------------------------------------
+
+You can use Percona Server packages version 8.4 on AlmaLinux 9
+since Mroonga 15.04 release.
+
+Install:
+
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+   $ sudo percona-release enable-only ps-84-lts release
+   $ sudo dnf install -y --enablerepo=epel percona-server-8.4-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package:
+
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _almalinux-9-mariadb-10-6:
 
 AlmaLinux 9 (with MariaDB 10.6 package)
