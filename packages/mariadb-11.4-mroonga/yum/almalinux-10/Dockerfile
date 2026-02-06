@@ -15,7 +15,7 @@ RUN \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MariaDB.repo && \
   dnf install -y \
-    https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm && \
+    https://packages.groonga.org/almalinux/${distribution}/groonga-release-latest.noarch.rpm && \
   dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/${distribution}/apache-arrow-release-latest.rpm && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
   dnf install --enablerepo=crb -y ${quiet} \
