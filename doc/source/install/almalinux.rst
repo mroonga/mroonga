@@ -312,6 +312,42 @@ Install groonga-tokenizer-mecab package:
 
    $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
 
+.. _almalinux-9-oracle-8-4:
+
+AlmaLinux 9 (with the Oracle MySQL 8.4 package)
+-----------------------------------------------
+
+You can use Oracle's MySQL packages version 8.4 on AlmaLinux 9 since
+Mroonga 14.04 release.
+
+.. note::
+
+   There are already known issues about MySQL 8.4.
+
+   * :doc:`/tutorial/wrapper` Wrapper mode is not supported
+   * :doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization.
+
+Install:
+
+.. code-block:: console
+
+   $ sudo dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/9/apache-arrow-release-latest.rpm
+   $ sudo dnf install -y https://packages.groonga.org/almalinux/9/groonga-release-latest.noarch.rpm
+   $ sudo dnf install -y https://repo.mysql.com/mysql84-community-release-el9.rpm
+   $ sudo dnf install -y --enablerepo=epel,crb mysql-community-8.4-mroonga
+   ($ sudo systemctl start mysqld)
+   ($ tmp_password=$(sudo grep 'A temporary password' /var/log/mysqld.log | sed -e 's/^.*: //'))
+   ($ sudo mysqladmin -u root --password="${tmp_password}" password)
+
+If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a
+tokenizer, install groonga-tokenizer-mecab package.
+
+Install groonga-tokenizer-mecab package:
+
+.. code-block:: console
+
+   $ sudo dnf install -y --enablerepo=epel groonga-tokenizer-mecab
+
 .. _almalinux-9-percona-8-0:
 
 AlmaLinux 9 (with Percona Server 8.0 package)

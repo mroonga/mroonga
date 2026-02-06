@@ -103,6 +103,12 @@ msgstr "AlmaLinux 9（OracleのMySQL 8.0パッケージを利用）"
 msgid "You can use Oracle's MySQL packages version 8.0 on AlmaLinux 9 since Mroonga 12.12 release."
 msgstr "AlmaLinux 9では、Mroonga 12.12からOracleのMySQL 8.0パッケージを利用できます。"
 
+msgid "AlmaLinux 9 (with the Oracle MySQL 8.4 package)"
+msgstr "AlmaLinux 9（OracleのMySQL 8.4パッケージを利用）"
+
+msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 9 since Mroonga 14.04 release."
+msgstr "AlmaLinux 9では、Mroonga 14.04からOracleのMySQL 8.4パッケージを利用できます。"
+
 msgid "AlmaLinux 9 (with Percona Server 8.0 package)"
 msgstr "AlmaLinux 9（Percona Server 8.0パッケージを利用）"
 
