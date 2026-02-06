@@ -17,7 +17,7 @@ RUN \
   dnf install -y \
     https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm && \
   dnf install -y epel-release && \
-  dnf install -y https://apache.jfrog.io/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm && \
+  dnf install -y https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm && \
   dnf config-manager --set-enabled epel || : && \
   dnf config-manager --set-enabled crb || : && \
   dnf groupinstall -y ${quiet} "Development Tools" && \
