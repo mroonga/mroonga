@@ -33,6 +33,7 @@ RUN \
     libtool \
     make \
     pkgconfig \
+    selinux-policy-devel \
     sudo \
     wget \
     which && \
