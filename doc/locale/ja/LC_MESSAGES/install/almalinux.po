@@ -76,6 +76,12 @@ msgstr "AlmaLinux 8（MariaDB 11.4のパッケージを利用）"
 msgid "You can use MariaDB's MariaDB packages version 11.4 on AlmaLinux 8 since Mroonga 14.07 release."
 msgstr "AlmaLinux 8では、Mroonga 14.07からMariaDB提供のMariaDB 11.4パッケージを利用できます。"
 
+msgid "AlmaLinux 8 (with MariaDB 11.8 package)"
+msgstr "AlmaLinux 8（MariaDB 11.8のパッケージを利用）"
+
+msgid "You can use MariaDB's MariaDB packages version 11.8 on AlmaLinux 8 since Mroonga 15.21 release."
+msgstr "AlmaLinux 8では、Mroonga 15.21からMariaDB提供のMariaDB 11.8パッケージを利用できます。"
+
 msgid "AlmaLinux 9 (with the Oracle MySQL 8.0 package)"
 msgstr "AlmaLinux 9（OracleのMySQL 8.0パッケージを利用）"
 
