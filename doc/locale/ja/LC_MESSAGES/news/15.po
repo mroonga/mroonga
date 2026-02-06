@@ -30,13 +30,13 @@ msgid "MariaDB 10.11, 11.4, and 11.8"
 msgstr "MariaDB 10.11、11.4、11.8"
 
 msgid "Added support for MySQL 8.0.45-0ubuntu0.24.04.1 on Ubuntu 24.04"
-msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
+msgstr "Ubuntu 24.04のMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
 
 msgid "This is the latest MySQL Community Server 8.0."
 msgstr "これは最新のMySQL Community Server 8.0のリリースです。"
 
 msgid "Added support for MySQL 8.0.45-0ubuntu0.22.04.1 on Ubuntu 22.04"
-msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
+msgstr "Ubuntu 22.04のMySQL 8.0.45-0ubuntu0.22.04.1をサポート"
 
 msgid "Added support for MariaDB 11.8.6 in the following OS"
 msgstr "以下のOSでMariaDB 11.8.6をサポート"
