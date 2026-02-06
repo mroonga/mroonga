@@ -103,6 +103,9 @@ jobs:
           - os: almalinux-9
             package: mariadb-10.11
             test-image: "images:almalinux/9"
+          - os: almalinux-10
+            package: mariadb-10.11
+            test-image: "images:almalinux/10"
           - os: debian-bookworm
             package: mariadb-10.11
             test-image: "images:debian/12"
