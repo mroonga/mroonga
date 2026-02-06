@@ -49,6 +49,21 @@ msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>
 msgid "Install groonga-tokenizer-mecab package:"
 msgstr "groonga-tokenizer-mecabをインストール:"
 
+msgid "AlmaLinux 8 (with the Oracle MySQL 8.4 package)"
+msgstr "AlmaLinux 8（OracleのMySQL 8.4パッケージを利用）"
+
+msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 8 since Mroonga 14.04 release."
+msgstr "AlmaLinux 8では、Mroonga 14.04からOracleのMySQL 8.4パッケージを利用できます。"
+
+msgid "There are already known issues about MySQL 8.4."
+msgstr "MySQL 8.4に関しては以下の既知の問題があります。"
+
+msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported"
+msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
+
+msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization."
+msgstr ":doc:`/tutorial/storage` ストレージモードは最適化関連の機能が未対応です。"
+
 msgid "AlmaLinux 8 (with Percona Server 8.0 package)"
 msgstr "AlmaLinux 8（Percona Server 8.0パッケージを利用）"
 
@@ -117,9 +132,3 @@ msgstr "AlmaLinux 10（OracleのMySQL 8.4パッケージを利用）"
 
 msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 10 since Mroonga 15.18 release."
 msgstr "AlmaLinux 10では、Mroonga 15.18からOracleのMySQL 8.4パッケージを利用できます。"
-
-msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported"
-msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
-
-msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization."
-msgstr ":doc:`/tutorial/storage` ストレージモードは最適化関連の機能が未対応です。"
