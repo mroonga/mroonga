@@ -23,6 +23,12 @@ msgstr "15.25リリース - 2026-02-06"
 msgid "Improvements"
 msgstr "改良"
 
+msgid "Added new support for the following MariaDB on AlmaLinux 10"
+msgstr "新規にAlmaLinux 10で以下のMariaDBをサポート"
+
+msgid "MariaDB 10.11, 11.4, and 11.8"
+msgstr "MariaDB 10.11、11.4、11.8"
+
 msgid "Added support for MySQL 8.0.45-0ubuntu0.24.04.1 on Ubuntu 24.04"
 msgstr "UbuntuのMySQL 8.0.45-0ubuntu0.24.04.1をサポート"
 
