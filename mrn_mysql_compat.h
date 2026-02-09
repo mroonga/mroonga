@@ -907,6 +907,28 @@ using TABLE_LIST = Table_ref;
                          to))
 #endif
 
+#if defined(MRN_MARIADB_P) &&                                                  \
+  ((MYSQL_VERSION_ID >= 110409 && MYSQL_VERSION_ID < 110500) ||                \
+   (MYSQL_VERSION_ID >= 110804))
+#  define MRN_CREATE_TYPELIB(count,                                            \
+                             name,                                             \
+                             type_names,                                       \
+                             type_lengths,                                     \
+                             hidden_values)                                    \
+    {                                                                          \
+      count, name, type_names, type_lengths, hidden_values                     \
+    }
+#else
+#  define MRN_CREATE_TYPELIB(count,                                            \
+                             name,                                             \
+                             type_names,                                       \
+                             type_lengths,                                     \
+                             hidden_values)                                    \
+    {                                                                          \
+      count, name, type_names, type_lengths                                    \
+    }
+#endif
+
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib()
 #else

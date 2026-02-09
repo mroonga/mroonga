@@ -730,11 +730,12 @@ static const char* mrn_boolean_mode_sytnax_flag_names[] = {
   "ALLOW_LEADING_NOT",
   "QUERY_NO_SYNTAX_ERROR",
   NullS};
-static TYPELIB mrn_boolean_mode_syntax_flags_typelib = {
-  array_elements(mrn_boolean_mode_sytnax_flag_names) - 1,
-  "",
-  mrn_boolean_mode_sytnax_flag_names,
-  NULL};
+static TYPELIB mrn_boolean_mode_syntax_flags_typelib =
+  MRN_CREATE_TYPELIB(array_elements(mrn_boolean_mode_sytnax_flag_names) - 1,
+                     "",
+                     mrn_boolean_mode_sytnax_flag_names,
+                     nullptr,
+                     nullptr);
 #ifdef MRN_GROONGA_EMBEDDED
 static mrn_bool mrn_libgroonga_embedded = true;
 #else
@@ -820,11 +821,12 @@ static const char* mrn_log_level_type_names[] = {"NONE",
                                                  "DEBUG",
                                                  "DUMP",
                                                  NullS};
-static TYPELIB mrn_log_level_typelib = {
-  array_elements(mrn_log_level_type_names) - 1,
-  "mrn_log_level_typelib",
-  mrn_log_level_type_names,
-  NULL};
+static TYPELIB mrn_log_level_typelib =
+  MRN_CREATE_TYPELIB(array_elements(mrn_log_level_type_names) - 1,
+                     "mrn_log_level_typelib",
+                     mrn_log_level_type_names,
+                     nullptr,
+                     nullptr);
 
 #if MYSQL_VERSION_ID >= 80011 && !defined(MRN_MARIADB_P)
 typedef SYS_VAR mrn_sys_var;
@@ -1154,11 +1156,12 @@ static const char* mrn_action_on_error_names[] = {
   NullS,
 };
 
-static TYPELIB mrn_action_on_error_typelib = {
-  array_elements(mrn_action_on_error_names) - 1,
-  "mrn_action_on_error_typelib",
-  mrn_action_on_error_names,
-  NULL};
+static TYPELIB mrn_action_on_error_typelib =
+  MRN_CREATE_TYPELIB(array_elements(mrn_action_on_error_names) - 1,
+                     "mrn_action_on_error_typelib",
+                     mrn_action_on_error_names,
+                     nullptr,
+                     nullptr);
 
 static MYSQL_THDVAR_ENUM(action_on_fulltext_query_error,
                          PLUGIN_VAR_RQCMDARG,
@@ -1340,11 +1343,12 @@ namespace mrn {
 } // namespace mrn
 static const char* mrn_condition_push_down_type_names[] = {
   "NONE", "ALL", "ONE_FULL_TEXT_SEARCH", NullS};
-static TYPELIB mrn_condition_push_down_type_typelib = {
-  array_elements(mrn_condition_push_down_type_names) - 1,
-  "mrn_condition_push_down_type_typelib",
-  mrn_condition_push_down_type_names,
-  NULL};
+static TYPELIB mrn_condition_push_down_type_typelib =
+  MRN_CREATE_TYPELIB(array_elements(mrn_condition_push_down_type_names) - 1,
+                     "mrn_condition_push_down_type_typelib",
+                     mrn_condition_push_down_type_names,
+                     nullptr,
+                     nullptr);
 
 static MYSQL_THDVAR_ENUM(condition_push_down_type,
                          PLUGIN_VAR_RQCMDARG,
