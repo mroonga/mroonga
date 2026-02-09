@@ -907,7 +907,9 @@ using TABLE_LIST = Table_ref;
                          to))
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110409)
+#if defined(MRN_MARIADB_P) &&                                                  \
+  ((MYSQL_VERSION_ID >= 110409 && MYSQL_VERSION_ID < 110500) ||                \
+   (MYSQL_VERSION_ID >= 110804))
 #  define MRN_CREATE_TYPELIB(count,                                            \
                              name,                                             \
                              type_names,                                       \
