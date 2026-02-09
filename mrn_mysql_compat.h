@@ -908,22 +908,22 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110409)
-#  define MRN_CREATE_TYPELIB(count,                               \
-                             name,                                \
-                             type_names,                          \
-                             type_lengths,                        \
-                             hidden_values)                       \
-    {                                                             \
-      count, name, type_names, type_lengths, hidden_values        \
+#  define MRN_CREATE_TYPELIB(count,                                            \
+                             name,                                             \
+                             type_names,                                       \
+                             type_lengths,                                     \
+                             hidden_values)                                    \
+    {                                                                          \
+      count, name, type_names, type_lengths, hidden_values                     \
     }
 #else
-#  define MRN_CREATE_TYPELIB(count,                               \
-                             name,                                \
-                             type_names,                          \
-                             type_lengths,                        \
-                             hidden_values)                       \
-    {                                                             \
-      count, name, type_names, type_lengths                       \
+#  define MRN_CREATE_TYPELIB(count,                                            \
+                             name,                                             \
+                             type_names,                                       \
+                             type_lengths,                                     \
+                             hidden_values)                                    \
+    {                                                                          \
+      count, name, type_names, type_lengths                                    \
     }
 #endif
 
