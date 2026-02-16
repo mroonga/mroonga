@@ -55,10 +55,20 @@ jobs:
             package: mysql-community-minimal-8.0
           - image: "images:almalinux/9"
             package: percona-server-8.0
+          - image: "images:almalinux/9"
+            package: percona-server-8.4
 
           # AlmaLinux 10
           - image: "images:almalinux/10"
+            package: mariadb-10.11
+          - image: "images:almalinux/10"
+            package: mariadb-11.4
+          - image: "images:almalinux/10"
+            package: mariadb-11.8
+          - image: "images:almalinux/10"
             package: mysql-community-8.4
+          - image: "images:almalinux/10"
+            package: percona-server-8.4
 
           # Debian 12
           - image: "images:debian/12"
