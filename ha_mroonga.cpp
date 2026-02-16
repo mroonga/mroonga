@@ -3772,6 +3772,7 @@ int ha_mroonga::wrapper_create(const char* name,
     base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
+  info->option_struct = table->s->option_struct_table;
 #  ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
   error = hnd->ha_create(name, table, info, table_def);
 #  else
@@ -15107,6 +15108,7 @@ int ha_mroonga::wrapper_truncate(
   MRN_DBUG_ENTER_METHOD();
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+  wrap_handler->option_struct = table->s->option_struct_table;
 #  ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
   error = wrap_handler->ha_truncate(table_def);
 #  else
@@ -16714,7 +16716,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD* thd)
   }
   HA_CREATE_INFO info;
 #  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
-  info.option_struct = table_share->option_struct;
+  info.option_struct = table_share->option_struct_table;
 #  endif
   error =
     wrapper_create_index(table_share->normalized_path.str, table, &info, share);
