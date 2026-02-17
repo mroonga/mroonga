@@ -941,7 +941,8 @@ using TABLE_LIST = Table_ref;
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT(table_share)                       \
     ((table_share)->option_struct)
-#  define MRN_SET_OPTION_STRUCT_TO_OPTION_STRUCT(table_share_option_struct)    \
+#  define MRN_SET_OPTION_STRUCT_TO_TABLE_OPTION_STRUCT(                        \
+    table_share_option_struct)                                                 \
     ;                                                     /* No operation */
 #  define MRN_SET_OPTION_STRUCT_TO_HANDLER(table_share) ; /* No operation */
 #endif
