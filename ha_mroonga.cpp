@@ -16716,7 +16716,7 @@ int ha_mroonga::wrapper_recreate_indexes(THD* thd)
   }
   HA_CREATE_INFO info;
 #  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
-  info.option_struct = table_share->option_struct_table;
+  info.option_struct = MRN_TABLE_SHARE_OPTION_STRUCT(table_share);
 #  endif
   error =
     wrapper_create_index(table_share->normalized_path.str, table, &info, share);
