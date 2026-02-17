@@ -34,7 +34,9 @@ baseurl = "https://rpm.mariadb.org/${mariadb_version}/rhel/\$releasever/\$basear
 gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 REPO
-    sudo dnf module -y disable mariadb
+    if [ "${os_version}" = "8" ] || [ "${os_version}" = "9" ]; then
+      sudo dnf module -y disable mariadb
+    fi
     ;;
   mysql-community-minimal-*)
     service_name=mysqld
@@ -64,7 +66,11 @@ REPO
     sudo ${DNF_INSTALL} \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${percona_server_version} | sed -e 's/\.//g')
-    sudo percona-release setup ps${percona_package_version}
+    if [ "${percona_package_version}" = "80" ]; then
+      sudo percona-release setup ps${percona_package_version}
+    else
+      sudo percona-release enable-only ps-${percona_package_version}-lts release
+    fi
     sudo ${DNF_INSTALL} percona-icu-data-files
     ;;
 esac
