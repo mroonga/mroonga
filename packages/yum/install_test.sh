@@ -34,7 +34,9 @@ baseurl = "https://rpm.mariadb.org/${mariadb_version}/rhel/\$releasever/\$basear
 gpgkey = https://rpm.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck = 1
 REPO
-    sudo dnf module -y disable mariadb
+    if [ "${os_version}" = "8" ] || [ "${os_version}" = "9" ]; then
+      sudo dnf module -y disable mariadb
+    else
     ;;
   mysql-community-minimal-*)
     service_name=mysqld
