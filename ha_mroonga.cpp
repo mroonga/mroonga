@@ -3772,7 +3772,9 @@ int ha_mroonga::wrapper_create(const char* name,
     base_key_info = NULL;
     DBUG_RETURN(HA_ERR_OUT_OF_MEM);
   }
-  info->option_struct = table->s->option_struct_table;
+#  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  info->option_struct = MRN_TABLE_SHARE_OPTION_STRUCT(table->s);
+#  endif
 #  ifdef MRN_HANDLER_CREATE_HAVE_TABLE_DEFINITION
   error = hnd->ha_create(name, table, info, table_def);
 #  else
