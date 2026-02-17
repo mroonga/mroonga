@@ -64,7 +64,11 @@ REPO
     sudo ${DNF_INSTALL} \
          https://repo.percona.com/yum/percona-release-latest.noarch.rpm
     percona_package_version=$(echo ${percona_server_version} | sed -e 's/\.//g')
-    sudo percona-release setup ps${percona_package_version}
+    if [ "${percona_package_version}" = "80" ]; then
+      sudo percona-release setup ps${percona_package_version}
+    else
+      sudo percona-release enable-only ps-${percona_package_version}-lts release
+    fi
     sudo ${DNF_INSTALL} percona-icu-data-files
     ;;
 esac
