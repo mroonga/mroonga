@@ -15105,15 +15105,16 @@ int ha_mroonga::wrapper_truncate(
 )
 {
   int error = 0;
-  MRN_SHARE *tmp_share;
   MRN_DBUG_ENTER_METHOD();
-
-  if (!(tmp_share = mrn_get_share(table->s->table_name.str, table, &error))) {
-    DBUG_RETURN(error);
-  }
 
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
+
+#  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
+  MRN_SHARE* tmp_share;
+  if (!(tmp_share = mrn_get_share(table->s->table_name.str, table, &error))) {
+    DBUG_RETURN(error);
+  }
 
   if (parse_engine_table_options(ha_thd(), tmp_share->hton, table->s)) {
     error = MRN_GET_ERROR_NUMBER;
@@ -15122,6 +15123,7 @@ int ha_mroonga::wrapper_truncate(
       MRN_TABLE_SHARE_OPTION_STRUCT(table->s);
     error = wrap_handler->ha_truncate();
   }
+#  endif
 #  ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
   error = wrap_handler->ha_truncate(table_def);
 #  else
