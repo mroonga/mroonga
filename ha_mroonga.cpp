@@ -15121,8 +15121,8 @@ int ha_mroonga::wrapper_truncate(
   if (parse_engine_table_options(ha_thd(), tmp_share->hton, table->s)) {
     error = MRN_GET_ERROR_NUMBER;
   } else {
-    wrap_handler->option_struct = option_struct =
-      MRN_TABLE_SHARE_OPTION_STRUCT(table->s);
+    option_struct = MRN_TABLE_SHARE_OPTION_STRUCT(table->s);
+    MRN_SET_OPTION_STRUCT_TO_HANDLER(option_struct);
     error = wrap_handler->ha_truncate();
   }
 #  endif

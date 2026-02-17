@@ -933,8 +933,11 @@ using TABLE_LIST = Table_ref;
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib()
 #  define MRN_TABLE_SHARE_OPTION_STRUCT(table_share)                           \
     (table_share)->option_struct_table
+#  define MRN_SET_OPTION_STRUCT_TO_HANDLER(option_struct)                      \
+    (wrap_handler->option_struct = option_struct)
 #else
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
 #  define MRN_TABLE_SHARE_OPTION_STRUCT(table_share)                           \
     (table_share)->option_struct
+#  define MRN_SET_OPTION_STRUCT_TO_HANDLER(option_struct) ; /* No operation */
 #endif
