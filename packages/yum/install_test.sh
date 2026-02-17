@@ -36,7 +36,7 @@ gpgcheck = 1
 REPO
     if [ "${os_version}" = "8" ] || [ "${os_version}" = "9" ]; then
       sudo dnf module -y disable mariadb
-    else
+    fi
     ;;
   mysql-community-minimal-*)
     service_name=mysqld
