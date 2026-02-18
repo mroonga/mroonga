@@ -6,6 +6,7 @@ News
 .. toctree::
    :maxdepth: 2
 
+   news/16
    news/15
    news/14
    news/13
