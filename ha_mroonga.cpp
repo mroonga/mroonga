@@ -15108,7 +15108,6 @@ int ha_mroonga::wrapper_truncate(
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
 
