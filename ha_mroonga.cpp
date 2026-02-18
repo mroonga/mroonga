@@ -15122,7 +15122,6 @@ int ha_mroonga::wrapper_truncate(
   } else {
     MRN_SET_OPTION_STRUCT_TO_TABLE_OPTION_STRUCT(table->s);
     MRN_SET_OPTION_STRUCT_TO_HANDLER(table->s);
-    error = wrap_handler->ha_truncate();
   }
 #  endif
 #  ifdef MRN_HANDLER_TRUNCATE_HAVE_TABLE_DEFINITION
