@@ -15134,7 +15134,9 @@ int ha_mroonga::wrapper_truncate(
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
 
+#  ifdef MRN_SUPPORT_CUSTOM_OPTIONS
   mrn_free_share(tmp_share);
+#  endif
 
   if (!error && wrapper_have_target_index()) {
     error = wrapper_truncate_index();
