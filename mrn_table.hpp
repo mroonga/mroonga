@@ -103,7 +103,6 @@ namespace mrn {
 #endif
         alter_create_info(NULL),
         disable_keys_create_info(NULL),
-        alter_connect_string(NULL),
         alter_comment(NULL),
         associated_grn_ctxs() {
     }
@@ -127,10 +126,6 @@ namespace mrn {
 #endif
       alter_create_info = NULL;
       disable_keys_create_info = NULL;
-      if (alter_connect_string) {
-        my_free(alter_connect_string);
-        alter_connect_string = NULL;
-      }
       if (alter_comment) {
         my_free(alter_comment);
         alter_comment = NULL;
@@ -151,7 +146,6 @@ namespace mrn {
 #endif
     HA_CREATE_INFO *alter_create_info;
     HA_CREATE_INFO *disable_keys_create_info;
-    char *alter_connect_string;
     char *alter_comment;
     std::list<grn_ctx *> associated_grn_ctxs;
   };
