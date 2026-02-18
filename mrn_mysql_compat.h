@@ -934,3 +934,18 @@ using TABLE_LIST = Table_ref;
 #else
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
 #endif
+
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 120300)
+#  define MRN_GET_TABLE_SHARE_OPTION_STRUCT(table_share)                       \
+    ((table_share)->option_struct_table)
+#  define MRN_SET_OPTION_STRUCT_TO_TABLE_OPTION_STRUCT(table_share)            \
+    (option_struct = (table_share)->option_struct_table)
+#  define MRN_SET_OPTION_STRUCT_TO_HANDLER(table_share)                        \
+    (wrap_handler->option_struct = (table_share)->option_struct_table)
+#else
+#  define MRN_GET_TABLE_SHARE_OPTION_STRUCT(table_share)                       \
+    ((table_share)->option_struct)
+#  define MRN_SET_OPTION_STRUCT_TO_TABLE_OPTION_STRUCT(table_share)            \
+    ;                                                     /* No operation */
+#  define MRN_SET_OPTION_STRUCT_TO_HANDLER(table_share) ; /* No operation */
+#endif
