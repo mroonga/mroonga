@@ -943,6 +943,6 @@ using TABLE_LIST = Table_ref;
 #else
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT_TABLE(table_share)                 \
     ((table_share)->option_struct)
-/* The following macro do nothing */
+/* This does nothing */
 #  define MRN_SET_OPTION_STRUCT_TABLE(table_share, option_struct)
 #endif
