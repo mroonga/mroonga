@@ -938,11 +938,11 @@ using TABLE_LIST = Table_ref;
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 120300)
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT_TABLE(table_share)                 \
     ((table_share)->option_struct_table)
-#  define MRN_SET_OPTION_STRUCT_TABLE(table_share, option_struct)              \
+#  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)              \
     (option_struct = (table_share)->option_struct_table)
 #else
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT_TABLE(table_share)                 \
     ((table_share)->option_struct)
 /* This does nothing */
-#  define MRN_SET_OPTION_STRUCT_TABLE(table_share, option_struct)
+#  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)
 #endif
