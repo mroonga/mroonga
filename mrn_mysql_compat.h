@@ -939,7 +939,7 @@ using TABLE_LIST = Table_ref;
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT_TABLE(table_share)                 \
     ((table_share)->option_struct_table)
 #  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)              \
-    (option_struct = (table_share)->option_struct_table)
+    (option_struct) = (table_share)->option_struct_table
 #else
 #  define MRN_GET_TABLE_SHARE_OPTION_STRUCT_TABLE(table_share)                 \
     ((table_share)->option_struct)
