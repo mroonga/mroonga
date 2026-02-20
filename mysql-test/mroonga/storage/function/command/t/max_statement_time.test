@@ -22,6 +22,7 @@
 --source ../../../../include/mroonga/have_groonga_12_0_9_or_later.inc
 --source ../../../../include/mroonga/load_mroonga_functions.inc
 
+--replace_result "Query execution was interrupted (max_statement_time exceeded)" "Query was interrupted: execution time limit 0.001 sec exceeded"
 --error ER_STATEMENT_TIMEOUT
 SET STATEMENT max_statement_time = 0.001 FOR
   SELECT mroonga_command('sleep', 'second', '1');
