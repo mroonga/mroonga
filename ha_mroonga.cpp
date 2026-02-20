@@ -3635,26 +3635,15 @@ int ha_mroonga::create_share_for_create() const
   MRN_TABLE_SHARE_RESET(&table_share_for_create);
   if (table_share) {
     table_share_for_create.comment = table_share->comment;
-    table_share_for_create.connect_string = table_share->connect_string;
   } else {
     if (thd_sql_command(ha_thd()) != SQLCOM_CREATE_INDEX) {
       table_share_for_create.comment = create_info->comment;
-      table_share_for_create.connect_string = create_info->connect_string;
     }
     if (thd_sql_command(ha_thd()) == SQLCOM_ALTER_TABLE ||
         thd_sql_command(ha_thd()) == SQLCOM_CREATE_INDEX) {
       mrn::SlotData* slot_data = mrn_get_slot_data(thd, false);
       if (slot_data && slot_data->alter_create_info) {
         create_info = slot_data->alter_create_info;
-        if (slot_data->alter_connect_string) {
-          table_share_for_create.connect_string.str =
-            slot_data->alter_connect_string;
-          table_share_for_create.connect_string.length =
-            strlen(slot_data->alter_connect_string);
-        } else {
-          table_share_for_create.connect_string.str = NULL;
-          table_share_for_create.connect_string.length = 0;
-        }
         if (slot_data->alter_comment) {
           table_share_for_create.comment.str = slot_data->alter_comment;
           table_share_for_create.comment.length =
@@ -15693,10 +15682,6 @@ void ha_mroonga::storage_update_create_info(HA_CREATE_INFO* create_info)
 void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
 {
   MRN_DBUG_ENTER_METHOD();
-  if (!create_info->connect_string.str) {
-    create_info->connect_string.str = table->s->connect_string.str;
-    create_info->connect_string.length = table->s->connect_string.length;
-  }
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode) {
     wrapper_update_create_info(create_info);
@@ -15709,16 +15694,6 @@ void ha_mroonga::update_create_info(HA_CREATE_INFO* create_info)
   mrn::SlotData* slot_data = mrn_get_slot_data(ha_thd(), true);
   if (slot_data) {
     slot_data->alter_create_info = create_info;
-    if (slot_data->alter_connect_string) {
-      my_free(slot_data->alter_connect_string);
-      slot_data->alter_connect_string = NULL;
-    }
-    if (create_info->connect_string.str) {
-      slot_data->alter_connect_string =
-        mrn_my_strndup(create_info->connect_string.str,
-                       create_info->connect_string.length,
-                       MYF(MY_WME));
-    }
     if (slot_data->alter_comment) {
       my_free(slot_data->alter_comment);
       slot_data->alter_comment = NULL;
@@ -17075,8 +17050,7 @@ bool ha_mroonga::check_if_incompatible_data(HA_CREATE_INFO* create_info,
 {
   MRN_DBUG_ENTER_METHOD();
   bool res;
-  if (create_info->comment.str != table_share->comment.str ||
-      create_info->connect_string.str != table_share->connect_string.str) {
+  if (create_info->comment.str != table_share->comment.str) {
     DBUG_RETURN(COMPATIBLE_DATA_NO);
   }
 #ifdef MRN_ENABLE_WRAPPER_MODE
