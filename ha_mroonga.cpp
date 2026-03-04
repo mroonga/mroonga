@@ -3101,6 +3101,7 @@ ha_mroonga::ha_mroonga(handlerton* hton, TABLE_SHARE* share_arg)
       ignoring_duplicated_key(false),
       inserting_with_update(false),
       fulltext_searching(false),
+      st_mrn_ft_infos_created_(false),
       ignoring_no_key_columns(false),
       replacing_(false),
       written_by_row_based_binlog(0),
@@ -10165,6 +10166,8 @@ ha_mroonga::generic_ft_init_ext_select(uint flags, uint key_nr, String* key)
   info->id_accessor = NULL;
   info->key_accessor = NULL;
 
+  st_mrn_ft_infos_created_ = true;
+
   if (GRN_TEXT_LEN(&(info->query)) == 0) {
     DBUG_RETURN(info);
   }
@@ -14116,6 +14119,9 @@ int ha_mroonga::generic_reset()
   if (thd_sql_command(ha_thd()) != SQLCOM_SELECT) {
     DBUG_RETURN(error);
   }
+  if (!st_mrn_ft_infos_created_) {
+    DBUG_RETURN(error);
+  }
 
   TABLE_LIST* table_list = table->pos_in_table_list;
   if (!table_list) {
@@ -14140,6 +14146,8 @@ int ha_mroonga::generic_reset()
       mrn_generic_ft_clear(reinterpret_cast<st_mrn_ft_info*>(item->ft_handler));
     }
   }
+
+  st_mrn_ft_infos_created_ = false;
 
   DBUG_RETURN(error);
 }

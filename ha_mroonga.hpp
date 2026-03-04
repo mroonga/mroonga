@@ -593,6 +593,7 @@ private:
   bool ignoring_duplicated_key;
   bool inserting_with_update;
   bool fulltext_searching;
+  bool st_mrn_ft_infos_created_;
   bool ignoring_no_key_columns;
   bool replacing_;
   uint written_by_row_based_binlog;
