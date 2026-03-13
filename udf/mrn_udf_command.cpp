@@ -305,7 +305,22 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
                GRN_TEXT_LEN(&(info->command)),
                0);
   if (ctx->rc != GRN_SUCCESS) {
-    MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_WRITE);
+    if ((ctx)->rc == GRN_CANCEL) {
+      char max_statement_time_str[32];
+      size_t length =
+        my_snprintf(max_statement_time_str,
+                    sizeof(max_statement_time_str),
+                    "%g",
+                    current_thd->variables.max_statement_time_double);
+      my_snprintf(max_statement_time_str + length,
+                  sizeof(max_statement_time_str) - length,
+                  " sec");
+      my_error(MRN_ERROR_CANCEL,
+               MYF(0),
+               max_statement_time_str);
+    } else {
+      MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_WRITE, current_thd);
+    }
     goto error;
   }
 
@@ -315,7 +330,7 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
     unsigned int buffer_length;
     grn_ctx_recv(ctx, &buffer, &buffer_length, &flags);
     if (ctx->rc != GRN_SUCCESS) {
-      MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_READ);
+      MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_READ, current_thd);
       goto error;
     }
     if (buffer_length > 0) {

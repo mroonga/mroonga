@@ -850,21 +850,27 @@ using TABLE_LIST = Table_ref;
 
 #ifdef MRN_MARIADB_P
 #  define MRN_ERROR_CANCEL ER_STATEMENT_TIMEOUT
+#  define MRN_TIMEOUT_VALUE(current_thd)                \
+    (current_thd->variables.max_statement_time_double)
 #else
 #  define MRN_ERROR_CANCEL ER_QUERY_TIMEOUT
+#  define MRN_TIMEOUT_VALUE(current_thd)                \
+    (current_thd->variables.max_execution_time)
 #endif
 
 #ifdef MRN_ERROR_CANCEL
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
+#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)               \
     do {                                                                       \
       if ((ctx)->rc == GRN_CANCEL) {                                           \
-        my_error(MRN_ERROR_CANCEL, MYF(0));                                    \
+        my_error(MRN_ERROR_CANCEL,                                             \
+                 MYF(0),                                                       \
+                 std::to_string((current_thd)->variables.max_statement_time_double)); \
       } else {                                                                 \
         my_message((error_code), (ctx)->errbuf, MYF(0));                       \
       }                                                                        \
     } while (false)
 #else
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
+#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)               \
     my_message(error_code, ctx->errbuf, MYF(0))
 #endif
 
