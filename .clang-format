@@ -33,4 +33,5 @@ NamespaceIndentation: All
 PPIndentWidth: 2
 PackConstructorInitializers: CurrentLine
 PointerAlignment: Left
+SeparateDefinitionBlocks: Always
 SortIncludes: Never

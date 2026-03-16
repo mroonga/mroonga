@@ -1365,6 +1365,7 @@ namespace mrn {
     };
   } // namespace condition_push_down
 } // namespace mrn
+
 static const char* mrn_condition_push_down_type_names[] = {
   "NONE", "ALL", "ONE_FULL_TEXT_SEARCH", NullS};
 static TYPELIB mrn_condition_push_down_type_typelib =
@@ -3226,6 +3227,7 @@ const char* ha_mroonga::index_type(uint key_nr)
 #endif
 
 static const char* ha_mroonga_exts[] = {NullS};
+
 const char** ha_mroonga::bas_ext() const
 {
   MRN_DBUG_ENTER_METHOD();
@@ -12993,6 +12995,7 @@ bool ha_mroonga::geo_need_reverse(Field_geom* field)
 #endif
   DBUG_RETURN(reverse);
 }
+
 void ha_mroonga::storage_store_field_geometry(Field* field,
                                               const char* value,
                                               uint value_length)
