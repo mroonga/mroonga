@@ -887,6 +887,7 @@ static int mrn_log_file_check(THD* thd,
 
   DBUG_RETURN(0);
 }
+
 static void
 mrn_log_file_update(THD* thd, mrn_sys_var* var, void* var_ptr, const void* save)
 {
