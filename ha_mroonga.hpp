@@ -1279,7 +1279,6 @@ private:
   int wrapper_extra_opt(enum ha_extra_function operation, ulong cache_size);
 #endif
   int storage_extra_opt(enum ha_extra_function operation, ulong cache_size);
-  int generic_reset();
 #ifdef MRN_ENABLE_WRAPPER_MODE
   int wrapper_reset();
 #endif

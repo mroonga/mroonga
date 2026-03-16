@@ -14105,50 +14105,13 @@ int ha_mroonga::storage_encode_multiple_column_key_range(KEY* key_info,
   DBUG_RETURN(error);
 }
 
-int ha_mroonga::generic_reset()
-{
-  MRN_DBUG_ENTER_METHOD();
-  int error = 0;
-
-  ctx->rc = GRN_SUCCESS;
-  ctx->errbuf[0] = '\0';
-
-  if (thd_sql_command(ha_thd()) != SQLCOM_SELECT) {
-    DBUG_RETURN(error);
-  }
-
-  TABLE_LIST* table_list = table->pos_in_table_list;
-  if (!table_list) {
-    DBUG_RETURN(error);
-  }
-
-  mrn_query_block* query_block = MRN_TABLE_LIST_QUERY_BLOCK(table_list);
-  if (!query_block) {
-    DBUG_RETURN(error);
-  }
-
-  if (!query_block->ftfunc_list) {
-    DBUG_RETURN(error);
-  }
-  if (!query_block->ftfunc_list->elements) {
-    DBUG_RETURN(error);
-  }
-  List_iterator<Item_func_match> iterator(*(query_block->ftfunc_list));
-  Item_func_match* item;
-  while ((item = iterator++)) {
-    if (item->ft_handler) {
-      mrn_generic_ft_clear(reinterpret_cast<st_mrn_ft_info*>(item->ft_handler));
-    }
-  }
-
-  DBUG_RETURN(error);
-}
-
 #ifdef MRN_ENABLE_WRAPPER_MODE
 int ha_mroonga::wrapper_reset()
 {
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
+  ctx->rc = GRN_SUCCESS;
+  ctx->errbuf[0] = '\0';
   MRN_SET_WRAP_SHARE_KEY(share, table->s);
   MRN_SET_WRAP_TABLE_KEY(this, table);
   error = wrap_handler->ha_reset();
@@ -14159,10 +14122,6 @@ int ha_mroonga::wrapper_reset()
     alter_key_info_buffer = NULL;
   }
   wrap_ft_init_count = 0;
-  int generic_error = generic_reset();
-  if (error == 0) {
-    error = generic_error;
-  }
   DBUG_RETURN(error);
 }
 #endif
@@ -14170,9 +14129,9 @@ int ha_mroonga::wrapper_reset()
 int ha_mroonga::storage_reset()
 {
   MRN_DBUG_ENTER_METHOD();
-  int error;
-  error = generic_reset();
-  DBUG_RETURN(error);
+  ctx->rc = GRN_SUCCESS;
+  ctx->errbuf[0] = '\0';
+  DBUG_RETURN(0);
 }
 
 int ha_mroonga::reset()
