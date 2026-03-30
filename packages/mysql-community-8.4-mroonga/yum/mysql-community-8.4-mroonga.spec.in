@@ -108,6 +108,9 @@ Documentation for Mroonga
 %doc mysql-community-8.4-mroonga-doc/*
 
 %changelog
+* Mon Mar 30 2026 Horimoto Yasuhiro <horimoto@clear-code.com> - 16.01-1
+- New upstream release.
+
 * Fri Feb 06 2026 Horimoto Yasuhiro <horimoto@clear-code.com> - 15.25-1
 - New upstream release.
 
