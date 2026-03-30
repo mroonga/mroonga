@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Mroonga 15.26\n"
+"Project-Id-Version: Mroonga mrn_version\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2026-02-18 11:53+0900\n"
 "Language-Team: Japanese\n"
@@ -48,13 +48,13 @@ msgid "This is the latest MariaDB 11.8 release."
 msgstr "11.8.6は最新のMariaDB 11.8のリリースです。"
 
 msgid "Dropped support for `engine \"XXX\"` in CONNECTION for wrapper mode"
-msgstr "ラッパーモードで`CONNECTIN=engine \"XXX\"`のサポートをやめました。"
+msgstr "ラッパーモードで`CONNECTION=engine \"XXX\"`のサポートをやめました。"
 
 msgid "[[MDEV-38530]( https://jira.mariadb.org/browse/MDEV-38530 )][Reported by Roel Van de Paar]"
-msgstr "[[MDEV-38530]( https://jira.mariadb.org/browse/MDEV-38530 )][Roel Van de Paaraさんの報告]"
+msgstr "[[MDEV-38530]( https://jira.mariadb.org/browse/MDEV-38530 )][Roel Van de Paarさんの報告]"
 
-msgid "Mroonga accepted `engine \"XXX\"` for wrapper mode in not only in `COMMENT` but also in `CONNECTION`. However, this behavior was neither documented nor tested, so support for it has been removed."
-msgstr "Mroongaのラッパーモードで`CONNECTIN=engine \"XXX\"`という書き方もできるようになっていますが、これについてドキュメントもテストも存在しないため、この機能を削除しました。"
+msgid "Mroonga accepted `engine \"XXX\"` for wrapper mode not only in `COMMENT` but also in `CONNECTION`. However, this behavior was neither documented nor tested, so support for it has been removed."
+msgstr "Mroongaのラッパーモードで`CONNECTION=engine \"XXX\"`という書き方もできるようになっていますが、これについてドキュメントもテストも存在しないため、この機能を削除しました。"
 
 msgid "Fixes"
 msgstr "修正"
@@ -65,7 +65,7 @@ msgstr "`mroonga_log_file`に`NULL`または、空の文字列を設定すると
 msgid "[[GH-1069]( https://github.com/mroonga/mroonga/pull/1069 )][Patched by Hadeer Ramadan]"
 msgstr "[[GH-1069]( https://github.com/mroonga/mroonga/pull/1069 )][Hadeer Ramadanさんがパッチ提供]"
 
-msgid "Setting `NULL` or an empty string as below, caused a `SIGSEGV`."
+msgid "Setting `NULL` or an empty string as shown below caused a `SIGSEGV`."
 msgstr "以下のように`NULL`または、空の文字列を設定すると、`SIGSEGV`が発生します。"
 
 msgid "Thanks"
