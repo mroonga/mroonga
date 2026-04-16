@@ -947,13 +947,14 @@ using TABLE_LIST = Table_ref;
 #  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)
 #endif
 
-#if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100625 && MYSQL_VERSION_ID <= 100700) ||               \
-   (MYSQL_VERSION_ID >= 101116 && MYSQL_VERSION_ID <= 101200) ||               \
-   (MYSQL_VERSION_ID >= 110410))
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 130000)
 #  define MRN_HA_EXTRA_BEGIN_COPY_NAME "HA_EXTRA_BEGIN_COPY"
 #  define MRN_HA_EXTRA_BEGIN_COPY      HA_EXTRA_BEGIN_COPY
+#  define MRN_HA_EXTRA_END_COPY_NAME   "HA_EXTRA_END_COPY"
+#  define MRN_HA_EXTRA_END_COPY        HA_EXTRA_END_COPY
 #else
 #  define MRN_HA_EXTRA_BEGIN_COPY_NAME "HA_EXTRA_BEGIN_ALTER_COPY"
 #  define MRN_HA_EXTRA_BEGIN_COPY      HA_EXTRA_BEGIN_ALTER_COPY
+#  define MRN_HA_EXTRA_END_COPY_NAME   "HA_EXTRA_END_ALTER_COPY"
+#  define MRN_HA_EXTRA_END_COPY        HA_EXTRA_END_ALTER_COPY
 #endif
