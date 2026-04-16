@@ -930,6 +930,9 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 110800)
+#  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib_attr()
+#elif defined(MRN_MARIADB_P) &&                                                \
+  ((MYSQL_VERSION_ID >= 110800) || (MYSQL_VERSION_ID < 110900))
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib()
 #else
 #  define MRN_FIELD_ENUM_GET_TYPELIB(field_enum) (field_enum)->typelib
