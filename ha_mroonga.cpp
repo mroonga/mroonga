@@ -658,8 +658,8 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = MRN_HA_EXTRA_END_COPY_NAME;
     break;
 #  ifdef MRN_HAVE_HA_EXTRA_ABORT_ALTER_COPY
-  case HA_EXTRA_ABORT_ALTER_COPY:
-    inspected = "HA_EXTRA_ABORT_ALTER_COPY";
+  case MRN_HA_EXTRA_ABORT_COPY:
+    inspected = MRN_HA_EXTRA_ABORT_COPY_NAME;
     break;
 #  endif
 #  ifdef MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
