@@ -879,7 +879,7 @@ using TABLE_LIST = Table_ref;
         }                                                                      \
       } while (false)
 #  else
-#    define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                          \
+#    define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)             \
       do {                                                                     \
         if ((ctx)->rc == GRN_CANCEL) {                                         \
           my_error(MRN_ERROR_CANCEL, MYF(0));                                  \
