@@ -306,18 +306,24 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
                0);
   if (ctx->rc != GRN_SUCCESS) {
     if ((ctx)->rc == GRN_CANCEL) {
-      char max_statement_time_str[32];
-      size_t length =
-        my_snprintf(max_statement_time_str,
-                    sizeof(max_statement_time_str),
-                    "%g",
-                    current_thd->variables.max_statement_time_double);
-      my_snprintf(max_statement_time_str + length,
-                  sizeof(max_statement_time_str) - length,
+      double timeout_sec = current_thd->query_timer.period / 1000000.0;
+      char timeout_str[32];
+      size_t timeout_str_length =
+        my_snprintf(timeout_str, sizeof(timeout_str), "%g", timeout_sec);
+
+
+      if (!strchr(timeout_str, '.') && !strchr(timeout_str, 'e')) {
+        timeout_str_length +=
+          my_snprintf(timeout_str + timeout_str_length,
+                      sizeof(timeout_str) - timeout_str_length,
+                      ".0");
+      }
+      my_snprintf(timeout_str + timeout_str_length,
+                  sizeof(timeout_str) - timeout_str_length,
                   " sec");
       my_error(MRN_ERROR_CANCEL,
                MYF(0),
-               max_statement_time_str);
+               timeout_str);
     } else {
       MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_WRITE, current_thd);
     }
