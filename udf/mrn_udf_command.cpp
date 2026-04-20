@@ -306,7 +306,7 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
                0);
   if (ctx->rc != GRN_SUCCESS) {
     if ((ctx)->rc == GRN_CANCEL) {
-      double timeout_sec = current_thd->query_timer.period / 1000000.0;
+      double timeout_sec = current_thd->query_timer.timeout / 1000000.0;
       char timeout_str[32];
       size_t timeout_str_length =
         my_snprintf(timeout_str, sizeof(timeout_str), "%g", timeout_sec);
