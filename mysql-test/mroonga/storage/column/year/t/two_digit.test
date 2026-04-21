@@ -19,6 +19,7 @@
 --source ../../../../include/mroonga/skip_windows.inc
 --source ../../../../include/mroonga/have_mariadb.inc
 --source ../../../../include/mroonga/have_mroonga.inc
+--source ../../../../include/mroonga/have_old_mode_2_digit_year.inc
 
 --disable_warnings
 DROP TABLE IF EXISTS two_digits;
