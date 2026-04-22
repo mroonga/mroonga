@@ -1547,10 +1547,10 @@ static handler* mrn_hton_handler_create(handlerton* hton,
   DBUG_RETURN(new_handler);
 }
 
-static void mrn_hton_drop_database(handlerton* hton, char* path)
+static void mrn_hton_drop_database(handlerton* hton, MRN_SCHEMA_NAME_DECLARATION)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  mrn_db_manager->drop(path);
+  mrn_db_manager->drop(MRN_SCHEMA_NAME);
   DBUG_VOID_RETURN;
 }
 
