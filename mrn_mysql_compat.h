@@ -967,8 +967,8 @@ using TABLE_LIST = Table_ref;
 
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
 #  define MRN_SCHEMA_NAME_DECLARATION const char* schema_name
-#  define MRN_SCHEMA_NAME (schema_name)
+#  define MRN_SCHEMA_NAME             (schema_name)
 #else
 #  define MRN_SCHEMA_NAME_DECLARATION char* path
-#  define MRN_SCHEMA_NAME (path)
+#  define MRN_SCHEMA_NAME             (path)
 #endif
