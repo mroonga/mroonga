@@ -964,3 +964,14 @@ using TABLE_LIST = Table_ref;
 #  define MRN_HA_EXTRA_ABORT_COPY_NAME "HA_EXTRA_ABORT_ALTER_COPY"
 #  define MRN_HA_EXTRA_ABORT_COPY      HA_EXTRA_ABORT_ALTER_COPY
 #endif
+
+#if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+#  define MRN_SCHEMA_NAME_DECLARATION const char* schema_name
+#  define MRN_SCHEMA_NAME             (schema_name)
+#  define MRN_FIELD_DATETIME          Field_datetime
+#else
+#  define MRN_SCHEMA_NAME_DECLARATION char* path
+#  define MRN_SCHEMA_NAME             (path)
+#  define MRN_FIELD_DATETIME          Field_datetimef
+#endif
+>>>>>>> d115f15b8 (mysql-server-9.7: follow rename of Field_datetimef class)
