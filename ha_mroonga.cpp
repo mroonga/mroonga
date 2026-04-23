@@ -12444,7 +12444,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field* field, grn_obj* buf)
   MRN_DBUG_ENTER_METHOD();
   int error = 0;
   bool truncated = false;
-  MRN_FIELD_DATETIME* datetime_field = (MRN_FIELD_DATETIME*)field;
+  mrn_field_datetime* datetime_field = (mrn_field_datetime*)field;
   MYSQL_TIME mysql_time;
   MRN_FIELD_GET_TIME(datetime_field, &mysql_time, current_thd);
   long long int time = 0;
@@ -13751,7 +13751,7 @@ int ha_mroonga::storage_encode_key_datetime2(Field* field,
   int error = 0;
   bool truncated = false;
 
-  MRN_FIELD_DATETIME* datetime2_field = (MRN_FIELD_DATETIME*)field;
+  mrn_field_datetime* datetime2_field = (mrn_field_datetime*)field;
   longlong packed_time =
     my_datetime_packed_from_binary(key, datetime2_field->decimals());
   MYSQL_TIME mysql_time;

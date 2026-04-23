@@ -967,9 +967,9 @@ using TABLE_LIST = Table_ref;
 
 #include <sql/field.h>
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
-using MRN_FIELD_DATETIME = Field_datetime;
+using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 #else
-using MRN_FIELD_DATETIME = Field_datetimef;
+using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 #endif
