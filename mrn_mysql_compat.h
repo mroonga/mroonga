@@ -971,5 +971,5 @@ using MRN_FIELD_DATETIME = Field_datetime;
 using MRN_FIELD_TIMESTAMP = Field_timestamp;
 #else
 using MRN_FIELD_DATETIME = Field_datetimef;
-using MRN_FIELD_TIMESTAMP = Field_timestampf:
+using MRN_FIELD_TIMESTAMP = Field_timestampf;
 #endif
