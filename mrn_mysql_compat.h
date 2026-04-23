@@ -966,7 +966,7 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
-#  define MRN_FIELD_DATETIME          Field_datetime
+#  define MRN_FIELD_DATETIME Field_datetime
 #else
-#  define MRN_FIELD_DATETIME          Field_datetimef
+#  define MRN_FIELD_DATETIME Field_datetimef
 #endif
