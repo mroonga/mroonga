@@ -855,16 +855,41 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #ifdef MRN_ERROR_CANCEL
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
-    do {                                                                       \
-      if ((ctx)->rc == GRN_CANCEL) {                                           \
-        my_error(MRN_ERROR_CANCEL, MYF(0));                                    \
-      } else {                                                                 \
-        my_message((error_code), (ctx)->errbuf, MYF(0));                       \
-      }                                                                        \
-    } while (false)
+#  if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 130000)
+#    define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)             \
+      do {                                                                     \
+        if ((ctx)->rc == GRN_CANCEL) {                                         \
+          double timeout_sec = current_thd->query_timer.timeout / 1000000.0;   \
+          char timeout_str[32];                                                \
+          size_t timeout_str_length =                                          \
+            my_snprintf(timeout_str, sizeof(timeout_str), "%g", timeout_sec);  \
+                                                                               \
+          if (!strchr(timeout_str, '.') && !strchr(timeout_str, 'e')) {        \
+            timeout_str_length +=                                              \
+              my_snprintf(timeout_str + timeout_str_length,                    \
+                          sizeof(timeout_str) - timeout_str_length,            \
+                          ".0");                                               \
+          }                                                                    \
+          my_snprintf(timeout_str + timeout_str_length,                        \
+                      sizeof(timeout_str) - timeout_str_length,                \
+                      " sec");                                                 \
+          my_error(MRN_ERROR_CANCEL, MYF(0), timeout_str);                     \
+        } else {                                                               \
+          my_message((error_code), (ctx)->errbuf, MYF(0));                     \
+        }                                                                      \
+      } while (false)
+#  else
+#    define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)             \
+      do {                                                                     \
+        if ((ctx)->rc == GRN_CANCEL) {                                         \
+          my_error(MRN_ERROR_CANCEL, MYF(0));                                  \
+        } else {                                                               \
+          my_message((error_code), (ctx)->errbuf, MYF(0));                     \
+        }                                                                      \
+      } while (false)
+#  endif
 #else
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
+#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code, current_thd)               \
     my_message(error_code, ctx->errbuf, MYF(0))
 #endif
 
