@@ -186,11 +186,11 @@ namespace mrn {
         if (is_null) {
           grn_time = 0;
         } else {
-          MRN_FIELD_DATETIME* datetimef_field =
+          MRN_FIELD_DATETIME* datetime_field =
             static_cast<MRN_FIELD_DATETIME*>(field);
           long long int mysql_datetime_packed =
             my_datetime_packed_from_binary(current_mysql_key,
-                                           datetimef_field->decimals());
+                                           datetime_field->decimals());
           MYSQL_TIME mysql_time;
           TIME_from_longlong_datetime_packed(&mysql_time,
                                              mysql_datetime_packed);
@@ -306,7 +306,7 @@ namespace mrn {
         }
       } break;
       case TYPE_DATETIME2: {
-        MRN_FIELD_DATETIME* datetimef_field =
+        MRN_FIELD_DATETIME* datetime_field =
           static_cast<MRN_FIELD_DATETIME*>(field);
         long long int grn_time;
         grn_key_data_size = 8;
@@ -320,7 +320,7 @@ namespace mrn {
           mrn_TIME_to_longlong_datetime_packed(mysql_time);
         my_datetime_packed_to_binary(mysql_datetime_packed,
                                      current_mysql_key,
-                                     datetimef_field->decimals());
+                                     datetime_field->decimals());
       } break;
       case TYPE_BYTE_SEQUENCE:
         decode_sequence(key_part,
