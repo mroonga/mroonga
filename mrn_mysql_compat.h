@@ -974,4 +974,3 @@ using TABLE_LIST = Table_ref;
 #  define MRN_SCHEMA_NAME             (path)
 #  define MRN_FIELD_DATETIME          Field_datetimef
 #endif
->>>>>>> d115f15b8 (mysql-server-9.7: follow rename of Field_datetimef class)
