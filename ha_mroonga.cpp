@@ -12428,9 +12428,9 @@ int ha_mroonga::generic_store_bulk_timestamp2(Field* field, grn_obj* buf)
   int error = 0;
   int64_t grn_time = 0;
   if (!field->is_null()) {
-    MRN_FIELD_TIMESTAMP* timestamp_field =
-      static_cast<MRN_FIELD_TIMESTAMP*>(field);
-    mrn::TimestampFieldValueConverter<MRN_FIELD_TIMESTAMP> converter(
+    mrn_field_timestamp* timestamp_field =
+      static_cast<mrn_field_timestamp*>(field);
+    mrn::TimestampFieldValueConverter<mrn_field_timestamp> converter(
       timestamp_field);
     grn_time = converter.convert();
   }
@@ -13713,7 +13713,7 @@ int ha_mroonga::storage_encode_key_timestamp2(Field* field,
   int error = 0;
   bool truncated = false;
 
-  MRN_FIELD_TIMESTAMP* timestamp2_field = (MRN_FIELD_TIMESTAMP*)field;
+  mrn_field_timestamp* timestamp2_field = (mrn_field_timestamp*)field;
   MYSQL_TIME mysql_time;
 #ifdef MRN_TIMESTAMP_USE_MY_TIMEVAL
   struct my_timeval my_tm;
