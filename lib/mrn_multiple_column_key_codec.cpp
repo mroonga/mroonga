@@ -186,8 +186,8 @@ namespace mrn {
         if (is_null) {
           grn_time = 0;
         } else {
-          MRN_FIELD_DATETIME* datetime_field =
-            static_cast<MRN_FIELD_DATETIME*>(field);
+          mrn_field_datetime* datetime_field =
+            static_cast<mrn_field_datetime*>(field);
           long long int mysql_datetime_packed =
             my_datetime_packed_from_binary(current_mysql_key,
                                            datetime_field->decimals());
@@ -306,8 +306,8 @@ namespace mrn {
         }
       } break;
       case TYPE_DATETIME2: {
-        MRN_FIELD_DATETIME* datetime_field =
-          static_cast<MRN_FIELD_DATETIME*>(field);
+        mrn_field_datetime* datetime_field =
+          static_cast<mrn_field_datetime*>(field);
         long long int grn_time;
         grn_key_data_size = 8;
         decode_long_long_int(key_part, current_grn_key, &grn_time);
