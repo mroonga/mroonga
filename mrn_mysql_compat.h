@@ -965,7 +965,7 @@ using TABLE_LIST = Table_ref;
 #  define MRN_HA_EXTRA_ABORT_COPY      HA_EXTRA_ABORT_ALTER_COPY
 #endif
 
-#include <sql/field.h>
+#include <field.h>
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
 using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
