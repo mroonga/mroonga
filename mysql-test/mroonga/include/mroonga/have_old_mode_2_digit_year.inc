@@ -20,9 +20,11 @@
 --source ../../include/mroonga/check_mariadb.inc
 
 --disable_query_log
-if ($mariadb && $version_13_0_or_later) {
+if ($mariadb) {
+  if ($version_13_0_or_later) {
 --disable_warnings
-  set old_mode=2_DIGIT_YEAR;
+    set old_mode=2_DIGIT_YEAR;
 --enable_warnings
+  }
 }
 --enable_query_log
