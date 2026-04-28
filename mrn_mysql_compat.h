@@ -970,8 +970,14 @@ using TABLE_LIST = Table_ref;
 using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
+
+#  define MRN_SCHEMA_NAME_DECLARATION const char* schema_name
+#  define MRN_SCHEMA_NAME             (schema_name)
 #else
 using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
+
+#  define MRN_SCHEMA_NAME_DECLARATION char* path
+#  define MRN_SCHEMA_NAME             (path)
 #endif
