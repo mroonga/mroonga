@@ -970,8 +970,10 @@ using TABLE_LIST = Table_ref;
 using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
+using mrn_field_date = Field_date;
 #else
 using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
+using mrn_field_date = Field_newdate;
 #endif
