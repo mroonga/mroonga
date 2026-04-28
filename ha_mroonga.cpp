@@ -12497,7 +12497,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field* field, grn_obj* buf)
   bool truncated = false;
   long long int time = 0;
   if (!field->is_null()) {
-    auto newdate_field = static_cast<Field_newdate*>(field);
+    auto newdate_field = static_cast<mrn_field_date*>(field);
     MYSQL_TIME mysql_date;
     MRN_FIELD_GET_TIME(newdate_field, &mysql_date, current_thd);
     mrn::TimeConverter time_converter;
