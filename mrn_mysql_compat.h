@@ -971,9 +971,23 @@ using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
+
+#  define MRN_LOAD_TIME(key, field_time, mysq_time)                            \
+    do {                                                                       \
+      Time_val time;                                                           \
+      Time_val::load_time(key, field_time->decimals(), &time);                 \
+      mysql_time = MYSQL_TIME(time);                                           \
+    } while (false)
 #else
 using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
+
+#  define MRN_LOAD_TIME(key, field_time, mysq_time)                            \
+    do {                                                                       \
+      longlong packed_time =                                                   \
+        my_time_packed_from_binary(key, field_time->decimals());               \
+      TIME_from_longlong_time_packed(&mysql_time, packed_time);                \
+    } while (false)
 #endif
