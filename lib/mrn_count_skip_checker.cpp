@@ -226,7 +226,7 @@ namespace mrn {
         DBUG_RETURN(skippable);
       }
       break;
-    case Item_func::MULT_EQUAL_FUNC:
+    case Item_func::MRN_MULTI_EQ_FUNC:
 #ifdef MRN_HAVE_ITEM_EQUAL_FIELDS_ITERATOR
       {
         Item_equal *equal_item = static_cast<Item_equal *>(func_item);

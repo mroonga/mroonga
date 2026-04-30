@@ -972,6 +972,8 @@ using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
 
+constexpr Functype MRN_MULTI_EQ_FUNC = MULTI_EQ_FUNC;
+
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
 {
@@ -979,11 +981,14 @@ static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
   Time_val::load_time(key, field->decimals(), &time);
   return MYSQL_TIME(time);
 }
+
 #else
 using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
+
+constexpr Functype MRN_MULTI_EQ_FUNC = MULT_EQUAL_FUNC;
 
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
