@@ -13783,8 +13783,7 @@ int ha_mroonga::storage_encode_key_time2(Field* field,
   bool truncated = false;
 
   mrn_field_time* time2_field = (mrn_field_time*)field;
-  MYSQL_TIME mysql_time;
-  mysql_time = mrn_field_time_load_from_key(key, time2_field);
+  MYSQL_TIME mysql_time = mrn_field_time_load_from_key(key, time2_field);
   mrn::TimeConverter time_converter;
   long long int grn_time =
     time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
