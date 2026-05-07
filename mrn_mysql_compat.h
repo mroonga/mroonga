@@ -972,7 +972,7 @@ using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
 
-#  define MRN_LOAD_TIME(key, field_time, mysq_time)                            \
+#  define MRN_LOAD_TIME(key, field_time, mysql_time)                            \
     do {                                                                       \
       Time_val time;                                                           \
       Time_val::load_time(key, field_time->decimals(), &time);                 \
