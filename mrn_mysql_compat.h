@@ -971,9 +971,26 @@ using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
+
+static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
+                                                      mrn_field_time* field)
+{
+  Time_val time;
+  Time_val::load_time(key, field->decimals(), &time);
+  return MYSQL_TIME(time);
+}
 #else
 using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
+
+static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
+                                                      mrn_field_time* field)
+{
+  MYSQL_TIME mysql_time;
+  longlong packed_time = my_time_packed_from_binary(key, field->decimals());
+  TIME_from_longlong_time_packed(&mysql_time, packed_time);
+  return mysql_time;
+}
 #endif
