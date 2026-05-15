@@ -994,3 +994,9 @@ static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
   return mysql_time;
 }
 #endif
+
+#if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+#  define MRN_MULTI_EQ_FUNC MULTI_EQ_FUNC
+#else
+#  define MRN_MULTI_EQ_FUNC MULT_EQUAL_FUNC
+#endif
