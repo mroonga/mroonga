@@ -750,13 +750,29 @@ using TABLE_LIST = Table_ref;
 #  define MRN_ITEM_IS_INT_TYPE(item)    ((item)->type() == Item::INT_ITEM)
 #endif
 
+#include <item.h>
 #ifdef MRN_MARIADB_P
-#  define MRN_ITEM_GET_TIME(item, time, thd)                                   \
-    ((item)->get_date((thd), (time), Time::Options((thd))))
+static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
+{
+  return item->get_date(thd, my_time, Time::Options(thd));
+}
+
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                             \
     ((item)->get_date((thd), (time), Time::Options(TIME_FUZZY_DATES, (thd))))
 #else
-#  define MRN_ITEM_GET_TIME(item, time, thd) ((item)->get_time((time)))
+static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Time_val time;
+  bool result;
+  result = item->val_time(&time);
+  *my_time = MYSQL_TIME(time);
+  return result;
+#  else
+  return item->get_time(my_time);
+#  endif
+}
+
 #  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                             \
     ((item)->get_date((time), TIME_FUZZY_DATE))
 #endif
