@@ -971,9 +971,6 @@ using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
-
-#define MRN_MULTI_EQ_FUNC MULTI_EQ_FUNC
-
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
 {
@@ -986,9 +983,6 @@ using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
-
-#define MRN_MULTI_EQ_FUNC MULT_EQUAL_FUNC
-
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
 {
@@ -997,4 +991,10 @@ static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
   TIME_from_longlong_time_packed(&mysql_time, packed_time);
   return mysql_time;
 }
+#endif
+
+#if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+#  define MRN_MULTI_EQ_FUNC MULTI_EQ_FUNC
+#else
+#  define MRN_MULTI_EQ_FUNC MULT_EQUAL_FUNC
 #endif
