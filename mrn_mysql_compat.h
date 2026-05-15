@@ -966,14 +966,13 @@ using TABLE_LIST = Table_ref;
 #endif
 
 #include <field.h>
-#include <item_func.h>
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
 using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
 
-constexpr Item_func::Functype MRN_MULTI_EQ_FUNC = Item_func::MULTI_EQ_FUNC;
+#define MRN_MULTI_EQ_FUNC MULTI_EQ_FUNC
 
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
@@ -988,7 +987,7 @@ using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
 
-constexpr Item_func::Functype MRN_MULTI_EQ_FUNC = Item_func::MULT_EQUAL_FUNC;
+#define MRN_MULTI_EQ_FUNC MULT_EQUAL_FUNC
 
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
