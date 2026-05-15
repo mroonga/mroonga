@@ -971,6 +971,7 @@ using mrn_field_datetime = Field_datetime;
 using mrn_field_timestamp = Field_timestamp;
 using mrn_field_time = Field_time;
 using mrn_field_date = Field_date;
+
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
 {
@@ -983,6 +984,7 @@ using mrn_field_datetime = Field_datetimef;
 using mrn_field_timestamp = Field_timestampf;
 using mrn_field_time = Field_timef;
 using mrn_field_date = Field_newdate;
+
 static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
                                                       mrn_field_time* field)
 {
