@@ -131,7 +131,7 @@ msgid "[:doc:`/reference/server_variables`] Added a document for ``mroonga_query
 msgstr "[:doc:`/reference/server_variables`] ``mroonga_query_log_file`` のドキュメントを追加しました。 "
 
 msgid "[:doc:`/install/others`] Added a document about how to uninstall Mroonga. [GitHub#135][Patched by ryfjwr]"
-msgstr "[:doc:`/install/ubuntu`] Mroongaのアンインストール方法についてのドキュメントを追加しました。 [GitHub#135][ryfjwrさんがパッチ提供]"
+msgstr "[:doc:`/install/others`] Mroongaのアンインストール方法についてのドキュメントを追加しました。 [GitHub#135][ryfjwrさんがパッチ提供]"
 
 msgid "[:doc:`/tutorial/storage`] Added a document about how to use regular expression search."
 msgstr "[:doc:`/tutorial/storage`] 正規表現検索の使い方についてのドキュメントを追加しました。 "
