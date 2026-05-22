@@ -4,7 +4,7 @@ FROM ${FROM}
 ARG DEBUG
 
 ENV \
-  SCL=gcc-toolset-11
+  SCL=gcc-toolset-12
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
