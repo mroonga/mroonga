@@ -104,11 +104,8 @@ set(MRN_DOC_HTML_FILES
     _static/styles/pydata-sphinx-theme.css.map
     _static/styles/theme.css
     _static/switcher.json
-    _static/vendor/fontawesome/webfonts/fa-brands-400.ttf
     _static/vendor/fontawesome/webfonts/fa-brands-400.woff2
-    _static/vendor/fontawesome/webfonts/fa-regular-400.ttf
     _static/vendor/fontawesome/webfonts/fa-regular-400.woff2
-    _static/vendor/fontawesome/webfonts/fa-solid-900.ttf
     _static/vendor/fontawesome/webfonts/fa-solid-900.woff2
     _static/webpack-macros.html
     characteristic.html
