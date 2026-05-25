@@ -306,7 +306,7 @@ msgstr "@pinpikokunさん"
 msgid "Release 7.02 - 2017-04-29"
 msgstr "7.02リリース - 2017-04-29"
 
-msgid "[:doc:`/install/centos`] Dropped Ubuntu 12.04 (Precise Pangolin) support because of EOL."
+msgid "[:doc:`/install/ubuntu`] Dropped Ubuntu 12.04 (Precise Pangolin) support because of EOL."
 msgstr "[:doc:`/install/ubuntu`] EOLのため、Ubuntu 12.04 (Precise Pangolin)のサポートをやめました。"
 
 msgid "[:doc:`/install/ubuntu`] Added Zesty Zapus (Ubuntu 17.04) support."
