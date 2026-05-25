@@ -17,17 +17,50 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.01 - 2026-03-30"
-msgstr "16.01リリース - 2026-03-30"
+msgid "Release 16.05 - 2026-05-26"
+msgstr "16.05リリース - 2026-05-26"
 
 msgid "Improvements"
 msgstr "改良"
 
-msgid "Added support for Percona Server for MySQL 8.0.45-36 in the following OS"
-msgstr "以下のOSでPercona Server for MySQL 8.0.45-36をサポート"
+msgid "Added support for MariaDB 10.6.26 in the following OS"
+msgstr "以下のOSでMariaDB 10.6.26をサポート"
 
 msgid "AlmaLinux 8, 9"
 msgstr ""
+
+msgid "Added support for MariaDB 10.11.17 in the following OS"
+msgstr "以下のOSでMariaDB 10.11.17をサポート"
+
+msgid "AlmaLinux 8, 9, 10"
+msgstr ""
+
+msgid "Added support for MariaDB 11.4.11 in the following OS"
+msgstr "以下のOSでMariaDB 11.4.11をサポート"
+
+msgid "Added support for MariaDB 11.8.7 in the following OS"
+msgstr "以下のOSでMariaDB 11.8.7をサポート"
+
+msgid "Added support for MySQL 8.0.46 in the following OS"
+msgstr "以下のOSでMySQL 8.0.46をサポート"
+
+msgid "Debian 12"
+msgstr ""
+
+msgid "Ubuntu 22.04, 24.04"
+msgstr ""
+
+msgid "Added support for MySQL 8.4.9 in the following OS"
+msgstr "以下のOSでMySQL 8.4.9をサポート"
+
+msgid "Debian 12, 13"
+msgstr ""
+
+msgid "Release 16.01 - 2026-03-30"
+msgstr "16.01リリース - 2026-03-30"
+
+msgid "Added support for Percona Server for MySQL 8.0.45-36 in the following OS"
+msgstr "以下のOSでPercona Server for MySQL 8.0.45-36をサポート"
 
 msgid "8.0.45-36 is the latest Percona Server for MySQL 8.0 release."
 msgstr "8.0.45-36は最新のPercona Server for MySQL 8.0のリリースです。"
