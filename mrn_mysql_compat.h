@@ -764,8 +764,7 @@ static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
 {
 #  if MYSQL_VERSION_ID >= 90700
   Time_val time;
-  bool result;
-  result = item->val_time(&time);
+  bool result = item->val_time(&time);
   *my_time = MYSQL_TIME(time);
   return result;
 #  else
