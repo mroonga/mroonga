@@ -159,6 +159,13 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
 
+# This is a workaround. We can remove this when https://bugs.mysql.com/bug.php?id=120594 is resolved.
+# Now, MySQL Server RPM installation fails due to MariaDB 11.8 package conflicts in AlmaLinux 10.
+# Therefore, we exclude MariaDB 11.8 package from this precess.
+if [ "${major_version}" -ge 10 ] ; then
+  echo "exclude=mariadb11.8*" | sudo tee -a /etc/dnf/dnf.conf
+fi
+
 repositories_dir=/host/packages/${package}/yum/repositories
 sudo ${DNF} install -y \
   ${repositories_dir}/${os}/${major_version}/*/Packages/*.rpm
