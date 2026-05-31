@@ -18,9 +18,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 require "date"
+require "json"
+require "open-uri"
 require "tmpdir"
 
-VERSION_FULL = File.read("version_full")
+VERSION_FULL = File.read("version_full").chomp
 
 def env_var(name, default=nil)
   value = ENV[name] || default
@@ -36,16 +38,45 @@ def new_version
   env_var("NEW_VERSION", version.succ)
 end
 
+def version_segments(version)
+  major, minor_micro = version.split(".")
+  [major, minor_micro[0], minor_micro[1]]
+end
+
 def new_version_major
-  new_version.split(".")[0]
+  version_segments(new_version)[0]
 end
 
 def new_version_minor
-  new_version.split(".")[1][0]
+  version_segments(new_version)[1]
 end
 
 def new_version_micro
-  new_version.split(".")[1][1]
+  version_segments(new_version)[2]
+end
+
+def version_major
+  version_segments(version)[0]
+end
+
+def version_minor
+  version_segments(version)[1]
+end
+
+def version_micro
+  version_segments(version)[2]
+end
+
+def latest_groonga_version
+  releases_url = "https://api.github.com/repos/groonga/groonga/releases/latest"
+  URI.open(releases_url) do |response|
+    Gem::Version.new(JSON.parse(response.read)["tag_name"].delete_prefix("v"))
+  end
+end
+
+def latest_groonga_version_in_mroonga_style
+  segments = latest_groonga_version.segments
+  "#{segments[0]}.#{segments[1]}#{segments[2]}"
 end
 
 def new_version_in_hex
@@ -112,8 +143,26 @@ namespace :release do
   end
 
   namespace :version do
+    desc "Validate version for release"
+    task :validate do
+      if version != VERSION_FULL
+        message = "You must NOT specify VERSION=#{ENV["VERSION"]} for 'rake release'. "
+        message += "You must run 'rake dev:version:bump NEW_VERSION=#{ENV["VERSION"]}' "
+        message += "before 'rake release'."
+        raise message
+      end
+
+      mroonga_version = Gem::Version.new("#{version_major}.#{version_minor}.#{version_micro}")
+      if mroonga_version < latest_groonga_version
+        message = "Mroonga version (#{VERSION_FULL}) must be greater than or equal to "
+        message += "the latest Groonga version (#{latest_groonga_version}). "
+        message += "You must run 'rake dev:version:bump NEW_VERSION=#{latest_groonga_version_in_mroonga_style}'."
+        raise message
+      end
+    end
+
     desc "Update versions for a new release"
-    task :update do
+    task update: :validate do
       new_release_date =
         ENV["NEW_RELEASE_DATE"] || Date.today.strftime("%Y-%m-%d")
       cd("packages") do
@@ -134,7 +183,7 @@ namespace :release do
   end
 
   desc "Tag"
-  task :tag do
+  task tag: "version:validate" do
     sh("git",
        "tag",
        "v#{version}",
@@ -147,6 +196,7 @@ end
 
 desc "Release"
 task release: [
+  "release:version:validate",
   "release:version:update",
   "release:tag",
   "dev:version:bump"
