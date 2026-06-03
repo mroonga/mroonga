@@ -159,11 +159,16 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
 
-# This is a workaround. We can remove this when https://bugs.mysql.com/bug.php?id=120594 is resolved.
-# Now, MySQL Server RPM installation fails due to MariaDB 11.8 package conflicts in AlmaLinux 10.
-# Therefore, we exclude MariaDB 11.8 package from this process.
 if [ "${major_version}" -ge 10 ] ; then
+  # This is a workaround. We can remove this when https://bugs.mysql.com/bug.php?id=120594 is resolved.
+  # Now, MySQL Server RPM installation fails due to MariaDB 11.8 package conflicts in AlmaLinux 10.
+  # Therefore, we exclude MariaDB 11.8 package from this process.
   echo "exclude=mariadb11.8*" | sudo tee -a /etc/dnf/dnf.conf
+  # In AlmaLinux 10, DNF Modularity has been removed.
+  # As a result, we can not longer disable the mysql8.4 packages which is provided AppStream via "dnf module disable".
+  # Since we only need mysql-community-server, we exclude the default mysql8.4 packages in /etc/dnf/dnf.conf.
+  # Otherwise, a conflict will occur between mysql8.4 and mysql-community-server, preventing the installation.
+  sudo sed -i '$ s/$/ mysql8.4*/' /etc/dnf/dnf.conf
 fi
 
 repositories_dir=/host/packages/${package}/yum/repositories
