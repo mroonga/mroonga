@@ -165,7 +165,7 @@ if [ "${major_version}" -ge 10 ] ; then
   # Therefore, we exclude MariaDB 11.8 package from this process.
   #
   # "exclude=mysql8.4*" is not a workaround. In AlmaLinux 10, DNF Modularity has been removed.
-  # As a result, we can not longer disable the mysql8.4 packages which is provided AppStream via "dnf module disable".
+  # As a result, we can no longer disable the mysql8.4 packages that are provided by AppStream via "dnf module disable".
   # Since we only need mysql-community-server, we exclude the default mysql8.4 packages in /etc/dnf/dnf.conf.
   # Otherwise, a conflict will occur between mysql8.4 and mysql-community-server, preventing the installation.
   echo "exclude=mariadb11.8* mysql8.4*" | sudo tee -a /etc/dnf/dnf.conf
