@@ -167,15 +167,19 @@ jobs:
           - os: almalinux-10
             package: mysql-community-8.4
             test-image: "images:almalinux/10"
-          - os: debian-trixie
-            package: mysql-community-8.4
-            test-image: "images:debian/13"
-          - os: ubuntu-jammy
-            package: mysql-community-8.4
-            test-image: "images:ubuntu/22.04"
-          - os: ubuntu-noble
-            package: mysql-community-8.4
-            test-image: "images:ubuntu/24.04"
+          # This is a temporary workaround.
+          # Currently, the Mroonga apt package cannot be installed with MySQL 8.4.9 due to a dependency issue.
+          # For details, refer to https://bugs.mysql.com/bug.php?id=120697.
+          # We can remove this workaround when this issue is resolved upstream.
+          #- os: debian-trixie
+          #  package: mysql-community-8.4
+          #  test-image: "images:debian/13"
+          #- os: ubuntu-jammy
+          #  package: mysql-community-8.4
+          #  test-image: "images:ubuntu/22.04"
+          #- os: ubuntu-noble
+          #  package: mysql-community-8.4
+          #  test-image: "images:ubuntu/24.04"
 
           # MySQL community minimal 8.0
           - os: almalinux-9
