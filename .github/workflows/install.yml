@@ -32,8 +32,6 @@ jobs:
           - image: "images:almalinux/8"
             package: mariadb-11.8
           - image: "images:almalinux/8"
-            package: mysql-community-8.0
-          - image: "images:almalinux/8"
             package: mysql-community-8.4
           - image: "images:almalinux/8"
             package: percona-server-8.0
@@ -48,11 +46,7 @@ jobs:
           - image: "images:almalinux/9"
             package: mariadb-11.8
           - image: "images:almalinux/9"
-            package: mysql-community-8.0
-          - image: "images:almalinux/9"
             package: mysql-community-8.4
-          - image: "images:almalinux/9"
-            package: mysql-community-minimal-8.0
           - image: "images:almalinux/9"
             package: percona-server-8.0
           - image: "images:almalinux/9"
