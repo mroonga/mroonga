@@ -17,44 +17,50 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.05 - 2026-06-08"
-msgstr "16.05リリース - 2026-06-08"
+msgid "Release 16.05 - 2026-06-19"
+msgstr "16.05リリース - 2026-06-19"
+
+msgid "In this release, we do not provide Mroonga packages with MySQL 8.4 for apt temporary. Currently, the Mroonga apt package cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We can provide them again when this issue is resolved upstream."
+msgstr "このリリースでは、MySQL 8.4向けのMroongaのAPTパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供できます。"
 
 msgid "Improvements"
 msgstr "改良"
 
-msgid "Added support for MariaDB 10.6.26 in the following OS"
-msgstr "以下のOSでMariaDB 10.6.26をサポート"
+msgid "Added support for MariaDB 10.6.27 in the following OS"
+msgstr "以下のOSでMariaDB 10.6.27をサポート"
 
 msgid "AlmaLinux 8, 9"
 msgstr ""
 
-msgid "Added support for MariaDB 10.11.17 in the following OS"
-msgstr "以下のOSでMariaDB 10.11.17をサポート"
+msgid "Added support for MariaDB 10.11.18 in the following OS"
+msgstr "以下のOSでMariaDB 10.11.18をサポート"
 
 msgid "AlmaLinux 8, 9, 10"
 msgstr ""
 
-msgid "Added support for MariaDB 11.4.11 in the following OS"
-msgstr "以下のOSでMariaDB 11.4.11をサポート"
+msgid "Added support for MariaDB 11.4.12 in the following OS"
+msgstr "以下のOSでMariaDB 11.4.12をサポート"
 
-msgid "Added support for MariaDB 11.8.7 in the following OS"
-msgstr "以下のOSでMariaDB 11.8.7をサポート"
+msgid "Added support for MariaDB 11.8.8 in the following OS"
+msgstr "以下のOSでMariaDB 11.8.8をサポート"
 
 msgid "Added support for MySQL 8.0.46 in the following OS"
 msgstr "以下のOSでMySQL 8.0.46をサポート"
 
-msgid "Debian 12"
-msgstr ""
-
 msgid "Ubuntu 22.04, 24.04"
 msgstr ""
 
-msgid "Added support for MySQL 8.4.9 in the following OS"
-msgstr "以下のOSでMySQL 8.4.9をサポート"
+msgid "Added support for MySQL 8.4.10 in the following OS"
+msgstr "以下のOSでMySQL 8.4.10をサポート"
 
-msgid "Debian 12, 13"
-msgstr ""
+msgid "Added support for Percona Server for MySQL 8.0.46-37 in the following OS"
+msgstr "以下のOSでPercona Server for MySQL 8.0.46-36をサポート"
+
+msgid "Dropped support for Debian 12"
+msgstr "Debian 12のサポーとをやめました"
+
+msgid "It reached EOL at 2026-06-10."
+msgstr "2026-06-10でEOLとなったためです。"
 
 msgid "Release 16.01 - 2026-03-30"
 msgstr "16.01リリース - 2026-03-30"
