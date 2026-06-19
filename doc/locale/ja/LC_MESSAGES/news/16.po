@@ -20,7 +20,7 @@ msgstr "お知らせ - 16系"
 msgid "Release 16.05 - 2026-06-19"
 msgstr "16.05リリース - 2026-06-19"
 
-msgid "In this release, we do not provide Mroonga packages with MySQL 8.4 for apt temporary. Currently, the Mroonga apt package cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We can provide them again when this issue is resolved upstream."
+msgid "In this release, we do not provide Mroonga APT packages for MySQL 8.4. Currently, the Mroonga APT packages cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4向けのMroongaのAPTパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供できます。"
 
 msgid "Improvements"
@@ -54,10 +54,10 @@ msgid "Added support for MySQL 8.4.10 in the following OS"
 msgstr "以下のOSでMySQL 8.4.10をサポート"
 
 msgid "Added support for Percona Server for MySQL 8.0.46-37 in the following OS"
-msgstr "以下のOSでPercona Server for MySQL 8.0.46-36をサポート"
+msgstr "以下のOSでPercona Server for MySQL 8.0.46-37をサポート"
 
 msgid "Dropped support for Debian 12"
-msgstr "Debian 12のサポーとをやめました"
+msgstr "Debian 12のサポートをやめました"
 
 msgid "It reached EOL at 2026-06-10."
 msgstr "2026-06-10でEOLとなったためです。"
