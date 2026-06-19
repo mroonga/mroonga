@@ -22,7 +22,7 @@ msgstr ""
 msgid "This section describes how to install Mroonga related deb packages on Debian GNU/Linux. You can install them by ``apt``."
 msgstr "このセクションではDebian GNU/Linux上でMroonga関連のdebパッケージをインストールする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
-msgid "bookworm (MariaDB)"
+msgid "trixie (MariaDB)"
 msgstr ""
 
 msgid "Install::"
@@ -33,12 +33,6 @@ msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>
 
 msgid "Install groonga-tokenizer-mecab package::"
 msgstr "groonga-tokenizer-mecabをインストール::"
-
-msgid "bookworm (with the Oracle MySQL 8.0 package)"
-msgstr "bookworm（OracleのMySQL 8.0パッケージを利用）"
-
-msgid "trixie (MariaDB)"
-msgstr ""
 
 msgid "trixie (with the Oracle MySQL 8.4 package)"
 msgstr "trixie （OracleのMySQL 8.4パッケージを利用）"
