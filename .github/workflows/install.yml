@@ -86,7 +86,7 @@ jobs:
           - image: "images:ubuntu/24.04"
             package: mysql
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install Incus
         run: |
           sudo apt update
