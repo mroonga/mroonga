@@ -22,33 +22,6 @@ msgstr ""
 msgid "This section describes how to install Mroonga related RPM packages on AlmaLinux. You can install them by ``dnf``."
 msgstr "このセクションではAlmaLinux上でMroonga関連のRPMパッケージをインストールする方法を説明します。これらのパッケージは ``dnf`` でインストールできます。"
 
-msgid "AlmaLinux 8 (with the Oracle MySQL 8.0 package)"
-msgstr "AlmaLinux 8（OracleのMySQL 8.0パッケージを利用）"
-
-msgid "You can use Oracle's MySQL packages version 8.0 on AlmaLinux 8 since Mroonga 11.10 release."
-msgstr "AlmaLinux 8では、Mroonga 11.10からOracleのMySQL 8.0パッケージを利用できます。"
-
-msgid "There are already known issues about MySQL 8.0."
-msgstr "MySQL 8.0に関しては以下の既知の問題があります。"
-
-msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported yet"
-msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
-
-msgid ":doc:`/tutorial/storage`  Storage mode does not support the following feature."
-msgstr ":doc:`/tutorial/storage` ストレージモードは以下の機能が未対応です。"
-
-msgid "The feature of relevant to the optimization."
-msgstr "最適化関連の機能"
-
-msgid "Install:"
-msgstr "インストール:"
-
-msgid "If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package."
-msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい場合はgroonga-tokenizer-mecabをインストールしてください。"
-
-msgid "Install groonga-tokenizer-mecab package:"
-msgstr "groonga-tokenizer-mecabをインストール:"
-
 msgid "AlmaLinux 8 (with the Oracle MySQL 8.4 package)"
 msgstr "AlmaLinux 8（OracleのMySQL 8.4パッケージを利用）"
 
@@ -63,6 +36,15 @@ msgstr ":doc:`/tutorial/wrapper` ラッパーモードは未対応です。"
 
 msgid ":doc:`/tutorial/storage`  Storage mode does not support a feature relevant to an optimization."
 msgstr ":doc:`/tutorial/storage` ストレージモードは最適化関連の機能が未対応です。"
+
+msgid "Install:"
+msgstr "インストール:"
+
+msgid "If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package."
+msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>`_ を利用したい場合はgroonga-tokenizer-mecabをインストールしてください。"
+
+msgid "Install groonga-tokenizer-mecab package:"
+msgstr "groonga-tokenizer-mecabをインストール:"
 
 msgid "AlmaLinux 8 (with Percona Server 8.0 package)"
 msgstr "AlmaLinux 8（Percona Server 8.0パッケージを利用）"
@@ -96,12 +78,6 @@ msgstr "AlmaLinux 8（MariaDB 11.8のパッケージを利用）"
 
 msgid "You can use MariaDB's MariaDB packages version 11.8 on AlmaLinux 8 since Mroonga 15.21 release."
 msgstr "AlmaLinux 8では、Mroonga 15.21からMariaDB提供のMariaDB 11.8パッケージを利用できます。"
-
-msgid "AlmaLinux 9 (with the Oracle MySQL 8.0 package)"
-msgstr "AlmaLinux 9（OracleのMySQL 8.0パッケージを利用）"
-
-msgid "You can use Oracle's MySQL packages version 8.0 on AlmaLinux 9 since Mroonga 12.12 release."
-msgstr "AlmaLinux 9では、Mroonga 12.12からOracleのMySQL 8.0パッケージを利用できます。"
 
 msgid "AlmaLinux 9 (with the Oracle MySQL 8.4 package)"
 msgstr "AlmaLinux 9（OracleのMySQL 8.4パッケージを利用）"

@@ -22,29 +22,8 @@ msgstr ""
 msgid "This section describes how to install Mroonga related RPM packages on AlmaLinux. You can install them by ``dnf``."
 msgstr ""
 
-msgid "Oracle Linux 8 (with the Oracle MySQL 8.0 package)"
+msgid "Oracle Linux 8 (with the Oracle MySQL 8.4 package)"
 msgstr ""
 
-msgid "You can use Oracle's MySQL packages version 8.0 on Oracle Linux 8 since Mroonga 12.08 release."
-msgstr ""
-
-msgid "There are already known issues about MySQL 8.0."
-msgstr ""
-
-msgid ":doc:`/tutorial/wrapper` Wrapper mode is not supported yet"
-msgstr ""
-
-msgid ":doc:`/tutorial/storage`  Storage mode does not support the following feature."
-msgstr ""
-
-msgid "The feature of relevant to the optimization."
-msgstr ""
-
-msgid "Install::"
-msgstr ""
-
-msgid "If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package."
-msgstr ""
-
-msgid "Install groonga-tokenizer-mecab package::"
+msgid "This package will be included in a future release."
 msgstr ""
