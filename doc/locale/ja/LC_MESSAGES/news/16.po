@@ -17,8 +17,8 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.06 - 2026-06-30"
-msgstr "16.06リリース - 2026-06-30"
+msgid "Release 16.07 - 2026-06-30"
+msgstr "16.07リリース - 2026-06-30"
 
 msgid "In this release, we do not provide Mroonga APT packages for MySQL 8.4. Currently, the Mroonga APT packages cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4向けのMroongaのAPTパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
