@@ -288,13 +288,11 @@ class MroongaPackageTask < PackagesGroongaOrgPackageTask
     index_html = URI.open(srpms_url) do |response|
       response.read
     end
-    latest_target_srpm =
-      index_html.
-        scan(/href="(.+?)"/i).
-        flatten.
-        grep(/\Apercona-server-/).
-        last
-    latest_target_srpm[/\Apercona-server-(\d+\.\d+\.\d+-\d+\.\d+)/, 1]
+    index_html.
+      scan(/href="(.+?)"/i).
+      flatten.
+      filter_map {|href| href[/\Apercona-server-(\d+\.\d+\.\d+-\d+\.\d+)/, 1]}.
+      max_by {|version| Gem::Version.new(version)}
   end
 
   def percona_server_rpm_version
