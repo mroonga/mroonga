@@ -58,7 +58,7 @@ sed -i'' -e 's/^  make /  # make /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 sed -i'' -e 's/^  cmake3 /  cmake /' ~/rpmbuild/SPECS/%{_mysql_spec_file}
 
 %build
-rpmbuild -bc ~/rpmbuild/SPECS/%{_mysql_spec_file}
+rpmbuild -bc --define "without_pgo 1" ~/rpmbuild/SPECS/%{_mysql_spec_file}
 mysql_source=$HOME/rpmbuild/BUILD/percona-server-%{_mysql_version}-%{_percona_server_version}/percona-server-%{_mysql_version}-%{_percona_server_version}
 mysql_build=$HOME/rpmbuild/BUILD/percona-server-%{_mysql_version}-%{_percona_server_version}/release
 make %_smp_mflags -C ${mysql_build}/utilities GenError
