@@ -181,14 +181,12 @@ jobs:
             test-image: "images:almalinux/9"
 
           # Percona Server 8.4
-          # This is a temporary workaround.
-          # The build fails due to what appears to be an upstream issue, so we skip it for now.
-          # - os: almalinux-9
-          #   package: percona-server-8.4
-          #   test-image: "images:almalinux/9"
-          # - os: almalinux-10
-          #   package: percona-server-8.4
-          #   test-image: "images:almalinux/10"
+          - os: almalinux-9
+            package: percona-server-8.4
+            test-image: "images:almalinux/9"
+          - os: almalinux-10
+            package: percona-server-8.4
+            test-image: "images:almalinux/10"
     env:
       APACHE_ARROW_REPOSITORY: ${{ github.workspace }}/apache-arrow
       GROONGA_REPOSITORY: ${{ github.workspace }}/groonga
