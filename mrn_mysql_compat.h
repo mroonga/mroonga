@@ -1044,11 +1044,11 @@ static inline MYSQL_TIME mrn_field_time_load_from_key(const uchar* key,
 #endif
 
 #if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
-#  define MRN_MULTI_EQ_FUNC MULTI_EQ_FUNC
+#  define MRN_MULTI_EQ_FUNC           MULTI_EQ_FUNC
 #  define MRN_SCHEMA_NAME_DECLARATION const char* schema_name
-#  define MRN_SCHEMA_NAME (schema_name)
+#  define MRN_SCHEMA_NAME             (schema_name)
 #else
-#  define MRN_MULTI_EQ_FUNC MULT_EQUAL_FUNC
+#  define MRN_MULTI_EQ_FUNC           MULT_EQUAL_FUNC
 #  define MRN_SCHEMA_NAME_DECLARATION char* path
 #  define MRN_SCHEMA_NAME             (path)
 #endif
