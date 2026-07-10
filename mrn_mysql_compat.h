@@ -757,8 +757,11 @@ static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
   return item->get_date(thd, my_time, Time::Options(thd));
 }
 
-#  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                             \
-    ((item)->get_date((thd), (time), Time::Options(TIME_FUZZY_DATES, (thd))))
+static inline bool
+mrn_item_get_date_fuzzy(Item* item, MYSQL_TIME* my_time, THD* thd)
+{
+  return item->get_date(thd, my_time, Time::Options(TIME_FUZZY_DATES, thd));
+}
 #else
 static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
 {
@@ -772,8 +775,22 @@ static inline bool mrn_item_get_time(Item* item, MYSQL_TIME* my_time, THD* thd)
 #  endif
 }
 
-#  define MRN_ITEM_GET_DATE_FUZZY(item, time, thd)                             \
-    ((item)->get_date((time), TIME_FUZZY_DATE))
+static inline bool
+mrn_item_get_date_fuzzy(Item* item, MYSQL_TIME* my_time, THD* thd)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Date_val date;
+  /* The argument of TIME_NO_FLAGS(0) shows default behavior.
+   * The default behaviror does not check for zero parts in dates.
+   * So, MySQL can accept incomplete date by using TIME_NO_FLAGS.
+   */
+  bool result = item->val_date(&date, TIME_NO_FLAGS);
+  *my_time = MYSQL_TIME(date);
+  return result;
+#  else
+  return item->get_date(my_time, TIME_FUZZY_DATE);
+#  endif
+}
 #endif
 
 #ifdef MRN_MARIADB_P

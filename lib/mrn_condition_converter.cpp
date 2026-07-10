@@ -592,7 +592,7 @@ namespace mrn {
       error = false;
       break;
     default:
-      error = MRN_ITEM_GET_DATE_FUZZY(real_value_item, mysql_time, thread_);
+      error = mrn_item_get_date_fuzzy(real_value_item, mysql_time, thread_);
       break;
     }
 
