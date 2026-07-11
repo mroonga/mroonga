@@ -780,8 +780,8 @@ mrn_item_get_date_fuzzy(Item* item, MYSQL_TIME* my_time, THD* thd)
 {
 #  if MYSQL_VERSION_ID >= 90700
   Date_val date;
-  /* The argument of TIME_NO_FLAGS(0) shows default behavior.
-   * The default behaviror does not check for zero parts in dates.
+  /* The argument TIME_NO_FLAGS(=0x00) shows default behavior.
+   * The default behavior does not check for zero parts in dates.
    * So, MySQL can accept incomplete date by using TIME_NO_FLAGS.
    */
   bool result = item->val_date(&date, TIME_NO_FLAGS);
