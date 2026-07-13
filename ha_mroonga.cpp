@@ -12337,7 +12337,7 @@ int ha_mroonga::generic_store_bulk_time(Field* field, grn_obj* buf)
   bool truncated = false;
   Field_time* time_field = (Field_time*)field;
   MYSQL_TIME mysql_time;
-  MRN_FIELD_GET_TIME(time_field, &mysql_time, current_thd);
+  mrn_field_get_time(time_field, &mysql_time, current_thd);
   mrn::TimeConverter time_converter;
   long long int time =
     time_converter.mysql_time_to_grn_time(&mysql_time, &truncated);
@@ -12356,7 +12356,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field* field, grn_obj* buf)
   bool truncated = false;
   Field_datetime* datetime_field = (Field_datetime*)field;
   MYSQL_TIME mysql_time;
-  MRN_FIELD_GET_TIME(datetime_field, &mysql_time, current_thd);
+  mrn_field_get_time(datetime_field, &mysql_time, current_thd);
   long long int time = 0;
   if (!field->is_null()) {
     mrn::TimeConverter time_converter;
@@ -12446,7 +12446,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field* field, grn_obj* buf)
   bool truncated = false;
   mrn_field_datetime* datetime_field = (mrn_field_datetime*)field;
   MYSQL_TIME mysql_time;
-  MRN_FIELD_GET_TIME(datetime_field, &mysql_time, current_thd);
+  mrn_field_get_time(datetime_field, &mysql_time, current_thd);
   long long int time = 0;
   mrn::TimeConverter time_converter;
   if (!field->is_null()) {
@@ -12471,7 +12471,7 @@ int ha_mroonga::generic_store_bulk_time2(Field* field, grn_obj* buf)
   int error = 0;
   bool truncated = false;
   MYSQL_TIME mysql_time;
-  MRN_FIELD_GET_TIME(field, &mysql_time, current_thd);
+  mrn_field_get_time(field, &mysql_time, current_thd);
   mrn::TimeConverter time_converter;
   long long int time = 0;
   if (!field->is_null()) {
@@ -12499,7 +12499,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field* field, grn_obj* buf)
   if (!field->is_null()) {
     auto newdate_field = static_cast<mrn_field_date*>(field);
     MYSQL_TIME mysql_date;
-    MRN_FIELD_GET_TIME(newdate_field, &mysql_date, current_thd);
+    mrn_field_get_time(newdate_field, &mysql_date, current_thd);
     mrn::TimeConverter time_converter;
     time = time_converter.mysql_time_to_grn_time(&mysql_date, &truncated);
   }
