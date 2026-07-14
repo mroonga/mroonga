@@ -795,16 +795,16 @@ mrn_item_get_date_fuzzy(Item* item, MYSQL_TIME* my_time, THD* thd)
 
 #ifdef MRN_MARIADB_P
 static inline bool
-mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* current_thd)
+mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* thd)
 {
-  return time_field->get_date(my_time, Time::Options(current_thd));
+  return time_field->get_date(my_time, Time::Options(thd));
 }
 
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)                        \
     ((field)->get_date((time), Time::Options(TIME_CONV_NONE, (thd))))
 #else
 static inline bool
-mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* current_thd)
+mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* thd)
 {
 #  if MYSQL_VERSION_ID >= 90700
   Time_val time;
