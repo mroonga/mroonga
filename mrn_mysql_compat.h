@@ -806,7 +806,7 @@ mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* current_thd)
 static inline bool
 mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* current_thd)
 {
-#  if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+#  if MYSQL_VERSION_ID >= 90700
   Time_val time;
   bool result = time_field->val_time(&time);
   *my_time = MYSQL_TIME(time);
