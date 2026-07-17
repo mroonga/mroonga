@@ -1547,13 +1547,21 @@ static handler* mrn_hton_handler_create(handlerton* hton,
   DBUG_RETURN(new_handler);
 }
 
-static void mrn_hton_drop_database(handlerton* hton,
-                                   MRN_SCHEMA_NAME_DECLARATION)
+#if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+static void mrn_hton_drop_database(handlerton* hton, const char* schema_name)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  mrn_db_manager->drop(MRN_SCHEMA_NAME);
+  mrn_db_manager->drop(schema_name);
   DBUG_VOID_RETURN;
 }
+#else
+static void mrn_hton_drop_database(handlerton* hton, char* path)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  mrn_db_manager->drop(path);
+  DBUG_VOID_RETURN;
+}
+#endif
 
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
