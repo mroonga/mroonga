@@ -1547,12 +1547,75 @@ static handler* mrn_hton_handler_create(handlerton* hton,
   DBUG_RETURN(new_handler);
 }
 
+/*
+ * MySQL passes "path" in one of the following forms:
+ *
+ * - "./${db}/${table}"
+ * - "./${db}/"
+ *
+ * This "path" is generated base on "mysql_data_home" by
+ * "build_table_filename()" in MySQL.
+ * "mysql_data_home" is defined as:
+ *
+ *   "char *mysql_data_home = const_cast<char*>(".");"
+ *
+ * Therefore, "mysql_data_home" is always ".", and "path" always has one of
+ * the above forms.
+ *
+ * Mroonga handles these forms in the "PathMapper" class.
+ * "PathMapper::db_name()" and "PathMapper::db_path()" translate "path" into
+ * Mroonga's db name and db path as follows:
+ *
+ * "PathMapper::db_name()":
+ *
+ * - "./${db}/${table}" => "${db}"
+ * - "./${db}/"         => "${db}"
+ *
+ * "PathMapper::db_path()":
+ *
+ * - "./${db}/${table}" => "${db}.mrn"
+ * - "./${db}/"         => "${db}.mrn"
+ *
+ * Therefore, the expected behavior of "PathMapper::db_name()" is to return
+ * "${db}", and the expected behavior of "PathMapper::db_path()" is to return
+ * "${db}.mrn".
+ *
+ * In Mysql 9.7, "schema_name"(e.g."${db}") is passed to
+ * "mrn_hton_drop_database()" instead of "path"(e.g."./${db}/").
+ *
+ * If PathMapper is given "schema_name" instead of "path", the behavior is:
+ *
+ * "PathMapper::db_name()":
+ *
+ * - "${db}" => "${db}"
+ *
+ * "PathMapper::db_path()":
+ *
+ * "${db}" => "${db}.mrn"
+ *
+ * "mysql_data_home_path" only set in the MariaDB.
+ *
+ * Therefore, "PathMapper" behaves correctly whether MySQL passes "path" or
+ * "schema_name".
+ *
+ * For these reasons, this change only updates the argument type and name of
+ * this function.
+ */
+#if (MYSQL_VERSION_ID >= 90700 && !defined(MRN_MARIADB_P))
+static void mrn_hton_drop_database(handlerton* hton, const char* schema_name)
+{
+  MRN_DBUG_ENTER_FUNCTION();
+  mrn_db_manager->drop(schema_name);
+  DBUG_VOID_RETURN;
+}
+#else
 static void mrn_hton_drop_database(handlerton* hton, char* path)
 {
   MRN_DBUG_ENTER_FUNCTION();
   mrn_db_manager->drop(path);
   DBUG_VOID_RETURN;
 }
+#endif
 
 #ifndef MRN_MARIADB_P
 #  define MRN_HANDLERTON_CLOSE_CONNECTION_NEED_THREAD_DATA_RESET
