@@ -78,15 +78,9 @@ if [ "${try_auto_prepare}" = "yes" ]; then
          -u root \
          --connect-expired-password \
          -p"${auto_generated_password}" \
-         -e "quit" > /dev/null 2>&1; then
-      if "${mysql_command}" \
-           -u root \
-           --connect-expired-password \
-           -p"${auto_generated_password}" \
-           -e "ALTER USER root@localhost IDENTIFIED BY '$auto_generated_password'"; then
-        need_password_expire=yes
-        password_option="-p${auto_generated_password}"
-      fi
+         -e "ALTER USER root@localhost IDENTIFIED BY '$auto_generated_password'"; then
+      need_password_expire=yes
+      password_option="-p${auto_generated_password}"
     fi
   fi
   if [ -z "${password_option}" ]; then
