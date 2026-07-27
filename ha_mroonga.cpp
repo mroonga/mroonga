@@ -12567,7 +12567,7 @@ int ha_mroonga::generic_store_bulk_new_date(Field* field, grn_obj* buf)
     auto newdate_field = static_cast<mrn_field_date*>(field);
     MYSQL_TIME mysql_date;
     THD* thd = current_thd;
-    mrn_field_get_time(newdate_field, &mysql_date, thd);
+    mrn_field_get_date(newdate_field, &mysql_date, thd);
     mrn::TimeConverter time_converter;
     time = time_converter.mysql_time_to_grn_time(&mysql_date, &truncated);
   }
@@ -12983,7 +12983,7 @@ void ha_mroonga::storage_store_field_new_date(Field* field,
   mysql_date.time_type = MYSQL_TIMESTAMP_DATE;
   mrn::TimeConverter time_converter;
   time_converter.grn_time_to_mysql_time(time, &mysql_date);
-  field->store_time(&mysql_date);
+  mrn_store_field_date(field, &mysql_date);
   DBUG_VOID_RETURN;
 }
 
