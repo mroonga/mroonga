@@ -12937,7 +12937,7 @@ void ha_mroonga::storage_store_field_time(Field* field,
   mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   mrn::TimeConverter time_converter;
   time_converter.grn_time_to_mysql_time(time, &mysql_time);
-  field->store_time(&mysql_time);
+  mrn_store_field_time(field, &mysql_time);
   DBUG_VOID_RETURN;
 }
 
@@ -13014,7 +13014,7 @@ void ha_mroonga::storage_store_field_time2(Field* field,
   mysql_time.time_type = MYSQL_TIMESTAMP_TIME;
   mrn::TimeConverter time_converter;
   time_converter.grn_time_to_mysql_time(time, &mysql_time);
-  field->store_time(&mysql_time);
+  mrn_store_field_time(field, &mysql_time);
   DBUG_VOID_RETURN;
 }
 
