@@ -12421,7 +12421,7 @@ int ha_mroonga::generic_store_bulk_datetime(Field* field, grn_obj* buf)
   Field_datetime* datetime_field = (Field_datetime*)field;
   MYSQL_TIME mysql_time;
   THD* thd = current_thd;
-  mrn_field_get_time(datetime_field, &mysql_time, thd);
+  mrn_field_get_datetime(datetime_field, &mysql_time, thd);
   long long int time = 0;
   if (!field->is_null()) {
     mrn::TimeConverter time_converter;
@@ -12512,7 +12512,7 @@ int ha_mroonga::generic_store_bulk_datetime2(Field* field, grn_obj* buf)
   mrn_field_datetime* datetime_field = (mrn_field_datetime*)field;
   MYSQL_TIME mysql_time;
   THD* thd = current_thd;
-  mrn_field_get_time(datetime_field, &mysql_time, thd);
+  mrn_field_get_datetime(datetime_field, &mysql_time, thd);
   long long int time = 0;
   mrn::TimeConverter time_converter;
   if (!field->is_null()) {
@@ -12952,7 +12952,7 @@ void ha_mroonga::storage_store_field_datetime(Field* field,
   mysql_datetime.time_type = MYSQL_TIMESTAMP_DATETIME;
   mrn::TimeConverter time_converter;
   time_converter.grn_time_to_mysql_time(time, &mysql_datetime);
-  field->store_time(&mysql_datetime);
+  mrn_store_field_datetime(field, &mysql_datetime);
   DBUG_VOID_RETURN;
 }
 
@@ -12998,7 +12998,7 @@ void ha_mroonga::storage_store_field_datetime2(Field* field,
   mysql_datetime.time_type = MYSQL_TIMESTAMP_DATETIME;
   mrn::TimeConverter time_converter;
   time_converter.grn_time_to_mysql_time(time, &mysql_datetime);
-  field->store_time(&mysql_datetime);
+  mrn_store_field_datetime(field, &mysql_datetime);
   DBUG_VOID_RETURN;
 }
 

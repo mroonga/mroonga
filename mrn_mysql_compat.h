@@ -806,9 +806,21 @@ mrn_field_get_date(Field* time_field, MYSQL_TIME* my_time, THD* thd)
   return time_field->get_date(my_time, Time::Options(thd));
 }
 
+static inline bool
+mrn_field_get_datetime(Field* time_field, MYSQL_TIME* my_time, THD* thd)
+{
+  return time_field->get_date(my_time, Time::Options(thd));
+}
+
 static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
 {
   field->store_time(my_field_date);
+}
+
+static inline void mrn_store_field_datetime(Field* field,
+                                            MYSQL_TIME* my_field_datetime)
+{
+  field->store_time(my_field_datetime);
 }
 
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)                        \
@@ -845,6 +857,24 @@ mrn_field_get_date(Field* time_field, MYSQL_TIME* my_time, THD* thd)
 #  endif
 }
 
+static inline bool
+mrn_field_get_datetime(Field* time_field, MYSQL_TIME* my_time, THD* thd)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Datetime_val datetime;
+  /*
+   * The argument TIME_NO_FLAGS(=0x00) shows default behavior.
+   * The default behavior does not check for zero parts in dates.
+   * So, MySQL can accept incomplete date by using TIME_NO_FLAGS.
+   */
+  bool result = time_field->val_datetime(&datetime, TIME_NO_FLAGS);
+  *my_time = MYSQL_TIME(datetime);
+  return result;
+#  else
+  return time_field->get_time(my_time);
+#  endif
+}
+
 static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
 {
 #  if MYSQL_VERSION_ID >= 90700
@@ -852,6 +882,21 @@ static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
   field->store_date(date);
 #  else
   field->store_time(my_field_date);
+#  endif
+}
+
+static inline void mrn_store_field_datetime(Field* field,
+                                            MYSQL_TIME* my_field_datetime)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  /*
+   * store_time() can accept DATETIME values because it internally converts the
+   * input to MYSQL_TIME type. MYSQL_TIME type can represent DATETIME, TIME, and
+   * DATE values without any loss of information.
+   */
+  field->store_time(my_field_datetime, TIME_NO_FLAGS);
+#  else
+  field->store_time(my_field_datetime);
 #  endif
 }
 
