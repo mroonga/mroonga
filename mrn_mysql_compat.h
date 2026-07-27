@@ -800,6 +800,17 @@ mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* thd)
   return time_field->get_date(my_time, Time::Options(thd));
 }
 
+static inline bool
+mrn_field_get_date(Field* time_field, MYSQL_TIME* my_time, THD* thd)
+{
+  return time_field->get_date(my_time, Time::Options(thd));
+}
+
+static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
+{
+  field->store_time(my_field_date);
+}
+
 #  define MRN_FIELD_GET_DATE_NO_FUZZY(field, time, thd)                        \
     ((field)->get_date((time), Time::Options(TIME_CONV_NONE, (thd))))
 #else
@@ -813,6 +824,34 @@ mrn_field_get_time(Field* time_field, MYSQL_TIME* my_time, THD* thd)
   return result;
 #  else
   return time_field->get_time(my_time);
+#  endif
+}
+
+static inline bool
+mrn_field_get_date(Field* time_field, MYSQL_TIME* my_time, THD* thd)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Date_val date;
+  /*
+   * The argument TIME_NO_FLAGS(=0x00) shows default behavior.
+   * The default behavior does not check for zero parts in dates.
+   * So, MySQL can accept incomplete date by using TIME_NO_FLAGS.
+   */
+  bool result = time_field->val_date(&date, TIME_NO_FLAGS);
+  *my_time = MYSQL_TIME(date);
+  return result;
+#  else
+  return time_field->get_time(my_time);
+#  endif
+}
+
+static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Date_val date = Date_val(*my_field_date);
+  field->store_date(date);
+#  else
+  field->store_time(my_field_date);
 #  endif
 }
 
