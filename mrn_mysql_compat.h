@@ -812,6 +812,11 @@ mrn_field_get_datetime(Field* time_field, MYSQL_TIME* my_time, THD* thd)
   return time_field->get_date(my_time, Time::Options(thd));
 }
 
+static inline void mrn_store_field_time(Field* field, MYSQL_TIME* my_field_time)
+{
+  field->store_time(my_field_time);
+}
+
 static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
 {
   field->store_time(my_field_date);
@@ -875,6 +880,28 @@ mrn_field_get_datetime(Field* time_field, MYSQL_TIME* my_time, THD* thd)
 #  endif
 }
 
+static inline void mrn_store_field_time(Field* field, MYSQL_TIME* my_field_time)
+{
+#  if MYSQL_VERSION_ID >= 90700
+  Time_val time = Time_val(*my_field_time);
+  /*
+   * The second argument specifies the number of fractional digits in ltime.
+   * However, it is meaningful only when storing the value into a
+   * CHAR/VARCHAR/TEXT field.
+   * See: https://github.com/mysql/mysql-server/blob/9.7/sql/field.h#L960-L964
+   *
+   * For TIME, DATE, and DATETIME fields, this argument is ignored because
+   * those field types already store their own fractional-seconds precision.
+   *
+   * Since this function handles the TIME values, the argument is ignored.
+   * So, we always pass 0.
+   */
+  field->store_time(time, 0);
+#  else
+  field->store_time(my_field_time);
+#  endif
+}
+
 static inline void mrn_store_field_date(Field* field, MYSQL_TIME* my_field_date)
 {
 #  if MYSQL_VERSION_ID >= 90700
@@ -893,8 +920,19 @@ static inline void mrn_store_field_datetime(Field* field,
    * store_time() can accept DATETIME values because it internally converts the
    * input to MYSQL_TIME type. MYSQL_TIME type can represent DATETIME, TIME, and
    * DATE values without any loss of information.
+   *
+   * The second argument specifies the number of fractional digits in ltime.
+   * However, it is meaningful only when storing the value into a
+   * CHAR/VARCHAR/TEXT field.
+   * See: https://github.com/mysql/mysql-server/blob/9.7/sql/field.h#L960-L964
+   *
+   * For TIME, DATE, and DATETIME fields, this argument is ignored because
+   * those field types already store their own fractional-seconds precision.
+   *
+   * Since this function handles the DATETIME values, the argument is ignored.
+   * So, we always pass 0.
    */
-  field->store_time(my_field_datetime, TIME_NO_FLAGS);
+  field->store_time(my_field_datetime, 0);
 #  else
   field->store_time(my_field_datetime);
 #  endif
