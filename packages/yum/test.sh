@@ -74,6 +74,12 @@ REPO
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     if [ "${mysql_package_version}" = "97" ]; then
+      # Currently, the repository configuration RPM for MySQL 9.7 is mysql84-community-release-el{8,9,10}-3.
+      # mysql97-community-release-el{8,9,10} does not exist now on MySQL official repository.
+      # Therefore, We use mysql84-community-release-el{8,9,10}-3.
+      #
+      # Note that mysql84-community-release-el{8,9,10}-3 is intended only for MySQL 9.7
+      # It cannot be used to install MySQL 8.4. To install MySQL 8.4, use mysql84-community-release-el{8,9,10} instead.
       sudo ${DNF} install -y \
            https://repo.mysql.com/yum/mysql-9.7-community/el/8/x86_64/mysql84-community-release-el${major_version}-3.noarch.rpm
     else

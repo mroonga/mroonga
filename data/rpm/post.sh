@@ -74,6 +74,8 @@ need_password_expire=no
 if [ "${try_auto_prepare}" = "yes" ]; then
   password_option=""
   if [ "${have_auto_generated_password}" = "yes" ]; then
+    # Since MySQL 9.7 only accepts SQL statements for password changes.
+    # Therefore, only the password is changed here.
     if "${mysql_command}" \
          -u root \
          --connect-expired-password \
