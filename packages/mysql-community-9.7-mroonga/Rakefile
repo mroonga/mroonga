@@ -5,8 +5,10 @@ class MySQLCommunity97MroongaPackageTask < MroongaPackageTask
     super("mysql-community-9.7-mroonga")
   end
 
-  def enable_apt?
-    false
+  def apt_targets_default
+    [
+      "ubuntu-jammy",
+    ]
   end
 
   def enable_ubuntu?

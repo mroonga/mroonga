@@ -177,6 +177,9 @@ jobs:
           - os: almalinux-10
             package: mysql-community-9.7
             test-image: "images:almalinux/10"
+          - os: ubuntu-jammy
+            package: mysql-community-9.7
+            test-image: "images:ubuntu/22.04"
 
           # MySQL community minimal 8.4
           - os: almalinux-9
