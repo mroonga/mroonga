@@ -32,7 +32,7 @@ install Mroonga::
 
   $ sudo apt install -y -V software-properties-common lsb-release
   $ sudo add-apt-repository -y universe
-  $ sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
+  $ sudo add-apt-repository -y "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
 
 Add the Groonga APT repository to your system::
 
@@ -40,7 +40,7 @@ Add the Groonga APT repository to your system::
   $ sudo apt install -y -V ca-certificates wget
   $ wget https://packages.groonga.org/ubuntu/groonga-apt-source-latest-$(lsb_release --codename --short).deb
   $ sudo apt install -y -V ./groonga-apt-source-latest-$(lsb_release --codename --short).deb
-  $ rm -rf groonga-apt-source-latest-$(lsb_release --codename --short).deb
+  $ rm -f groonga-apt-source-latest-$(lsb_release --codename --short).deb
   $ sudo apt update
 
 Install Mroonga for MySQL::
