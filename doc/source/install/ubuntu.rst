@@ -4,11 +4,10 @@ Ubuntu
 This section describes how to install Mroonga related deb packages on
 Ubuntu. You can install them by ``apt``.
 
-PPA (Personal Package Archive)
-------------------------------
+.. note::
 
-The Mroonga APT repository for Ubuntu uses PPA (Personal Package
-Archive) on Launchpad. You can install Mroonga by APT from the PPA.
+   The PPA (Personal Package Archive, ``ppa:groonga/ppa``) is deprecated.
+   Use the Groonga APT repository (``packages.groonga.org``) described below instead.
 
 Here are supported Ubuntu versions:
 
@@ -25,28 +24,35 @@ Here are Ubuntu versions that supports MariaDB:
 * 22.04 Jammy Jellyfish
 * 24.04 Noble Numbat
 
+Groonga APT Repository
+------------------------
+
 Enable the universe repository and the security update repository to
 install Mroonga::
 
-  % sudo apt-get install -y -V software-properties-common lsb-release
-  % sudo add-apt-repository -y universe
-  % sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
+  $ sudo apt install -y -V software-properties-common lsb-release
+  $ sudo add-apt-repository -y universe
+  $ sudo add-apt-repository -y "deb http://security.ubuntu.com/ubuntu $(lsb_release --short --codename)-security main restricted"
 
-Add the ``ppa:groonga/ppa`` PPA to your system::
+Add the Groonga APT repository to your system::
 
-  % sudo add-apt-repository -y ppa:groonga/ppa
-  % sudo apt-get update
+  $ sudo apt update
+  $ sudo apt install -y -V ca-certificates wget
+  $ wget https://packages.groonga.org/ubuntu/groonga-apt-source-latest-$(lsb_release --codename --short).deb
+  $ sudo apt install -y -V ./groonga-apt-source-latest-$(lsb_release --codename --short).deb
+  $ rm -f groonga-apt-source-latest-$(lsb_release --codename --short).deb
+  $ sudo apt update
 
 Install Mroonga for MySQL::
 
-  % sudo apt-get install -y -V mysql-server-mroonga
+  $ sudo apt install -y -V mysql-mroonga
 
 Install Mroonga for MariaDB::
 
-  % sudo apt-get install -y -V mariadb-server-mroonga
+  $ sudo apt install -y -V mariadb-mroonga
 
 If you want to use `MeCab <https://taku910.github.io/mecab/>`_ as a tokenizer, install groonga-tokenizer-mecab package.
 
 Install groonga-tokenizer-mecab package::
 
-  % sudo apt-get install -y -V groonga-tokenizer-mecab
+  $ sudo apt install -y -V groonga-tokenizer-mecab
