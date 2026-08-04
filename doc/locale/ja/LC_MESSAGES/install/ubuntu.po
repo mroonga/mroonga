@@ -22,11 +22,8 @@ msgstr ""
 msgid "This section describes how to install Mroonga related deb packages on Ubuntu. You can install them by ``apt``."
 msgstr "このセクションではUbuntu上でMroonga関連のdebパッケージをインストールする方法を説明します。これらのパッケージは ``apt`` でインストールできます。"
 
-msgid "PPA (Personal Package Archive)"
-msgstr ""
-
-msgid "The Mroonga APT repository for Ubuntu uses PPA (Personal Package Archive) on Launchpad. You can install Mroonga by APT from the PPA."
-msgstr "Ubuntu用のMroongaのAPTリポジトリーはLaunchpad上のPPA（Personal Package Archive）を使っています。このPPAからAPTでMroongaをインストールできます。"
+msgid "The PPA (Personal Package Archive, ``ppa:groonga/ppa``) is deprecated. Use the Groonga APT repository (``packages.groonga.org``) described below instead."
+msgstr "PPA（Personal Package Archive、``ppa:groonga/ppa``）は非推奨です。代わりに、Groonga APTリポジトリ（``packages.groonga.org``）を使用してください。"
 
 msgid "Here are supported Ubuntu versions:"
 msgstr "サポートしているUbuntuのバージョンは次の通りです。"
@@ -43,11 +40,14 @@ msgstr "MySQLをサポートしているUbuntuのバージョンは次の通り�
 msgid "Here are Ubuntu versions that supports MariaDB:"
 msgstr "MariaDBをサポートしているUbuntuのバージョンは次の通りです。"
 
+msgid "Groonga APT Repository"
+msgstr "Groonga APTリポジトリー"
+
 msgid "Enable the universe repository and the security update repository to install Mroonga::"
 msgstr "Mroongaをインストールするときは、universeリポジトリーとセキュリティアップデートリポジトリを有効にしてください。::"
 
-msgid "Add the ``ppa:groonga/ppa`` PPA to your system::"
-msgstr "``ppa:groonga/ppa`` PPAをシステムに追加します::"
+msgid "Add the Groonga APT repository to your system::"
+msgstr "Groonga APTリポジトリーをシステムに追加します::"
 
 msgid "Install Mroonga for MySQL::"
 msgstr "MySQL用のMroongaをインストール::"
