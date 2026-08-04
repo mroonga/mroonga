@@ -179,7 +179,7 @@ html_theme_options = {
   ],
   "use_edit_page_button": use_edit_page_button,
   "analytics": {
-    "google_analytics_id": "UA-7532323-1"
+    "google_analytics_id": "G-TRMHECP5LS"
   },
   "show_nav_level": 2,
 }
