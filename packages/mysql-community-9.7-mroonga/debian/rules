@@ -17,7 +17,7 @@ override_dh_auto_configure:
 	archive=$${archive_base}.orig.tar.gz;				\
 	debian=mysql-community_$(MYSQL_VERSION_FULL).debian.tar.xz;	\
 	source_base=$${PWD}/mysql-$(MYSQL_VERSION);			\
-	build_dir=$${source_base}/release;				\
+	build_dir=$${source_base}/debug;				\
 	cp /$${archive} ./;						\
 	cp /$${debian} ./;						\
 	tar xf $${archive};						\
