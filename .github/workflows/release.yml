@@ -111,7 +111,7 @@ jobs:
             --notes-file release-note-without-version.md \
             --title "${title}" \
             release-artifacts/*/*
-launchpad:
+  launchpad:
     name: Launchpad
     runs-on: ubuntu-latest
     needs: publish
