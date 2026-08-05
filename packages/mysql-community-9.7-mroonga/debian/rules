@@ -23,7 +23,7 @@ override_dh_auto_configure:
 	tar xf $${archive};											\
 	(cd $${source_base} &&											\
 	  tar xf ../$${debian});										\
-	sed -i 's|-DMRS_JIT_EXECUTOR_LIB=/var/lib/pb2/sb_1[^ ]*|-DMRS_JIT_EXECUTOR_LIB=system|g' debian/rules	\
+	sed -i 's|-DMRS_JIT_EXECUTOR_LIB=/var/lib/pb2/sb_1[^ ]*|-DMRS_JIT_EXECUTOR_LIB=system|g' debian/rules;	\
 	dpkg-source --before-build $${source_base};								\
 	(cd $${source_base} &&											\
 	  debian/rules override_dh_auto_configure);								\
