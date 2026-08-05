@@ -40,4 +40,5 @@ RUN \
     groonga-normalizer-mysql \
     libgroonga-dev \
     libmysqlclient-dev \
+    mysql-router-community \
     ninja-build
