@@ -12,6 +12,9 @@ export MYSQL_VERSION := $(shell apt-cache show mysql-community-server | grep Ver
 %:
 	dh $@ --without autoreconf
 
+# Workaround: rewrite $${source_base}/debian/rules using sed.
+# See: https://bugs.mysql.com/bug.php?id=121059
+# We can remove this when the https://bugs.mysql.com/bug.php?id=121059 is fixed.
 override_dh_auto_configure:
 	archive_base=mysql-community_$(MYSQL_VERSION);													\
 	archive=$${archive_base}.orig.tar.gz;														\
@@ -23,9 +26,6 @@ override_dh_auto_configure:
 	tar xf $${archive};																\
 	(cd $${source_base} &&																\
 	  tar xf ../$${debian});															\
-	# This is workaround.
-	# See https://bugs.mysql.com/bug.php?id=121059
-	# We can remove this when https://bugs.mysql.com/bug.php?id=121059 is resolved.
 	sed -i 's|-DMRS_JIT_EXECUTOR_LIB=/var/lib/pb2/sb_1[^ ]*|-DMRS_JIT_EXECUTOR_LIB=/usr/lib/mysqlrouter/private/|g' $${source_base}/debian/rules;	\
 	dpkg-source --before-build $${source_base};													\
 	(cd $${source_base} &&																\
