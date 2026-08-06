@@ -22,6 +22,10 @@ RUN \
     wget && \
   add-apt-repository -y ppa:groonga/ppa && \
   wget https://packages.groonga.org/$(lsb_release --id --short | tr 'A-Z' 'a-z')/groonga-apt-source-latest-$(lsb_release --codename --short).deb && \
+  # Normally, we should use https://repo.mysql.com/mysql-apt-config.deb.
+  # However, it currently does not support MySQL 9.7.
+  # MySQL 9.7 support is currently available only in mysql-apt-config_0.8.39-1_all.deb.
+  # Therefore, we use mysql-apt-config_0.8.39-1_all.deb.
   wget https://repo.mysql.com/mysql-apt-config_0.8.39-1_all.deb && \
   apt install -y -V --no-install-recommends ${quiet} \
     ./*.deb && \
