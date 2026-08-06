@@ -162,7 +162,7 @@ sudo mkdir -p plugin
 sudo cp -a /host/mysql-test/mroonga/ plugin/
 
 case ${package} in
-  mysql-8.*|mysql-community-8.*)
+  mysql-*)
     ( \
       echo "/usr/lib/mysql-test/var/ r,"; \
       echo "/usr/lib/mysql-test/var/** rwk,"; \
