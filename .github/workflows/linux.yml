@@ -180,6 +180,9 @@ jobs:
           - os: ubuntu-jammy
             package: mysql-community-9.7
             test-image: "images:ubuntu/22.04"
+          - os: ubuntu-noble
+            package: mysql-community-9.7
+            test-image: "images:ubuntu/24.04"
 
           # MySQL community minimal 8.4
           - os: almalinux-9
