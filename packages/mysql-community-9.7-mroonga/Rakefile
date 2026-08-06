@@ -8,6 +8,7 @@ class MySQLCommunity97MroongaPackageTask < MroongaPackageTask
   def apt_targets_default
     [
       "ubuntu-jammy",
+      "ubuntu-noble",
     ]
   end
 
