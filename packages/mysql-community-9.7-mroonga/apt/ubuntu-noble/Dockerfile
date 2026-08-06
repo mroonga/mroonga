@@ -7,7 +7,7 @@ RUN \
 
 ENV \
   DEBIAN_FRONTEND=noninteractive \
-  MYSQL_SERVER_VERSION=mysql-8.4-lts
+  MYSQL_SERVER_VERSION=mysql-9.7-lts
 
 ARG DEBUG
 
