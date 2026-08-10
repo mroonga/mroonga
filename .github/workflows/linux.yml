@@ -154,7 +154,7 @@ jobs:
             package: mysql-community-8.4
             test-image: "images:almalinux/10"
           # This is a temporary workaround.
-          # Currently, the Mroonga Debian package cannot be installed with MySQL 8.4 due to a dependency issue.
+          # Currently, the Mroonga for Debian trixie cannot be installed with MySQL 8.4 due to a dependency issue.
           # For details, refer to https://bugs.mysql.com/bug.php?id=120697.
           # We can remove this workaround when this issue is resolved upstream.
           #- os: debian-trixie
@@ -178,7 +178,7 @@ jobs:
             package: mysql-community-9.7
             test-image: "images:almalinux/10"
           # This is a temporary workaround.
-          # Currently, the Mroonga debian package cannot be installed with MySQL 9.7 due to a dependency issue.
+          # Currently, the Mroonga for Debian trixie cannot be installed with MySQL 9.7 due to a dependency issue.
           # For details, refer to https://bugs.mysql.com/bug.php?id=120697.
           # We can remove this workaround when this issue is resolved upstream.
           #- os: debian-trixie
