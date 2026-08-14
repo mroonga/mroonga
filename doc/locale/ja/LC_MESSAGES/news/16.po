@@ -17,11 +17,11 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.08 - 2026-08-04"
-msgstr "16.08リリース - 2026-08-04"
+msgid "Release 16.09 - 2026-08-14"
+msgstr "16.09リリース - 2026-08-14"
 
-msgid "In this release, we do not provide Mroonga APT packages for MySQL 8.4. Currently, the Mroonga APT packages cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
-msgstr "このリリースでは、MySQL 8.4向けのMroongaのAPTパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
+msgid "In this release, we do not provide Mroonga for Debian trixie package for MySQL 8.4 and 9.7. Currently, the Mroonga for Debian trixie package cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
+msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
 
 msgid "Improvements"
 msgstr "改良"
@@ -29,11 +29,53 @@ msgstr "改良"
 msgid "Added support for MySQL Community Server 9.7 LTS in the following OS"
 msgstr "以下のOSでMySQL Community Server 9.7 LTSをサポート"
 
-msgid "AlmaLinux 8, 9, and 10."
+msgid "Ubuntu 22.04(Jammy Jellyfish) and 24.04(Noble Numbat)"
 msgstr ""
 
 msgid "Added support for MySQL Community Server 8.4.11 in the following OS"
 msgstr "以下のOSでMySQL 8.4.11をサポート"
+
+msgid "Added support for MariaDB 10.6.28 in the following OS"
+msgstr "以下のOSでMariaDB 10.6.28をサポート"
+
+msgid "AlmaLinux 8 and 9"
+msgstr ""
+
+msgid "Ubuntu 22.04(Jammy Jellyfish)"
+msgstr ""
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a bug that could cause Mroonga to crash on any error when opening an index"
+msgstr "インデックス参照時に任意のエラーが発生したときMroongaがクラッシュすることがある問題を修正"
+
+msgid "[GH-1138]( https://github.com/mroonga/mroonga/issues/1138 )[Reported by Jérome Perrin and Kazuhiko]"
+msgstr "[GH-1138]( https://github.com/mroonga/mroonga/issues/1138 )[Jérome PerrinさんとKazuhikoさんの報告]"
+
+msgid "[GH-1139]( https://github.com/mroonga/mroonga/pull/1139 )[Patched by Jérome Perrin]"
+msgstr "[GH-1139]( https://github.com/mroonga/mroonga/pull/1139 )[Jérome Perrinさんのパッチ提供]"
+
+msgid "If any error occured when opening a index, Mroonga could crash while handring the error."
+msgstr "インデックス参照時に任意のエラーが発生すると、エラー処理中にMroongaがクラッシュすることがあったため、これを修正しました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Jérome Perrin"
+msgstr "Jérome Perrinさん"
+
+msgid "Kazuhiko"
+msgstr "Kazuhikoさん"
+
+msgid "Release 16.08 - 2026-08-04"
+msgstr "16.08リリース - 2026-08-04"
+
+msgid "In this release, we do not provide Mroonga APT packages for MySQL 8.4. Currently, the Mroonga APT packages cannot be installed with MySQL 8.4.10 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
+msgstr "このリリースでは、MySQL 8.4向けのMroongaのAPTパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
+
+msgid "AlmaLinux 8, 9, and 10."
+msgstr ""
 
 msgid "Release 16.07 - 2026-06-30"
 msgstr "16.07リリース - 2026-06-30"
@@ -134,9 +176,6 @@ msgstr "[[MDEV-38530]( https://jira.mariadb.org/browse/MDEV-38530 )][Roel Van de
 msgid "Mroonga accepted `engine \"XXX\"` for wrapper mode not only in `COMMENT` but also in `CONNECTION`. However, this behavior was neither documented nor tested, so support for it has been removed."
 msgstr "Mroongaのラッパーモードで`CONNECTION=engine \"XXX\"`という書き方もできるようになっていますが、これについてドキュメントもテストも存在しないため、この機能を削除しました。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "Fixed a crash bug that occurred when `mroonga_log_file` was set `NULL` or an empty string"
 msgstr "`mroonga_log_file`に`NULL`または、空の文字列を設定するとMroongaがクラッシュする問題を修正しました。"
 
@@ -145,9 +184,6 @@ msgstr "[[GH-1069]( https://github.com/mroonga/mroonga/pull/1069 )][Hadeer Ramad
 
 msgid "Setting `NULL` or an empty string as shown below caused a `SIGSEGV`."
 msgstr "以下のように`NULL`または、空の文字列を設定すると、`SIGSEGV`が発生します。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Hadeer Ramadan"
 msgstr "Hadeer Ramadanさん"
