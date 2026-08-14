@@ -5867,10 +5867,10 @@ int ha_mroonga::storage_open_indexes(const char* name)
   uint n_keys = table->s->keys;
   uint pkey_nr = table->s->primary_key;
   if (n_keys > 0) {
-    grn_index_tables = (grn_obj**)malloc(sizeof(grn_obj*) * n_keys);
-    grn_index_columns = (grn_obj**)malloc(sizeof(grn_obj*) * n_keys);
-    key_id = (grn_id*)malloc(sizeof(grn_id) * n_keys);
-    del_key_id = (grn_id*)malloc(sizeof(grn_id) * n_keys);
+    grn_index_tables = (grn_obj**)calloc(n_keys, sizeof(grn_obj*));
+    grn_index_columns = (grn_obj**)calloc(n_keys, sizeof(grn_obj*));
+    key_id = (grn_id*)calloc(n_keys, sizeof(grn_id));
+    del_key_id = (grn_id*)calloc(n_keys, sizeof(grn_id));
   } else {
     grn_index_tables = grn_index_columns = NULL;
     key_id = NULL;
@@ -5881,7 +5881,6 @@ int ha_mroonga::storage_open_indexes(const char* name)
   uint i, j;
   for (i = 0; i < n_keys; i++) {
     if (i == pkey_nr) {
-      grn_index_tables[i] = grn_index_columns[i] = NULL;
       continue;
     }
 
