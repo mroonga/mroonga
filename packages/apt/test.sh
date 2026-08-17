@@ -234,7 +234,7 @@ sudo rm -rf /var/lib/mysql
 sudo mv /etc/apt/sources.list.d/${package}.list /tmp/
 sudo apt update
 case ${package} in
-  mysql-community-8.*)
+  mysql-community-*)
     mysql_community_install_mysql_apt_config
     ;;
 esac
