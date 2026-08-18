@@ -65,6 +65,18 @@ REPO
          https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
     echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
     sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
+    # Currently, mysql-community-minimal-release-el9.rpm does not contain SRPM repository configuration for MySQL 9.7 community minimal.
+    # Therefore, we specify manually this configuration.
+    if [ "${mysql_version}" = "9.7" ]; then
+      sudo tee /etc/yum.repos.d/MySQL-9.7-minimal-source.repo <<-REPO
+[mysql-9.7-lts-community-minimal-source]
+name=MySQL 9.7 LTS Server Minimal - Source
+baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/SRPMS/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023
+enabled=1
+gpgcheck = 1
+REPO
+    fi
     ;;
   mysql-community-*)
     mysql_package_prefix=mysql-community

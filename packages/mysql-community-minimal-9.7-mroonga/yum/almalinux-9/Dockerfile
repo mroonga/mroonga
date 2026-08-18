@@ -14,6 +14,7 @@ RUN \
     echo "name=MySQL 9.7 LTS Server Minimal - Source"; \
     echo "baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/SRPMS/"; \
     echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023"; \
+    echo "enabled=1"; \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MySQL-9.7-minimal-source.repo && \
   dnf install --enablerepo=crb -y ${quiet} \
