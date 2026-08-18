@@ -12,7 +12,7 @@ RUN \
   { \
     echo "[mysql-9.7-lts-community-minimal-source]"; \
     echo "name=MySQL 9.7 LTS Server Minimal - Source"; \
-    echo "baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/$releasever/SRPMS/"; \
+    echo "baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/SRPMS/"; \
     echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023"; \
     echo "gpgcheck = 1"; \
   } | tee /etc/yum.repos.d/MySQL-9.7-minimal-source.repo && \
