@@ -65,12 +65,12 @@ REPO
     # Therefore, we specify manually this configuration.
     if [ "${mysql_version}" = "9.7" ]; then
       sudo tee /etc/yum.repos.d/MySQL-9.7-minimal-source.repo <<-REPO
-[mysql-9.7-lts-community-minimal-source]
-name=MySQL 9.7 LTS Server Minimal - Source
-baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/SRPMS/
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023
+[mysql-cluster-9.7-lts-community-minimal]
+name=MySQL Cluster 9.7 LTS Minimal
+baseurl=https://repo.mysql.com/yum/mysql-cluster-9.7-community/docker/el/9/x86_64/
 enabled=1
-gpgcheck = 1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023
 REPO
     else
       sudo ${DNF} install -y \
