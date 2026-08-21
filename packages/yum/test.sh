@@ -170,7 +170,8 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
 
   cat /usr/share/mroonga/install.sql
   mysql --print-defaults
-  sudo ${mysql} < /usr/share/mroonga/install.sql
+  #  sudo ${mysql} < /usr/share/mroonga/install.sql
+  sleep 2
   sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
