@@ -168,8 +168,15 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
 
   sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 
-  sudo ${mysql} -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"
-  sudo ${mysql} < /usr/share/mroonga/update.sql
+  # MySQL Community Server Minimal 9.7 does not allow the SOURCE command in an SQL file.
+  # "${mysql} < /usr/share/mroonga/install.sql" causes a syntax error.
+  # Therefore, we execute each statement in install.sql individually.
+  if [ "${mysql_version}" = "9.7" ]; then
+    sudo ${mysql} -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"
+    sudo ${mysql} < /usr/share/mroonga/update.sql
+  else
+    sudo ${mysql} < /usr/share/mroonga/install.sql
+  fi
   sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
