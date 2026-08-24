@@ -63,8 +63,23 @@ REPO
 
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql-community-minimal-release-el${major_version}.rpm
-    echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
-    sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
+
+    # Currently, mysql-community-minimal-release-el9.rpm does not contain SRPM repository configuration for MySQL 9.7 community minimal.
+    # Therefore, we specify manually this configuration.
+    if [ "${mysql_version}" = "9.7" ]; then
+      sudo tee /etc/yum.repos.d/MySQL-9.7-minimal-source.repo <<-REPO
+[mysql-9.7-lts-community-minimal]
+name=MySQL 9.7 LTS Server Minimal
+baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/x86_64/
+enabled=1
+module_hotfixes=true
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023
+REPO
+    else
+      echo "module_hotfixes=true" | sudo tee -a /etc/yum.repos.d/mysql-community-minimal.repo
+      sudo sed -i -e 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/mysql-community-minimal.repo
+    fi
     ;;
   mysql-community-*)
     mysql_package_prefix=mysql-community
@@ -154,7 +169,14 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
 
   sudo ${mysql} --connect-expired-password -e "ALTER USER user() IDENTIFIED BY '$auto_generated_password'"
 
-  sudo ${mysql} < /usr/share/mroonga/install.sql
+  # MySQL Community Server Minimal 9.7 does not allow the SOURCE command in an SQL file.
+  # "${mysql} < /usr/share/mroonga/install.sql" causes a syntax error.
+  # Therefore, we execute this with --commands.
+  if [ "${mysql_version}" = "9.7" ]; then
+    sudo ${mysql} --commands < /usr/share/mroonga/install.sql
+  else
+    sudo ${mysql} < /usr/share/mroonga/install.sql
+  fi
   sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
   mysqladmin -u root -p${auto_generated_password} shutdown
 }
