@@ -171,9 +171,8 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
 
   # MySQL Community Server Minimal 9.7 does not allow the SOURCE command in an SQL file.
   # "${mysql} < /usr/share/mroonga/install.sql" causes a syntax error.
-  # Therefore, we execute each statement in install.sql individually.
+  # Therefore, we execute this with --commands.
   if [ "${mysql_version}" = "9.7" ]; then
-#    sudo ${mysql} -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"
     sudo ${mysql} --commands < /usr/share/mroonga/install.sql
   else
     sudo ${mysql} < /usr/share/mroonga/install.sql
