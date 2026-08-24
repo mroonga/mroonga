@@ -72,6 +72,7 @@ REPO
 name=MySQL 9.7 LTS Server Minimal
 baseurl=https://repo.mysql.com/yum/mysql-9.7-community/docker/el/9/x86_64/
 enabled=1
+module_hotfixes=true
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql-2023
 REPO
