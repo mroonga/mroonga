@@ -173,8 +173,8 @@ function mroonga_can_be_registered_for_mysql_community_minimal() {
   # "${mysql} < /usr/share/mroonga/install.sql" causes a syntax error.
   # Therefore, we execute each statement in install.sql individually.
   if [ "${mysql_version}" = "9.7" ]; then
-    sudo ${mysql} -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"
-    sudo ${mysql} < /usr/share/mroonga/update.sql
+#    sudo ${mysql} -e "INSTALL PLUGIN mroonga SONAME 'ha_mroonga.so';"
+    sudo ${mysql} --commands < /usr/share/mroonga/install.sql
   else
     sudo ${mysql} < /usr/share/mroonga/install.sql
   fi
