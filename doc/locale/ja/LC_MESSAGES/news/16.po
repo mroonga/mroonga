@@ -20,7 +20,7 @@ msgstr "お知らせ - 16系"
 msgid "Release 16.10 - 2026-08-27"
 msgstr "16.10リリース - 2026-08-27"
 
-msgid "In this release, we do not provide Mroonga for Debian trixie package for MySQL 8.4 and 9.7. Currently, the Mroonga for Debian trixie package cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
+msgid "In this release, we do not provide Mroonga packages for Debian trixie for MySQL 8.4 and 9.7. Currently, the Mroonga packages for Debian trixie cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
 
 msgid "Improvements"
@@ -46,6 +46,9 @@ msgstr ""
 
 msgid "Release 16.09 - 2026-08-14"
 msgstr "16.09リリース - 2026-08-14"
+
+msgid "In this release, we do not provide Mroonga for Debian trixie package for MySQL 8.4 and 9.7. Currently, the Mroonga for Debian trixie package cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
+msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
 
 msgid "Added support for MySQL Community Server 9.7 LTS in the following OS"
 msgstr "以下のOSでMySQL Community Server 9.7 LTSをサポート"
