@@ -113,12 +113,25 @@ jobs:
             release-artifacts/*/*
   launchpad:
     name: Launchpad
+    if: |
+      github.ref_type == 'tag'
     runs-on: ubuntu-latest
     needs: publish
     environment: release
     timeout-minutes: 10
-    if: |
-      github.ref_type == 'tag'
+    strategy:
+      fail-fast: false
+      matrix:
+        # Keep in sync with packages/*/Rakefile:ubuntu_targets_default
+        include:
+          - package: mariadb-10.6-mroonga
+            code-name: jammy
+          - package: mariadb-10.11-mroonga
+            code-name: noble
+          - package: mysql-8.0-mroonga
+            code-name: jammy
+          - package: mysql-8.0-mroonga
+            code-name: noble
     steps:
       - uses: actions/checkout@v7
       - name: Download source archive
@@ -149,4 +162,5 @@ jobs:
         run: |
           echo "${LAUNCHPAD_DEPLOY_KEY}" | gpg --import
           echo "trusted-key ${LAUNCHPAD_UPLOADER_PGP_KEY}" > ~/.gnupg/gpg.conf
-          rake -C packages ubuntu
+          rake -C packages/${{ matrix.package }} \
+            ubuntu:upload:${{ matrix.code-name }}
