@@ -94,9 +94,10 @@ jobs:
               -OutFile ${mariadbTarGz} `
               -Verbose
           }
-          # Workaround for: https://jira.mariadb.org/browse/MDEV-33493
+          # Workaround for: https://jira.mariadb.org/browse/MDEV-41001
           ridk exec tar xzf "${mariadbTarGz}" `
-            --exclude=storage/spider/mysql-test/spider/bugfix/r/udf_mysql_func_early_init_file.result
+            --exclude=storage/duckdb/third_parties/duckdb/data/csv/glob/crawl/.symbolic_link/link_to_file `
+            --exclude=storage/duckdb/third_parties/duckdb/data/csv/glob/crawl/.symbolic_link/mydir/link_to_upper_dir
           Move-Item mariadb-${Env:MARIADB_VERSION} mariadb
           Remove-Item mariadb\storage\mroonga -Recurse -Force
       - uses: actions/checkout@v7
