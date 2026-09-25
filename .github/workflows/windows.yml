@@ -182,9 +182,9 @@ jobs:
           Invoke-WebRequest `
             -MaximumRetryCount 3 `
             -RetryIntervalSec 65 `
-            -Uri "https://github.com/mruby/mruby/pull/6279.patch" `
-            -OutFile 6279.patch
-          ridk exec patch -p1 -i 6279.patch
+            -Uri "https://github.com/mruby/mruby/pull/7631.patch" `
+            -OutFile 7631.patch
+          ridk exec patch -p1 -i 7631.patch
       - uses: actions/checkout@v7
         if: |
           matrix.use-main == 'yes'
