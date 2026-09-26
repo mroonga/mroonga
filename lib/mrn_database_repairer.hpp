@@ -27,21 +27,13 @@ namespace mrn {
   public:
     DatabaseRepairer(grn_ctx *ctx, THD *thd);
     ~DatabaseRepairer(void);
-    bool is_crashed(void);
     bool is_crashed(const char *db_path);
-    bool is_corrupt(void);
     bool is_corrupt(const char *db_path);
-    bool repair(void);
     bool repair(const char *db_path);
 
   private:
     grn_ctx *ctx_;
     THD *thd_;
-    const char *base_directory_;
-    char base_directory_buffer_[MRN_MAX_PATH_SIZE];
-    const char *path_prefix_;
-    char path_prefix_buffer_[MRN_MAX_PATH_SIZE];
-    size_t path_prefix_length_;
     size_t mrn_db_file_suffix_length_;
 
     typedef void (DatabaseRepairer::*EachBodyFunc)(grn_ctx *ctx,
@@ -49,12 +41,10 @@ namespace mrn {
                                                    const char *db_path,
                                                    void *user_data);
 
-    void each_database(EachBodyFunc each_body_func, void *user_data);
     void each_database_body(const char *db_path,
                             grn_ctx *ctx,
                             EachBodyFunc each_body_func,
                             void *user_data);
-    void detect_paths(void);
 
     void check_body(grn_ctx *ctx,
                     grn_obj *db,

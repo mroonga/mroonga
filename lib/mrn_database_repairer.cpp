@@ -22,18 +22,9 @@
 #include <mrn_constants.hpp>
 
 #include "mrn_database_repairer.hpp"
-#include "mrn_path_mapper.hpp"
 
 // for debug
 #define MRN_CLASS_NAME "mrn::DatabaseRepairer"
-
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <errno.h>
-
-#ifndef WIN32
-#  include <dirent.h>
-#endif
 
 namespace mrn {
   struct CheckResult {
@@ -49,24 +40,10 @@ namespace mrn {
   DatabaseRepairer::DatabaseRepairer(grn_ctx *ctx, THD *thd)
     : ctx_(ctx),
       thd_(thd),
-      base_directory_(NULL),
-      base_directory_buffer_(),
-      path_prefix_(NULL),
-      path_prefix_buffer_(),
-      path_prefix_length_(0),
       mrn_db_file_suffix_length_(strlen(MRN_DB_FILE_SUFFIX)) {
   }
 
   DatabaseRepairer::~DatabaseRepairer() {
-  }
-
-  bool DatabaseRepairer::is_crashed(void) {
-    MRN_DBUG_ENTER_METHOD();
-
-    CheckResult result;
-    each_database(&DatabaseRepairer::check_body, &result);
-
-    DBUG_RETURN(result.is_crashed);
   }
 
   bool DatabaseRepairer::is_crashed(const char *db_path) {
@@ -92,15 +69,6 @@ namespace mrn {
     DBUG_RETURN(result.is_crashed);
   }
 
-  bool DatabaseRepairer::is_corrupt(void) {
-    MRN_DBUG_ENTER_METHOD();
-
-    CheckResult result;
-    each_database(&DatabaseRepairer::check_body, &result);
-
-    DBUG_RETURN(result.is_corrupt);
-  }
-
   bool DatabaseRepairer::is_corrupt(const char *db_path) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -124,15 +92,6 @@ namespace mrn {
     DBUG_RETURN(result.is_corrupt);
   }
 
-  bool DatabaseRepairer::repair(void) {
-    MRN_DBUG_ENTER_METHOD();
-
-    bool succeeded = true;
-    each_database(&DatabaseRepairer::repair_body, &succeeded);
-
-    DBUG_RETURN(succeeded);
-  }
-
   bool DatabaseRepairer::repair(const char *db_path) {
     MRN_DBUG_ENTER_METHOD();
 
@@ -154,64 +113,6 @@ namespace mrn {
     }
 
     DBUG_RETURN(succeeded);
-  }
-
-  void DatabaseRepairer::each_database(EachBodyFunc each_body_func,
-                                       void *user_data) {
-    MRN_DBUG_ENTER_METHOD();
-
-    detect_paths();
-
-#ifdef WIN32
-    WIN32_FIND_DATA data;
-    HANDLE finder = FindFirstFile(base_directory_, &data);
-    if (finder == INVALID_HANDLE_VALUE) {
-      DBUG_VOID_RETURN;
-    }
-
-    grn_ctx ctx;
-    grn_rc rc = grn_ctx_init(&ctx, 0);
-    if (rc == GRN_SUCCESS) {
-      do {
-        char db_path[MRN_MAX_PATH_SIZE];
-        snprintf(db_path, MRN_MAX_PATH_SIZE,
-                 "%s%c%s", base_directory_, FN_LIBCHAR, data.cFileName);
-        each_database_body(db_path, &ctx, each_body_func, user_data);
-      } while (FindNextFile(finder, &data) != 0);
-      grn_ctx_fin(&ctx);
-    } else {
-      GRN_LOG(ctx_, GRN_LOG_WARNING,
-              "[mroonga][database][repairer][each] "
-              "failed to initialize grn_ctx: %d: %s",
-              rc, grn_rc_to_string(rc));
-    }
-    FindClose(finder);
-#else
-    DIR *dir = opendir(base_directory_);
-    if (!dir) {
-      DBUG_VOID_RETURN;
-    }
-
-    grn_ctx ctx;
-    grn_rc rc = grn_ctx_init(&ctx, 0);
-    if (rc == GRN_SUCCESS) {
-      while (struct dirent *entry = readdir(dir)) {
-        char db_path[MRN_MAX_PATH_SIZE];
-        snprintf(db_path, MRN_MAX_PATH_SIZE,
-                 "%s%c%s", base_directory_, FN_LIBCHAR, entry->d_name);
-        each_database_body(entry->d_name, &ctx, each_body_func, user_data);
-      }
-      grn_ctx_fin(&ctx);
-    } else {
-      GRN_LOG(ctx_, GRN_LOG_WARNING,
-              "[mroonga][database][repairer][each] "
-              "failed to initialize grn_ctx: %d: %s",
-              rc, grn_rc_to_string(rc));
-    }
-    closedir(dir);
-#endif
-
-    DBUG_VOID_RETURN;
   }
 
   void DatabaseRepairer::each_database_body(const char *db_path,
@@ -238,39 +139,6 @@ namespace mrn {
     (this->*each_body_func)(ctx, db, db_path, user_data);
 
     grn_obj_close(ctx, db);
-
-    DBUG_VOID_RETURN;
-  }
-
-  void DatabaseRepairer::detect_paths(void) {
-    MRN_DBUG_ENTER_METHOD();
-
-    const char *raw_path_prefix = mrn::PathMapper::default_path_prefix;
-
-    if (!raw_path_prefix) {
-      base_directory_ = ".";
-      path_prefix_ = NULL;
-      DBUG_VOID_RETURN;
-    }
-
-    strcpy(base_directory_buffer_, raw_path_prefix);
-    size_t raw_path_prefix_length = strlen(raw_path_prefix);
-    size_t separator_position = raw_path_prefix_length;
-    for (; separator_position > 0; separator_position--) {
-      if (mrn_is_directory_separator(base_directory_buffer_[separator_position])) {
-        break;
-      }
-    }
-    if (separator_position == 0 ||
-        separator_position == raw_path_prefix_length) {
-      base_directory_ = ".";
-    } else {
-      base_directory_buffer_[separator_position] = '\0';
-      base_directory_ = base_directory_buffer_;
-      strcpy(path_prefix_buffer_, raw_path_prefix + separator_position + 1);
-      path_prefix_ = path_prefix_buffer_;
-      path_prefix_length_ = strlen(path_prefix_);
-    }
 
     DBUG_VOID_RETURN;
   }
