@@ -74,7 +74,8 @@ set(MRN_DOC_SOURCES
     tutorial/storage.rst
     tutorial/tokenizer-list.inc
     tutorial/wrapper.rst
-    upgrade.rst)
+    upgrade.rst
+)
 
 set(MRN_DOC_HTML_FILES
     .buildinfo.bak
@@ -175,4 +176,5 @@ set(MRN_DOC_HTML_FILES
     tutorial/mode.html
     tutorial/storage.html
     tutorial/wrapper.html
-    upgrade.html)
+    upgrade.html
+)
