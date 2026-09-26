@@ -27,7 +27,7 @@ concurrency:
 jobs:
   main:
     name: ${{ matrix.id }}
-    timeout-minutes: 30
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -40,6 +40,9 @@ jobs:
           #
           # To list available plugins, you can run:
           #   cmake -L $MARIADB_SOURCE_DIR | grep PLUGIN_
+          #
+          # We should not disable PLUGIN_INNOBASE and PLUGIN_MROONGA
+          # because they are needed for testing.
           - id: core
             compile_options:
               - -GNinja
@@ -51,9 +54,13 @@ jobs:
               - -DMYSQL_MAINTAINER_MODE=OFF
               - -DPLUGIN_ARCHIVE=NO
               - -DPLUGIN_AUDIT_NULL=NO
-              - -DPLUGIN_AUTH_ED25519=NO
-              - -DPLUGIN_AUTH_TEST_PLUGIN=NO
               - -DPLUGIN_AUTH_0X0100=NO
+              - -DPLUGIN_AUTH_ED25519=NO
+              - -DPLUGIN_AUTH_GSSAPI=NO
+              - -DPLUGIN_AUTH_MYSQL_SHA2=NO
+              - -DPLUGIN_AUTH_PARSEC=NO
+              - -DPLUGIN_AUTH_SOCKET=NO
+              - -DPLUGIN_AUTH_TEST_PLUGIN=NO
               - -DPLUGIN_BLACKHOLE=NO
               - -DPLUGIN_COLUMNSTORE=NO
               - -DPLUGIN_CONNECT=NO
@@ -61,24 +68,34 @@ jobs:
               - -DPLUGIN_DEBUG_KEY_MANAGEMENT=NO
               - -DPLUGIN_DIALOG_EXAMPLES=NO
               - -DPLUGIN_DISKS=NO
+              - -DPLUGIN_DUCKDB=NO
               - -DPLUGIN_EXAMPLE=NO
               - -DPLUGIN_EXAMPLE_KEY_MANAGEMENT=NO
               - -DPLUGIN_FEDERATED=NO
               - -DPLUGIN_FEDERATEDX=NO
+              - -DPLUGIN_FEEDBACK=NO
               - -DPLUGIN_FILE_KEY_MANAGEMENT=NO
               - -DPLUGIN_FTEXAMPLE=NO
               - -DPLUGIN_FUNC_TEST=NO
               - -DPLUGIN_HANDLERSOCKET=NO
+              - -DPLUGIN_HASHICORP_KEY_MANAGEMENT=NO
               - -DPLUGIN_LOCALES=NO
               - -DPLUGIN_METADATA_LOCK_INFO=NO
-              - -DPLUGIN_OQGRAPH=NO
+              - -DPLUGIN_PARTITION=NO
               - -DPLUGIN_PASSWORD_REUSE_CHECK=NO
+              - -DPLUGIN_PERFSCHEMA=NO
+              - -DPLUGIN_PROVIDER_BZIP2=NO
+              - -DPLUGIN_PROVIDER_LZ4=NO
+              - -DPLUGIN_PROVIDER_LZMA=NO
+              - -DPLUGIN_PROVIDER_LZO=NO
+              - -DPLUGIN_PROVIDER_SNAPPY=NO
+              - -DPLUGIN_QA_AUTH_CLIENT=NO
               - -DPLUGIN_QA_AUTH_INTERFACE=NO
               - -DPLUGIN_QA_AUTH_SERVER=NO
-              - -DPLUGIN_QA_AUTH_CLIENT=NO
               - -DPLUGIN_QUERY_CACHE_INFO=NO
               - -DPLUGIN_QUERY_RESPONSE_TIME=NO
               - -DPLUGIN_ROCKSDB=NO
+              - -DPLUGIN_S3=NO
               - -DPLUGIN_SEQUENCE=NO
               - -DPLUGIN_SERVER_AUDIT=NO
               - -DPLUGIN_SIMPLE_PASSWORD_CHECK=NO
@@ -88,27 +105,19 @@ jobs:
               - -DPLUGIN_TEST_SQL_DISCOVERY=NO
               - -DPLUGIN_TEST_SQL_SERVICE=NO
               - -DPLUGIN_TEST_VERSIONING=NO
+              - -DPLUGIN_THREAD_POOL_INFO=NO
+              - -DPLUGIN_TYPE_MYSQL_JSON=NO
+              - -DPLUGIN_TYPE_MYSQL_TIMESTAMP=NO
               - -DPLUGIN_TYPE_TEST=NO
+              - -DPLUGIN_USER_VARIABLES=NO
+              - -DPLUGIN_VIDEX=NO
+              - -DPLUGIN_WSREP_INFO=NO
+              - -DPLUGIN_WSREP_PROVIDER=NO
               - -DPROVIDER_LZ4=NO
               - -DWITH_EMBEDDED_SERVER=NO
               - -DWITH_UNIT_TESTS=OFF
               - -DWITH_MARIABACKUP=OFF
               - -DWITH_SAFEMALLOC=OFF
-              - -DWITH_WSREP=OFF
-
-          # https://github.com/MariaDB/buildbot/blob/cca6638494b6d774ec89f10adc3512d2152b56dc/configuration/builders/sequences/compile_only.py#L45-L70
-          - id: compile-only-minimal
-            compile_options:
-              - -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-              - -DCMAKE_C_COMPILER_LAUNCHER=ccache
-              - -DPLUGIN_FEEDBACK=NO
-              - -DPLUGIN_INNOBASE=NO
-              - -DPLUGIN_PARTITION=NO
-              - -DPLUGIN_PERFSCHEMA=NO
-              - -DPLUGIN_SEQUENCE=NO
-              - -DPLUGIN_THREAD_POOL_INFO=NO
-              - -DPLUGIN_USER_VARIABLES=NO
-              - -DWITH_NONE=ON
               - -DWITH_WSREP=OFF
     steps:
       - uses: ruby/setup-ruby@v1
@@ -148,6 +157,12 @@ jobs:
           path: ccache
           key: mariadb-linux-ccache-${{ hashFiles('mariadb/**/*.cpp', 'mariadb/**/*.h', 'mariadb/**/*.hpp') }}
           restore-keys: mariadb-linux-ccache-
+      - name: Show available plugins
+        run: |
+          cmake -L mariadb |& \
+            grep '^PLUGIN_' | \
+            grep -v '^PLUGIN_INNOBASE' | \
+            grep -v '^PLUGIN_MROONGA'
       - name: Configure MariaDB
         run: |
           cmake \
