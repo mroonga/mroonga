@@ -48,10 +48,6 @@ project(
     LANGUAGES C CXX
 )
 
-if(NOT DEFINED CMAKE_CXX_STANDARD OR CMAKE_CXX_STANDARD LESS 17)
-    set(CMAKE_CXX_STANDARD 17)
-endif()
-
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
@@ -150,6 +146,29 @@ else()
     endif()
     set_mysql_config_value("--cflags" MYSQL_CFLAGS)
     set_mysql_config_value("--version" MYSQL_VERSION)
+endif()
+
+if(EXISTS "${MYSQL_SOURCE_DIR}/storage/maria")
+    set(MYSQL_VARIANT "MariaDB")
+else()
+    set(MYSQL_VARIANT "MySQL")
+endif()
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(${MYSQL_VARIANT} STREQUAL "MariaDB")
+    set(MRN_MINIMUM_CXX_STANDARD 17)
+else()
+    if(${MYSQL_VERSION} VERSION_LESS "8.4")
+        set(MRN_MINIMUM_CXX_STANDARD 17)
+    else()
+        set(MRN_MINIMUM_CXX_STANDARD 20)
+    endif()
+endif()
+if(
+    NOT DEFINED CMAKE_CXX_STANDARD
+    OR CMAKE_CXX_STANDARD LESS ${MRN_MINIMUM_CXX_STANDARD}
+)
+    set(CMAKE_CXX_STANDARD ${MRN_MINIMUM_CXX_STANDARD})
 endif()
 
 if(MRN_GROONGA_BUNDLED)
@@ -297,24 +316,6 @@ string(
     MRN_UDF_SOURCES
     "${MRN_UDF_SOURCES}"
 )
-
-if(EXISTS "${MYSQL_SOURCE_DIR}/storage/maria")
-    set(MYSQL_VARIANT "MariaDB")
-else()
-    set(MYSQL_VARIANT "MySQL")
-endif()
-
-if(${MYSQL_VARIANT} STREQUAL "MariaDB")
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-    if(${MYSQL_VERSION} VERSION_LESS "8.4")
-        set(CMAKE_CXX_STANDARD 17)
-    else()
-        set(CMAKE_CXX_STANDARD 20)
-    endif()
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
 
 set(MRN_ALL_SOURCES
     ${MRN_SOURCES}
