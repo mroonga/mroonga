@@ -94,10 +94,9 @@ File.open(File.join(source_dir, "files.cmake"), "w") do |output|
       files << path
     end
     files.sort!
-    output.print("set(MRN_DOC_SOURCES")
+    output.puts("set(MRN_DOC_SOURCES")
     files.each do |file|
-      output.puts
-      output.print("    #{file}")
+      output.puts("    #{file}")
     end
     output.puts(")")
     output.puts
@@ -115,10 +114,9 @@ File.open(File.join(source_dir, "files.cmake"), "w") do |output|
       html_files << path
     end
     html_files.sort!
-    output.print("set(MRN_DOC_HTML_FILES")
+    output.puts("set(MRN_DOC_HTML_FILES")
     html_files.each do |html_file|
-      output.puts
-      output.print("    #{html_file}")
+      output.puts("    #{html_file}")
     end
     output.puts(")")
   end
