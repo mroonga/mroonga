@@ -1018,31 +1018,15 @@ static inline void mrn_store_field_datetime(Field* field,
 #  define MRN_HAVE_UDF_METADATA
 #endif
 
-#ifdef MRN_MARIADB_P
-/*
- * We can't use my_error(ER_STATEMENT_TIMEOUT, MYF(0)) because
- * ER_STATEMENT_TIMEOUT has "%s" since MariaDB 12.3. The server
- * prepares the message for the killed statement. We use it.
- */
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
-    do {                                                                       \
-      auto thd_ = current_thd;                                                 \
-      if ((ctx)->rc == GRN_CANCEL && thd_ && thd_->killed) {                   \
-        thd_->send_kill_message();                                             \
-      } else {                                                                 \
-        my_message((error_code), (ctx)->errbuf, MYF(0));                       \
-      }                                                                        \
-    } while (false)
-#else
-#  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
-    do {                                                                       \
-      if ((ctx)->rc == GRN_CANCEL) {                                           \
-        my_error(ER_QUERY_TIMEOUT, MYF(0));                                    \
-      } else {                                                                 \
-        my_message((error_code), (ctx)->errbuf, MYF(0));                       \
-      }                                                                        \
-    } while (false)
-#endif
+#define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                              \
+  do {                                                                         \
+    auto thd_ = current_thd;                                                   \
+    if ((ctx)->rc == GRN_CANCEL && thd_ && thd_->killed) {                     \
+      thd_->send_kill_message();                                               \
+    } else {                                                                   \
+      my_message((error_code), (ctx)->errbuf, MYF(0));                         \
+    }                                                                          \
+  } while (false)
 
 #if defined(MRN_MARIADB_P) &&                                                  \
   ((MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||                \
