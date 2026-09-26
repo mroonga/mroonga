@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2025  Sutou Kouhei <kou@clear-code.com>
+  Copyright(C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
   Copyright(C) 2020-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -1019,23 +1019,29 @@ static inline void mrn_store_field_datetime(Field* field,
 #endif
 
 #ifdef MRN_MARIADB_P
-#  define MRN_ERROR_CANCEL ER_STATEMENT_TIMEOUT
-#else
-#  define MRN_ERROR_CANCEL ER_QUERY_TIMEOUT
-#endif
-
-#ifdef MRN_ERROR_CANCEL
+/*
+ * We can't use my_error(ER_STATEMENT_TIMEOUT, MYF(0)) because
+ * ER_STATEMENT_TIMEOUT has "%s" since MariaDB 12.3. The server
+ * prepares the message for the killed statement. We use it.
+ */
 #  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
     do {                                                                       \
-      if ((ctx)->rc == GRN_CANCEL) {                                           \
-        my_error(MRN_ERROR_CANCEL, MYF(0));                                    \
+      auto thd_ = current_thd;                                                 \
+      if ((ctx)->rc == GRN_CANCEL && thd_ && thd_->killed) {                   \
+        thd_->send_kill_message();                                             \
       } else {                                                                 \
         my_message((error_code), (ctx)->errbuf, MYF(0));                       \
       }                                                                        \
     } while (false)
 #else
 #  define MRN_SET_MESSAGE_FROM_CTX(ctx, error_code)                            \
-    my_message(error_code, ctx->errbuf, MYF(0))
+    do {                                                                       \
+      if ((ctx)->rc == GRN_CANCEL) {                                           \
+        my_error(ER_QUERY_TIMEOUT, MYF(0));                                    \
+      } else {                                                                 \
+        my_message((error_code), (ctx)->errbuf, MYF(0));                       \
+      }                                                                        \
+    } while (false)
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
@@ -1119,7 +1125,7 @@ static inline void mrn_store_field_datetime(Field* field,
 #  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 130000)
+#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 120300)
 #  define MRN_HA_EXTRA_BEGIN_COPY_NAME "HA_EXTRA_BEGIN_COPY"
 #  define MRN_HA_EXTRA_BEGIN_COPY      HA_EXTRA_BEGIN_COPY
 #  define MRN_HA_EXTRA_END_COPY_NAME   "HA_EXTRA_END_COPY"
