@@ -223,6 +223,9 @@ if(MRN_GROONGA_BUNDLED)
                 APPEND CMAKE_CXX_FLAGS
                 " /wd4099 /wd4700 /wd4311 /wd4477 /wd4302 /wd4090 /wd4244"
             )
+            # llama.cpp has some warnings with LLVM and MariaDB
+            # doesn't like warnings.
+            set(GRN_WITH_LLAMA_CPP OFF)
         endif()
         add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
         if(
