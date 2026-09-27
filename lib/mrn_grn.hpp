@@ -24,16 +24,18 @@
 
 namespace mrn {
   namespace grn {
-    bool is_table(grn_obj *obj) {
+    bool is_table(grn_obj* obj)
+    {
       grn_id type = obj->header.type;
       return GRN_TABLE_HASH_KEY <= type && obj->header.type <= GRN_DB;
     }
 
-    bool is_vector_column(grn_obj *column) {
+    bool is_vector_column(grn_obj* column)
+    {
       int column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
       return column_type == GRN_OBJ_COLUMN_VECTOR;
     }
-  }
-}
+  } // namespace grn
+} // namespace mrn
 
 #endif // MRN_GRN_HPP_
