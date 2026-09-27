@@ -35,6 +35,7 @@ repos:
           ?lib/mrn_condition_converter\.cpp|
           ?lib/mrn_grn\.hpp|
           ?lib/mrn_multiple_column_key_codec\.cpp|
+          ?lib/mrn_operations\.cpp|
           ?mrn_mysql_compat\.h|
           )
   - repo: https://github.com/BlankSpruce/gersemi-pre-commit
