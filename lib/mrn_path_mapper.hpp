@@ -22,8 +22,6 @@
 #ifndef MRN_PATH_MAPPER_HPP_
 #define MRN_PATH_MAPPER_HPP_
 
-#include <mrn_constants.hpp>
-
 #include <string>
 
 namespace mrn {
@@ -47,10 +45,10 @@ namespace mrn {
     const char *path_prefix_;
     const char *mysql_data_home_path_;
     std::string db_path_;
-    char db_name_[MRN_MAX_PATH_SIZE];
-    char table_name_[MRN_MAX_PATH_SIZE];
-    char mysql_table_name_[MRN_MAX_PATH_SIZE];
-    char mysql_path_[MRN_MAX_PATH_SIZE];
+    std::string db_name_;
+    std::string table_name_;
+    std::string mysql_table_name_;
+    std::string mysql_path_;
   };
 }
 
