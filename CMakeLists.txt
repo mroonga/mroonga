@@ -223,9 +223,20 @@ if(MRN_GROONGA_BUNDLED)
                 APPEND CMAKE_CXX_FLAGS
                 " /wd4099 /wd4700 /wd4311 /wd4477 /wd4302 /wd4090 /wd4244"
             )
-            # llama.cpp has some warnings with MSVC and MariaDB
-            # doesn't like warnings.
-            set(GRN_WITH_LLAMA_CPP "no")
+            # MariaDB treats warnings as errors with
+            # MYSQL_MAINTAINER_MODE=ERR.
+            if(MYSQL_MAINTAINER_MODE MATCHES "ERR")
+                # llama.cpp has some warnings with MSVC such as C4018
+                # (signed/unsigned mismatch) and D9002 (ignoring
+                # unknown option '-fno-lto').
+                set(GRN_WITH_LLAMA_CPP "no")
+                # MeCab defines NOMINMAX that is also defined by
+                # MariaDB. It's C4005 (macro redefinition).
+                set(GRN_WITH_MECAB "no")
+                # mruby defines WIN32_LEAN_AND_MEAN that is also
+                # defined by MariaDB. It's C4005 (macro redefinition).
+                set(GRN_WITH_MRUBY OFF)
+            endif()
         endif()
         add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
         if(
