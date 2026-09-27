@@ -35,59 +35,62 @@
 
 #include <string>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
-typedef struct st_mrn_snippet_html_info
-{
-  grn_ctx *ctx;
+typedef struct st_mrn_snippet_html_info {
+  grn_ctx* ctx;
   grn_obj result;
   unsigned int mysql_table_name_index;
   unsigned int mysql_index_name_index;
   unsigned int mysql_lexicon_name_index;
-  grn_obj *db;
+  grn_obj* db;
   bool use_shared_db;
-  grn_obj *snippet;
-  grn_obj *lexicon;
-  grn_obj *query_table;
-  grn_obj *query_default_column;
+  grn_obj* snippet;
+  grn_obj* lexicon;
+  grn_obj* query_table;
+  grn_obj* query_default_column;
 } mrn_snippet_html_info;
 
-static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
-                                        UDF_ARGS *args,
-                                        char *message,
-                                        grn_obj **snippet)
+static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info* info,
+                                         UDF_ARGS* args,
+                                         char* message,
+                                         grn_obj** snippet)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  grn_ctx *ctx = info->ctx;
+  grn_ctx* ctx = info->ctx;
   int flags = GRN_SNIP_SKIP_LEADING_SPACES;
   unsigned int width = 200;
   unsigned int max_n_results = 3;
-  const char *open_tag = "<span class=\"keyword\">";
-  const char *close_tag = "</span>";
-  grn_snip_mapping *mapping = GRN_SNIP_MAPPING_HTML_ESCAPE;
+  const char* open_tag = "<span class=\"keyword\">";
+  const char* close_tag = "</span>";
+  grn_snip_mapping* mapping = GRN_SNIP_MAPPING_HTML_ESCAPE;
 
   *snippet = NULL;
 
   mrn::encoding::set_raw(ctx, system_charset_info);
 
-  *snippet = grn_snip_open(ctx, flags,
-                           width, max_n_results,
-                           open_tag, strlen(open_tag),
-                           close_tag, strlen(close_tag),
+  *snippet = grn_snip_open(ctx,
+                           flags,
+                           width,
+                           max_n_results,
+                           open_tag,
+                           strlen(open_tag),
+                           close_tag,
+                           strlen(close_tag),
                            mapping);
   if (ctx->rc != GRN_SUCCESS) {
     if (message) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_snippet_html(): failed to open grn_snip: <%s>",
                ctx->errbuf);
     }
     goto error;
   }
 
-  if (info->mysql_table_name_index == 0 &&
-      info->mysql_index_name_index == 0 &&
+  if (info->mysql_table_name_index == 0 && info->mysql_index_name_index == 0 &&
       info->mysql_lexicon_name_index == 0) {
     if (!(system_charset_info->state & (MY_CS_BINSORT | MY_CS_CSSORT))) {
       grn_snip_set_normalizer(ctx, *snippet, GRN_NORMALIZER_AUTO);
@@ -95,50 +98,54 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
   } else {
     std::string lexicon_name;
     if (info->mysql_lexicon_name_index > 0) {
-      const char *mysql_lexicon_name =
+      const char* mysql_lexicon_name =
         args->args[info->mysql_lexicon_name_index];
       const size_t mysql_lexicon_name_length =
         args->lengths[info->mysql_lexicon_name_index];
       if (mysql_lexicon_name_length == 0) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): lexicon_name is empty");
         }
         goto error;
       }
-      lexicon_name = std::string(mysql_lexicon_name,
-                                 mysql_lexicon_name_length);
+      lexicon_name = std::string(mysql_lexicon_name, mysql_lexicon_name_length);
     } else {
       if (info->mysql_table_name_index == 0) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): table_name is missing");
         }
         goto error;
       }
-      const char *mysql_table_name = args->args[info->mysql_table_name_index];
+      const char* mysql_table_name = args->args[info->mysql_table_name_index];
       const size_t mysql_table_name_length =
         args->lengths[info->mysql_table_name_index];
       if (mysql_table_name_length == 0) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): table_name is empty");
         }
         goto error;
       }
       if (info->mysql_index_name_index == 0) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): index_name is missing");
         }
         goto error;
       }
-      const char *mysql_index_name = args->args[info->mysql_index_name_index];
+      const char* mysql_index_name = args->args[info->mysql_index_name_index];
       const size_t mysql_index_name_length =
         args->lengths[info->mysql_index_name_index];
       if (mysql_index_name_length == 0) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): index_name is empty");
         }
         goto error;
@@ -147,15 +154,15 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
                                            mysql_table_name_length,
                                            mysql_index_name,
                                            mysql_index_name_length);
-      lexicon_name = std::string(index_table_name.c_str(),
-                                 index_table_name.length());
+      lexicon_name =
+        std::string(index_table_name.c_str(), index_table_name.length());
     }
-    info->lexicon = grn_ctx_get(ctx,
-                                   lexicon_name.c_str(),
-                                   lexicon_name.length());
+    info->lexicon =
+      grn_ctx_get(ctx, lexicon_name.c_str(), lexicon_name.length());
     if (!info->lexicon) {
       if (message) {
-        snprintf(message, MYSQL_ERRMSG_SIZE,
+        snprintf(message,
+                 MYSQL_ERRMSG_SIZE,
                  "mroonga_snippet_html(): nonexistent index: <%.*s>",
                  static_cast<int>(lexicon_name.length()),
                  lexicon_name.c_str());
@@ -179,28 +186,30 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       // Do nothing
     } else if (GRN_RAW_STRING_EQUAL_CSTRING(arg_name, "query")) {
       if (!info->query_table) {
-        grn_obj *short_text;
+        grn_obj* short_text;
         short_text = grn_ctx_at(info->ctx, GRN_DB_SHORT_TEXT);
         info->query_table = grn_table_create(info->ctx,
-                                             NULL, 0, NULL,
+                                             NULL,
+                                             0,
+                                             NULL,
                                              GRN_TABLE_HASH_KEY,
                                              short_text,
                                              NULL);
       }
       if (!info->query_default_column) {
-        info->query_default_column =
-          grn_obj_column(info->ctx,
-                         info->query_table,
-                         GRN_COLUMN_NAME_KEY,
-                         GRN_COLUMN_NAME_KEY_LEN);
+        info->query_default_column = grn_obj_column(info->ctx,
+                                                    info->query_table,
+                                                    GRN_COLUMN_NAME_KEY,
+                                                    GRN_COLUMN_NAME_KEY_LEN);
       }
 
-      grn_obj *expr = NULL;
-      grn_obj *record = NULL;
+      grn_obj* expr = NULL;
+      grn_obj* record = NULL;
       GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->query_table, expr, record);
       if (!expr) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): "
                    "failed to create expression: <%s>",
                    ctx->errbuf);
@@ -218,7 +227,8 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
       grn_rc rc = query_parser.parse(args->args[i], args->lengths[i]);
       if (rc != GRN_SUCCESS) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): "
                    "failed to parse query: "
                    "<%.*s>: "
@@ -234,11 +244,14 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
                                         expr,
                                         *snippet,
                                         0,
-                                        NULL, NULL,
-                                        NULL, NULL);
+                                        NULL,
+                                        NULL,
+                                        NULL,
+                                        NULL);
       if (rc != GRN_SUCCESS) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): "
                    "failed to add conditions: <%s>",
                    ctx->errbuf);
@@ -246,13 +259,18 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info *info,
         goto error;
       }
     } else {
-      grn_rc rc = grn_snip_add_cond(ctx, *snippet,
-                                    args->args[i], args->lengths[i],
-                                    NULL, 0,
-                                    NULL, 0);
+      grn_rc rc = grn_snip_add_cond(ctx,
+                                    *snippet,
+                                    args->args[i],
+                                    args->lengths[i],
+                                    NULL,
+                                    0,
+                                    NULL,
+                                    0);
       if (rc != GRN_SUCCESS) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_snippet_html(): "
                    "failed to add a condition to grn_snip: <%s>",
                    ctx->errbuf);
@@ -273,18 +291,17 @@ error:
 
 MRN_BEGIN_DECLS
 
-MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
-                                           UDF_ARGS *args,
-                                           char *message)
+MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT* init,
+                                           UDF_ARGS* args,
+                                           char* message)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_snippet_html_info *info = NULL;
+  mrn_snippet_html_info* info = NULL;
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_snippet_html(): Mroonga isn't initialized");
@@ -292,12 +309,12 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
   }
 
   if (args->arg_count < 1) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_snippet_html(): wrong number of arguments: %u for 1+",
              args->arg_count);
     goto error;
   }
-
 
   for (unsigned int i = 0; i < args->arg_count; ++i) {
     switch (args->arg_type[i]) {
@@ -305,21 +322,26 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
       /* OK */
       break;
     case REAL_RESULT:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_snippet_html(): all arguments must be string: "
                "<%u>=<%g>",
-               i, *((double *)(args->args[i])));
+               i,
+               *((double*)(args->args[i])));
       goto error;
       break;
     case INT_RESULT:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_snippet_html(): all arguments must be string: "
                "<%u>=<%lld>",
-               i, *((longlong *)(args->args[i])));
+               i,
+               *((longlong*)(args->args[i])));
       goto error;
       break;
     default:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_snippet_html(): all arguments must be string: <%u>",
                i);
       goto error;
@@ -329,21 +351,22 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
 
   init->maybe_null = 1;
 
-  info = (mrn_snippet_html_info *)mrn_my_malloc(sizeof(mrn_snippet_html_info),
-                                                MYF(MY_WME | MY_ZEROFILL));
+  info = (mrn_snippet_html_info*)mrn_my_malloc(sizeof(mrn_snippet_html_info),
+                                               MYF(MY_WME | MY_ZEROFILL));
   if (!info) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_snippet_html(): failed to allocate memory");
     goto error;
   }
 
   info->ctx = mrn_context_pool->pull();
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
-    const char *action;
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* action;
     if (current_db_path) {
       action = "open database";
-      mrn::Database *db;
+      mrn::Database* db;
       int error = mrn_db_manager->open(current_db_path, &db);
       if (error == 0) {
         info->db = db->get();
@@ -458,7 +481,7 @@ MRN_API mrn_bool mroonga_snippet_html_init(UDF_INIT *init,
     }
   }
 
-  init->ptr = (char *)info;
+  init->ptr = (char*)info;
 
   DBUG_RETURN(false);
 
@@ -476,21 +499,21 @@ error:
   DBUG_RETURN(true);
 }
 
-MRN_API char *mroonga_snippet_html(UDF_INIT *init,
-                                   UDF_ARGS *args,
-                                   char *result,
-                                   unsigned long *length,
-                                   uchar *is_null,
-                                   uchar *error)
+MRN_API char* mroonga_snippet_html(UDF_INIT* init,
+                                   UDF_ARGS* args,
+                                   char* result,
+                                   unsigned long* length,
+                                   uchar* is_null,
+                                   uchar* error)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_snippet_html_info *info =
-    reinterpret_cast<mrn_snippet_html_info *>(init->ptr);
+  mrn_snippet_html_info* info =
+    reinterpret_cast<mrn_snippet_html_info*>(init->ptr);
 
-  grn_ctx *ctx = info->ctx;
-  grn_obj *snippet = info->snippet;
-  grn_obj *result_buffer = &(info->result);
+  grn_ctx* ctx = info->ctx;
+  grn_obj* snippet = info->snippet;
+  grn_obj* result_buffer = &(info->result);
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -504,16 +527,22 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
   }
 
   {
-    char *target = args->args[0];
+    char* target = args->args[0];
     unsigned int target_length = args->lengths[0];
 
     unsigned int n_results, max_tagged_length;
     {
-      grn_rc rc = grn_snip_exec(ctx, snippet, target, target_length,
-                                &n_results, &max_tagged_length);
+      grn_rc rc = grn_snip_exec(ctx,
+                                snippet,
+                                target,
+                                target_length,
+                                &n_results,
+                                &max_tagged_length);
       if (rc != GRN_SUCCESS) {
         my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                        ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                        ER_MRN_ERROR_FROM_GROONGA_STR,
+                        MYF(0),
+                        ctx->errbuf);
         goto error;
       }
     }
@@ -522,8 +551,8 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
     GRN_BULK_REWIND(result_buffer);
 
     {
-      const char *start_tag = "<div class=\"snippet\">";
-      const char *end_tag = "</div>";
+      const char* start_tag = "<div class=\"snippet\">";
+      const char* end_tag = "</div>";
       size_t start_tag_length = strlen(start_tag);
       size_t end_tag_length = strlen(end_tag);
       for (unsigned int i = 0; i < n_results; ++i) {
@@ -531,13 +560,16 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
 
         grn_bulk_reserve(ctx, result_buffer, max_tagged_length);
         unsigned int result_length;
-        grn_rc rc =
-          grn_snip_get_result(ctx, snippet, i,
-                              GRN_BULK_CURR(result_buffer),
-                              &result_length);
+        grn_rc rc = grn_snip_get_result(ctx,
+                                        snippet,
+                                        i,
+                                        GRN_BULK_CURR(result_buffer),
+                                        &result_length);
         if (rc) {
           my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                          ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                          ER_MRN_ERROR_FROM_GROONGA_STR,
+                          MYF(0),
+                          ctx->errbuf);
           goto error;
         }
         grn_bulk_space(ctx, result_buffer, result_length);
@@ -550,7 +582,9 @@ MRN_API char *mroonga_snippet_html(UDF_INIT *init,
       grn_rc rc = grn_obj_close(ctx, snippet);
       if (rc != GRN_SUCCESS) {
         my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                        ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                        ER_MRN_ERROR_FROM_GROONGA_STR,
+                        MYF(0),
+                        ctx->errbuf);
         goto error;
       }
     }
@@ -570,12 +604,12 @@ error:
   DBUG_RETURN(NULL);
 }
 
-MRN_API void mroonga_snippet_html_deinit(UDF_INIT *init)
+MRN_API void mroonga_snippet_html_deinit(UDF_INIT* init)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_snippet_html_info *info =
-    reinterpret_cast<mrn_snippet_html_info *>(init->ptr);
+  mrn_snippet_html_info* info =
+    reinterpret_cast<mrn_snippet_html_info*>(init->ptr);
   if (!info) {
     DBUG_VOID_RETURN;
   }
