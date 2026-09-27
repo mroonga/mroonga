@@ -20,6 +20,7 @@
 */
 
 #include <mrn_mysql.h>
+#include <mrn_constants.hpp>
 
 #include "mrn_path_mapper.hpp"
 
@@ -36,11 +37,11 @@ namespace mrn {
     : original_mysql_path_(original_mysql_path),
       path_prefix_(path_prefix),
       mysql_data_home_path_(mysql_data_home_path),
-      db_path_() {
-    db_name_[0] = '\0';
-    table_name_[0] = '\0';
-    mysql_table_name_[0] = '\0';
-    mysql_path_[0] = '\0';
+      db_path_(),
+      db_name_(),
+      table_name_(),
+      mysql_table_name_(),
+      mysql_path_() {
   }
 
   /**
@@ -108,89 +109,75 @@ namespace mrn {
    *   "/tmp/mysql-test/var/tmp/mysqld.1/#sql27c5_1_0"
    */
   const char *PathMapper::db_name() {
-    if (db_name_[0] != '\0') {
-      return db_name_;
+    if (!db_name_.empty()) {
+      return db_name_.c_str();
     }
 
     if (original_mysql_path_[0] == FN_CURLIB &&
         original_mysql_path_[1] == FN_LIBCHAR) {
-      int i = 2, j = 0, len;
-      len = strlen(original_mysql_path_);
-      while (i < len && original_mysql_path_[i] != FN_LIBCHAR) {
-        db_name_[j++] = original_mysql_path_[i++];
-      }
-      db_name_[j] = '\0';
-    } else if (mysql_data_home_path_) {
-      int len = strlen(original_mysql_path_);
-      int mysql_data_home_len = strlen(mysql_data_home_path_);
-      if (len > mysql_data_home_len &&
-          !strncmp(original_mysql_path_,
-                   mysql_data_home_path_,
-                   mysql_data_home_len)) {
-        int i = mysql_data_home_len, j = 0;
-        while (original_mysql_path_[i] != FN_LIBCHAR && i < len) {
-          db_name_[j++] = original_mysql_path_[i++];
-        }
-        if (i == len) {
-          grn_memcpy(db_name_, original_mysql_path_, len);
-        } else {
-          db_name_[j] = '\0';
-        }
+      const char *db_name = original_mysql_path_ + 2;
+      const char *db_name_end = strchr(db_name, FN_LIBCHAR);
+      if (db_name_end) {
+        db_name_.assign(db_name, db_name_end - db_name);
       } else {
-        strcpy(db_name_, original_mysql_path_);
+        db_name_ = db_name;
+      }
+    } else if (mysql_data_home_path_) {
+      size_t mysql_data_home_length = strlen(mysql_data_home_path_);
+      const char *db_name = original_mysql_path_ + mysql_data_home_length;
+      const char *db_name_end = nullptr;
+      if (strlen(original_mysql_path_) > mysql_data_home_length &&
+          strncmp(original_mysql_path_,
+                  mysql_data_home_path_,
+                  mysql_data_home_length) == 0) {
+        db_name_end = strchr(db_name, FN_LIBCHAR);
+      }
+      if (db_name_end) {
+        db_name_.assign(db_name, db_name_end - db_name);
+      } else {
+        db_name_ = original_mysql_path_;
       }
     } else {
-      strcpy(db_name_, original_mysql_path_);
+      db_name_ = original_mysql_path_;
     }
-    return db_name_;
+    return db_name_.c_str();
   }
 
   /**
    * "./${db}/${table}" ==> "${table}" (with encoding first '_')
    */
   const char *PathMapper::table_name() {
-    if (table_name_[0] != '\0') {
-      return table_name_;
+    if (!table_name_.empty()) {
+      return table_name_.c_str();
     }
 
-    int len = strlen(original_mysql_path_);
-    int i = len, j = 0;
-    for (; original_mysql_path_[--i] != FN_LIBCHAR ;) {}
-    if (original_mysql_path_[i + 1] == '_') {
-      table_name_[j++] = '@';
-      table_name_[j++] = '0';
-      table_name_[j++] = '0';
-      table_name_[j++] = '5';
-      table_name_[j++] = 'f';
-      i++;
+    const char *separator = strrchr(original_mysql_path_, FN_LIBCHAR);
+    const char *table_name = separator ? separator + 1 : original_mysql_path_;
+    if (table_name[0] == '_') {
+      table_name_ = "@005f";
+      table_name++;
     }
-    for (; i < len ;) {
-      table_name_[j++] = original_mysql_path_[++i];
-    }
-    table_name_[j] = '\0';
-    return table_name_;
+    table_name_ += table_name;
+    return table_name_.c_str();
   }
 
   /**
    * "./${db}/${table}" ==> "${table}" (without encoding first '_')
    */
   const char *PathMapper::mysql_table_name() {
-    if (mysql_table_name_[0] != '\0') {
-      return mysql_table_name_;
+    if (!mysql_table_name_.empty()) {
+      return mysql_table_name_.c_str();
     }
 
-    int len = strlen(original_mysql_path_);
-    int i = len, j = 0;
-    for (; original_mysql_path_[--i] != FN_LIBCHAR ;) {}
-    for (; i < len ;) {
-      if (len - i - 1 >= 3 &&
-          strncmp(original_mysql_path_ + i + 1, "#P#", 3) == 0) {
-        break;
-      }
-      mysql_table_name_[j++] = original_mysql_path_[++i];
+    const char *separator = strrchr(original_mysql_path_, FN_LIBCHAR);
+    const char *table_name = separator ? separator + 1 : original_mysql_path_;
+    const char *partition = strstr(table_name, "#P#");
+    if (partition) {
+      mysql_table_name_.assign(table_name, partition - table_name);
+    } else {
+      mysql_table_name_ = table_name;
     }
-    mysql_table_name_[j] = '\0';
-    return mysql_table_name_;
+    return mysql_table_name_.c_str();
   }
 
   /**
@@ -198,21 +185,18 @@ namespace mrn {
    * "./${db}/${table}#P#xxx" ==> "./${db}/${table}"
    */
   const char *PathMapper::mysql_path() {
-    if (mysql_path_[0] != '\0') {
-      return mysql_path_;
+    if (!mysql_path_.empty()) {
+      return mysql_path_.c_str();
     }
 
-    int i;
-    int len = strlen(original_mysql_path_);
-    for (i = 0; i < len; i++) {
-      if (len - i >= 3 &&
-          strncmp(original_mysql_path_ + i, "#P#", 3) == 0) {
-        break;
-      }
-      mysql_path_[i] = original_mysql_path_[i];
+    const char *partition = strstr(original_mysql_path_, "#P#");
+    if (partition) {
+      mysql_path_.assign(original_mysql_path_,
+                         partition - original_mysql_path_);
+    } else {
+      mysql_path_ = original_mysql_path_;
     }
-    mysql_path_[i] = '\0';
-    return mysql_path_;
+    return mysql_path_.c_str();
   }
 
   bool PathMapper::is_internal_table_name() {
