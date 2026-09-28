@@ -24,17 +24,18 @@
 namespace mrn {
   class ColumnName {
   public:
-    ColumnName(const char *mysql_name);
-    ColumnName(const char *mysql_name, size_t mysql_name_length);
-    const char *mysql_name();
-    const char *c_str();
+    ColumnName(const char* mysql_name);
+    ColumnName(const char* mysql_name, size_t mysql_name_length);
+    const char* mysql_name();
+    const char* c_str();
     size_t length();
+
   private:
-    const char *mysql_name_;
+    const char* mysql_name_;
     size_t mysql_name_length_;
     char name_[MRN_MAX_PATH_SIZE];
     size_t length_;
 
     void encode();
   };
-}
+} // namespace mrn

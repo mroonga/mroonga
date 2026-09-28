@@ -30,32 +30,28 @@
 #define MRN_CLASS_NAME "mrn::ColumnName"
 
 namespace mrn {
-  ColumnName::ColumnName(const char *mysql_name)
-    : mysql_name_(mysql_name),
-      mysql_name_length_(strlen(mysql_name)) {
+  ColumnName::ColumnName(const char* mysql_name)
+      : mysql_name_(mysql_name),
+        mysql_name_length_(strlen(mysql_name))
+  {
     encode();
   }
 
-  ColumnName::ColumnName(const char *mysql_name,
-                         size_t mysql_name_length)
-    : mysql_name_(mysql_name),
-      mysql_name_length_(mysql_name_length) {
+  ColumnName::ColumnName(const char* mysql_name, size_t mysql_name_length)
+      : mysql_name_(mysql_name),
+        mysql_name_length_(mysql_name_length)
+  {
     encode();
   }
 
-  const char *ColumnName::mysql_name() {
-    return mysql_name_;
-  }
+  const char* ColumnName::mysql_name() { return mysql_name_; }
 
-  const char *ColumnName::c_str() {
-    return name_;
-  }
+  const char* ColumnName::c_str() { return name_; }
 
-  size_t ColumnName::length() {
-    return length_;
-  }
+  size_t ColumnName::length() { return length_; }
 
-  void ColumnName::encode() {
+  void ColumnName::encode()
+  {
     MRN_DBUG_ENTER_METHOD();
     uint errors;
     length_ = mrn_strconvert(system_charset_info,
@@ -68,4 +64,4 @@ namespace mrn {
     name_[length_] = '\0';
     DBUG_VOID_RETURN;
   }
-}
+} // namespace mrn
