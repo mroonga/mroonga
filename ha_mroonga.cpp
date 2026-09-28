@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright (C) 2010 Tetsuro IKEDA
-  Copyright (C) 2010-2013 Kentoku SHIBA
-  Copyright (C) 2011-2025 Sutou Kouhei <kou@clear-code.com>
-  Copyright (C) 2013 Kenji Maruyama <mmmaru777@gmail.com>
-  Copyright (C) 2020 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2013  Kenji Maruyama <mmmaru777@gmail.com>
+  Copyright (C) 2020  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -2696,10 +2696,8 @@ mrn_generic_ft_ensure_searched(st_mrn_ft_info* info,
     DBUG_VOID_RETURN;
   }
 
-  info->score_column = grn_obj_column(info->ctx,
-                                      info->result,
-                                      MRN_COLUMN_NAME_SCORE,
-                                      strlen(MRN_COLUMN_NAME_SCORE));
+  info->score_column =
+    mrn::grn::obj_column(info->ctx, info->result, MRN_COLUMN_NAME_SCORE);
 
   if (GRN_TEXT_LEN(&(info->query)) == 0) {
     DBUG_VOID_RETURN;
@@ -5028,10 +5026,8 @@ int ha_mroonga::storage_create_index(TABLE* table,
       for (j = 0; j < n_key_parts; j++) {
         Field* field = key_info->key_part[j].field;
         mrn::ColumnName column_name(FIELD_NAME(field));
-        grn_obj* source_column = grn_obj_column(ctx,
-                                                grn_table,
-                                                column_name.c_str(),
-                                                column_name.length());
+        grn_obj* source_column =
+          mrn::grn::obj_column(ctx, grn_table, column_name.view());
         grn_id source_id = grn_obj_id(ctx, source_column);
         GRN_UINT32_PUT(ctx, &source_ids, source_id);
         grn_obj_unlink(ctx, source_column);
@@ -5044,8 +5040,7 @@ int ha_mroonga::storage_create_index(TABLE* table,
     Field* field = key_info->key_part[0].field;
     mrn::ColumnName column_name(FIELD_NAME(field));
     grn_obj* column;
-    column =
-      grn_obj_column(ctx, grn_table, column_name.c_str(), column_name.length());
+    column = mrn::grn::obj_column(ctx, grn_table, column_name.view());
     if (column) {
       grn_obj source_ids;
       grn_id source_id = grn_obj_id(ctx, column);
@@ -5481,15 +5476,15 @@ int ha_mroonga::wrapper_open_indexes(const char* name)
       goto error;
     }
 
-    grn_index_columns[i] = grn_obj_column(ctx,
-                                          grn_index_tables[i],
-                                          INDEX_COLUMN_NAME,
-                                          strlen(INDEX_COLUMN_NAME));
+    grn_index_columns[i] =
+      mrn::grn::obj_column(ctx, grn_index_tables[i], INDEX_COLUMN_NAME);
     if (!grn_index_columns[i]) {
       /* just for backward compatibility before 1.0. */
       Field* field = key_info->key_part[0].field;
       grn_index_columns[i] =
-        grn_obj_column(ctx, grn_index_tables[i], FIELD_NAME(field));
+        mrn::grn::obj_column(ctx,
+                             grn_index_tables[i],
+                             std::string_view(FIELD_NAME(field)));
     }
 
     if (ctx->rc) {
@@ -5795,8 +5790,7 @@ int ha_mroonga::storage_open_columns(void)
     }
 #endif
 
-    grn_columns[i] =
-      grn_obj_column(ctx, grn_table, column_name.c_str(), column_name.length());
+    grn_columns[i] = mrn::grn::obj_column(ctx, grn_table, column_name.view());
     if (!grn_columns[i]) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -5903,7 +5897,9 @@ int ha_mroonga::storage_open_indexes(const char* name)
       grn_index_tables[i] = grn_ctx_get(ctx, lexicon_name, -1);
       if (ctx->rc == GRN_SUCCESS) {
         grn_index_columns[i] =
-          grn_obj_column(ctx, grn_index_tables[i], KEY_NAME(key_info));
+          mrn::grn::obj_column(ctx,
+                               grn_index_tables[i],
+                               std::string_view(KEY_NAME(key_info)));
       }
     } else {
       mrn::IndexTableName index_table_name(mapper.table_name(),
@@ -5914,15 +5910,15 @@ int ha_mroonga::storage_open_indexes(const char* name)
           mrn::grn::ctx_get(ctx, index_table_name.old_view());
       }
       if (ctx->rc == GRN_SUCCESS) {
-        grn_index_columns[i] = grn_obj_column(ctx,
-                                              grn_index_tables[i],
-                                              INDEX_COLUMN_NAME,
-                                              strlen(INDEX_COLUMN_NAME));
+        grn_index_columns[i] =
+          mrn::grn::obj_column(ctx, grn_index_tables[i], INDEX_COLUMN_NAME);
         if (!grn_index_columns[i] && ctx->rc == GRN_SUCCESS) {
           /* just for backward compatibility before 1.0. */
           Field* field = key_info->key_part[0].field;
           grn_index_columns[i] =
-            grn_obj_column(ctx, grn_index_tables[i], FIELD_NAME(field));
+            mrn::grn::obj_column(ctx,
+                                 grn_index_tables[i],
+                                 std::string_view(FIELD_NAME(field)));
         }
       }
     }
@@ -10162,21 +10158,19 @@ int ha_mroonga::generic_ft_init()
   } else {
     if (mrn_ft_info->sorted_result) {
       if (grn_table->header.type == GRN_TABLE_NO_KEY) {
-        mrn_ft_info->id_accessor = grn_obj_column(ctx,
-                                                  mrn_ft_info->sorted_result,
-                                                  MRN_COLUMN_NAME_ID,
-                                                  strlen(MRN_COLUMN_NAME_ID));
+        mrn_ft_info->id_accessor =
+          mrn::grn::obj_column(ctx,
+                               mrn_ft_info->sorted_result,
+                               MRN_COLUMN_NAME_ID);
       } else {
-        mrn_ft_info->key_accessor = grn_obj_column(ctx,
-                                                   mrn_ft_info->sorted_result,
-                                                   MRN_COLUMN_NAME_KEY,
-                                                   strlen(MRN_COLUMN_NAME_KEY));
+        mrn_ft_info->key_accessor =
+          mrn::grn::obj_column(ctx,
+                               mrn_ft_info->sorted_result,
+                               MRN_COLUMN_NAME_KEY);
       }
     } else {
-      mrn_ft_info->key_accessor = grn_obj_column(ctx,
-                                                 mrn_ft_info->result,
-                                                 MRN_COLUMN_NAME_KEY,
-                                                 strlen(MRN_COLUMN_NAME_KEY));
+      mrn_ft_info->key_accessor =
+        mrn::grn::obj_column(ctx, mrn_ft_info->result, MRN_COLUMN_NAME_KEY);
     }
   }
   DBUG_RETURN(error);
@@ -10632,8 +10626,7 @@ bool ha_mroonga::is_foreign_key_field(const char* table_name,
   }
 
   mrn::ColumnName column_name(field_name, field_name_length);
-  grn_obj* column =
-    grn_obj_column(ctx, table, column_name.c_str(), column_name.length());
+  grn_obj* column = mrn::grn::obj_column(ctx, table, column_name.view());
   if (!column) {
     DBUG_RETURN(false);
   }
@@ -10653,10 +10646,8 @@ bool ha_mroonga::is_foreign_key_field(const char* table_name,
   mrn::IndexColumnName index_column_name(table_name,
                                          field_name,
                                          field_name_length);
-  foreign_index_column = grn_obj_column(ctx,
-                                        range,
-                                        index_column_name.c_str(),
-                                        index_column_name.length());
+  foreign_index_column =
+    mrn::grn::obj_column(ctx, range, index_column_name.view());
   if (foreign_index_column) {
     grn_obj_unref(ctx, foreign_index_column);
     grn_obj_unref(ctx, column);
@@ -12098,17 +12089,13 @@ bool ha_mroonga::check_fast_order_limit(grn_obj* result_set,
         }
 
         if (is_storage_mode) {
-          (*sort_keys)[i].key = grn_obj_column(ctx,
-                                               result_set,
-                                               column_name.c_str(),
-                                               column_name.length());
+          (*sort_keys)[i].key =
+            mrn::grn::obj_column(ctx, result_set, column_name.view());
 #ifdef MRN_ENABLE_WRAPPER_MODE
         } else {
           if (is_primary_key_field(field)) {
-            (*sort_keys)[i].key = grn_obj_column(ctx,
-                                                 result_set,
-                                                 MRN_COLUMN_NAME_KEY,
-                                                 strlen(MRN_COLUMN_NAME_KEY));
+            (*sort_keys)[i].key =
+              mrn::grn::obj_column(ctx, result_set, MRN_COLUMN_NAME_KEY);
           } else {
             GRN_LOG(ctx,
                     GRN_LOG_DEBUG,
@@ -12123,10 +12110,8 @@ bool ha_mroonga::check_fast_order_limit(grn_obj* result_set,
       } else if (item->type() == Item::FUNC_ITEM) {
         Item_func* func_item = static_cast<Item_func*>(item);
         if (func_item->functype() == Item_func::FT_FUNC) {
-          (*sort_keys)[i].key = grn_obj_column(ctx,
-                                               result_set,
-                                               MRN_COLUMN_NAME_SCORE,
-                                               strlen(MRN_COLUMN_NAME_SCORE));
+          (*sort_keys)[i].key =
+            mrn::grn::obj_column(ctx, result_set, MRN_COLUMN_NAME_SCORE);
         } else {
           GRN_LOG(ctx,
                   GRN_LOG_DEBUG,
@@ -15995,10 +15980,7 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE* tmp_share,
 
     grn_obj* grn_from_table = grn_ctx_get(ctx, from_table_name, -1);
     mrn::ColumnName column_name(FIELD_NAME(field));
-    column = grn_obj_column(ctx,
-                            grn_from_table,
-                            column_name.c_str(),
-                            column_name.length());
+    column = mrn::grn::obj_column(ctx, grn_from_table, column_name.view());
     if (!column) {
       continue;
     }
@@ -16006,10 +15988,8 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE* tmp_share,
     grn_obj* ref_table = grn_ctx_at(ctx, ref_table_id);
     mrn::IndexColumnName from_index_column_name(from_table_name,
                                                 column_name.c_str());
-    ref_column = grn_obj_column(ctx,
-                                ref_table,
-                                from_index_column_name.c_str(),
-                                from_index_column_name.length());
+    ref_column =
+      mrn::grn::obj_column(ctx, ref_table, from_index_column_name.view());
     if (!ref_column) {
       continue;
     }
@@ -17614,10 +17594,8 @@ bool ha_mroonga::wrapper_inplace_alter_table(TABLE* altered_table,
       break;
     }
     mrn_set_bitmap_by_key(table->read_set, key);
-    index_columns[key_pos] = grn_obj_column(ctx,
-                                            index_tables[key_pos],
-                                            INDEX_COLUMN_NAME,
-                                            strlen(INDEX_COLUMN_NAME));
+    index_columns[key_pos] =
+      mrn::grn::obj_column(ctx, index_tables[key_pos], INDEX_COLUMN_NAME);
     need_fill_index = true;
   }
   if (!error && need_fill_index) {
@@ -18097,7 +18075,9 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
 
     Field* old_field = field;
     grn_obj* column_obj;
-    column_obj = grn_obj_column(ctx, table_obj, FIELD_NAME(old_field));
+    column_obj = mrn::grn::obj_column(ctx,
+                                      table_obj,
+                                      std::string_view(FIELD_NAME(old_field)));
     if (column_obj) {
       grn_column_rename(ctx, column_obj, new_field_name, new_field_name_length);
       if (ctx->rc) {
@@ -19108,8 +19088,7 @@ char* ha_mroonga::storage_get_foreign_key_create_info()
     }
 
     mrn::ColumnName column_name(FIELD_NAME(field));
-    column =
-      grn_obj_column(ctx, grn_table, column_name.c_str(), column_name.length());
+    column = mrn::grn::obj_column(ctx, grn_table, column_name.view());
     if (!column) {
       continue;
     }
@@ -19253,8 +19232,7 @@ int ha_mroonga::storage_get_foreign_key_list(THD* thd,
     }
 
     mrn::ColumnName column_name(FIELD_NAME(field));
-    column =
-      grn_obj_column(ctx, grn_table, column_name.c_str(), column_name.length());
+    column = mrn::grn::obj_column(ctx, grn_table, column_name.view());
     if (!column) {
       continue;
     }

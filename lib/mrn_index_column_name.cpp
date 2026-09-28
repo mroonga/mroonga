@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2011-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -73,6 +73,11 @@ namespace mrn {
   const char* IndexColumnName::c_str() { return name_; }
 
   size_t IndexColumnName::length() { return length_; }
+
+  std::string_view IndexColumnName::view()
+  {
+    return std::string_view(name_, length_);
+  }
 
   uint IndexColumnName::encode(uchar* encoded_start,
                                uchar* encoded_end,

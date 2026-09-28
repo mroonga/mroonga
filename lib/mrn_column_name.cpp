@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2016-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,11 @@ namespace mrn {
   const char* ColumnName::c_str() { return name_; }
 
   size_t ColumnName::length() { return length_; }
+
+  std::string_view ColumnName::view()
+  {
+    return std::string_view(name_, length_);
+  }
 
   void ColumnName::encode()
   {
