@@ -50,6 +50,8 @@ jobs:
     env:
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
+      # Use -DMYSQL_MAINTAINER_MODE=ERR like MariaDB's buildbot.
+      MAINTAINER_MODE: ${{ matrix.use-main == 'yes' && matrix.embed == 'ON' }}
     runs-on: windows-2022
     timeout-minutes: 45
     steps:
@@ -211,6 +213,9 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
+          set CMAKE_ARGS=
+          if "%MAINTAINER_MODE%" == "true" set "CMAKE_ARGS=%CMAKE_ARGS% -DMYSQL_MAINTAINER_MODE=ERR"
+          if "%MAINTAINER_MODE%" == "true" set "CMAKE_ARGS=%CMAKE_ARGS% -DPLUGIN_CONNECT=NO"
           # -DINSTALL_RUNTIME_DEPENDENCIES=OFF is workaround for: https://github.com/mroonga/mroonga/issues/967
           # We can remove this workaround after supporting vcpkg in Groonga.
           cmake ^
@@ -226,8 +231,13 @@ jobs:
             -DMRN_GROONGA_NORMALIZER_MYSQL_EMBED=${{ matrix.embed || 'OFF' }} ^
             -DGRN_WITH_MRUBY=ON ^
             -DGRN_WITH_WINDOWS_BACK_TRACE=OFF ^
-            -DGRN_WITH_XSIMD=no || exit /B
+            -DGRN_WITH_XSIMD=no ^
+            %CMAKE_ARGS% || exit /B
       - name: Install
+        id: install
+        # TODO: Remove this when we fix all warnings reported by
+        # -DMYSQL_MAINTAINER_MODE=ERR.
+        continue-on-error: ${{ env.MAINTAINER_MODE == 'true' }}
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
@@ -239,6 +249,7 @@ jobs:
             --verbose || exit /B
           ccache --show-stats --verbose
       - name: Create package
+        if: steps.install.outcome == 'success'
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" %VC_ARCHITECTURE% || exit /B
@@ -250,6 +261,7 @@ jobs:
             --verbose || exit /B
           ccache --show-stats --verbose
       - name: Prepare package
+        if: steps.install.outcome == 'success'
         run: |
           pushd build
           Expand-Archive `
@@ -268,11 +280,13 @@ jobs:
 
       # Artifact
       - uses: actions/upload-artifact@v7
+        if: steps.install.outcome == 'success'
         with:
           name: ${{ env.UPLOAD_ARTIFACT_NAME }}
           path: ${{ env.ARTIFACT_NAME }}.zip
 
       - name: Test
+        if: steps.install.outcome == 'success'
         run: |
           cd install\${Env:TEST_DIR_NAME}
           $suites = `
@@ -287,6 +301,7 @@ jobs:
             --suite=$($suites -join ",")
 
       - name: "Test: reference count"
+        if: steps.install.outcome == 'success'
         run: |
           cd install\${Env:TEST_DIR_NAME}
           $suites = `
