@@ -4539,8 +4539,7 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
         DBUG_RETURN(false);
 
       mrn::PathMapper mapper(ref_path);
-      grn_table_ref =
-        grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+      grn_table_ref = mrn::grn::ctx_get(ctx, mapper.table_name());
       if (!grn_table_ref) {
         error = ER_CANT_CREATE_TABLE;
         char err_msg[MRN_BUFFER_SIZE];
@@ -5470,12 +5469,9 @@ int ha_mroonga::wrapper_open_indexes(const char* name)
 
     mrn::IndexTableName index_table_name(mapper.table_name(),
                                          KEY_NAME(key_info));
-    grn_index_tables[i] =
-      grn_ctx_get(ctx, index_table_name.c_str(), index_table_name.length());
+    grn_index_tables[i] = mrn::grn::ctx_get(ctx, index_table_name.view());
     if (ctx->rc == GRN_SUCCESS && !grn_index_tables[i]) {
-      grn_index_tables[i] = grn_ctx_get(ctx,
-                                        index_table_name.old_c_str(),
-                                        index_table_name.old_length());
+      grn_index_tables[i] = mrn::grn::ctx_get(ctx, index_table_name.old_view());
     }
     if (ctx->rc) {
       DBUG_PRINT("info",
@@ -5741,8 +5737,7 @@ int ha_mroonga::open_table(const char* name)
     DBUG_RETURN(error);
 
   mrn::PathMapper mapper(name);
-  grn_table =
-    grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  grn_table = mrn::grn::ctx_get(ctx, mapper.table_name());
   if (ctx->rc) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -5913,12 +5908,10 @@ int ha_mroonga::storage_open_indexes(const char* name)
     } else {
       mrn::IndexTableName index_table_name(mapper.table_name(),
                                            KEY_NAME(key_info));
-      grn_index_tables[i] =
-        grn_ctx_get(ctx, index_table_name.c_str(), index_table_name.length());
+      grn_index_tables[i] = mrn::grn::ctx_get(ctx, index_table_name.view());
       if (ctx->rc == GRN_SUCCESS && !grn_index_tables[i]) {
-        grn_index_tables[i] = grn_ctx_get(ctx,
-                                          index_table_name.old_c_str(),
-                                          index_table_name.old_length());
+        grn_index_tables[i] =
+          mrn::grn::ctx_get(ctx, index_table_name.old_view());
       }
       if (ctx->rc == GRN_SUCCESS) {
         grn_index_columns[i] = grn_obj_column(ctx,
@@ -6159,7 +6152,7 @@ int ha_mroonga::generic_delete_table(const char* name,
     DBUG_RETURN(error);
 
   error = drop_indexes(table_name);
-  grn_obj* table_obj = grn_ctx_get(ctx, table_name, strlen(table_name));
+  grn_obj* table_obj = mrn::grn::ctx_get(ctx, table_name);
   if (table_obj) {
     if (thd_sql_command(ha_thd()) == SQLCOM_DROP_DB) {
       grn_obj_remove_dependent(ctx, table_obj);
@@ -10898,7 +10891,7 @@ void ha_mroonga::remove_grn_obj_force(const char* name)
 {
   MRN_DBUG_ENTER_METHOD();
 
-  grn_obj* obj = grn_ctx_get(ctx, name, strlen(name));
+  grn_obj* obj = mrn::grn::ctx_get(ctx, name);
   if (obj) {
     grn_obj_remove(ctx, obj);
   } else {
@@ -10943,8 +10936,8 @@ int ha_mroonga::drop_index(MRN_SHARE* target_share, uint key_index)
              "%s." KEY_NAME_FORMAT,
              lexicon_name,
              KEY_NAME_FORMAT_VALUE(key_info));
-    target_name_length = strlen(target_name);
-    grn_obj* index_column = grn_ctx_get(ctx, target_name, target_name_length);
+    target_name_length = static_cast<int>(strlen(target_name));
+    grn_obj* index_column = mrn::grn::ctx_get(ctx, target_name);
     if (index_column) {
       rc = grn_obj_remove(ctx, index_column);
     }
@@ -10952,12 +10945,9 @@ int ha_mroonga::drop_index(MRN_SHARE* target_share, uint key_index)
     mrn::PathMapper mapper(target_share->table_name);
     mrn::IndexTableName index_table_name(mapper.table_name(),
                                          KEY_NAME(key_info));
-    grn_obj* index_table =
-      grn_ctx_get(ctx, index_table_name.c_str(), index_table_name.length());
+    grn_obj* index_table = mrn::grn::ctx_get(ctx, index_table_name.view());
     if (!index_table) {
-      index_table = grn_ctx_get(ctx,
-                                index_table_name.old_c_str(),
-                                index_table_name.old_length());
+      index_table = mrn::grn::ctx_get(ctx, index_table_name.old_view());
     }
     if (index_table) {
       target_name_length =
@@ -15871,13 +15861,9 @@ int ha_mroonga::wrapper_rename_index(const char* from,
     mrn::IndexTableName from_index_table_name(from_table_name, KEY_NAME(key));
     mrn::IndexTableName to_index_table_name(to_table_name, KEY_NAME(key));
     grn_obj* index_table;
-    index_table = grn_ctx_get(ctx,
-                              from_index_table_name.c_str(),
-                              from_index_table_name.length());
+    index_table = mrn::grn::ctx_get(ctx, from_index_table_name.view());
     if (!index_table) {
-      index_table = grn_ctx_get(ctx,
-                                from_index_table_name.old_c_str(),
-                                from_index_table_name.old_length());
+      index_table = mrn::grn::ctx_get(ctx, from_index_table_name.old_view());
     }
     if (index_table) {
       rc = grn_table_rename(ctx,
@@ -15892,7 +15878,7 @@ int ha_mroonga::wrapper_rename_index(const char* from,
     }
   }
 
-  grn_obj* table = grn_ctx_get(ctx, from_table_name, strlen(from_table_name));
+  grn_obj* table = mrn::grn::ctx_get(ctx, from_table_name);
   if (ctx->rc != GRN_SUCCESS) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -15948,13 +15934,9 @@ int ha_mroonga::storage_rename_table(const char* from,
     mrn::IndexTableName from_index_table_name(from_table_name, KEY_NAME(key));
     mrn::IndexTableName to_index_table_name(to_table_name, KEY_NAME(key));
     grn_obj* index_table;
-    index_table = grn_ctx_get(ctx,
-                              from_index_table_name.c_str(),
-                              from_index_table_name.length());
+    index_table = mrn::grn::ctx_get(ctx, from_index_table_name.view());
     if (!index_table) {
-      index_table = grn_ctx_get(ctx,
-                                from_index_table_name.old_c_str(),
-                                from_index_table_name.old_length());
+      index_table = mrn::grn::ctx_get(ctx, from_index_table_name.old_view());
     }
     if (index_table) {
       rc = grn_table_rename(ctx,
@@ -15973,8 +15955,7 @@ int ha_mroonga::storage_rename_table(const char* from,
     goto error_end;
   }
   {
-    grn_obj* table_obj =
-      grn_ctx_get(ctx, from_table_name, strlen(from_table_name));
+    grn_obj* table_obj = mrn::grn::ctx_get(ctx, from_table_name);
     if (ctx->rc != GRN_SUCCESS) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -16276,12 +16257,9 @@ int ha_mroonga::generic_disable_index(int i, KEY* key_info)
     mrn::PathMapper mapper(share->table_name);
     mrn::IndexTableName index_table_name(mapper.table_name(),
                                          KEY_NAME(key_info));
-    grn_obj* index_table =
-      grn_ctx_get(ctx, index_table_name.c_str(), index_table_name.length());
+    grn_obj* index_table = mrn::grn::ctx_get(ctx, index_table_name.view());
     if (!index_table) {
-      index_table = grn_ctx_get(ctx,
-                                index_table_name.old_c_str(),
-                                index_table_name.old_length());
+      index_table = mrn::grn::ctx_get(ctx, index_table_name.old_view());
     }
     if (index_table) {
       grn_obj_remove(ctx, index_table);
@@ -17882,8 +17860,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
 
   mrn::PathMapper mapper(share->table_name);
   grn_obj* table_obj;
-  table_obj =
-    grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  table_obj = mrn::grn::ctx_get(ctx, mapper.table_name());
 
   Alter_info* alter_info = ha_alter_info->alter_info;
   List_iterator_fast<Create_field> create_fields(alter_info->create_list);
@@ -18087,8 +18064,7 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
 
   mrn::PathMapper mapper(share->table_name);
   grn_obj* table_obj;
-  table_obj =
-    grn_ctx_get(ctx, mapper.table_name(), strlen(mapper.table_name()));
+  table_obj = mrn::grn::ctx_get(ctx, mapper.table_name());
 
   Alter_info* alter_info = ha_alter_info->alter_info;
   uint n_fields = table->s->fields;

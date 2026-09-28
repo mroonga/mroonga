@@ -22,18 +22,26 @@
 
 #include <groonga.h>
 
+#include <string_view>
+
 namespace mrn {
   namespace grn {
-    bool is_table(grn_obj* obj)
+    inline bool is_table(grn_obj* obj)
     {
       grn_id type = obj->header.type;
       return GRN_TABLE_HASH_KEY <= type && obj->header.type <= GRN_DB;
     }
 
-    bool is_vector_column(grn_obj* column)
+    inline bool is_vector_column(grn_obj* column)
     {
       int column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
       return column_type == GRN_OBJ_COLUMN_VECTOR;
+    }
+
+    // grn_ctx_get() that accepts std::string_view.
+    inline grn_obj* ctx_get(grn_ctx* ctx, std::string_view name)
+    {
+      return grn_ctx_get(ctx, name.data(), static_cast<int>(name.size()));
     }
   } // namespace grn
 } // namespace mrn

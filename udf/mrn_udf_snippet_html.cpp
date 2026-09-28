@@ -22,6 +22,7 @@
 #include <mrn_mysql_compat.h>
 #include <mrn_err.h>
 #include <mrn_encoding.hpp>
+#include <mrn_grn.hpp>
 #include <mrn_windows.hpp>
 #include <mrn_table.hpp>
 #include <mrn_macro.hpp>
@@ -157,8 +158,7 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info* info,
       lexicon_name =
         std::string(index_table_name.c_str(), index_table_name.length());
     }
-    info->lexicon =
-      grn_ctx_get(ctx, lexicon_name.c_str(), lexicon_name.length());
+    info->lexicon = mrn::grn::ctx_get(ctx, lexicon_name);
     if (!info->lexicon) {
       if (message) {
         snprintf(message,

@@ -22,6 +22,8 @@
 
 #include <mrn_constants.hpp>
 
+#include <string_view>
+
 namespace mrn {
   class IndexTableName {
   public:
@@ -45,6 +47,8 @@ namespace mrn {
     size_t length();
     const char *old_c_str();
     size_t old_length();
+    std::string_view view();
+    std::string_view old_view();
   private:
     const char *table_name_;
     size_t table_name_length_;

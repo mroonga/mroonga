@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "mrn_operations.hpp"
+#include "mrn_grn.hpp"
 
 // for debug
 #define MRN_CLASS_NAME     "mrn::Operations"
@@ -239,7 +240,8 @@ namespace mrn {
       DBUG_RETURN(error);
     }
 
-    grn_obj* target_table = grn_ctx_get(ctx_, table_name, table_name_size);
+    grn_obj* target_table =
+      mrn::grn::ctx_get(ctx_, std::string_view(table_name, table_name_size));
     if (!target_table) {
       GRN_LOG(ctx_,
               GRN_LOG_WARNING,
