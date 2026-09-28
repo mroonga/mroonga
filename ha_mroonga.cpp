@@ -15833,10 +15833,7 @@ int ha_mroonga::wrapper_rename_index(const char* from,
       index_table = mrn::grn::ctx_get(ctx, from_index_table_name.old_view());
     }
     if (index_table) {
-      rc = grn_table_rename(ctx,
-                            index_table,
-                            to_index_table_name.c_str(),
-                            to_index_table_name.length());
+      rc = mrn::grn::table_rename(ctx, index_table, to_index_table_name.view());
       if (rc != GRN_SUCCESS) {
         error = ER_CANT_OPEN_FILE;
         my_message(error, ctx->errbuf, MYF(0));
@@ -15851,7 +15848,7 @@ int ha_mroonga::wrapper_rename_index(const char* from,
     my_message(error, ctx->errbuf, MYF(0));
     DBUG_RETURN(error);
   }
-  rc = grn_table_rename(ctx, table, to_table_name, strlen(to_table_name));
+  rc = mrn::grn::table_rename(ctx, table, to_table_name);
   if (rc != GRN_SUCCESS) {
     error = ER_CANT_OPEN_FILE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -15906,10 +15903,7 @@ int ha_mroonga::storage_rename_table(const char* from,
       index_table = mrn::grn::ctx_get(ctx, from_index_table_name.old_view());
     }
     if (index_table) {
-      rc = grn_table_rename(ctx,
-                            index_table,
-                            to_index_table_name.c_str(),
-                            to_index_table_name.length());
+      rc = mrn::grn::table_rename(ctx, index_table, to_index_table_name.view());
       if (rc != GRN_SUCCESS) {
         error = ER_CANT_OPEN_FILE;
         my_message(error, ctx->errbuf, MYF(0));
@@ -15928,7 +15922,7 @@ int ha_mroonga::storage_rename_table(const char* from,
       my_message(error, ctx->errbuf, MYF(0));
       goto error_end;
     }
-    rc = grn_table_rename(ctx, table_obj, to_table_name, strlen(to_table_name));
+    rc = mrn::grn::table_rename(ctx, table_obj, to_table_name);
     if (rc != GRN_SUCCESS) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
