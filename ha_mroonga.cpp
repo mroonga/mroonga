@@ -2792,10 +2792,7 @@ mrn_wrapper_ft_find_relevance(FT_INFO* handler, uchar* record, uint length)
            record,
            info->primary_key_info,
            info->primary_key_info->key_length);
-  record_id = grn_table_get(info->ctx,
-                            info->table,
-                            GRN_TEXT_VALUE(&(info->key)),
-                            GRN_TEXT_LEN(&(info->key)));
+  record_id = mrn::grn::table_get(info->ctx, info->table, &(info->key));
 
   if (record_id != GRN_ID_NIL) {
     grn_id result_record_id;
@@ -2831,10 +2828,8 @@ static float mrn_wrapper_ft_get_relevance(FT_INFO* handler)
   grn_id record_id;
   ha_mroonga* mroonga = info->mroonga;
   mrn_change_encoding(info->ctx, NULL);
-  record_id = grn_table_get(info->ctx,
-                            info->table,
-                            GRN_TEXT_VALUE(&(mroonga->key_buffer)),
-                            GRN_TEXT_LEN(&(mroonga->key_buffer)));
+  record_id =
+    mrn::grn::table_get(info->ctx, info->table, &(mroonga->key_buffer));
 
   if (record_id != GRN_ID_NIL) {
     grn_id result_record_id;
@@ -7800,8 +7795,7 @@ int ha_mroonga::wrapper_get_record_id(uchar* data,
            &(table->key_info[table_share->primary_key]),
            table->key_info[table_share->primary_key].key_length);
 
-  *record_id =
-    grn_table_get(ctx, grn_table, GRN_TEXT_VALUE(&key), GRN_TEXT_LEN(&key));
+  *record_id = mrn::grn::table_get(ctx, grn_table, &key);
   if (*record_id == GRN_ID_NIL) {
     DBUG_PRINT("info", ("mroonga: %s", context));
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
@@ -10415,10 +10409,7 @@ int ha_mroonga::storage_ft_read(uchar* buf)
                       mrn_ft_info->key_accessor,
                       found_record_id,
                       &key_buffer);
-    record_id = grn_table_get(ctx,
-                              grn_table,
-                              GRN_TEXT_VALUE(&key_buffer),
-                              GRN_TEXT_LEN(&key_buffer));
+    record_id = mrn::grn::table_get(ctx, grn_table, &key_buffer);
   } else {
     void* key;
     grn_table_cursor_get_key(ctx, mrn_ft_info->cursor, &key);
@@ -10878,7 +10869,7 @@ void ha_mroonga::remove_grn_obj_force(const char* name)
     grn_obj_remove(ctx, obj);
   } else {
     grn_obj* db = grn_ctx_db(ctx);
-    grn_id id = grn_table_get(ctx, db, name, strlen(name));
+    grn_id id = mrn::grn::table_get(ctx, db, name);
     if (id) {
       grn_obj_remove_force(ctx, name, strlen(name));
     }
