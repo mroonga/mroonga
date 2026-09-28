@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -50,29 +50,26 @@ namespace mrn {
                                 NULL,
                                 NULL);
       columns_.type_ =
-        grn_column_create(ctx_,
-                          table_,
-                          COLUMN_TYPE_NAME,
-                          strlen(COLUMN_TYPE_NAME),
-                          NULL,
-                          GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
-                          grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT));
+        mrn::grn::column_create(ctx_,
+                                table_,
+                                COLUMN_TYPE_NAME,
+                                nullptr,
+                                GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT));
       columns_.table_ =
-        grn_column_create(ctx_,
-                          table_,
-                          COLUMN_TABLE_NAME,
-                          strlen(COLUMN_TABLE_NAME),
-                          NULL,
-                          GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
-                          grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT));
+        mrn::grn::column_create(ctx_,
+                                table_,
+                                COLUMN_TABLE_NAME,
+                                nullptr,
+                                GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx_, GRN_DB_SHORT_TEXT));
       columns_.record_ =
-        grn_column_create(ctx_,
-                          table_,
-                          COLUMN_RECORD_NAME,
-                          strlen(COLUMN_RECORD_NAME),
-                          NULL,
-                          GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
-                          grn_ctx_at(ctx_, GRN_DB_UINT32));
+        mrn::grn::column_create(ctx_,
+                                table_,
+                                COLUMN_RECORD_NAME,
+                                nullptr,
+                                GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT,
+                                grn_ctx_at(ctx_, GRN_DB_UINT32));
     } else {
       columns_.type_ = grn_ctx_get(ctx_, TABLE_NAME "." COLUMN_TYPE_NAME, -1);
       columns_.table_ = grn_ctx_get(ctx_, TABLE_NAME "." COLUMN_TABLE_NAME, -1);
