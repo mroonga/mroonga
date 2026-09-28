@@ -62,6 +62,23 @@ namespace mrn {
                                type);
     }
 
+    // grn_table_create() that accepts std::string_view.
+    inline grn_obj* table_create(grn_ctx* ctx,
+                                 std::string_view name,
+                                 const char* path,
+                                 grn_table_flags flags,
+                                 grn_obj* key_type,
+                                 grn_obj* value_type)
+    {
+      return grn_table_create(ctx,
+                              name.data(),
+                              static_cast<unsigned int>(name.size()),
+                              path,
+                              flags,
+                              key_type,
+                              value_type);
+    }
+
     // grn_obj_column() that accepts std::string_view.
     inline grn_obj*
     obj_column(grn_ctx* ctx, grn_obj* table, std::string_view name)
