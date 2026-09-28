@@ -20,6 +20,7 @@
 
 #include "mrn_field_normalizer.hpp"
 #include "mrn_encoding.hpp"
+#include "mrn_grn.hpp"
 
 #include <field.h>
 
@@ -122,12 +123,12 @@ namespace mrn {
                                    lexicon_,
                                    flags);
     } else {
+      std::string_view normalizer_name(GRN_TEXT_VALUE(&normalizer),
+                                       GRN_TEXT_LEN(&normalizer));
       grn_string = grn_string_open(ctx_,
                                    string,
                                    string_length,
-                                   grn_ctx_get(ctx_,
-                                               GRN_TEXT_VALUE(&normalizer),
-                                               GRN_TEXT_LEN(&normalizer)),
+                                   mrn::grn::ctx_get(ctx_, normalizer_name),
                                    flags);
     }
     GRN_OBJ_FIN(ctx_, &normalizer);

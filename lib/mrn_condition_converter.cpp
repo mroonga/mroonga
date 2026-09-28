@@ -20,6 +20,7 @@
 
 #include "mrn_condition_converter.hpp"
 #include "mrn_encoding.hpp"
+#include "mrn_grn.hpp"
 #include "mrn_query_parser.hpp"
 #include "mrn_time_converter.hpp"
 
@@ -975,7 +976,7 @@ namespace mrn {
     Item* min_item = arguments[1];
     Item* max_item = arguments[2];
 
-    grn_obj* between_func = grn_ctx_get(ctx_, "between", strlen("between"));
+    grn_obj* between_func = mrn::grn::ctx_get(ctx_, "between");
     grn_expr_append_obj(ctx_, expression, between_func, GRN_OP_PUSH, 1);
 
     const Item_field* field_item = static_cast<const Item_field*>(target_item);

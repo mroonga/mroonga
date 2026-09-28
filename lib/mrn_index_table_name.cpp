@@ -126,6 +126,14 @@ namespace mrn {
     return old_length_;
   }
 
+  std::string_view IndexTableName::view() {
+    return std::string_view(name_, length_);
+  }
+
+  std::string_view IndexTableName::old_view() {
+    return std::string_view(old_name_, old_length_);
+  }
+
   uint IndexTableName::encode(uchar *encoded_start,
                               uchar *encoded_end,
                               const uchar *mysql_string_start,
