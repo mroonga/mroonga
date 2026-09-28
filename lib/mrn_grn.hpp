@@ -92,6 +92,15 @@ namespace mrn {
         std::string_view(GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key)));
     }
 
+    inline grn_rc
+    table_rename(grn_ctx* ctx, grn_obj* table, std::string_view name)
+    {
+      return grn_table_rename(ctx,
+                              table,
+                              name.data(),
+                              static_cast<unsigned int>(name.size()));
+    }
+
     inline grn_obj*
     obj_column(grn_ctx* ctx, grn_obj* table, std::string_view name)
     {
