@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2014 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@
 
 #include <groonga.h>
 
+#include <cstdint>
 #include <string_view>
 
 namespace mrn {
@@ -42,6 +43,16 @@ namespace mrn {
     inline grn_obj* ctx_get(grn_ctx* ctx, std::string_view name)
     {
       return grn_ctx_get(ctx, name.data(), static_cast<int>(name.size()));
+    }
+
+    // grn_obj_column() that accepts std::string_view.
+    inline grn_obj*
+    obj_column(grn_ctx* ctx, grn_obj* table, std::string_view name)
+    {
+      return grn_obj_column(ctx,
+                            table,
+                            name.data(),
+                            static_cast<uint32_t>(name.size()));
     }
   } // namespace grn
 } // namespace mrn

@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2011-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,8 @@
 
 #include <mrn_constants.hpp>
 
+#include <string_view>
+
 namespace mrn {
   class IndexColumnName {
   public:
@@ -31,6 +33,7 @@ namespace mrn {
                     size_t mysql_column_name_length);
     const char* c_str();
     size_t length();
+    std::string_view view();
 
   private:
     const char* table_name_;
