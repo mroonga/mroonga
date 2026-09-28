@@ -3965,13 +3965,12 @@ int ha_mroonga::wrapper_create_index_fulltext(const char* grn_table_name,
     set_normalizer(index_table, key_info);
   }
 
-  grn_obj* index_column = grn_column_create(ctx,
-                                            index_table,
-                                            INDEX_COLUMN_NAME,
-                                            strlen(INDEX_COLUMN_NAME),
-                                            NULL,
-                                            index_column_flags,
-                                            grn_table);
+  grn_obj* index_column = mrn::grn::column_create(ctx,
+                                                  index_table,
+                                                  INDEX_COLUMN_NAME,
+                                                  nullptr,
+                                                  index_column_flags,
+                                                  grn_table);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -4023,13 +4022,12 @@ int ha_mroonga::wrapper_create_index_geo(const char* grn_table_name,
   grn_obj_unlink(ctx, lexicon_key_type);
   index_tables[i] = index_table;
 
-  grn_obj* index_column = grn_column_create(ctx,
-                                            index_table,
-                                            INDEX_COLUMN_NAME,
-                                            strlen(INDEX_COLUMN_NAME),
-                                            NULL,
-                                            index_column_flags,
-                                            grn_table);
+  grn_obj* index_column = mrn::grn::column_create(ctx,
+                                                  index_table,
+                                                  INDEX_COLUMN_NAME,
+                                                  nullptr,
+                                                  index_column_flags,
+                                                  grn_table);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -4347,13 +4345,12 @@ int ha_mroonga::storage_create(const char* name,
     }
     char* col_path = NULL; // we don't specify path
 
-    grn_column_create(ctx,
-                      table_obj,
-                      column_name.c_str(),
-                      column_name.length(),
-                      col_path,
-                      col_flags,
-                      col_type);
+    mrn::grn::column_create(ctx,
+                            table_obj,
+                            column_name.view(),
+                            col_path,
+                            col_flags,
+                            col_type);
     if (ctx->rc) {
       error = ER_CANT_CREATE_TABLE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -4651,12 +4648,12 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
       mrn_free_tmp_table_share(tmp_ref_table_share);
       mrn_open_mutex_unlock(table->s);
       grn_column_flags col_flags = GRN_OBJ_COLUMN_SCALAR | GRN_OBJ_PERSISTENT;
-      column = grn_column_create(ctx,
-                                 table_obj,
-                                 FIELD_NAME(field),
-                                 NULL,
-                                 col_flags,
-                                 grn_table_ref);
+      column = mrn::grn::column_create(ctx,
+                                       table_obj,
+                                       std::string_view(FIELD_NAME(field)),
+                                       nullptr,
+                                       col_flags,
+                                       grn_table_ref);
       if (ctx->rc) {
         grn_obj_unlink(ctx, grn_table_ref);
         error = ER_CANT_CREATE_TABLE;
@@ -4666,13 +4663,12 @@ bool ha_mroonga::storage_create_foreign_key(TABLE* table,
 
       mrn::IndexColumnName index_column_name(grn_table_name, FIELD_NAME(field));
       grn_obj_flags ref_col_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
-      column_ref = grn_column_create(ctx,
-                                     grn_table_ref,
-                                     index_column_name.c_str(),
-                                     index_column_name.length(),
-                                     NULL,
-                                     ref_col_flags,
-                                     table_obj);
+      column_ref = mrn::grn::column_create(ctx,
+                                           grn_table_ref,
+                                           index_column_name.view(),
+                                           nullptr,
+                                           ref_col_flags,
+                                           table_obj);
       if (ctx->rc) {
         grn_obj_unlink(ctx, column);
         grn_obj_unlink(ctx, grn_table_ref);
@@ -5001,13 +4997,13 @@ int ha_mroonga::storage_create_index(TABLE* table,
     index_column_name = INDEX_COLUMN_NAME;
     index_column_name_length = strlen(index_column_name);
   }
-  index_column = grn_column_create(ctx,
-                                   index_table,
-                                   index_column_name,
-                                   index_column_name_length,
-                                   NULL,
-                                   index_column_flags,
-                                   grn_table);
+  index_column = mrn::grn::column_create(
+    ctx,
+    index_table,
+    std::string_view(index_column_name, index_column_name_length),
+    nullptr,
+    index_column_flags,
+    grn_table);
 
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
@@ -17879,13 +17875,12 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
     }
     char* col_path = NULL; // we don't specify path
 
-    grn_obj* column_obj = grn_column_create(ctx,
-                                            table_obj,
-                                            column_name.c_str(),
-                                            column_name.length(),
-                                            col_path,
-                                            col_flags,
-                                            col_type);
+    grn_obj* column_obj = mrn::grn::column_create(ctx,
+                                                  table_obj,
+                                                  column_name.view(),
+                                                  col_path,
+                                                  col_flags,
+                                                  col_type);
     if (ctx->rc) {
       error = ER_WRONG_COLUMN_NAME;
       my_message(error, ctx->errbuf, MYF(0));

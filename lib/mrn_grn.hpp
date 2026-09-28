@@ -45,6 +45,23 @@ namespace mrn {
       return grn_ctx_get(ctx, name.data(), static_cast<int>(name.size()));
     }
 
+    // grn_column_create() that accepts std::string_view.
+    inline grn_obj* column_create(grn_ctx* ctx,
+                                  grn_obj* table,
+                                  std::string_view name,
+                                  const char* path,
+                                  grn_column_flags flags,
+                                  grn_obj* type)
+    {
+      return grn_column_create(ctx,
+                               table,
+                               name.data(),
+                               static_cast<unsigned int>(name.size()),
+                               path,
+                               flags,
+                               type);
+    }
+
     // grn_obj_column() that accepts std::string_view.
     inline grn_obj*
     obj_column(grn_ctx* ctx, grn_obj* table, std::string_view name)
