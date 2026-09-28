@@ -25,22 +25,24 @@
 namespace mrn {
   class IndexColumnName {
   public:
-    IndexColumnName(const char *table_name,
-                    const char *mysql_column_name);
-    IndexColumnName(const char *table_name,
-                    const char *mysql_column_name,
+    IndexColumnName(const char* table_name, const char* mysql_column_name);
+    IndexColumnName(const char* table_name,
+                    const char* mysql_column_name,
                     size_t mysql_column_name_length);
-    const char *c_str();
+    const char* c_str();
     size_t length();
+
   private:
-    const char *table_name_;
-    const char *mysql_column_name_;
+    const char* table_name_;
+    const char* mysql_column_name_;
     size_t mysql_column_name_length_;
     char name_[MRN_MAX_KEY_SIZE];
     size_t length_;
 
     void init();
-    uint encode(uchar *encoded_start, uchar *encoded_end,
-                const uchar *mysql_string_start, const uchar *mysql_string_end);
+    uint encode(uchar* encoded_start,
+                uchar* encoded_end,
+                const uchar* mysql_string_start,
+                const uchar* mysql_string_end);
   };
-}
+} // namespace mrn
