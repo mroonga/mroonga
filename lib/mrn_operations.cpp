@@ -42,13 +42,12 @@ namespace mrn {
 
     table_ = grn_ctx_get(ctx_, TABLE_NAME, -1);
     if (!table_) {
-      table_ = grn_table_create(ctx_,
-                                TABLE_NAME,
-                                strlen(TABLE_NAME),
-                                NULL,
-                                GRN_OBJ_TABLE_NO_KEY | GRN_OBJ_PERSISTENT,
-                                NULL,
-                                NULL);
+      table_ = mrn::grn::table_create(ctx_,
+                                      TABLE_NAME,
+                                      nullptr,
+                                      GRN_OBJ_TABLE_NO_KEY | GRN_OBJ_PERSISTENT,
+                                      nullptr,
+                                      nullptr);
       columns_.type_ =
         mrn::grn::column_create(ctx_,
                                 table_,

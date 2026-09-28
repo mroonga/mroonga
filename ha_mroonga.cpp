@@ -3942,13 +3942,12 @@ int ha_mroonga::wrapper_create_index_fulltext(const char* grn_table_name,
     DBUG_RETURN(error);
   }
   mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));
-  index_table = grn_table_create(ctx,
-                                 index_table_name.c_str(),
-                                 index_table_name.length(),
-                                 NULL,
-                                 index_table_flags,
-                                 lexicon_key_type.get(),
-                                 0);
+  index_table = mrn::grn::table_create(ctx,
+                                       index_table_name.view(),
+                                       nullptr,
+                                       index_table_flags,
+                                       lexicon_key_type.get(),
+                                       nullptr);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
@@ -4006,13 +4005,12 @@ int ha_mroonga::wrapper_create_index_geo(const char* grn_table_name,
   grn_obj_flags index_column_flags = GRN_OBJ_COLUMN_INDEX | GRN_OBJ_PERSISTENT;
 
   grn_obj* lexicon_key_type = grn_ctx_at(ctx, GRN_DB_WGS84_GEO_POINT);
-  index_table = grn_table_create(ctx,
-                                 index_table_name.c_str(),
-                                 index_table_name.length(),
-                                 NULL,
-                                 index_table_flags,
-                                 lexicon_key_type,
-                                 0);
+  index_table = mrn::grn::table_create(ctx,
+                                       index_table_name.view(),
+                                       nullptr,
+                                       index_table_flags,
+                                       lexicon_key_type,
+                                       nullptr);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(ER_CANT_CREATE_TABLE, ctx->errbuf, MYF(0));
@@ -4065,13 +4063,12 @@ int ha_mroonga::wrapper_create_index(const char* name,
     if (!find_table_flags(info, tmp_share, &flags)) {
       flags |= GRN_OBJ_TABLE_HASH_KEY;
     }
-    grn_obj* table = grn_table_create(ctx,
-                                      grn_table_name,
-                                      strlen(grn_table_name),
-                                      path,
-                                      flags,
-                                      pkey_type,
-                                      pkey_value_type);
+    grn_obj* table = mrn::grn::table_create(ctx,
+                                            grn_table_name,
+                                            path,
+                                            flags,
+                                            pkey_type,
+                                            pkey_value_type);
     if (ctx->rc) {
       error = ER_CANT_CREATE_TABLE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -4204,13 +4201,12 @@ int ha_mroonga::storage_create(const char* name,
   char* table_path = NULL;         // we don't specify path
   grn_obj* pkey_value_type = NULL; // we don't use this
 
-  table_obj = grn_table_create(ctx,
-                               mapper.table_name(),
-                               strlen(mapper.table_name()),
-                               table_path,
-                               table_flags,
-                               pkey_type,
-                               pkey_value_type);
+  table_obj = mrn::grn::table_create(ctx,
+                                     mapper.table_name(),
+                                     table_path,
+                                     table_flags,
+                                     pkey_type,
+                                     pkey_value_type);
   if (ctx->rc) {
     error = ER_CANT_CREATE_TABLE;
     my_message(error, ctx->errbuf, MYF(0));
@@ -4851,13 +4847,12 @@ int ha_mroonga::storage_create_index_table(TABLE* table,
 
   {
     mrn::IndexTableName index_table_name(grn_table_name, KEY_NAME(key_info));
-    index_table = grn_table_create(ctx,
-                                   index_table_name.c_str(),
-                                   index_table_name.length(),
-                                   NULL,
-                                   index_table_flags,
-                                   index_type,
-                                   NULL);
+    index_table = mrn::grn::table_create(ctx,
+                                         index_table_name.view(),
+                                         nullptr,
+                                         index_table_flags,
+                                         index_type,
+                                         nullptr);
   }
   if (ctx->rc) {
     grn_obj_unlink(ctx, index_type);
