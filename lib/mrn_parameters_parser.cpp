@@ -51,8 +51,7 @@ namespace mrn {
     };
   };
 
-  ParametersParser::ParametersParser(const char* input,
-                                     unsigned int input_length)
+  ParametersParser::ParametersParser(const char* input, size_t input_length)
       : input_(input),
         input_length_(input_length),
         parsed_(false),

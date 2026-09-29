@@ -26,7 +26,7 @@
 namespace mrn {
   class ParametersParser {
   public:
-    ParametersParser(const char* input, unsigned int input_length);
+    ParametersParser(const char* input, size_t input_length);
     ~ParametersParser();
     const char* operator[](const char* key);
     const char* tokenizer();
@@ -34,7 +34,7 @@ namespace mrn {
 
   private:
     const char* input_;
-    unsigned int input_length_;
+    size_t input_length_;
 
     bool parsed_;
     LIST* parameters_;
