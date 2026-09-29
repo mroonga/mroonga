@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011-2013 Kentoku SHIBA
-  Copyright(C) 2011-2021 Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2011-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,15 +30,18 @@
 namespace mrn {
   class Parameter {
   public:
-    char *key_;
-    char *value_;
+    char* key_;
+    char* value_;
 
-    Parameter(const char *key, unsigned int key_length,
-              const char *value, unsigned int value_length)
-      : key_(mrn_my_strndup(key, key_length, MYF(0))),
-        value_(mrn_my_strndup(value, value_length, MYF(0))) {
-    };
-    ~Parameter() {
+    Parameter(const char* key,
+              unsigned int key_length,
+              const char* value,
+              unsigned int value_length)
+        : key_(mrn_my_strndup(key, key_length, MYF(0))),
+          value_(mrn_my_strndup(value, value_length, MYF(0))) {};
+
+    ~Parameter()
+    {
       if (key_) {
         my_free(key_);
       }
@@ -48,38 +51,40 @@ namespace mrn {
     };
   };
 
-  ParametersParser::ParametersParser(const char *input,
+  ParametersParser::ParametersParser(const char* input,
                                      unsigned int input_length)
-    : input_(input),
-      input_length_(input_length),
-      parsed_(false),
-      parameters_(NULL) {
+      : input_(input),
+        input_length_(input_length),
+        parsed_(false),
+        parameters_(NULL)
+  {
   }
 
-  ParametersParser::~ParametersParser() {
-    for (LIST *next = parameters_; next; next = next->next) {
-      Parameter *parameter = static_cast<Parameter *>(next->data);
+  ParametersParser::~ParametersParser()
+  {
+    for (LIST* next = parameters_; next; next = next->next) {
+      Parameter* parameter = static_cast<Parameter*>(next->data);
       delete parameter;
     }
     list_free(parameters_, false);
   }
 
-  void ParametersParser::ensure_parsed() {
+  void ParametersParser::ensure_parsed()
+  {
     if (parsed_) {
       return;
     }
 
-    const char *current = input_;
-    const char *end = input_ + input_length_;
+    const char* current = input_;
+    const char* end = input_ + input_length_;
     for (; current < end; ++current) {
       if (is_white_space(current[0])) {
         continue;
       }
 
-      const char *key = current;
+      const char* key = current;
       unsigned int key_length = 0;
-      while (current < end &&
-             !is_white_space(current[0]) &&
+      while (current < end && !is_white_space(current[0]) &&
              current[0] != '\'' && current[0] != '"' && current[0] != ',') {
         ++current;
         ++key_length;
@@ -113,10 +118,11 @@ namespace mrn {
     parsed_ = true;
   }
 
-  const char *ParametersParser::parse_value(const char *current,
-                                            const char *end,
-                                            const char *key,
-                                            unsigned int key_length) {
+  const char* ParametersParser::parse_value(const char* current,
+                                            const char* end,
+                                            const char* key,
+                                            unsigned int key_length)
+  {
     char quote = current[0];
     if (quote != '\'' && quote != '"') {
       // TODO: report error
@@ -130,8 +136,8 @@ namespace mrn {
     unsigned int value_length = 0;
     for (; current < end && value_length < max_value_length; ++current) {
       if (current[0] == quote) {
-        Parameter *parameter = new Parameter(key, key_length,
-                                             value, value_length);
+        Parameter* parameter =
+          new Parameter(key, key_length, value, value_length);
         parameters_ = list_cons(parameter, parameters_);
         found = true;
         ++current;
@@ -175,10 +181,11 @@ namespace mrn {
     return current;
   }
 
-  const char *ParametersParser::operator[](const char *key) {
+  const char* ParametersParser::operator[](const char* key)
+  {
     ensure_parsed();
-    for (LIST *next = parameters_; next; next = next->next) {
-      Parameter *parameter = static_cast<Parameter *>(next->data);
+    for (LIST* next = parameters_; next; next = next->next) {
+      Parameter* parameter = static_cast<Parameter*>(next->data);
       if (strcasecmp(parameter->key_, key) == 0) {
         return parameter->value_;
       }
@@ -186,23 +193,25 @@ namespace mrn {
     return NULL;
   }
 
-  const char *ParametersParser::tokenizer() {
-    const char *parser = (*this)["parser"];
+  const char* ParametersParser::tokenizer()
+  {
+    const char* parser = (*this)["parser"];
     if (parser) {
       MRN_WARN_DEPRECATED(current_thd, "parser", "tokenizer");
     }
-    const char *tokenizer = (*this)["tokenizer"];
+    const char* tokenizer = (*this)["tokenizer"];
     if (!tokenizer) {
       tokenizer = parser;
     }
     return tokenizer;
   }
 
-  const char *ParametersParser::lexicon() {
-    const char *lexicon = (*this)["lexicon"];
+  const char* ParametersParser::lexicon()
+  {
+    const char* lexicon = (*this)["lexicon"];
     if (!lexicon) {
       lexicon = (*this)["table"]; // For backward compatibility
     }
     return lexicon;
   }
-}
+} // namespace mrn
