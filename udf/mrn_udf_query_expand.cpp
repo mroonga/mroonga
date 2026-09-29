@@ -228,7 +228,7 @@ static void query_expand(mrn::QueryExpandInfo* info, UDF_ARGS* args)
   GRN_TEXT_SET(info->ctx, &(info->expanded_query), query, raw_query - query);
   grn_expr_syntax_expand_query_by_table(ctx,
                                         raw_query,
-                                        raw_query_length,
+                                        static_cast<int>(raw_query_length),
                                         flags,
                                         info->term_column,
                                         info->expanded_term_column,
@@ -268,7 +268,7 @@ MRN_API char* mroonga_query_expand(UDF_INIT* init,
     goto error;
   }
 
-  *length = GRN_TEXT_LEN(&(info->expanded_query));
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(&(info->expanded_query)));
   DBUG_RETURN(GRN_TEXT_VALUE(&(info->expanded_query)));
 
 error:
