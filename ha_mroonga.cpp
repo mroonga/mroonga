@@ -10869,7 +10869,7 @@ void ha_mroonga::remove_grn_obj_force(const char* name)
     grn_obj* db = grn_ctx_db(ctx);
     grn_id id = mrn::grn::table_get(ctx, db, name);
     if (id) {
-      grn_obj_remove_force(ctx, name, strlen(name));
+      mrn::grn::obj_remove_force(ctx, name);
     }
   }
 

@@ -167,6 +167,13 @@ namespace mrn {
                             name.data(),
                             static_cast<uint32_t>(name.size()));
     }
+
+    inline grn_rc obj_remove_force(grn_ctx* ctx, std::string_view name)
+    {
+      return grn_obj_remove_force(ctx,
+                                  name.data(),
+                                  static_cast<int>(name.size()));
+    }
   } // namespace grn
 } // namespace mrn
 
