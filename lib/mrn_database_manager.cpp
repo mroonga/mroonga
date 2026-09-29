@@ -23,6 +23,7 @@
 
 #include "mrn_database_manager.hpp"
 #include "mrn_encoding.hpp"
+#include "mrn_grn.hpp"
 #include "mrn_lock.hpp"
 #include "mrn_path_mapper.hpp"
 
@@ -107,11 +108,7 @@ namespace mrn {
 
     grn_id id;
     void* db_address;
-    id = grn_hash_get(ctx_,
-                      cache_,
-                      mapper.db_name(),
-                      strlen(mapper.db_name()),
-                      &db_address);
+    id = mrn::grn::hash_get(ctx_, cache_, mapper.db_name(), &db_address);
     if (id == GRN_ID_NIL) {
       grn_obj* grn_db;
       struct stat db_stat;
@@ -193,11 +190,7 @@ namespace mrn {
 
     grn_id id;
     void* db_address;
-    id = grn_hash_get(ctx_,
-                      cache_,
-                      mapper.db_name(),
-                      strlen(mapper.db_name()),
-                      &db_address);
+    id = mrn::grn::hash_get(ctx_, cache_, mapper.db_name(), &db_address);
     if (id == GRN_ID_NIL) {
       DBUG_VOID_RETURN;
     }
@@ -223,11 +216,7 @@ namespace mrn {
 
     grn_id id;
     void* db_address;
-    id = grn_hash_get(ctx_,
-                      cache_,
-                      mapper.db_name(),
-                      strlen(mapper.db_name()),
-                      &db_address);
+    id = mrn::grn::hash_get(ctx_, cache_, mapper.db_name(), &db_address);
 
     Database* db = NULL;
     if (id == GRN_ID_NIL) {
