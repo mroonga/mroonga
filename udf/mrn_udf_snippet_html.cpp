@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -72,15 +72,13 @@ static mrn_bool mrn_snippet_html_prepare(mrn_snippet_html_info* info,
 
   mrn::encoding::set_raw(ctx, system_charset_info);
 
-  *snippet = grn_snip_open(ctx,
-                           flags,
-                           width,
-                           max_n_results,
-                           open_tag,
-                           strlen(open_tag),
-                           close_tag,
-                           strlen(close_tag),
-                           mapping);
+  *snippet = mrn::grn::snip_open(ctx,
+                                 flags,
+                                 width,
+                                 max_n_results,
+                                 open_tag,
+                                 close_tag,
+                                 mapping);
   if (ctx->rc != GRN_SUCCESS) {
     if (message) {
       snprintf(message,
@@ -590,7 +588,7 @@ MRN_API char* mroonga_snippet_html(UDF_INIT* init,
     }
   }
 
-  *length = GRN_TEXT_LEN(result_buffer);
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(result_buffer));
   DBUG_RETURN(GRN_TEXT_VALUE(result_buffer));
 
 error:

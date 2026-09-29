@@ -122,6 +122,25 @@ namespace mrn {
                           value);
     }
 
+    inline grn_obj* snip_open(grn_ctx* ctx,
+                              int flags,
+                              unsigned int width,
+                              unsigned int max_results,
+                              std::string_view default_open_tag,
+                              std::string_view default_close_tag,
+                              grn_snip_mapping* mapping)
+    {
+      return grn_snip_open(ctx,
+                           flags,
+                           width,
+                           max_results,
+                           default_open_tag.data(),
+                           static_cast<unsigned int>(default_open_tag.size()),
+                           default_close_tag.data(),
+                           static_cast<unsigned int>(default_close_tag.size()),
+                           mapping);
+    }
+
     inline grn_rc
     table_rename(grn_ctx* ctx, grn_obj* table, std::string_view name)
     {
