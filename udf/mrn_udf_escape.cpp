@@ -230,7 +230,7 @@ MRN_API char* mroonga_escape(UDF_INIT* init,
     goto error;
   }
 
-  *length = GRN_TEXT_LEN(&(info->escaped_value));
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(&(info->escaped_value)));
   return GRN_TEXT_VALUE(&(info->escaped_value));
 
 error:
