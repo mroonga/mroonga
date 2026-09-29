@@ -179,14 +179,6 @@ jobs:
             Expand-Archive groonga-latest.zip .
             Remove-Item groonga-latest.zip
             Move-Item groonga-* extra\groonga
-            pushd extra\groonga\vendor\mruby-source
-            Invoke-WebRequest `
-              -MaximumRetryCount 3 `
-              -RetryIntervalSec 65 `
-              -Uri "https://github.com/mruby/mruby/pull/7631.patch" `
-              -OutFile 7631.patch
-            ridk exec patch -p1 -i 7631.patch
-            popd
           }
           Remove-Item extra\groonga\test -Recurse -Force
       - uses: actions/checkout@v7
