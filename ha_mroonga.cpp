@@ -3744,7 +3744,7 @@ int ha_mroonga::create_share_for_create() const
     share_for_create.table_name =
       mrn_my_strdup(MRN_GET_TABLE_NAME(lex->query_tables), MYF(MY_WME));
     share_for_create.table_name_length =
-      MRN_GET_TABLE_NAME_LENGTH(lex->query_tables);
+      static_cast<uint>(MRN_GET_TABLE_NAME_LENGTH(lex->query_tables));
   }
   share_for_create.table_share = &table_share_for_create;
   table_for_create.s = &table_share_for_create;
@@ -15882,7 +15882,8 @@ int ha_mroonga::storage_rename_table(const char* from,
   if (error)
     DBUG_RETURN(error);
 
-  if (!(to_long_term_share = mrn_get_long_term_share(to, strlen(to), &error)))
+  if (!(to_long_term_share =
+          mrn_get_long_term_share(to, static_cast<uint>(strlen(to)), &error)))
     DBUG_RETURN(error);
   to_long_term_share->auto_inc_value = from_long_term_share->auto_inc_value;
   DBUG_PRINT(
