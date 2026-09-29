@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -32,53 +32,60 @@
 #include <mrn_variables.hpp>
 #include <mrn_current_thread.hpp>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
-struct st_mrn_snip_info
-{
-  grn_ctx *ctx;
-  grn_obj *db;
+struct st_mrn_snip_info {
+  grn_ctx* ctx;
+  grn_obj* db;
   bool use_shared_db;
-  grn_obj *snippet;
+  grn_obj* snippet;
   grn_obj result;
 };
 
-static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
-                                   char *message, grn_obj **snippet)
+static mrn_bool mrn_snippet_prepare(st_mrn_snip_info* snip_info,
+                                    UDF_ARGS* args,
+                                    char* message,
+                                    grn_obj** snippet)
 {
   unsigned int i;
-  CHARSET_INFO *cs;
-  grn_ctx *ctx = snip_info->ctx;
+  CHARSET_INFO* cs;
+  grn_ctx* ctx = snip_info->ctx;
   long long snip_max_len;
   long long snip_max_num;
   long long skip_leading_spaces;
   long long html_escape;
   int flags = GRN_SNIP_COPY_TAG;
-  grn_snip_mapping *mapping = NULL;
+  grn_snip_mapping* mapping = NULL;
   grn_rc rc;
 
   *snippet = NULL;
-  snip_max_len = *((long long *) args->args[1]);
-  snip_max_num = *((long long *) args->args[2]);
+  snip_max_len = *((long long*)args->args[1]);
+  snip_max_num = *((long long*)args->args[2]);
 
   if (args->arg_type[3] == STRING_RESULT) {
     if (!(cs = get_charset_by_name(args->args[3], MYF(0)))) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-               "Unknown charset: <%s>", args->args[3]);
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
+               "Unknown charset: <%s>",
+               args->args[3]);
       goto error;
     }
   } else {
-    uint charset_id = static_cast<uint>(*((long long *) args->args[3]));
+    uint charset_id = static_cast<uint>(*((long long*)args->args[3]));
     if (!(cs = get_charset(charset_id, MYF(0)))) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-               "Unknown charset ID: <%u>", charset_id);
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
+               "Unknown charset ID: <%u>",
+               charset_id);
       goto error;
     }
   }
   if (!mrn::encoding::set_raw(ctx, cs)) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
-             "Unsupported charset: <%s>", MRN_CHARSET_NAME(cs));
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
+             "Unsupported charset: <%s>",
+             MRN_CHARSET_NAME(cs));
     goto error;
   }
 
@@ -86,33 +93,47 @@ static mrn_bool mrn_snippet_prepare(st_mrn_snip_info *snip_info, UDF_ARGS *args,
     flags |= GRN_SNIP_NORMALIZE;
   }
 
-  skip_leading_spaces = *((long long *) args->args[4]);
+  skip_leading_spaces = *((long long*)args->args[4]);
   if (skip_leading_spaces) {
     flags |= GRN_SNIP_SKIP_LEADING_SPACES;
   }
 
-  html_escape = *((long long *) args->args[5]);
+  html_escape = *((long long*)args->args[5]);
   if (html_escape) {
-    mapping = (grn_snip_mapping *) -1;
+    mapping = (grn_snip_mapping*)-1;
   }
 
-  *snippet = grn_snip_open(ctx, flags, static_cast<unsigned int>(snip_max_len),
+  *snippet = grn_snip_open(ctx,
+                           flags,
+                           static_cast<unsigned int>(snip_max_len),
                            static_cast<unsigned int>(snip_max_num),
-                           "", 0, "", 0, mapping);
+                           "",
+                           0,
+                           "",
+                           0,
+                           mapping);
   if (ctx->rc) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
-             "Failed to open grn_snip: <%s>", ctx->errbuf);
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
+             "Failed to open grn_snip: <%s>",
+             ctx->errbuf);
     goto error;
   }
 
   for (i = 8; i < args->arg_count; i += 3) {
-    rc = grn_snip_add_cond(ctx, *snippet,
-                           args->args[i], args->lengths[i],
-                           args->args[i + 1], args->lengths[i + 1],
-                           args->args[i + 2], args->lengths[i + 2]);
+    rc = grn_snip_add_cond(ctx,
+                           *snippet,
+                           args->args[i],
+                           args->lengths[i],
+                           args->args[i + 1],
+                           args->lengths[i + 1],
+                           args->args[i + 2],
+                           args->lengths[i + 2]);
     if (rc) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
-               "Failed to add a condition to grn_snip: <%s>", ctx->errbuf);
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
+               "Failed to add a condition to grn_snip: <%s>",
+               ctx->errbuf);
       goto error;
     }
   }
@@ -128,22 +149,23 @@ error:
 
 MRN_BEGIN_DECLS
 
-MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *message)
+MRN_API mrn_bool mroonga_snippet_init(UDF_INIT* init,
+                                      UDF_ARGS* args,
+                                      char* message)
 {
   uint i;
-  st_mrn_snip_info *snip_info = NULL;
+  st_mrn_snip_info* snip_info = NULL;
   bool can_open_snippet = true;
   init->ptr = NULL;
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_snippet(): Mroonga isn't initialized");
     goto error;
   }
-  if (args->arg_count < 11 || (args->arg_count - 11) % 3)
-  {
-    sprintf(message, "Incorrect number of arguments for mroonga_snippet(): %u",
+  if (args->arg_count < 11 || (args->arg_count - 11) % 3) {
+    sprintf(message,
+            "Incorrect number of arguments for mroonga_snippet(): %u",
             args->arg_count);
     goto error;
   }
@@ -159,12 +181,9 @@ MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *mess
     strcpy(message, "mroonga_snippet() requires int for 3rd argument");
     goto error;
   }
-  if (
-    args->arg_type[3] != STRING_RESULT &&
-    args->arg_type[3] != INT_RESULT
-  ) {
+  if (args->arg_type[3] != STRING_RESULT && args->arg_type[3] != INT_RESULT) {
     strcpy(message,
-      "mroonga_snippet() requires string or int for 4th argument");
+           "mroonga_snippet() requires string or int for 4th argument");
     goto error;
   }
   if (args->arg_type[4] != INT_RESULT) {
@@ -177,26 +196,27 @@ MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *mess
   }
   for (i = 6; i < args->arg_count; i++) {
     if (args->arg_type[i] != STRING_RESULT) {
-      sprintf(message, "mroonga_snippet() requires string for %uth argument",
+      sprintf(message,
+              "mroonga_snippet() requires string for %uth argument",
               i);
       goto error;
     }
   }
   init->maybe_null = 1;
 
-  if (!(snip_info = (st_mrn_snip_info *) mrn_my_malloc(sizeof(st_mrn_snip_info),
-                                                       MYF(MY_WME | MY_ZEROFILL))))
-  {
+  if (!(snip_info =
+          (st_mrn_snip_info*)mrn_my_malloc(sizeof(st_mrn_snip_info),
+                                           MYF(MY_WME | MY_ZEROFILL)))) {
     strcpy(message, "mroonga_snippet() out of memory");
     goto error;
   }
   snip_info->ctx = mrn_context_pool->pull();
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
-    const char *action;
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* action;
     if (current_db_path) {
       action = "open database";
-      mrn::Database *db;
+      mrn::Database* db;
       int error = mrn_db_manager->open(current_db_path, &db);
       if (error == 0) {
         snip_info->db = db->get();
@@ -228,7 +248,7 @@ MRN_API mrn_bool mroonga_snippet_init(UDF_INIT *init, UDF_ARGS *args, char *mess
       goto error;
     }
   }
-  init->ptr = (char *) snip_info;
+  init->ptr = (char*)snip_info;
 
   return false;
 
@@ -243,15 +263,19 @@ error:
   return true;
 }
 
-MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
-                              unsigned long *length, uchar *is_null, uchar *error)
+MRN_API char* mroonga_snippet(UDF_INIT* init,
+                              UDF_ARGS* args,
+                              char* result,
+                              unsigned long* length,
+                              uchar* is_null,
+                              uchar* error)
 {
-  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) init->ptr;
-  grn_ctx *ctx = snip_info->ctx;
-  grn_obj *result_buffer = &(snip_info->result);
-  char *target;
+  st_mrn_snip_info* snip_info = (st_mrn_snip_info*)init->ptr;
+  grn_ctx* ctx = snip_info->ctx;
+  grn_obj* result_buffer = &(snip_info->result);
+  char* target;
   unsigned int target_length;
-  grn_obj *snippet = NULL;
+  grn_obj* snippet = NULL;
   grn_rc rc;
   unsigned int i, n_results, max_tagged_length;
 
@@ -267,7 +291,8 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     for (i = 1; i < args->arg_count; i++) {
       if (!args->args[i]) {
         my_printf_error(ER_MRN_INVALID_NULL_VALUE_NUM,
-                        ER_MRN_INVALID_NULL_VALUE_STR, MYF(0),
+                        ER_MRN_INVALID_NULL_VALUE_STR,
+                        MYF(0),
                         "mroonga_snippet() arguments");
         goto error;
       }
@@ -280,11 +305,17 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     snippet = snip_info->snippet;
   }
 
-  rc = grn_snip_exec(ctx, snippet, target, target_length,
-                     &n_results, &max_tagged_length);
+  rc = grn_snip_exec(ctx,
+                     snippet,
+                     target,
+                     target_length,
+                     &n_results,
+                     &max_tagged_length);
   if (rc) {
     my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                    ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                    ER_MRN_ERROR_FROM_GROONGA_STR,
+                    MYF(0),
+                    ctx->errbuf);
     goto error;
   }
 
@@ -293,12 +324,16 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     GRN_TEXT_PUT(ctx, result_buffer, args->args[6], args->lengths[6]);
     grn_bulk_reserve(ctx, result_buffer, max_tagged_length);
     unsigned int result_length;
-    rc = grn_snip_get_result(ctx, snippet, i,
+    rc = grn_snip_get_result(ctx,
+                             snippet,
+                             i,
                              GRN_BULK_CURR(result_buffer),
                              &result_length);
     if (rc) {
       my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                      ER_MRN_ERROR_FROM_GROONGA_STR,
+                      MYF(0),
+                      ctx->errbuf);
       goto error;
     }
     grn_bulk_space(ctx, result_buffer, result_length);
@@ -309,7 +344,9 @@ MRN_API char *mroonga_snippet(UDF_INIT *init, UDF_ARGS *args, char *result,
     rc = grn_obj_close(ctx, snippet);
     if (rc) {
       my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
+                      ER_MRN_ERROR_FROM_GROONGA_STR,
+                      MYF(0),
+                      ctx->errbuf);
       goto error;
     }
   }
@@ -322,9 +359,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_snippet_deinit(UDF_INIT *init)
+MRN_API void mroonga_snippet_deinit(UDF_INIT* init)
 {
-  st_mrn_snip_info *snip_info = (st_mrn_snip_info *) init->ptr;
+  st_mrn_snip_info* snip_info = (st_mrn_snip_info*)init->ptr;
   if (snip_info) {
     if (snip_info->snippet) {
       grn_obj_close(snip_info->ctx, snip_info->snippet);
