@@ -12980,7 +12980,7 @@ void ha_mroonga::storage_store_field_blob(Field* field,
   Field_blob* blob = (Field_blob*)field;
   grn_obj* blob_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   GRN_TEXT_SET(ctx, blob_buffer, value, value_length);
-  blob->set_ptr(GRN_TEXT_LEN(blob_buffer),
+  blob->set_ptr(static_cast<uint32>(GRN_TEXT_LEN(blob_buffer)),
                 reinterpret_cast<uchar*>(GRN_TEXT_VALUE(blob_buffer)));
   DBUG_VOID_RETURN;
 }
@@ -13053,7 +13053,7 @@ void ha_mroonga::storage_store_field_geometry(Field* field,
   grn_obj* geometry_buffer = blob_buffers_[MRN_FIELD_FIELD_INDEX(field)];
   uint wkb_length = sizeof(wkb) / sizeof(*wkb);
   GRN_TEXT_SET(ctx, geometry_buffer, wkb, wkb_length);
-  geometry->set_ptr(GRN_TEXT_LEN(geometry_buffer),
+  geometry->set_ptr(static_cast<uint32>(GRN_TEXT_LEN(geometry_buffer)),
                     reinterpret_cast<uchar*>(GRN_TEXT_VALUE(geometry_buffer)));
 #endif
   DBUG_VOID_RETURN;
