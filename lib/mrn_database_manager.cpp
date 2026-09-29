@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2010  Tetsuro IKEDA
-  Copyright(C) 2010-2013  Kentoku SHIBA
-  Copyright(C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,22 +47,24 @@
 #include <string>
 
 extern "C" {
-  grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(grn_ctx *ctx);
-  grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(grn_ctx *ctx);
+grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(grn_ctx* ctx);
+grn_rc GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(grn_ctx* ctx);
 }
 
 namespace mrn {
-  DatabaseManager::DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex)
-    : ctx_(ctx),
-      cache_(NULL),
-      mutex_(mutex) {
+  DatabaseManager::DatabaseManager(grn_ctx* ctx, mysql_mutex_t* mutex)
+      : ctx_(ctx),
+        cache_(NULL),
+        mutex_(mutex)
+  {
   }
 
-  DatabaseManager::~DatabaseManager(void) {
+  DatabaseManager::~DatabaseManager(void)
+  {
     if (cache_) {
-      void *db_address;
+      void* db_address;
       GRN_HASH_EACH(ctx_, cache_, id, NULL, 0, &db_address, {
-        Database *db;
+        Database* db;
         grn_memcpy(&db, db_address, sizeof(db));
         delete db;
       });
@@ -70,15 +72,17 @@ namespace mrn {
     }
   }
 
-  bool DatabaseManager::init(void) {
+  bool DatabaseManager::init(void)
+  {
     MRN_DBUG_ENTER_METHOD();
     cache_ = grn_hash_create(ctx_,
                              NULL,
                              GRN_TABLE_MAX_KEY_SIZE,
-                             sizeof(Database *),
+                             sizeof(Database*),
                              GRN_OBJ_KEY_VAR_SIZE);
     if (!cache_) {
-      GRN_LOG(ctx_, GRN_LOG_ERROR,
+      GRN_LOG(ctx_,
+              GRN_LOG_ERROR,
               "failed to initialize hash table for caching opened databases");
       DBUG_RETURN(false);
     }
@@ -86,7 +90,8 @@ namespace mrn {
     DBUG_RETURN(true);
   }
 
-  int DatabaseManager::open(const char *path, Database **db) {
+  int DatabaseManager::open(const char* path, Database** db)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     int error = 0;
@@ -101,18 +106,21 @@ namespace mrn {
     }
 
     grn_id id;
-    void *db_address;
-    id = grn_hash_get(ctx_, cache_,
-                      mapper.db_name(), strlen(mapper.db_name()),
+    void* db_address;
+    id = grn_hash_get(ctx_,
+                      cache_,
+                      mapper.db_name(),
+                      strlen(mapper.db_name()),
                       &db_address);
     if (id == GRN_ID_NIL) {
-      grn_obj *grn_db;
+      grn_obj* grn_db;
       struct stat db_stat;
       if (stat(mapper.db_path(), &db_stat)) {
-        GRN_LOG(ctx_, GRN_LOG_INFO,
-                "database not found. creating...: <%s>", mapper.db_path());
-        if (path[0] == FN_CURLIB &&
-            mrn_is_directory_separator(path[1])) {
+        GRN_LOG(ctx_,
+                GRN_LOG_INFO,
+                "database not found. creating...: <%s>",
+                mapper.db_path());
+        if (path[0] == FN_CURLIB && mrn_is_directory_separator(path[1])) {
           ensure_database_directory();
         }
         grn_db = grn_db_create(ctx_, mapper.db_path(), NULL);
@@ -130,16 +138,20 @@ namespace mrn {
         }
       }
       *db = new Database(ctx_, grn_db);
-      grn_hash_add(ctx_, cache_,
-                   mapper.db_name(), strlen(mapper.db_name()),
-                   &db_address, NULL);
-      grn_memcpy(db_address, db, sizeof(Database *));
+      grn_hash_add(ctx_,
+                   cache_,
+                   mapper.db_name(),
+                   strlen(mapper.db_name()),
+                   &db_address,
+                   NULL);
+      grn_memcpy(db_address, db, sizeof(Database*));
       error = ensure_normalizers_registered((*db)->get());
       if (!error) {
         if ((*db)->is_broken()) {
           error = ER_CANT_OPEN_FILE;
           char error_message[MRN_MESSAGE_BUFFER_SIZE];
-          snprintf(error_message, MRN_MESSAGE_BUFFER_SIZE,
+          snprintf(error_message,
+                   MRN_MESSAGE_BUFFER_SIZE,
                    "mroonga: database: open: "
                    "The database maybe broken. "
                    "We recommend you to recreate the database. "
@@ -152,14 +164,15 @@ namespace mrn {
         }
       }
     } else {
-      grn_memcpy(db, db_address, sizeof(Database *));
+      grn_memcpy(db, db_address, sizeof(Database*));
       grn_ctx_use(ctx_, (*db)->get());
     }
 
     DBUG_RETURN(error);
   }
 
-  bool DatabaseManager::exist(const char *path) {
+  bool DatabaseManager::exist(const char* path)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     mrn::PathMapper mapper(path);
@@ -171,22 +184,25 @@ namespace mrn {
     DBUG_RETURN(exist);
   }
 
-  void DatabaseManager::close(const char *path) {
+  void DatabaseManager::close(const char* path)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     mrn::PathMapper mapper(path);
     mrn::Lock lock(mutex_);
 
     grn_id id;
-    void *db_address;
-    id = grn_hash_get(ctx_, cache_,
-                      mapper.db_name(), strlen(mapper.db_name()),
+    void* db_address;
+    id = grn_hash_get(ctx_,
+                      cache_,
+                      mapper.db_name(),
+                      strlen(mapper.db_name()),
                       &db_address);
     if (id == GRN_ID_NIL) {
       DBUG_VOID_RETURN;
     }
 
-    Database *db = NULL;
+    Database* db = NULL;
     grn_memcpy(&db, db_address, sizeof(db));
     grn_ctx_use(ctx_, db->get());
     if (db) {
@@ -198,23 +214,26 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  bool DatabaseManager::drop(const char *path) {
+  bool DatabaseManager::drop(const char* path)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     mrn::PathMapper mapper(path);
     mrn::Lock lock(mutex_);
 
     grn_id id;
-    void *db_address;
-    id = grn_hash_get(ctx_, cache_,
-                      mapper.db_name(), strlen(mapper.db_name()),
+    void* db_address;
+    id = grn_hash_get(ctx_,
+                      cache_,
+                      mapper.db_name(),
+                      strlen(mapper.db_name()),
                       &db_address);
 
-    Database *db = NULL;
+    Database* db = NULL;
     if (id == GRN_ID_NIL) {
       struct stat dummy;
       if (stat(mapper.db_path(), &dummy) == 0) {
-        grn_obj *grn_db = grn_db_open(ctx_, mapper.db_path());
+        grn_obj* grn_db = grn_db_open(ctx_, mapper.db_path());
         db = new Database(ctx_, grn_db);
       }
     } else {
@@ -233,9 +252,11 @@ namespace mrn {
       delete db;
       DBUG_RETURN(true);
     } else {
-      GRN_LOG(ctx_, GRN_LOG_ERROR,
+      GRN_LOG(ctx_,
+              GRN_LOG_ERROR,
               "failed to drop database: <%s>: <%s>",
-              mapper.db_path(), ctx_->errbuf);
+              mapper.db_path(),
+              ctx_->errbuf);
       if (id == GRN_ID_NIL) {
         delete db;
       }
@@ -243,17 +264,16 @@ namespace mrn {
     }
   }
 
-  int DatabaseManager::clear(void) {
+  int DatabaseManager::clear(void)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     int error = 0;
 
     mrn::Lock lock(mutex_);
 
-    grn_hash_cursor *cursor;
-    cursor = grn_hash_cursor_open(ctx_, cache_,
-                                  NULL, 0, NULL, 0,
-                                  0, -1, 0);
+    grn_hash_cursor* cursor;
+    cursor = grn_hash_cursor_open(ctx_, cache_, NULL, 0, NULL, 0, 0, -1, 0);
     if (ctx_->rc) {
       my_message(ER_ERROR_ON_READ, ctx_->errbuf, MYF(0));
       DBUG_RETURN(ER_ERROR_ON_READ);
@@ -265,8 +285,8 @@ namespace mrn {
         my_message(error, ctx_->errbuf, MYF(0));
         break;
       }
-      void *db_address;
-      Database *db;
+      void* db_address;
+      Database* db;
       grn_hash_cursor_get_value(ctx_, cursor, &db_address);
       grn_memcpy(&db, db_address, sizeof(db));
       grn_ctx_use(ctx_, db->get());
@@ -283,12 +303,14 @@ namespace mrn {
     DBUG_RETURN(error);
   }
 
-  const char *DatabaseManager::error_message() {
+  const char* DatabaseManager::error_message()
+  {
     MRN_DBUG_ENTER_METHOD();
     DBUG_RETURN(ctx_->errbuf);
   }
 
-  void DatabaseManager::mkdir_p(const char *directory) {
+  void DatabaseManager::mkdir_p(const char* directory)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     size_t i = 0;
@@ -297,35 +319,43 @@ namespace mrn {
       // sub_directory is empty for the leading separator of an
       // absolute path such as "/var/lib/mysql/".
       if (!sub_directory.empty() &&
-          (mrn_is_directory_separator(directory[i]) ||
-           directory[i] == '\0')) {
+          (mrn_is_directory_separator(directory[i]) || directory[i] == '\0')) {
         struct stat directory_status;
         if (stat(sub_directory.c_str(), &directory_status) != 0) {
-          DBUG_PRINT("info",
-                     ("mroonga: creating directory: <%s>",
-                      sub_directory.c_str()));
-          GRN_LOG(ctx_, GRN_LOG_INFO,
-                  "creating directory: <%s>", sub_directory.c_str());
+          DBUG_PRINT(
+            "info",
+            ("mroonga: creating directory: <%s>", sub_directory.c_str()));
+          GRN_LOG(ctx_,
+                  GRN_LOG_INFO,
+                  "creating directory: <%s>",
+                  sub_directory.c_str());
           if (MRN_MKDIR(sub_directory.c_str(), S_IRWXU) == 0) {
-            DBUG_PRINT("info",
-                       ("mroonga: created directory: <%s>",
-                        sub_directory.c_str()));
-            GRN_LOG(ctx_, GRN_LOG_INFO,
-                    "created directory: <%s>", sub_directory.c_str());
+            DBUG_PRINT(
+              "info",
+              ("mroonga: created directory: <%s>", sub_directory.c_str()));
+            GRN_LOG(ctx_,
+                    GRN_LOG_INFO,
+                    "created directory: <%s>",
+                    sub_directory.c_str());
           } else if (errno == EEXIST) {
             // Another process may create the directory after our stat().
             DBUG_PRINT("info",
                        ("mroonga: directory already exists: <%s>",
                         sub_directory.c_str()));
-            GRN_LOG(ctx_, GRN_LOG_INFO,
-                    "directory already exists: <%s>", sub_directory.c_str());
+            GRN_LOG(ctx_,
+                    GRN_LOG_INFO,
+                    "directory already exists: <%s>",
+                    sub_directory.c_str());
           } else {
             DBUG_PRINT("error",
                        ("mroonga: failed to create directory: <%s>: <%s>",
-                        sub_directory.c_str(), strerror(errno)));
-            GRN_LOG(ctx_, GRN_LOG_ERROR,
+                        sub_directory.c_str(),
+                        strerror(errno)));
+            GRN_LOG(ctx_,
+                    GRN_LOG_ERROR,
                     "failed to create directory: <%s>: <%s>",
-                    sub_directory.c_str(), strerror(errno));
+                    sub_directory.c_str(),
+                    strerror(errno));
             DBUG_VOID_RETURN;
           }
         }
@@ -342,14 +372,15 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void DatabaseManager::ensure_database_directory(void) {
+  void DatabaseManager::ensure_database_directory(void)
+  {
     MRN_DBUG_ENTER_METHOD();
 
-    const char *path_prefix = mrn::PathMapper::default_path_prefix;
+    const char* path_prefix = mrn::PathMapper::default_path_prefix;
     if (!path_prefix)
       DBUG_VOID_RETURN;
 
-    const char *last_path_separator;
+    const char* last_path_separator;
     last_path_separator = strrchr(path_prefix, FN_LIBCHAR);
 #ifdef FN_LIBCHAR2
     if (!last_path_separator)
@@ -367,7 +398,8 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  int DatabaseManager::ensure_normalizers_registered(grn_obj *db) {
+  int DatabaseManager::ensure_normalizers_registered(grn_obj* db)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     int error = 0;
@@ -377,7 +409,7 @@ namespace mrn {
       GRN_PLUGIN_IMPL_NAME_TAGGED(init, normalizers_mysql)(ctx_);
       GRN_PLUGIN_IMPL_NAME_TAGGED(register, normalizers_mysql)(ctx_);
 #  else
-      grn_obj *mysql_normalizer;
+      grn_obj* mysql_normalizer;
       mysql_normalizer = grn_ctx_get(ctx_, "NormalizerMySQLGeneralCI", -1);
       if (mysql_normalizer) {
         grn_obj_unlink(ctx_, mysql_normalizer);
@@ -390,4 +422,4 @@ namespace mrn {
 
     DBUG_RETURN(error);
   }
-}
+} // namespace mrn
