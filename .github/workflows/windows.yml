@@ -48,6 +48,7 @@ jobs:
             use-main: "yes"
             embed: "ON"
     env:
+      CCACHE_DIR: ${{ github.workspace }}\ccache
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
       # Use -DMYSQL_MAINTAINER_MODE=ERR like MariaDB's buildbot.
@@ -138,10 +139,9 @@ jobs:
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
       - uses: actions/cache@v6
         with:
-          path: |
-            ~\AppData\Roaming\ccache
-          key: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-${{ hashFiles('mariadb/storage/mroonga/**.{cpp,hpp,h}') }}
-          restore-keys: source-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-ccache-
+          path: ${{ env.CCACHE_DIR }}
+          key: windows-ccache-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-${{ matrix.use-main || 'no' }}-${{ matrix.embed || 'OFF' }}-${{ hashFiles('mariadb/storage/mroonga/**/*.cpp', 'mariadb/storage/mroonga/**/*.hpp', 'mariadb/storage/mroonga/**/*.h') }}
+          restore-keys: windows-ccache-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-${{ matrix.use-main || 'no' }}-${{ matrix.embed || 'OFF' }}-
       - name: Prepare ccache
         run: |
           choco install ccache
