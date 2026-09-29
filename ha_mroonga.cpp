@@ -7158,11 +7158,7 @@ int ha_mroonga::wrapper_write_row_index(mrn_write_row_buf_t buf)
 
   int added;
   grn_id record_id;
-  record_id = grn_table_add(ctx,
-                            grn_table,
-                            GRN_TEXT_VALUE(&key_buffer),
-                            GRN_TEXT_LEN(&key_buffer),
-                            &added);
+  record_id = mrn::grn::table_add(ctx, grn_table, &key_buffer, &added);
   if (record_id == GRN_ID_NIL) {
     DBUG_PRINT("info", ("mroonga: failed to add a new record into groonga"));
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
