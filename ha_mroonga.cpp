@@ -13173,7 +13173,7 @@ void ha_mroonga::storage_get_column_value(int nth_column,
   grn_obj* column = grn_columns[nth_column];
   grn_column_cache* column_cache = grn_column_caches[nth_column];
   grn_id range_id = grn_obj_get_range(ctx, column);
-  grn_obj_flags flags;
+  uint8_t flags;
 
   if (mrn::grn::is_vector_column(column)) {
     flags = GRN_OBJ_VECTOR;
