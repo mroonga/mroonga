@@ -76,6 +76,26 @@ namespace mrn {
                               value_type);
     }
 
+    inline grn_id
+    table_add(grn_ctx* ctx, grn_obj* table, std::string_view key, int* added)
+    {
+      return grn_table_add(ctx,
+                           table,
+                           key.data(),
+                           static_cast<unsigned int>(key.size()),
+                           added);
+    }
+
+    inline grn_id
+    table_add(grn_ctx* ctx, grn_obj* table, grn_obj* key, int* added)
+    {
+      return table_add(
+        ctx,
+        table,
+        std::string_view(GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key)),
+        added);
+    }
+
     inline grn_id table_get(grn_ctx* ctx, grn_obj* table, std::string_view key)
     {
       return grn_table_get(ctx,
