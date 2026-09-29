@@ -17780,7 +17780,7 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
   MRN_SHARE* tmp_share;
   TABLE_SHARE tmp_table_share;
   char **col_flags, **col_type;
-  uint *col_flags_length, *col_type_length;
+  size_t *col_flags_length, *col_type_length;
   tmp_table_share.keys = 0;
   tmp_table_share.fields = altered_table->s->fields;
   tmp_share =
@@ -17790,11 +17790,11 @@ bool ha_mroonga::storage_inplace_alter_table_add_column(
                                     &col_flags,
                                     sizeof(char*) * tmp_table_share.fields,
                                     &col_flags_length,
-                                    sizeof(uint) * tmp_table_share.fields,
+                                    sizeof(size_t) * tmp_table_share.fields,
                                     &col_type,
                                     sizeof(char*) * tmp_table_share.fields,
                                     &col_type_length,
-                                    sizeof(uint) * tmp_table_share.fields,
+                                    sizeof(size_t) * tmp_table_share.fields,
                                     NullS);
   if (!tmp_share) {
     have_error = true;
