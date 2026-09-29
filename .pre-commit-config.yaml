@@ -43,6 +43,7 @@ repos:
           ?lib/mrn_multiple_column_key_codec\.cpp|
           ?lib/mrn_operations\.cpp|
           ?mrn_mysql_compat\.h|
+          ?mrn_table\.cpp|
           ?mrn_table\.hpp|
           ?udf/mrn_udf_snippet_html\.cpp|
           )
