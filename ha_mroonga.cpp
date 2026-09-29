@@ -1187,13 +1187,14 @@ static TYPELIB mrn_action_on_error_typelib =
                      nullptr,
                      nullptr);
 
-static MYSQL_THDVAR_ENUM(action_on_fulltext_query_error,
-                         PLUGIN_VAR_RQCMDARG,
-                         "action on fulltext query error",
-                         NULL,
-                         NULL,
-                         mrn_action_on_fulltext_query_error_default,
-                         &mrn_action_on_error_typelib);
+static MYSQL_THDVAR_ENUM(
+  action_on_fulltext_query_error,
+  PLUGIN_VAR_RQCMDARG,
+  "action on fulltext query error",
+  nullptr,
+  nullptr,
+  static_cast<ulong>(mrn_action_on_fulltext_query_error_default),
+  &mrn_action_on_error_typelib);
 
 static void mrn_lock_timeout_update(THD* thd,
                                     mrn_sys_var* var,
