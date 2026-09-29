@@ -351,7 +351,7 @@ MRN_API char* mroonga_snippet(UDF_INIT* init,
     }
   }
 
-  *length = GRN_TEXT_LEN(result_buffer);
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(result_buffer));
   return GRN_TEXT_VALUE(result_buffer);
 
 error:
