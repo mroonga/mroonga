@@ -15971,10 +15971,7 @@ int ha_mroonga::storage_rename_foreign_key(MRN_SHARE* tmp_share,
     }
     mrn::IndexColumnName to_index_column_name(to_table_name,
                                               column_name.c_str());
-    rc = grn_column_rename(ctx,
-                           ref_column,
-                           to_index_column_name.c_str(),
-                           to_index_column_name.length());
+    rc = mrn::grn::column_rename(ctx, ref_column, to_index_column_name.view());
     if (rc != GRN_SUCCESS) {
       error = ER_CANT_OPEN_FILE;
       my_message(error, ctx->errbuf, MYF(0));
@@ -18054,7 +18051,10 @@ bool ha_mroonga::storage_inplace_alter_table_rename_column(
                                       table_obj,
                                       std::string_view(FIELD_NAME(old_field)));
     if (column_obj) {
-      grn_column_rename(ctx, column_obj, new_field_name, new_field_name_length);
+      mrn::grn::column_rename(
+        ctx,
+        column_obj,
+        std::string_view(new_field_name, new_field_name_length));
       if (ctx->rc) {
         int error = ER_WRONG_COLUMN_NAME;
         my_message(error, ctx->errbuf, MYF(0));

@@ -101,6 +101,15 @@ namespace mrn {
                               static_cast<unsigned int>(name.size()));
     }
 
+    inline grn_rc
+    column_rename(grn_ctx* ctx, grn_obj* column, std::string_view name)
+    {
+      return grn_column_rename(ctx,
+                               column,
+                               name.data(),
+                               static_cast<unsigned int>(name.size()));
+    }
+
     inline grn_obj*
     obj_column(grn_ctx* ctx, grn_obj* table, std::string_view name)
     {
