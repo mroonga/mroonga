@@ -7293,7 +7293,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
     unique_indexes_are_processed = true;
 
     char* pkey;
-    int pkey_size;
+    uint pkey_size;
     GRN_BULK_REWIND(&key_buffer);
     if (pkey_nr == MAX_INDEXES) {
       pkey = NULL;
@@ -7308,7 +7308,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
         }
         generic_store_bulk(pkey_field, &key_buffer);
         pkey = GRN_TEXT_VALUE(&key_buffer);
-        pkey_size = GRN_TEXT_LEN(&key_buffer);
+        pkey_size = static_cast<uint>(GRN_TEXT_LEN(&key_buffer));
       } else {
         mrn_change_encoding(ctx, NULL);
         uchar key[MRN_MAX_KEY_SIZE];
@@ -7319,7 +7319,7 @@ int ha_mroonga::storage_write_row(mrn_write_row_buf_t buf)
                                            key,
                                            key_info->key_length,
                                            (uchar*)pkey,
-                                           (uint*)&pkey_size);
+                                           &pkey_size);
       }
     }
 
@@ -7607,7 +7607,8 @@ int ha_mroonga::storage_write_row_unique_index(const uchar* buf,
                                                grn_id* key_id)
 {
   char* ukey = NULL;
-  int error, ukey_size = 0;
+  int error;
+  uint ukey_size = 0;
   MRN_DBUG_ENTER_METHOD();
   GRN_BULK_REWIND(&key_buffer);
   if (KEY_N_KEY_PARTS(key_info) == 1) {
@@ -7618,7 +7619,7 @@ int ha_mroonga::storage_write_row_unique_index(const uchar* buf,
     }
     generic_store_bulk(ukey_field, &key_buffer);
     ukey = GRN_TEXT_VALUE(&key_buffer);
-    ukey_size = GRN_TEXT_LEN(&key_buffer);
+    ukey_size = static_cast<uint>(GRN_TEXT_LEN(&key_buffer));
   } else {
     mrn_change_encoding(ctx, NULL);
     uchar key[MRN_MAX_KEY_SIZE];
@@ -7634,7 +7635,7 @@ int ha_mroonga::storage_write_row_unique_index(const uchar* buf,
                                        key,
                                        key_info->key_length,
                                        (uchar*)(ukey),
-                                       (uint*)&ukey_size);
+                                       &ukey_size);
   }
 
   int added;
@@ -8756,7 +8757,7 @@ int ha_mroonga::storage_prepare_delete_row_unique_index(const uchar* buf,
     GRN_BULK_REWIND(&key_buffer);
     grn_obj_get_value(ctx, index_column, record_id, &key_buffer);
     ukey = GRN_TEXT_VALUE(&key_buffer);
-    ukey_size = GRN_TEXT_LEN(&key_buffer);
+    ukey_size = static_cast<uint32>(GRN_TEXT_LEN(&key_buffer));
   } else {
     mrn_change_encoding(ctx, NULL);
     uchar key[MRN_MAX_KEY_SIZE];
