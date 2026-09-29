@@ -11871,8 +11871,8 @@ bool ha_mroonga::is_grn_zero_column_value(grn_obj* column, grn_obj* value)
   }
 
   char* bytes = GRN_BULK_HEAD(value);
-  unsigned int size = GRN_BULK_VSIZE(value);
-  for (unsigned int i = 0; i < size; ++i) {
+  size_t size = GRN_BULK_VSIZE(value);
+  for (size_t i = 0; i < size; ++i) {
     if (bytes[i] != '\0') {
       DBUG_RETURN(false);
     }
@@ -13218,7 +13218,7 @@ void ha_mroonga::storage_store_field_column(Field* field,
 
       grn_obj unvectored_value;
       GRN_TEXT_INIT(&unvectored_value, 0);
-      int n_ids = GRN_RECORD_VECTOR_SIZE(value);
+      size_t n_ids = GRN_RECORD_VECTOR_SIZE(value);
       if (grn_obj_is_table_with_key(ctx, range)) {
         grn_obj* tokenizer =
           grn_obj_get_info(ctx, range, GRN_INFO_DEFAULT_TOKENIZER, NULL);
@@ -13231,7 +13231,7 @@ void ha_mroonga::storage_store_field_column(Field* field,
         } else {
           GRN_VALUE_FIX_SIZE_INIT(&key_buffer, 0, range->header.domain);
         }
-        for (int i = 0; i < n_ids; i++) {
+        for (size_t i = 0; i < n_ids; i++) {
           grn_id id = GRN_RECORD_VALUE_AT(value, i);
           if (i > 0) {
             if (tokenizer) {
@@ -13262,7 +13262,7 @@ void ha_mroonga::storage_store_field_column(Field* field,
                             GRN_TEXT_LEN(&unvectored_value));
       } else {
         GRN_TEXT_PUTS(ctx, &unvectored_value, "[");
-        for (int i = 0; i < n_ids; i++) {
+        for (size_t i = 0; i < n_ids; i++) {
           grn_id id = GRN_RECORD_VALUE_AT(value, i);
           if (i > 0) {
             GRN_TEXT_PUTS(ctx, &unvectored_value, ",");
