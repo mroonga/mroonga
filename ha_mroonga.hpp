@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2010  Tetsuro IKEDA
   Copyright (C) 2010-2013  Kentoku SHIBA
-  Copyright (C) 2011-2025  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1027,51 +1027,59 @@ private:
 
   void storage_store_field_string(Field* field,
                                   const char* value,
-                                  uint value_length);
+                                  size_t value_length);
   void storage_store_field_integer(Field* field,
                                    const char* value,
-                                   uint value_length);
+                                   size_t value_length);
   void storage_store_field_unsigned_integer(Field* field,
                                             const char* value,
-                                            uint value_length);
-  void
-  storage_store_field_float(Field* field, const char* value, uint value_length);
+                                            size_t value_length);
+  void storage_store_field_float(Field* field,
+                                 const char* value,
+                                 size_t value_length);
   void storage_store_field_timestamp(Field* field,
                                      const char* value,
-                                     uint value_length);
-  void
-  storage_store_field_date(Field* field, const char* value, uint value_length);
-  void
-  storage_store_field_time(Field* field, const char* value, uint value_length);
+                                     size_t value_length);
+  void storage_store_field_date(Field* field,
+                                const char* value,
+                                size_t value_length);
+  void storage_store_field_time(Field* field,
+                                const char* value,
+                                size_t value_length);
   void storage_store_field_datetime(Field* field,
                                     const char* value,
-                                    uint value_length);
-  void
-  storage_store_field_year(Field* field, const char* value, uint value_length);
+                                    size_t value_length);
+  void storage_store_field_year(Field* field,
+                                const char* value,
+                                size_t value_length);
   void storage_store_field_new_date(Field* field,
                                     const char* value,
-                                    uint value_length);
+                                    size_t value_length);
   void storage_store_field_datetime2(Field* field,
                                      const char* value,
-                                     uint value_length);
-  void
-  storage_store_field_time2(Field* field, const char* value, uint value_length);
-  void
-  storage_store_field_blob(Field* field, const char* value, uint value_length);
+                                     size_t value_length);
+  void storage_store_field_time2(Field* field,
+                                 const char* value,
+                                 size_t value_length);
+  void storage_store_field_blob(Field* field,
+                                const char* value,
+                                size_t value_length);
 #ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
   void storage_store_field_blob_compressed(Field* field,
                                            const char* value,
-                                           uint value_length);
+                                           size_t value_length);
 #endif
   bool geo_need_reverse(Field_geom* field);
   void storage_store_field_geometry(Field* field,
                                     const char* value,
-                                    uint value_length);
+                                    size_t value_length);
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
-  void
-  storage_store_field_json(Field* field, const char* value, uint value_length);
+  void storage_store_field_json(Field* field,
+                                const char* value,
+                                size_t value_length);
 #endif
-  void storage_store_field(Field* field, const char* value, uint value_length);
+  void
+  storage_store_field(Field* field, const char* value, size_t value_length);
   void
   storage_get_column_value(int nth_column, grn_id record_id, grn_obj* value);
   void storage_store_field_column(Field* field,

@@ -12689,7 +12689,7 @@ int ha_mroonga::generic_store_bulk(Field* field, grn_obj* buf)
 
 void ha_mroonga::storage_store_field_string(Field* field,
                                             const char* value,
-                                            uint value_length)
+                                            size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   field->store(value, value_length, field->charset());
@@ -12698,7 +12698,7 @@ void ha_mroonga::storage_store_field_string(Field* field,
 
 void ha_mroonga::storage_store_field_integer(Field* field,
                                              const char* value,
-                                             uint value_length)
+                                             size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   Field_num* field_num = static_cast<Field_num*>(field);
@@ -12758,7 +12758,7 @@ void ha_mroonga::storage_store_field_integer(Field* field,
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message,
              MRN_MESSAGE_BUFFER_SIZE,
-             "unknown integer value size: <%d>: "
+             "unknown integer value size: <%zu>: "
              "available sizes: [1, 2, 4, 8]",
              value_length);
     push_warning(ha_thd(),
@@ -12774,7 +12774,7 @@ void ha_mroonga::storage_store_field_integer(Field* field,
 
 void ha_mroonga::storage_store_field_unsigned_integer(Field* field,
                                                       const char* value,
-                                                      uint value_length)
+                                                      size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   switch (value_length) {
@@ -12808,7 +12808,7 @@ void ha_mroonga::storage_store_field_unsigned_integer(Field* field,
     char error_message[MRN_MESSAGE_BUFFER_SIZE];
     snprintf(error_message,
              MRN_MESSAGE_BUFFER_SIZE,
-             "unknown integer value size: <%d>: "
+             "unknown integer value size: <%zu>: "
              "available sizes: [1, 2, 4, 8]",
              value_length);
     push_warning(ha_thd(),
@@ -12824,7 +12824,7 @@ void ha_mroonga::storage_store_field_unsigned_integer(Field* field,
 
 void ha_mroonga::storage_store_field_float(Field* field,
                                            const char* value,
-                                           uint value_length)
+                                           size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   double field_value;
@@ -12835,7 +12835,7 @@ void ha_mroonga::storage_store_field_float(Field* field,
 
 void ha_mroonga::storage_store_field_timestamp(Field* field,
                                                const char* value,
-                                               uint value_length)
+                                               size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12863,7 +12863,7 @@ void ha_mroonga::storage_store_field_timestamp(Field* field,
 
 void ha_mroonga::storage_store_field_date(Field* field,
                                           const char* value,
-                                          uint value_length)
+                                          size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12881,7 +12881,7 @@ void ha_mroonga::storage_store_field_date(Field* field,
 
 void ha_mroonga::storage_store_field_time(Field* field,
                                           const char* value,
-                                          uint value_length)
+                                          size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12896,7 +12896,7 @@ void ha_mroonga::storage_store_field_time(Field* field,
 
 void ha_mroonga::storage_store_field_datetime(Field* field,
                                               const char* value,
-                                              uint value_length)
+                                              size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12911,7 +12911,7 @@ void ha_mroonga::storage_store_field_datetime(Field* field,
 
 void ha_mroonga::storage_store_field_year(Field* field,
                                           const char* value,
-                                          uint value_length)
+                                          size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12927,7 +12927,7 @@ void ha_mroonga::storage_store_field_year(Field* field,
 
 void ha_mroonga::storage_store_field_new_date(Field* field,
                                               const char* value,
-                                              uint value_length)
+                                              size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12942,7 +12942,7 @@ void ha_mroonga::storage_store_field_new_date(Field* field,
 
 void ha_mroonga::storage_store_field_datetime2(Field* field,
                                                const char* value,
-                                               uint value_length)
+                                               size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12957,7 +12957,7 @@ void ha_mroonga::storage_store_field_datetime2(Field* field,
 
 void ha_mroonga::storage_store_field_time2(Field* field,
                                            const char* value,
-                                           uint value_length)
+                                           size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   long long int time = *((long long int*)value);
@@ -12973,7 +12973,7 @@ void ha_mroonga::storage_store_field_time2(Field* field,
 
 void ha_mroonga::storage_store_field_blob(Field* field,
                                           const char* value,
-                                          uint value_length)
+                                          size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   Field_blob* blob = (Field_blob*)field;
@@ -12987,7 +12987,7 @@ void ha_mroonga::storage_store_field_blob(Field* field,
 #ifdef MRN_HAVE_MYSQL_TYPE_BLOB_COMPRESSED
 void ha_mroonga::storage_store_field_blob_compressed(Field* field,
                                                      const char* value,
-                                                     uint value_length)
+                                                     size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   Field_blob* blob = static_cast<Field_blob*>(field);
@@ -13020,7 +13020,7 @@ bool ha_mroonga::geo_need_reverse(Field_geom* field)
 
 void ha_mroonga::storage_store_field_geometry(Field* field,
                                               const char* value,
-                                              uint value_length)
+                                              size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
 #ifdef MRN_HAVE_SPATIAL
@@ -13061,7 +13061,7 @@ void ha_mroonga::storage_store_field_geometry(Field* field,
 #ifdef MRN_HAVE_MYSQL_TYPE_JSON
 void ha_mroonga::storage_store_field_json(Field* field,
                                           const char* value,
-                                          uint value_length)
+                                          size_t value_length)
 {
   MRN_DBUG_ENTER_METHOD();
   Field_json* json = static_cast<Field_json*>(field);
@@ -13072,7 +13072,7 @@ void ha_mroonga::storage_store_field_json(Field* field,
 
 void ha_mroonga::storage_store_field(Field* field,
                                      const char* value,
-                                     uint value_length)
+                                     size_t value_length)
 {
   field->set_notnull();
   switch (field->real_type()) {
