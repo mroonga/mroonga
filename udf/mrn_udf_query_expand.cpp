@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -29,21 +29,21 @@
 #include <mrn_current_thread.hpp>
 #include <mrn_query_parser.hpp>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
 namespace mrn {
   struct QueryExpandInfo {
-    grn_ctx *ctx;
+    grn_ctx* ctx;
     grn_obj expanded_query;
-    grn_obj *term_column;
-    grn_obj *expanded_term_column;
+    grn_obj* term_column;
+    grn_obj* expanded_term_column;
   };
-}
+} // namespace mrn
 
-static void mrn_query_expand_info_free(mrn::QueryExpandInfo *info)
+static void mrn_query_expand_info_free(mrn::QueryExpandInfo* info)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
@@ -66,18 +66,17 @@ static void mrn_query_expand_info_free(mrn::QueryExpandInfo *info)
   DBUG_VOID_RETURN;
 }
 
-MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
-                                          UDF_ARGS *args,
-                                          char *message)
+MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT* init,
+                                           UDF_ARGS* args,
+                                           char* message)
 {
-  mrn::QueryExpandInfo *info = NULL;
+  mrn::QueryExpandInfo* info = NULL;
 
   MRN_DBUG_ENTER_FUNCTION();
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_query_expand(): Mroonga isn't initialized");
@@ -117,27 +116,29 @@ MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
 
   init->maybe_null = 1;
 
-  info = static_cast<mrn::QueryExpandInfo *>(
-    mrn_my_malloc(sizeof(mrn::QueryExpandInfo),
-                  MYF(MY_WME | MY_ZEROFILL)));
+  info = static_cast<mrn::QueryExpandInfo*>(
+    mrn_my_malloc(sizeof(mrn::QueryExpandInfo), MYF(MY_WME | MY_ZEROFILL)));
   if (!info) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_query_expand(): failed to allocate memory");
     goto error;
   }
 
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
     if (!current_db_path) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_query_expand(): no current database");
       goto error;
     }
 
-    mrn::Database *db;
+    mrn::Database* db;
     int error = mrn_db_manager->open(current_db_path, &db);
     if (error != 0) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_query_expand(): failed to open database: %s",
                mrn_db_manager->error_message());
       goto error;
@@ -149,27 +150,27 @@ MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
   GRN_TEXT_INIT(&(info->expanded_query), 0);
 
   {
-    const char *table_name = args->args[0];
+    const char* table_name = args->args[0];
     unsigned int table_name_length = args->lengths[0];
-    grn_obj *table = grn_ctx_get(info->ctx,
-                                 table_name,
-                                 table_name_length);
+    grn_obj* table = grn_ctx_get(info->ctx, table_name, table_name_length);
     if (!table) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_query_expand(): table doesn't exist: <%.*s>",
                static_cast<int>(table_name_length),
                table_name);
       goto error;
     }
 
-    const char *term_column_name = args->args[1];
+    const char* term_column_name = args->args[1];
     unsigned int term_column_name_length = args->lengths[1];
     info->term_column = grn_obj_column(info->ctx,
                                        table,
                                        term_column_name,
                                        term_column_name_length);
     if (!info->term_column) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_query_expand(): term column doesn't exist: <%.*s.%.*s>",
                static_cast<int>(table_name_length),
                table_name,
@@ -178,14 +179,16 @@ MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
       goto error;
     }
 
-    const char *expanded_term_column_name = args->args[2];
+    const char* expanded_term_column_name = args->args[2];
     unsigned int expanded_term_column_name_length = args->lengths[2];
-    info->expanded_term_column = grn_obj_column(info->ctx,
-                                                table,
-                                                expanded_term_column_name,
-                                                expanded_term_column_name_length);
+    info->expanded_term_column =
+      grn_obj_column(info->ctx,
+                     table,
+                     expanded_term_column_name,
+                     expanded_term_column_name_length);
     if (!info->expanded_term_column) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_query_expand(): "
                "expanded term column doesn't exist: <%.*s.%.*s>",
                static_cast<int>(table_name_length),
@@ -196,7 +199,7 @@ MRN_API mrn_bool mroonga_query_expand_init(UDF_INIT *init,
     }
   }
 
-  init->ptr = reinterpret_cast<char *>(info);
+  init->ptr = reinterpret_cast<char*>(info);
 
   DBUG_RETURN(false);
 
@@ -205,19 +208,14 @@ error:
   DBUG_RETURN(true);
 }
 
-static void query_expand(mrn::QueryExpandInfo *info, UDF_ARGS *args)
+static void query_expand(mrn::QueryExpandInfo* info, UDF_ARGS* args)
 {
-  grn_ctx *ctx = info->ctx;
-  const char *query = args->args[3];
+  grn_ctx* ctx = info->ctx;
+  const char* query = args->args[3];
   unsigned int query_length = args->lengths[3];
 
-  mrn::QueryParser query_parser(info->ctx,
-                                current_thd,
-                                NULL,
-                                NULL,
-                                0,
-                                NULL);
-  const char *raw_query;
+  mrn::QueryParser query_parser(info->ctx, current_thd, NULL, NULL, 0, NULL);
+  const char* raw_query;
   size_t raw_query_length;
   grn_operator default_operator;
   grn_expr_flags flags;
@@ -227,10 +225,7 @@ static void query_expand(mrn::QueryExpandInfo *info, UDF_ARGS *args)
                             &raw_query_length,
                             &default_operator,
                             &flags);
-  GRN_TEXT_SET(info->ctx,
-               &(info->expanded_query),
-               query,
-               raw_query - query);
+  GRN_TEXT_SET(info->ctx, &(info->expanded_query), query, raw_query - query);
   grn_expr_syntax_expand_query_by_table(ctx,
                                         raw_query,
                                         raw_query_length,
@@ -240,18 +235,18 @@ static void query_expand(mrn::QueryExpandInfo *info, UDF_ARGS *args)
                                         &(info->expanded_query));
 }
 
-MRN_API char *mroonga_query_expand(UDF_INIT *init,
-                                   UDF_ARGS *args,
-                                   char *result,
-                                   unsigned long *length,
-                                   uchar *is_null,
-                                   uchar *error)
+MRN_API char* mroonga_query_expand(UDF_INIT* init,
+                                   UDF_ARGS* args,
+                                   char* result,
+                                   unsigned long* length,
+                                   uchar* is_null,
+                                   uchar* error)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn::QueryExpandInfo *info =
-    reinterpret_cast<mrn::QueryExpandInfo *>(init->ptr);
-  grn_ctx *ctx = info->ctx;
+  mrn::QueryExpandInfo* info =
+    reinterpret_cast<mrn::QueryExpandInfo*>(init->ptr);
+  grn_ctx* ctx = info->ctx;
 
   if (!args->args[3]) {
     *is_null = 1;
@@ -264,7 +259,8 @@ MRN_API char *mroonga_query_expand(UDF_INIT *init,
 
   if (ctx->rc) {
     char message[MYSQL_ERRMSG_SIZE];
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_query_expand(): "
              "failed to expand: %s",
              ctx->errbuf);
@@ -280,11 +276,11 @@ error:
   DBUG_RETURN(NULL);
 }
 
-MRN_API void mroonga_query_expand_deinit(UDF_INIT *init)
+MRN_API void mroonga_query_expand_deinit(UDF_INIT* init)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  mrn::QueryExpandInfo *info =
-    reinterpret_cast<mrn::QueryExpandInfo *>(init->ptr);
+  mrn::QueryExpandInfo* info =
+    reinterpret_cast<mrn::QueryExpandInfo*>(init->ptr);
   mrn_query_expand_info_free(info);
   DBUG_VOID_RETURN;
 }
