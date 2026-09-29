@@ -49,27 +49,27 @@ typedef struct st_mroonga_share {
   MRN_LONG_TERM_SHARE* long_term_share;
 
   char* table_flags;
-  int table_flags_length;
+  size_t table_flags_length;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   char* engine;
-  int engine_length;
+  size_t engine_length;
 #endif
   char* tokenizer;
-  int tokenizer_length;
+  size_t tokenizer_length;
   char* default_tokenizer;
-  int default_tokenizer_length;
+  size_t default_tokenizer_length;
   char* normalizer;
-  int normalizer_length;
+  size_t normalizer_length;
   char* token_filters;
-  int token_filters_length;
+  size_t token_filters_length;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   plugin_ref plugin;
   handlerton* hton;
 #endif
   char** col_flags;
   char** col_type;
-  uint* col_flags_length;
-  uint* col_type_length;
+  size_t* col_flags_length;
+  size_t* col_type_length;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   uint* wrap_key_nr;
   uint wrap_keys;

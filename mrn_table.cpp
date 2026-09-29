@@ -341,7 +341,7 @@ int mrn_parse_table_param(MRN_SHARE* share, TABLE* table)
 #endif
   {
     const char* params_string_value = NULL;
-    uint params_string_length = 0;
+    size_t params_string_length = 0;
     switch (i) {
 #ifdef WITH_PARTITION_STORAGE_ENGINE
     case 3:
@@ -371,7 +371,7 @@ int mrn_parse_table_param(MRN_SHARE* share, TABLE* table)
       params_string_length = table->s->comment.length;
       DBUG_PRINT("info",
                  ("mroonga comment string=%.*s",
-                  params_string_length,
+                  static_cast<int>(params_string_length),
                   params_string_value));
       break;
     }
@@ -709,7 +709,7 @@ MRN_SHARE* mrn_get_share(const char* table_name, TABLE* table, int* error)
 #ifdef MRN_ENABLE_WRAPPER_MODE
   uint* wrap_key_nr;
 #endif
-  uint *col_flags_length, *col_type_length;
+  size_t *col_flags_length, *col_type_length;
 #ifdef MRN_ENABLE_WRAPPER_MODE
   KEY* wrap_key_info;
   TABLE_SHARE* wrap_table_share;
@@ -738,11 +738,11 @@ MRN_SHARE* mrn_get_share(const char* table_name, TABLE* table, int* error)
                                 &col_flags,
                                 sizeof(char*) * table->s->fields,
                                 &col_flags_length,
-                                sizeof(uint) * table->s->fields,
+                                sizeof(size_t) * table->s->fields,
                                 &col_type,
                                 sizeof(char*) * table->s->fields,
                                 &col_type_length,
-                                sizeof(uint) * table->s->fields,
+                                sizeof(size_t) * table->s->fields,
                                 &wrap_key_nr,
                                 sizeof(*wrap_key_nr) * table->s->keys,
                                 &wrap_key_info,
@@ -759,11 +759,11 @@ MRN_SHARE* mrn_get_share(const char* table_name, TABLE* table, int* error)
                                 &col_flags,
                                 sizeof(char*) * table->s->fields,
                                 &col_flags_length,
-                                sizeof(uint) * table->s->fields,
+                                sizeof(size_t) * table->s->fields,
                                 &col_type,
                                 sizeof(char*) * table->s->fields,
                                 &col_type_length,
-                                sizeof(uint) * table->s->fields,
+                                sizeof(size_t) * table->s->fields,
                                 NullS))
 #endif
     ) {
