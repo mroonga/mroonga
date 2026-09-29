@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010  Tetsuro IKEDA
-  Copyright(C) 2010-2013  Kentoku SHIBA
-  Copyright(C) 2011-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -39,13 +39,12 @@
 #  include <mysql/service_plugin_registry.h>
 #endif
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
-struct CommandInfo
-{
-  grn_ctx *ctx;
-  grn_obj *db;
+struct CommandInfo {
+  grn_ctx* ctx;
+  grn_obj* db;
   bool use_shared_db;
   grn_obj command;
   grn_obj result;
@@ -53,15 +52,15 @@ struct CommandInfo
 
 MRN_BEGIN_DECLS
 
-MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
-                                      char *message)
+MRN_API mrn_bool mroonga_command_init(UDF_INIT* init,
+                                      UDF_ARGS* args,
+                                      char* message)
 {
-  CommandInfo *info = NULL;
+  CommandInfo* info = NULL;
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_command(): Mroonga isn't initialized");
@@ -96,7 +95,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                    MYSQL_ERRMSG_SIZE,
                    MYSQL_ERRMSG_SIZE,
                    "mroonga_command(): Argument must be string: <%g>",
-                   *reinterpret_cast<double *>(args->args[i]));
+                   *reinterpret_cast<double*>(args->args[i]));
       goto error;
       break;
     case INT_RESULT:
@@ -104,7 +103,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                    MYSQL_ERRMSG_SIZE,
                    MYSQL_ERRMSG_SIZE,
                    "mroonga_command(): Argument must be string: <%lld>",
-                   *reinterpret_cast<longlong *>(args->args[i]));
+                   *reinterpret_cast<longlong*>(args->args[i]));
       goto error;
       break;
     case DECIMAL_RESULT:
@@ -130,8 +129,8 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
   init->maybe_null = 1;
   init->const_item = 0;
 
-  info = static_cast<CommandInfo *>(mrn_my_malloc(sizeof(CommandInfo),
-                                                  MYF(MY_WME | MY_ZEROFILL)));
+  info = static_cast<CommandInfo*>(
+    mrn_my_malloc(sizeof(CommandInfo), MYF(MY_WME | MY_ZEROFILL)));
   if (!info) {
     strcpy(message, "mroonga_command(): out of memory");
     goto error;
@@ -139,14 +138,14 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
 
   info->ctx = mrn_context_pool->pull();
   {
-    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, true);
+    mrn::SlotData* slot_data = mrn_get_slot_data(current_thd, true);
     if (slot_data) {
       slot_data->associated_grn_ctxs.push_back(info->ctx);
     }
   }
 #ifdef MRN_HAVE_UDF_METADATA
   {
-    const char *charset = nullptr;
+    const char* charset = nullptr;
     grn_encoding encoding = GRN_CTX_GET_ENCODING(info->ctx);
     if (encoding == GRN_ENC_DEFAULT) {
       encoding = grn_get_default_encoding();
@@ -171,16 +170,17 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
       break;
     }
     if (charset) {
-      auto *value = const_cast<char *>(charset);
-      my_service<SERVICE_TYPE(mysql_udf_metadata)>
-        service("mysql_udf_metadata", mysql_plugin_registry_acquire());
-      service->result_set(init, "charset", static_cast<void *>(value));
+      auto* value = const_cast<char*>(charset);
+      my_service<SERVICE_TYPE(mysql_udf_metadata)> service(
+        "mysql_udf_metadata",
+        mysql_plugin_registry_acquire());
+      service->result_set(init, "charset", static_cast<void*>(value));
     }
   }
 #endif
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
-    const char *action;
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* action;
     if (current_db_path) {
       action = "open database";
       char encoded_db_path[FN_REFLEN + 1];
@@ -189,7 +189,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
                               encoded_db_path,
                               sizeof(encoded_db_path));
       encoded_db_path[encoded_db_path_length] = '\0';
-      mrn::Database *db;
+      mrn::Database* db;
       int error = mrn_db_manager->open(encoded_db_path, &db);
       if (error == 0) {
         info->db = db->get();
@@ -214,7 +214,7 @@ MRN_API mrn_bool mroonga_command_init(UDF_INIT *init, UDF_ARGS *args,
   GRN_TEXT_INIT(&(info->command), 0);
   GRN_TEXT_INIT(&(info->result), 0);
 
-  init->ptr = reinterpret_cast<char *>(info);
+  init->ptr = reinterpret_cast<char*>(info);
 
   return false;
 
@@ -229,15 +229,15 @@ error:
   return true;
 }
 
-static void mroonga_command_escape_value(grn_ctx *ctx,
-                                         grn_obj *command,
-                                         const char *value,
+static void mroonga_command_escape_value(grn_ctx* ctx,
+                                         grn_obj* command,
+                                         const char* value,
                                          unsigned long value_length)
 {
   GRN_TEXT_PUTC(ctx, command, '"');
 
-  const char *value_current = value;
-  const char *value_end = value_current + value_length;
+  const char* value_current = value;
+  const char* value_end = value_current + value_length;
   while (value_current < value_end) {
     int char_length = grn_charlen(ctx, value_current, value_end);
 
@@ -267,11 +267,15 @@ static void mroonga_command_escape_value(grn_ctx *ctx,
   GRN_TEXT_PUTC(ctx, command, '"');
 }
 
-MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
-                              unsigned long *length, uchar *is_null, uchar *error)
+MRN_API char* mroonga_command(UDF_INIT* init,
+                              UDF_ARGS* args,
+                              char* result,
+                              unsigned long* length,
+                              uchar* is_null,
+                              uchar* error)
 {
-  CommandInfo *info = (CommandInfo *)init->ptr;
-  grn_ctx *ctx = info->ctx;
+  CommandInfo* info = (CommandInfo*)init->ptr;
+  grn_ctx* ctx = info->ctx;
   int flags = 0;
 
   if (!args->args[0]) {
@@ -287,12 +291,12 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
       return NULL;
     }
 
-    const char *name = args->args[i];
+    const char* name = args->args[i];
     unsigned long name_length = args->lengths[i];
     GRN_TEXT_PUTS(ctx, &(info->command), " --");
     GRN_TEXT_PUT(ctx, &(info->command), name, name_length);
 
-    const char *value = args->args[i + 1];
+    const char* value = args->args[i + 1];
     unsigned long value_length = args->lengths[i + 1];
     GRN_TEXT_PUTS(ctx, &(info->command), " ");
     mroonga_command_escape_value(ctx, &(info->command), value, value_length);
@@ -311,7 +315,7 @@ MRN_API char *mroonga_command(UDF_INIT *init, UDF_ARGS *args, char *result,
 
   GRN_BULK_REWIND(&(info->result));
   do {
-    char *buffer;
+    char* buffer;
     unsigned int buffer_length;
     grn_ctx_recv(ctx, &buffer, &buffer_length, &flags);
     if (ctx->rc != GRN_SUCCESS) {
@@ -331,11 +335,11 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_command_deinit(UDF_INIT *init)
+MRN_API void mroonga_command_deinit(UDF_INIT* init)
 {
-  CommandInfo *info = (CommandInfo *)init->ptr;
+  CommandInfo* info = (CommandInfo*)init->ptr;
   if (info) {
-    mrn::SlotData *slot_data = mrn_get_slot_data(current_thd, false);
+    mrn::SlotData* slot_data = mrn_get_slot_data(current_thd, false);
     if (slot_data) {
       slot_data->remove_associated_grn_ctx(info->ctx);
     }
