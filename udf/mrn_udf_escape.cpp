@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2013-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2013-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -26,11 +26,10 @@
 #include <mrn_variables.hpp>
 #include <mrn_context_pool.hpp>
 
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::ContextPool* mrn_context_pool;
 
-struct EscapeInfo
-{
-  grn_ctx *ctx;
+struct EscapeInfo {
+  grn_ctx* ctx;
   bool script_mode;
   grn_obj target_characters;
   grn_obj escaped_value;
@@ -38,16 +37,16 @@ struct EscapeInfo
 
 MRN_BEGIN_DECLS
 
-MRN_API mrn_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
-                                    char *message)
+MRN_API mrn_bool mroonga_escape_init(UDF_INIT* init,
+                                     UDF_ARGS* args,
+                                     char* message)
 {
-  EscapeInfo *info = NULL;
+  EscapeInfo* info = NULL;
   bool script_mode = false;
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_escape(): Mroonga isn't initialized");
@@ -95,8 +94,8 @@ MRN_API mrn_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
 
   init->maybe_null = 1;
 
-  info = static_cast<EscapeInfo *>(mrn_my_malloc(sizeof(EscapeInfo),
-                                                 MYF(MY_WME | MY_ZEROFILL)));
+  info = static_cast<EscapeInfo*>(
+    mrn_my_malloc(sizeof(EscapeInfo), MYF(MY_WME | MY_ZEROFILL)));
   if (!info) {
     strcpy(message, "mroonga_escape(): out of memory");
     goto error;
@@ -107,7 +106,7 @@ MRN_API mrn_bool mroonga_escape_init(UDF_INIT *init, UDF_ARGS *args,
   GRN_TEXT_INIT(&(info->target_characters), 0);
   GRN_TEXT_INIT(&(info->escaped_value), 0);
 
-  init->ptr = reinterpret_cast<char *>(info);
+  init->ptr = reinterpret_cast<char*>(info);
 
   return false;
 
@@ -119,105 +118,103 @@ error:
   return true;
 }
 
-static void escape(EscapeInfo *info, UDF_ARGS *args)
+static void escape(EscapeInfo* info, UDF_ARGS* args)
 {
-  grn_ctx *ctx = info->ctx;
+  grn_ctx* ctx = info->ctx;
 
   GRN_BULK_REWIND(&(info->escaped_value));
   if (info->script_mode) {
     switch (args->arg_type[0]) {
-    case STRING_RESULT:
-      {
-        char *value = args->args[0];
-        unsigned long value_length = args->lengths[0];
-        GRN_TEXT_PUTC(ctx, &(info->escaped_value), '"');
-        if (args->arg_count == 2) {
-          grn_obj special_characters;
-          GRN_TEXT_INIT(&special_characters, 0);
-          GRN_TEXT_PUT(ctx,
-                       &special_characters,
-                       args->args[1],
-                       args->lengths[1]);
-          GRN_TEXT_PUTC(ctx, &special_characters, '\0');
-          grn_expr_syntax_escape(ctx,
-                                 value,
-                                 value_length,
-                                 GRN_TEXT_VALUE(&special_characters),
-                                 '\\',
-                                 &(info->escaped_value));
-          GRN_OBJ_FIN(ctx, &special_characters);
-        } else {
-          const char *special_characters = "\"\\";
-          grn_expr_syntax_escape(ctx,
-                                 value,
-                                 value_length,
-                                 special_characters,
-                                 '\\',
-                                 &(info->escaped_value));
-        }
-        GRN_TEXT_PUTC(ctx, &(info->escaped_value), '"');
+    case STRING_RESULT: {
+      char* value = args->args[0];
+      unsigned long value_length = args->lengths[0];
+      GRN_TEXT_PUTC(ctx, &(info->escaped_value), '"');
+      if (args->arg_count == 2) {
+        grn_obj special_characters;
+        GRN_TEXT_INIT(&special_characters, 0);
+        GRN_TEXT_PUT(ctx, &special_characters, args->args[1], args->lengths[1]);
+        GRN_TEXT_PUTC(ctx, &special_characters, '\0');
+        grn_expr_syntax_escape(ctx,
+                               value,
+                               value_length,
+                               GRN_TEXT_VALUE(&special_characters),
+                               '\\',
+                               &(info->escaped_value));
+        GRN_OBJ_FIN(ctx, &special_characters);
+      } else {
+        const char* special_characters = "\"\\";
+        grn_expr_syntax_escape(ctx,
+                               value,
+                               value_length,
+                               special_characters,
+                               '\\',
+                               &(info->escaped_value));
       }
-      break;
-    case REAL_RESULT:
-      {
-        double value = *reinterpret_cast<double *>(args->args[0]);
-        grn_text_ftoa(ctx, &(info->escaped_value), value);
+      GRN_TEXT_PUTC(ctx, &(info->escaped_value), '"');
+    } break;
+    case REAL_RESULT: {
+      double value = *reinterpret_cast<double*>(args->args[0]);
+      grn_text_ftoa(ctx, &(info->escaped_value), value);
+    } break;
+    case INT_RESULT: {
+      longlong value = *reinterpret_cast<longlong*>(args->args[0]);
+      grn_text_lltoa(ctx, &(info->escaped_value), value);
+    } break;
+    case DECIMAL_RESULT: {
+      grn_obj value_raw;
+      GRN_TEXT_INIT(&value_raw, GRN_OBJ_DO_SHALLOW_COPY);
+      GRN_TEXT_SET(ctx, &value_raw, args->args[0], args->lengths[0]);
+      grn_obj value;
+      GRN_FLOAT_INIT(&value, 0);
+      if (grn_obj_cast(ctx, &value_raw, &value, GRN_FALSE) == GRN_SUCCESS) {
+        grn_text_ftoa(ctx, &(info->escaped_value), GRN_FLOAT_VALUE(&value));
+      } else {
+        GRN_TEXT_PUT(ctx,
+                     &(info->escaped_value),
+                     args->args[0],
+                     args->lengths[0]);
       }
-      break;
-    case INT_RESULT:
-      {
-        longlong value = *reinterpret_cast<longlong *>(args->args[0]);
-        grn_text_lltoa(ctx, &(info->escaped_value), value);
-      }
-      break;
-    case DECIMAL_RESULT:
-      {
-        grn_obj value_raw;
-        GRN_TEXT_INIT(&value_raw, GRN_OBJ_DO_SHALLOW_COPY);
-        GRN_TEXT_SET(ctx, &value_raw, args->args[0], args->lengths[0]);
-        grn_obj value;
-        GRN_FLOAT_INIT(&value, 0);
-        if (grn_obj_cast(ctx, &value_raw, &value, GRN_FALSE) == GRN_SUCCESS) {
-          grn_text_ftoa(ctx, &(info->escaped_value), GRN_FLOAT_VALUE(&value));
-        } else {
-          GRN_TEXT_PUT(ctx,
-                       &(info->escaped_value),
-                       args->args[0],
-                       args->lengths[0]);
-        }
-        GRN_OBJ_FIN(ctx, &value);
-        GRN_OBJ_FIN(ctx, &value_raw);
-      }
-      break;
+      GRN_OBJ_FIN(ctx, &value);
+      GRN_OBJ_FIN(ctx, &value_raw);
+    } break;
     default:
       break;
     }
   } else {
-    char *query = args->args[0];
+    char* query = args->args[0];
     unsigned long query_length = args->lengths[0];
     if (args->arg_count == 2) {
-      char *target_characters = args->args[1];
+      char* target_characters = args->args[1];
       unsigned long target_characters_length = args->lengths[1];
-      GRN_TEXT_PUT(ctx, &(info->target_characters),
+      GRN_TEXT_PUT(ctx,
+                   &(info->target_characters),
                    target_characters,
                    target_characters_length);
       GRN_TEXT_PUTC(ctx, &(info->target_characters), '\0');
-      grn_expr_syntax_escape(ctx, query, query_length,
+      grn_expr_syntax_escape(ctx,
+                             query,
+                             query_length,
                              GRN_TEXT_VALUE(&(info->target_characters)),
                              GRN_QUERY_ESCAPE,
                              &(info->escaped_value));
     } else {
-      grn_expr_syntax_escape_query(ctx, query, query_length,
+      grn_expr_syntax_escape_query(ctx,
+                                   query,
+                                   query_length,
                                    &(info->escaped_value));
     }
   }
 }
 
-MRN_API char *mroonga_escape(UDF_INIT *init, UDF_ARGS *args, char *result,
-                             unsigned long *length, uchar *is_null, uchar *error)
+MRN_API char* mroonga_escape(UDF_INIT* init,
+                             UDF_ARGS* args,
+                             char* result,
+                             unsigned long* length,
+                             uchar* is_null,
+                             uchar* error)
 {
-  EscapeInfo *info = reinterpret_cast<EscapeInfo *>(init->ptr);
-  grn_ctx *ctx = info->ctx;
+  EscapeInfo* info = reinterpret_cast<EscapeInfo*>(init->ptr);
+  grn_ctx* ctx = info->ctx;
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -241,9 +238,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_escape_deinit(UDF_INIT *init)
+MRN_API void mroonga_escape_deinit(UDF_INIT* init)
 {
-  EscapeInfo *info = reinterpret_cast<EscapeInfo *>(init->ptr);
+  EscapeInfo* info = reinterpret_cast<EscapeInfo*>(init->ptr);
   if (info) {
     grn_obj_unlink(info->ctx, &(info->target_characters));
     grn_obj_unlink(info->ctx, &(info->escaped_value));
