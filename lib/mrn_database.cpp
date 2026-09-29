@@ -20,6 +20,7 @@
 #include <mrn_mysql.h>
 
 #include "mrn_database.hpp"
+#include "mrn_grn.hpp"
 #include "mrn_operations.hpp"
 
 // for debug
@@ -87,7 +88,10 @@ namespace mrn {
   bool Database::is_broken_table(const char* name, size_t name_size)
   {
     MRN_DBUG_ENTER_METHOD();
-    grn_id id = grn_hash_get(ctx_, broken_table_names_, name, name_size, NULL);
+    grn_id id = mrn::grn::hash_get(ctx_,
+                                   broken_table_names_,
+                                   std::string_view(name, name_size),
+                                   nullptr);
     DBUG_RETURN(id != GRN_ID_NIL);
   }
 
