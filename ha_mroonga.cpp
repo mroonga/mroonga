@@ -11090,11 +11090,13 @@ int ha_mroonga::drop_indexes_multiple(const char* table_name,
            "%s%s",
            table_name,
            index_table_name_separator);
+  auto index_table_name_prefix_length =
+    static_cast<unsigned int>(strlen(index_table_name_prefix));
   grn_table_cursor* cursor =
     grn_table_cursor_open(ctx,
                           grn_ctx_db(ctx),
                           index_table_name_prefix,
-                          strlen(index_table_name_prefix),
+                          index_table_name_prefix_length,
                           NULL,
                           0,
                           0,
