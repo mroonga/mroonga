@@ -193,7 +193,7 @@ MRN_API char* mroonga_normalize(UDF_INIT* init,
     goto error;
   }
 
-  *length = GRN_TEXT_LEN(&(info->result));
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(&(info->result)));
   return GRN_TEXT_VALUE(&(info->result));
 
 error:
