@@ -42,6 +42,8 @@ repos:
           ?lib/mrn_index_column_name\.hpp|
           ?lib/mrn_multiple_column_key_codec\.cpp|
           ?lib/mrn_operations\.cpp|
+          ?lib/mrn_parameters_parser\.cpp|
+          ?lib/mrn_parameters_parser\.hpp|
           ?mrn_mysql_compat\.h|
           ?mrn_table\.cpp|
           ?mrn_table\.hpp|
