@@ -2613,14 +2613,14 @@ mrn_declare_plugin(MRN_PLUGIN_NAME){MYSQL_STORAGE_ENGINE_PLUGIN,
                                     MRN_PLUGIN_LAST_VALUES},
   i_s_mrn_stats mrn_declare_plugin_end;
 
-static double mrn_get_score_value(grn_obj* score)
+static float mrn_get_score_value(grn_obj* score)
 {
   MRN_DBUG_ENTER_FUNCTION();
-  double score_value;
+  float score_value;
   if (score->header.domain == GRN_DB_FLOAT) {
-    score_value = GRN_FLOAT_VALUE(score);
+    score_value = static_cast<float>(GRN_FLOAT_VALUE(score));
   } else {
-    score_value = (double)GRN_INT32_VALUE(score);
+    score_value = static_cast<float>(GRN_INT32_VALUE(score));
   }
   DBUG_RETURN(score_value);
 }
