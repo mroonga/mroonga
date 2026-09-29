@@ -306,7 +306,7 @@ MRN_API char* mroonga_command(UDF_INIT* init,
 
   grn_ctx_send(ctx,
                GRN_TEXT_VALUE(&(info->command)),
-               GRN_TEXT_LEN(&(info->command)),
+               static_cast<unsigned int>(GRN_TEXT_LEN(&(info->command))),
                0);
   if (ctx->rc != GRN_SUCCESS) {
     MRN_SET_MESSAGE_FROM_CTX(ctx, ER_ERROR_ON_WRITE);
@@ -327,7 +327,7 @@ MRN_API char* mroonga_command(UDF_INIT* init,
     }
   } while (flags & GRN_CTX_MORE);
 
-  *length = GRN_TEXT_LEN(&(info->result));
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(&(info->result)));
   return GRN_TEXT_VALUE(&(info->result));
 
 error:
