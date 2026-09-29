@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2015 Naoya Murakami <naoya@createfield.com>
-  Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015  Naoya Murakami <naoya@createfield.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,32 +30,31 @@
 #include <mrn_variables.hpp>
 #include <mrn_current_thread.hpp>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
 #define DEFAULT_NORMALIZER_NAME "NormalizerAuto"
 
 MRN_BEGIN_DECLS
 
-struct st_mrn_normalize_info
-{
-  grn_ctx *ctx;
-  grn_obj *db;
+struct st_mrn_normalize_info {
+  grn_ctx* ctx;
+  grn_obj* db;
   bool use_shared_db;
-  grn_obj *normalizer;
+  grn_obj* normalizer;
   int flags;
   grn_obj result;
 };
 
-MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
-                                       char *message)
+MRN_API mrn_bool mroonga_normalize_init(UDF_INIT* init,
+                                        UDF_ARGS* args,
+                                        char* message)
 {
-  st_mrn_normalize_info *info = NULL;
+  st_mrn_normalize_info* info = NULL;
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_normalize(): Mroonga isn't initialized");
@@ -84,8 +83,8 @@ MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
 
   init->maybe_null = 1;
 
-  info = (st_mrn_normalize_info *)mrn_my_malloc(sizeof(st_mrn_normalize_info),
-                                                MYF(MY_WME | MY_ZEROFILL));
+  info = (st_mrn_normalize_info*)mrn_my_malloc(sizeof(st_mrn_normalize_info),
+                                               MYF(MY_WME | MY_ZEROFILL));
   if (!info) {
     strcpy(message, "mroonga_normalize(): out of memory");
     goto error;
@@ -93,11 +92,11 @@ MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
 
   info->ctx = mrn_context_pool->pull();
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
-    const char *action;
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* action;
     if (current_db_path) {
       action = "open database";
-      mrn::Database *db;
+      mrn::Database* db;
       int error = mrn_db_manager->open(current_db_path, &db);
       if (error == 0) {
         info->db = db->get();
@@ -124,8 +123,10 @@ MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
     info->normalizer = grn_ctx_get(info->ctx, args->args[1], args->lengths[1]);
   }
   if (!info->normalizer) {
-    sprintf(message, "mroonga_normalize(): nonexistent normalizer %.*s",
-            (int)args->lengths[1], args->args[1]);
+    sprintf(message,
+            "mroonga_normalize(): nonexistent normalizer %.*s",
+            (int)args->lengths[1],
+            args->args[1]);
     goto error;
   }
   info->flags = 0;
@@ -133,7 +134,7 @@ MRN_API mrn_bool mroonga_normalize_init(UDF_INIT *init, UDF_ARGS *args,
   mrn::encoding::set_raw(info->ctx, system_charset_info);
   GRN_TEXT_INIT(&(info->result), 0);
 
-  init->ptr = (char *)info;
+  init->ptr = (char*)info;
 
   return false;
 
@@ -148,11 +149,15 @@ error:
   return true;
 }
 
-MRN_API char *mroonga_normalize(UDF_INIT *init, UDF_ARGS *args, char *result,
-                                unsigned long *length, uchar *is_null, uchar *error)
+MRN_API char* mroonga_normalize(UDF_INIT* init,
+                                UDF_ARGS* args,
+                                char* result,
+                                unsigned long* length,
+                                uchar* is_null,
+                                uchar* error)
 {
-  st_mrn_normalize_info *info = (st_mrn_normalize_info *)init->ptr;
-  grn_ctx *ctx = info->ctx;
+  st_mrn_normalize_info* info = (st_mrn_normalize_info*)init->ptr;
+  grn_ctx* ctx = info->ctx;
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -161,17 +166,20 @@ MRN_API char *mroonga_normalize(UDF_INIT *init, UDF_ARGS *args, char *result,
 
   GRN_BULK_REWIND(&(info->result));
   {
-    char *target = args->args[0];
+    char* target = args->args[0];
     unsigned int target_length = args->lengths[0];
-    grn_obj *grn_string;
-    const char *normalized;
+    grn_obj* grn_string;
+    const char* normalized;
     unsigned int normalized_length_in_bytes;
     unsigned int normalized_n_characters;
 
     grn_string = grn_string_open(ctx,
-                                 target, target_length,
-                                 info->normalizer, info->flags);
-    grn_string_get_normalized(ctx, grn_string,
+                                 target,
+                                 target_length,
+                                 info->normalizer,
+                                 info->flags);
+    grn_string_get_normalized(ctx,
+                              grn_string,
                               &normalized,
                               &normalized_length_in_bytes,
                               &normalized_n_characters);
@@ -194,9 +202,9 @@ error:
   return NULL;
 }
 
-MRN_API void mroonga_normalize_deinit(UDF_INIT *init)
+MRN_API void mroonga_normalize_deinit(UDF_INIT* init)
 {
-  st_mrn_normalize_info *info = (st_mrn_normalize_info *)init->ptr;
+  st_mrn_normalize_info* info = (st_mrn_normalize_info*)init->ptr;
 
   if (info) {
     GRN_OBJ_FIN(info->ctx, &(info->result));

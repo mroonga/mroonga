@@ -48,6 +48,7 @@ repos:
           ?mrn_table\.cpp|
           ?mrn_table\.hpp|
           ?udf/mrn_udf_command\.cpp|
+          ?udf/mrn_udf_normalize\.cpp|
           ?udf/mrn_udf_snippet_html\.cpp|
           )
   - repo: https://github.com/BlankSpruce/gersemi-pre-commit
