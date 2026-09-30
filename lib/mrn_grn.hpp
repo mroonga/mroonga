@@ -122,6 +122,20 @@ namespace mrn {
                           value);
     }
 
+    inline grn_id hash_add(grn_ctx* ctx,
+                           grn_hash* hash,
+                           std::string_view key,
+                           void** value,
+                           int* added)
+    {
+      return grn_hash_add(ctx,
+                          hash,
+                          key.data(),
+                          static_cast<unsigned int>(key.size()),
+                          value,
+                          added);
+    }
+
     inline grn_obj* snip_open(grn_ctx* ctx,
                               int flags,
                               unsigned int width,
