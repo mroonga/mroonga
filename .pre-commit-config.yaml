@@ -41,6 +41,8 @@ repos:
           ?lib/mrn_database\.hpp|
           ?lib/mrn_database_manager\.cpp|
           ?lib/mrn_database_manager\.hpp|
+          ?lib/mrn_debug_column_access\.cpp|
+          ?lib/mrn_debug_column_access\.hpp|
           ?lib/mrn_grn\.hpp|
           ?lib/mrn_index_column_name\.cpp|
           ?lib/mrn_index_column_name\.hpp|
