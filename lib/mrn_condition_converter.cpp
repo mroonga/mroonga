@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2025  Sutou Kouhei <kou@clear-code.com>
-  Copyright(C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2013-2026  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2021  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1091,11 +1091,12 @@ namespace mrn {
       grn_obj source_ids;
       GRN_RECORD_INIT(&source_ids, GRN_OBJ_VECTOR, GRN_ID_NIL);
       grn_obj_get_info(ctx_, index_column, GRN_INFO_SOURCE, &source_ids);
+      auto n_sections = static_cast<uint>(GRN_RECORD_VECTOR_SIZE(&source_ids));
       QueryParser query_parser(ctx_,
                                thread_,
                                expression,
                                index_column,
-                               GRN_RECORD_VECTOR_SIZE(&source_ids),
+                               n_sections,
                                match_columns);
       query_parser.parse(query->ptr(), query->length());
       GRN_OBJ_FIN(ctx_, &source_ids);
