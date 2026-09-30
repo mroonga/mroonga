@@ -137,7 +137,8 @@ jobs:
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
           Write-Output "TEST_DIR_NAME=${testDirName}" | `
             Out-File -FilePath ${Env:GITHUB_ENV} -Encoding utf8 -Append
-      - uses: actions/cache@v6
+      - uses: actions/cache/restore@v6
+        id: ccache-restore
         with:
           path: ${{ env.CCACHE_DIR }}
           key: windows-ccache-${{ env.MARIADB_VERSION }}-${{ env.VC_ARCHITECTURE }}-${{ matrix.use-main || 'no' }}-${{ matrix.embed || 'OFF' }}-${{ hashFiles('mariadb/storage/mroonga/**/*.cpp', 'mariadb/storage/mroonga/**/*.hpp', 'mariadb/storage/mroonga/**/*.h') }}
@@ -252,6 +253,15 @@ jobs:
             --target package ^
             --verbose || exit /B
           ccache --show-stats --verbose
+      # Caches created by pull requests aren't reused.
+      - uses: actions/cache/save@v6
+        if: |
+          !cancelled() &&
+          github.event_name != 'pull_request' &&
+          steps.ccache-restore.outputs.cache-hit != 'true'
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ${{ steps.ccache-restore.outputs.cache-primary-key }}
       - name: Prepare package
         if: steps.install.outcome == 'success'
         run: |
