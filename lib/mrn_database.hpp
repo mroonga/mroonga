@@ -25,24 +25,24 @@
 namespace mrn {
   class Database {
   public:
-    Database(grn_ctx *ctx, grn_obj *db);
+    Database(grn_ctx* ctx, grn_obj* db);
     ~Database(void);
 
     void close();
     grn_rc remove();
-    grn_obj *get();
+    grn_obj* get();
 
     bool is_broken();
-    bool is_broken_table(const char *name, size_t name_size);
-    void mark_table_repaired(const char *name, size_t name_size);
+    bool is_broken_table(const char* name, size_t name_size);
+    void mark_table_repaired(const char* name, size_t name_size);
 
   private:
-    grn_ctx *ctx_;
-    grn_obj *db_;
-    grn_cache *cache_;
-    grn_hash *broken_table_names_;
+    grn_ctx* ctx_;
+    grn_obj* db_;
+    grn_cache* cache_;
+    grn_hash* broken_table_names_;
     bool is_broken_;
   };
-}
+} // namespace mrn
 
 #endif /* MRN_DATABASE_HPP_ */
