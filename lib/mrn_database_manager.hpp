@@ -29,25 +29,25 @@
 namespace mrn {
   class DatabaseManager {
   public:
-    DatabaseManager(grn_ctx *ctx, mysql_mutex_t *mutex);
+    DatabaseManager(grn_ctx* ctx, mysql_mutex_t* mutex);
     ~DatabaseManager(void);
     bool init(void);
-    bool exist(const char *path);
-    int open(const char *path, Database **db);
-    void close(const char *path);
-    bool drop(const char *path);
+    bool exist(const char* path);
+    int open(const char* path, Database** db);
+    void close(const char* path);
+    bool drop(const char* path);
     int clear(void);
-    const char *error_message();
+    const char* error_message();
 
   private:
-    grn_ctx *ctx_;
-    grn_hash *cache_;
-    mysql_mutex_t *mutex_;
+    grn_ctx* ctx_;
+    grn_hash* cache_;
+    mysql_mutex_t* mutex_;
 
-    void mkdir_p(const char *directory);
+    void mkdir_p(const char* directory);
     void ensure_database_directory(void);
-    int ensure_normalizers_registered(grn_obj *db);
+    int ensure_normalizers_registered(grn_obj* db);
   };
-}
+} // namespace mrn
 
 #endif /* MRN_DATABASE_MANAGER_HPP_ */
