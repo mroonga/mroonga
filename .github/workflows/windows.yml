@@ -49,6 +49,11 @@ jobs:
             embed: "ON"
     env:
       CCACHE_DIR: ${{ github.workspace }}\ccache
+      # ccache doesn't remove old cache entries until the cache size
+      # reaches its max size (5GiB by default). We use small max size to
+      # avoid accumulating cache entries for old sources. One build uses
+      # ~0.75GB. GitHub Actions has 10GB cache limit.
+      CCACHE_MAXSIZE: "1G"
       PACKAGE_PLATFORM: "winx64"
       VC_ARCHITECTURE: "x64"
       # Use -DMYSQL_MAINTAINER_MODE=ERR like MariaDB's buildbot.
