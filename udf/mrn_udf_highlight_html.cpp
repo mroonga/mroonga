@@ -23,6 +23,7 @@
 #include <mrn_mysql_compat.h>
 #include <mrn_err.h>
 #include <mrn_encoding.hpp>
+#include <mrn_grn.hpp>
 #include <mrn_windows.hpp>
 #include <mrn_table.hpp>
 #include <mrn_macro.hpp>
@@ -53,9 +54,9 @@ typedef struct st_mrn_highlight_html_info {
   } query_mode;
 
   const char* open_tag;
-  unsigned long open_tag_length;
+  size_t open_tag_length;
   const char* close_tag;
-  unsigned long close_tag_length;
+  size_t close_tag_length;
 } mrn_highlight_html_info;
 
 static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info* info,
@@ -160,11 +161,7 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info* info,
         GRN_BULK_VSIZE(&extracted_keywords) / sizeof(grn_obj*);
       for (size_t i = 0; i < n_keywords; ++i) {
         grn_obj* extracted_keyword = GRN_PTR_VALUE_AT(&extracted_keywords, i);
-        grn_table_add(ctx,
-                      *keywords,
-                      GRN_TEXT_VALUE(extracted_keyword),
-                      GRN_TEXT_LEN(extracted_keyword),
-                      NULL);
+        mrn::grn::table_add(ctx, *keywords, extracted_keyword, nullptr);
         if (ctx->rc != GRN_SUCCESS) {
           if (message) {
             snprintf(message,
@@ -414,7 +411,7 @@ static bool highlight_html(grn_ctx* ctx,
       int n_hits = grn_pat_scan(ctx,
                                 keywords,
                                 target,
-                                target_length,
+                                static_cast<unsigned int>(target_length),
                                 hits,
                                 MAX_N_HITS,
                                 &rest);
@@ -498,7 +495,7 @@ MRN_API char* mroonga_highlight_html(UDF_INIT* init,
     }
   }
 
-  *length = GRN_TEXT_LEN(&(info->result));
+  *length = static_cast<unsigned long>(GRN_TEXT_LEN(&(info->result)));
   DBUG_RETURN(GRN_TEXT_VALUE(&(info->result)));
 
 error:
