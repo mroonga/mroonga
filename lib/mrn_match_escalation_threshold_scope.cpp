@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,13 +21,15 @@
 
 namespace mrn {
   MatchEscalationThresholdScope::MatchEscalationThresholdScope(
-    grn_ctx *ctx, long long int threshold)
-    : ctx_(ctx),
-      original_threshold_(grn_ctx_get_match_escalation_threshold(ctx_)) {
+    grn_ctx* ctx, long long int threshold)
+      : ctx_(ctx),
+        original_threshold_(grn_ctx_get_match_escalation_threshold(ctx_))
+  {
     grn_ctx_set_match_escalation_threshold(ctx_, threshold);
   }
 
-  MatchEscalationThresholdScope::~MatchEscalationThresholdScope() {
+  MatchEscalationThresholdScope::~MatchEscalationThresholdScope()
+  {
     grn_ctx_set_match_escalation_threshold(ctx_, original_threshold_);
   }
-}
+} // namespace mrn
