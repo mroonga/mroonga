@@ -98,7 +98,11 @@ namespace mrn {
   void Database::mark_table_repaired(const char* name, size_t name_size)
   {
     MRN_DBUG_ENTER_METHOD();
-    grn_hash_delete(ctx_, broken_table_names_, name, name_size, NULL);
+    grn_hash_delete(ctx_,
+                    broken_table_names_,
+                    name,
+                    static_cast<unsigned int>(name_size),
+                    nullptr);
     DBUG_VOID_RETURN;
   }
 } // namespace mrn
