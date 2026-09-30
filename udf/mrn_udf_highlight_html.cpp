@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2017-2019 Kouhei Sutou <kou@clear-code.com>
-  Copyright(C) 2022 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -32,41 +32,42 @@
 #include <mrn_query_parser.hpp>
 #include <mrn_current_thread.hpp>
 
-extern mrn::DatabaseManager *mrn_db_manager;
-extern mrn::ContextPool *mrn_context_pool;
+extern mrn::DatabaseManager* mrn_db_manager;
+extern mrn::ContextPool* mrn_context_pool;
 
 MRN_BEGIN_DECLS
 
-typedef struct st_mrn_highlight_html_info
-{
-  grn_ctx *ctx;
-  grn_obj *db;
+typedef struct st_mrn_highlight_html_info {
+  grn_ctx* ctx;
+  grn_obj* db;
   bool use_shared_db;
-  grn_obj *keywords;
+  grn_obj* keywords;
   grn_obj result;
+
   struct {
     bool used;
-    grn_obj *table;
-    grn_obj *default_column;
+    grn_obj* table;
+    grn_obj* default_column;
     const char* query;
     unsigned long query_length;
   } query_mode;
-  const char *open_tag;
+
+  const char* open_tag;
   unsigned long open_tag_length;
-  const char *close_tag;
+  const char* close_tag;
   unsigned long close_tag_length;
 } mrn_highlight_html_info;
 
-static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
-                                           UDF_ARGS *args,
-                                           char *message,
-                                           grn_obj **keywords)
+static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info* info,
+                                           UDF_ARGS* args,
+                                           char* message,
+                                           grn_obj** keywords)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  grn_ctx *ctx = info->ctx;
-  const char *normalizer_name = "NormalizerAuto";
-  grn_obj *expr = NULL;
+  grn_ctx* ctx = info->ctx;
+  const char* normalizer_name = "NormalizerAuto";
+  grn_obj* expr = NULL;
 
   *keywords = NULL;
 
@@ -75,13 +76,17 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
     normalizer_name = NULL;
   }
 
-  *keywords = grn_table_create(ctx, NULL, 0, NULL,
+  *keywords = grn_table_create(ctx,
+                               NULL,
+                               0,
+                               NULL,
                                GRN_OBJ_TABLE_PAT_KEY,
                                grn_ctx_at(ctx, GRN_DB_SHORT_TEXT),
                                NULL);
   if (ctx->rc != GRN_SUCCESS) {
     if (message) {
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_highlight_html(): "
                "failed to create grn_pat for keywords: <%s>",
                ctx->errbuf);
@@ -97,27 +102,29 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
 
   if (info->query_mode.used) {
     if (!info->query_mode.table) {
-      grn_obj *short_text;
+      grn_obj* short_text;
       short_text = grn_ctx_at(info->ctx, GRN_DB_SHORT_TEXT);
       info->query_mode.table = grn_table_create(info->ctx,
-                                                NULL, 0, NULL,
+                                                NULL,
+                                                0,
+                                                NULL,
                                                 GRN_TABLE_HASH_KEY,
                                                 short_text,
                                                 NULL);
     }
     if (!info->query_mode.default_column) {
-      info->query_mode.default_column =
-        grn_obj_column(info->ctx,
-                       info->query_mode.table,
-                       GRN_COLUMN_NAME_KEY,
-                       GRN_COLUMN_NAME_KEY_LEN);
+      info->query_mode.default_column = grn_obj_column(info->ctx,
+                                                       info->query_mode.table,
+                                                       GRN_COLUMN_NAME_KEY,
+                                                       GRN_COLUMN_NAME_KEY_LEN);
     }
 
-    grn_obj *record = NULL;
+    grn_obj* record = NULL;
     GRN_EXPR_CREATE_FOR_QUERY(info->ctx, info->query_mode.table, expr, record);
     if (!expr) {
       if (message) {
-        snprintf(message, MYSQL_ERRMSG_SIZE,
+        snprintf(message,
+                 MYSQL_ERRMSG_SIZE,
                  "mroonga_highlight_html(): "
                  "failed to create expression: <%s>",
                  ctx->errbuf);
@@ -131,10 +138,12 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
                                   info->query_mode.default_column,
                                   0,
                                   NULL);
-    grn_rc rc = query_parser.parse(info->query_mode.query, info->query_mode.query_length);
+    grn_rc rc =
+      query_parser.parse(info->query_mode.query, info->query_mode.query_length);
     if (rc != GRN_SUCCESS) {
       if (message) {
-        snprintf(message, MYSQL_ERRMSG_SIZE,
+        snprintf(message,
+                 MYSQL_ERRMSG_SIZE,
                  "mroonga_highlight_html(): "
                  "failed to parse query: <%s>",
                  ctx->errbuf);
@@ -148,9 +157,9 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       grn_expr_get_keywords(ctx, expr, &extracted_keywords);
 
       size_t n_keywords =
-        GRN_BULK_VSIZE(&extracted_keywords) / sizeof(grn_obj *);
+        GRN_BULK_VSIZE(&extracted_keywords) / sizeof(grn_obj*);
       for (size_t i = 0; i < n_keywords; ++i) {
-        grn_obj *extracted_keyword = GRN_PTR_VALUE_AT(&extracted_keywords, i);
+        grn_obj* extracted_keyword = GRN_PTR_VALUE_AT(&extracted_keywords, i);
         grn_table_add(ctx,
                       *keywords,
                       GRN_TEXT_VALUE(extracted_keyword),
@@ -158,7 +167,8 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
                       NULL);
         if (ctx->rc != GRN_SUCCESS) {
           if (message) {
-            snprintf(message, MYSQL_ERRMSG_SIZE,
+            snprintf(message,
+                     MYSQL_ERRMSG_SIZE,
                      "mroonga_highlight_html(): "
                      "failed to add a keyword: <%.*s>: <%s>",
                      static_cast<int>(GRN_TEXT_LEN(extracted_keyword)),
@@ -179,7 +189,7 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
       if (!args->args[i]) {
         continue;
       }
-      auto *attribute = args->attributes[i];
+      auto* attribute = args->attributes[i];
       auto attribute_length = args->attribute_lengths[i];
       if (attribute_length == strlen("open_tag") &&
           strncmp(attribute, "open_tag", strlen("open_tag")) == 0) {
@@ -189,14 +199,11 @@ static mrn_bool mrn_highlight_html_prepare(mrn_highlight_html_info *info,
           strncmp(attribute, "close_tag", strlen("close_tag")) == 0) {
         continue;
       }
-      grn_table_add(ctx,
-                    *keywords,
-                    args->args[i],
-                    args->lengths[i],
-                    NULL);
+      grn_table_add(ctx, *keywords, args->args[i], args->lengths[i], NULL);
       if (ctx->rc != GRN_SUCCESS) {
         if (message) {
-          snprintf(message, MYSQL_ERRMSG_SIZE,
+          snprintf(message,
+                   MYSQL_ERRMSG_SIZE,
                    "mroonga_highlight_html(): "
                    "failed to add a keyword: <%.*s>: <%s>",
                    static_cast<int>(args->lengths[i]),
@@ -221,18 +228,17 @@ error:
   DBUG_RETURN(true);
 }
 
-MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
-                                             UDF_ARGS *args,
-                                             char *message)
+MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT* init,
+                                             UDF_ARGS* args,
+                                             char* message)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_highlight_html_info *info = NULL;
+  mrn_highlight_html_info* info = NULL;
 
   init->ptr = NULL;
 
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
              "mroonga_highlight_html(): Mroonga isn't initialized");
@@ -240,12 +246,12 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   }
 
   if (args->arg_count < 1) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_highlight_html(): wrong number of arguments: %u for 1+",
              args->arg_count);
     goto error;
   }
-
 
   for (unsigned int i = 0; i < args->arg_count; ++i) {
     switch (args->arg_type[i]) {
@@ -253,21 +259,26 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
       /* OK */
       break;
     case REAL_RESULT:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_highlight_html(): all arguments must be string: "
                "<%u>=<%g>",
-               i, *((double *)(args->args[i])));
+               i,
+               *((double*)(args->args[i])));
       goto error;
       break;
     case INT_RESULT:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_highlight_html(): all arguments must be string: "
                "<%u>=<%lld>",
-               i, *((longlong *)(args->args[i])));
+               i,
+               *((longlong*)(args->args[i])));
       goto error;
       break;
     default:
-      snprintf(message, MYSQL_ERRMSG_SIZE,
+      snprintf(message,
+               MYSQL_ERRMSG_SIZE,
                "mroonga_highlight_html(): all arguments must be string: <%u>",
                i);
       goto error;
@@ -277,23 +288,22 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
 
   init->maybe_null = 0;
 
-  info =
-    reinterpret_cast<mrn_highlight_html_info *>(
-      mrn_my_malloc(sizeof(mrn_highlight_html_info),
-                    MYF(MY_WME | MY_ZEROFILL)));
+  info = reinterpret_cast<mrn_highlight_html_info*>(
+    mrn_my_malloc(sizeof(mrn_highlight_html_info), MYF(MY_WME | MY_ZEROFILL)));
   if (!info) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
+    snprintf(message,
+             MYSQL_ERRMSG_SIZE,
              "mroonga_highlight_html(): failed to allocate memory");
     goto error;
   }
 
   info->ctx = mrn_context_pool->pull();
   {
-    const char *current_db_path = MRN_THD_DB_PATH(current_thd);
-    const char *action;
+    const char* current_db_path = MRN_THD_DB_PATH(current_thd);
+    const char* action;
     if (current_db_path) {
       action = "open database";
-      mrn::Database *db;
+      mrn::Database* db;
       int error = mrn_db_manager->open(current_db_path, &db);
       if (error == 0) {
         info->db = db->get();
@@ -317,7 +327,7 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
   info->query_mode.used = false;
 
   for (unsigned int i = 1; i < args->arg_count; i++) {
-    auto *attribute = args->attributes[i];
+    auto* attribute = args->attributes[i];
     auto attribute_length = args->attribute_lengths[i];
     if (args->attribute_lengths[i] == strlen("query") &&
         strncmp(args->attributes[i], "query", strlen("query")) == 0) {
@@ -364,7 +374,7 @@ MRN_API mrn_bool mroonga_highlight_html_init(UDF_INIT *init,
     }
   }
 
-  init->ptr = (char *)info;
+  init->ptr = (char*)info;
 
   DBUG_RETURN(false);
 
@@ -379,25 +389,25 @@ error:
   DBUG_RETURN(true);
 }
 
-static bool highlight_html(grn_ctx *ctx,
-                           grn_pat *keywords,
-                           const char *target,
+static bool highlight_html(grn_ctx* ctx,
+                           grn_pat* keywords,
+                           const char* target,
                            size_t target_length,
-                           mrn_highlight_html_info *info)
+                           mrn_highlight_html_info* info)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
   {
-    const char *open_tag = info->open_tag;
+    const char* open_tag = info->open_tag;
     size_t open_tag_length = info->open_tag_length;
-    const char *close_tag = info->close_tag;
+    const char* close_tag = info->close_tag;
     size_t close_tag_length = info->close_tag_length;
-    grn_obj *output = &(info->result);
+    grn_obj* output = &(info->result);
 
     while (target_length > 0) {
 #define MAX_N_HITS 16
       grn_pat_scan_hit hits[MAX_N_HITS];
-      const char *rest;
+      const char* rest;
       size_t previous = 0;
       size_t chunk_length;
 
@@ -405,7 +415,9 @@ static bool highlight_html(grn_ctx *ctx,
                                 keywords,
                                 target,
                                 target_length,
-                                hits, MAX_N_HITS, &rest);
+                                hits,
+                                MAX_N_HITS,
+                                &rest);
       for (int i = 0; i < n_hits; i++) {
         if ((hits[i].offset - previous) > 0) {
           grn_text_escape_xml(ctx,
@@ -438,20 +450,20 @@ static bool highlight_html(grn_ctx *ctx,
   DBUG_RETURN(true);
 }
 
-MRN_API char *mroonga_highlight_html(UDF_INIT *init,
-                                     UDF_ARGS *args,
-                                     char *result,
-                                     unsigned long *length,
-                                     uchar *is_null,
-                                     uchar *error)
+MRN_API char* mroonga_highlight_html(UDF_INIT* init,
+                                     UDF_ARGS* args,
+                                     char* result,
+                                     unsigned long* length,
+                                     uchar* is_null,
+                                     uchar* error)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_highlight_html_info *info =
-    reinterpret_cast<mrn_highlight_html_info *>(init->ptr);
+  mrn_highlight_html_info* info =
+    reinterpret_cast<mrn_highlight_html_info*>(init->ptr);
 
-  grn_ctx *ctx = info->ctx;
-  grn_obj *keywords = info->keywords;
+  grn_ctx* ctx = info->ctx;
+  grn_obj* keywords = info->keywords;
 
   if (!args->args[0]) {
     *is_null = 1;
@@ -468,7 +480,7 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
   GRN_BULK_REWIND(&(info->result));
 
   if (!highlight_html(ctx,
-                      reinterpret_cast<grn_pat *>(keywords),
+                      reinterpret_cast<grn_pat*>(keywords),
                       args->args[0],
                       args->lengths[0],
                       info)) {
@@ -479,8 +491,10 @@ MRN_API char *mroonga_highlight_html(UDF_INIT *init,
     grn_rc rc = grn_obj_close(ctx, keywords);
     if (rc != GRN_SUCCESS) {
       my_printf_error(ER_MRN_ERROR_FROM_GROONGA_NUM,
-                      ER_MRN_ERROR_FROM_GROONGA_STR, MYF(0), ctx->errbuf);
-        goto error;
+                      ER_MRN_ERROR_FROM_GROONGA_STR,
+                      MYF(0),
+                      ctx->errbuf);
+      goto error;
     }
   }
 
@@ -498,12 +512,12 @@ error:
   DBUG_RETURN(NULL);
 }
 
-MRN_API void mroonga_highlight_html_deinit(UDF_INIT *init)
+MRN_API void mroonga_highlight_html_deinit(UDF_INIT* init)
 {
   MRN_DBUG_ENTER_FUNCTION();
 
-  mrn_highlight_html_info *info =
-    reinterpret_cast<mrn_highlight_html_info *>(init->ptr);
+  mrn_highlight_html_info* info =
+    reinterpret_cast<mrn_highlight_html_info*>(init->ptr);
   if (!info) {
     DBUG_VOID_RETURN;
   }

@@ -49,6 +49,7 @@ repos:
           ?mrn_table\.hpp|
           ?udf/mrn_udf_command\.cpp|
           ?udf/mrn_udf_escape\.cpp|
+          ?udf/mrn_udf_highlight_html\.cpp|
           ?udf/mrn_udf_normalize\.cpp|
           ?udf/mrn_udf_query_expand\.cpp|
           ?udf/mrn_udf_snippet\.cpp|
