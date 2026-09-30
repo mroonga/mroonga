@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kentoku SHIBA
+  Copyright (C) 2012  Kentoku SHIBA
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,15 +24,16 @@
 
 namespace mrn {
   class ExternalLock {
-    THD *thd_;
-    handler *handler_;
+    THD* thd_;
+    handler* handler_;
     int lock_type_;
     int error_;
+
   public:
-    ExternalLock(THD *thd, handler *handler, int lock_type);
+    ExternalLock(THD* thd, handler* handler, int lock_type);
     ~ExternalLock();
     int error();
   };
-}
+} // namespace mrn
 
 #endif // MRN_EXTERNAL_LOCK_HPP_
