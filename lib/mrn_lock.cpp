@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2013-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,17 +20,19 @@
 #include "mrn_lock.hpp"
 
 namespace mrn {
-  Lock::Lock(mysql_mutex_t *mutex, bool execute)
-    : mutex_(mutex),
-      execute_(execute) {
+  Lock::Lock(mysql_mutex_t* mutex, bool execute)
+      : mutex_(mutex),
+        execute_(execute)
+  {
     if (execute_) {
       mysql_mutex_lock(mutex_);
     }
   }
 
-  Lock::~Lock() {
+  Lock::~Lock()
+  {
     if (execute_) {
       mysql_mutex_unlock(mutex_);
     }
   }
-}
+} // namespace mrn
