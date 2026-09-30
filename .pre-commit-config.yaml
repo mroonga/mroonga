@@ -32,6 +32,8 @@ repos:
           (
           ?ha_mroonga\.cpp|
           ?ha_mroonga\.hpp|
+          ?lib/mrn_auto_increment_value_lock\.cpp|
+          ?lib/mrn_auto_increment_value_lock\.hpp|
           ?lib/mrn_column_name\.cpp|
           ?lib/mrn_column_name\.hpp|
           ?lib/mrn_condition_converter\.cpp|

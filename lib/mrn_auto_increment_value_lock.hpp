@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,12 +25,13 @@
 
 namespace mrn {
   class AutoIncrementValueLock {
-    TABLE_SHARE *table_share_;
+    TABLE_SHARE* table_share_;
     bool need_lock_;
+
   public:
-    AutoIncrementValueLock(TABLE_SHARE *table_share);
+    AutoIncrementValueLock(TABLE_SHARE* table_share);
     ~AutoIncrementValueLock();
   };
-}
+} // namespace mrn
 
 #endif // MRN_AUTO_INCREMENT_VALUE_LOCK_HPP_
