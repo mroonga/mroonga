@@ -1,7 +1,7 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2011  Kentoku SHIBA
-  Copyright(C) 2011-2020  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2011  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -26,12 +26,12 @@
 #define MRN_CLASS_NAME "mrn::IndexTableName"
 
 namespace mrn {
-  const char *IndexTableName::SEPARATOR = "#";
-  const char *IndexTableName::OLD_SEPARATOR = "-";
+  const char* IndexTableName::SEPARATOR = "#";
+  const char* IndexTableName::OLD_SEPARATOR = "-";
 
-  bool IndexTableName::is_custom_name(const char *table_name,
+  bool IndexTableName::is_custom_name(const char* table_name,
                                       size_t table_name_length,
-                                      const char *index_table_name,
+                                      const char* index_table_name,
                                       size_t index_table_name_length)
   {
     MRN_DBUG_ENTER_METHOD();
@@ -56,52 +56,58 @@ namespace mrn {
     DBUG_RETURN(false);
   }
 
-  IndexTableName::IndexTableName(const char *table_name,
-                                 const char *mysql_index_name)
-    : table_name_(table_name),
-      table_name_length_(strlen(table_name)),
-      mysql_index_name_(mysql_index_name),
-      mysql_index_name_length_(strlen(mysql_index_name_)) {
+  IndexTableName::IndexTableName(const char* table_name,
+                                 const char* mysql_index_name)
+      : table_name_(table_name),
+        table_name_length_(strlen(table_name)),
+        mysql_index_name_(mysql_index_name),
+        mysql_index_name_length_(strlen(mysql_index_name_))
+  {
     init();
   }
 
-  IndexTableName::IndexTableName(const char *table_name,
-                                 const char *mysql_index_name,
+  IndexTableName::IndexTableName(const char* table_name,
+                                 const char* mysql_index_name,
                                  size_t mysql_index_name_length)
-    : table_name_(table_name),
-      table_name_length_(strlen(table_name)),
-      mysql_index_name_(mysql_index_name),
-      mysql_index_name_length_(mysql_index_name_length) {
+      : table_name_(table_name),
+        table_name_length_(strlen(table_name)),
+        mysql_index_name_(mysql_index_name),
+        mysql_index_name_length_(mysql_index_name_length)
+  {
     init();
   }
 
-  IndexTableName::IndexTableName(const char *table_name,
+  IndexTableName::IndexTableName(const char* table_name,
                                  size_t table_name_length,
-                                 const char *mysql_index_name,
+                                 const char* mysql_index_name,
                                  size_t mysql_index_name_length)
-    : table_name_(table_name),
-      table_name_length_(table_name_length),
-      mysql_index_name_(mysql_index_name),
-      mysql_index_name_length_(mysql_index_name_length) {
+      : table_name_(table_name),
+        table_name_length_(table_name_length),
+        mysql_index_name_(mysql_index_name),
+        mysql_index_name_length_(mysql_index_name_length)
+  {
     init();
   }
 
-  void IndexTableName::init() {
+  void IndexTableName::init()
+  {
     uchar encoded_mysql_index_name_multibyte[MRN_MAX_KEY_SIZE - 1];
-    const uchar *mysql_index_name_multibyte =
-      reinterpret_cast<const uchar *>(mysql_index_name_);
+    const uchar* mysql_index_name_multibyte =
+      reinterpret_cast<const uchar*>(mysql_index_name_);
     encode(encoded_mysql_index_name_multibyte,
            encoded_mysql_index_name_multibyte + MRN_MAX_KEY_SIZE - 1,
            mysql_index_name_multibyte,
            mysql_index_name_multibyte + mysql_index_name_length_);
-    snprintf(old_name_, MRN_MAX_KEY_SIZE,
+    snprintf(old_name_,
+             MRN_MAX_KEY_SIZE,
              "%.*s%s%s",
              static_cast<int>(table_name_length_),
              table_name_,
              OLD_SEPARATOR,
              encoded_mysql_index_name_multibyte);
     old_length_ = strlen(old_name_);
-    snprintf(name_, MRN_MAX_KEY_SIZE,
+    snprintf(name_,
+             MRN_MAX_KEY_SIZE,
              "%.*s%s%s",
              static_cast<int>(table_name_length_),
              table_name_,
@@ -110,41 +116,36 @@ namespace mrn {
     length_ = strlen(name_);
   }
 
-  const char *IndexTableName::c_str() {
-    return name_;
-  }
+  const char* IndexTableName::c_str() { return name_; }
 
-  size_t IndexTableName::length() {
-    return length_;
-  }
+  size_t IndexTableName::length() { return length_; }
 
-  const char *IndexTableName::old_c_str() {
-    return old_name_;
-  }
+  const char* IndexTableName::old_c_str() { return old_name_; }
 
-  size_t IndexTableName::old_length() {
-    return old_length_;
-  }
+  size_t IndexTableName::old_length() { return old_length_; }
 
-  std::string_view IndexTableName::view() {
+  std::string_view IndexTableName::view()
+  {
     return std::string_view(name_, length_);
   }
 
-  std::string_view IndexTableName::old_view() {
+  std::string_view IndexTableName::old_view()
+  {
     return std::string_view(old_name_, old_length_);
   }
 
-  uint IndexTableName::encode(uchar *encoded_start,
-                              uchar *encoded_end,
-                              const uchar *mysql_string_start,
-                              const uchar *mysql_string_end) {
+  uint IndexTableName::encode(uchar* encoded_start,
+                              uchar* encoded_end,
+                              const uchar* mysql_string_start,
+                              const uchar* mysql_string_end)
+  {
     MRN_DBUG_ENTER_METHOD();
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
     my_charset_conv_wc_mb wc_mb = my_charset_filename.cset->wc_mb;
     DBUG_PRINT("info", ("mroonga: in=%s", mysql_string_start));
     encoded_end--;
-    uchar *encoded = encoded_start;
-    const uchar *mysql_string = mysql_string_start;
+    uchar* encoded = encoded_start;
+    const uchar* mysql_string = mysql_string_start;
     while (mysql_string < mysql_string_end && encoded < encoded_end) {
       my_wc_t wc;
       int mb_wc_converted_length;
@@ -170,4 +171,4 @@ namespace mrn {
     DBUG_PRINT("info", ("mroonga: out=%s", encoded_start));
     DBUG_RETURN(encoded - encoded_start);
   }
-}
+} // namespace mrn
