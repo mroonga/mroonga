@@ -17,8 +17,6 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <string.h>
-
 #include "mrn_smart_grn_obj.hpp"
 
 namespace mrn {
@@ -28,9 +26,6 @@ namespace mrn {
       : ctx_(ctx),
         obj_(NULL)
   {
-    if (name_size < 0) {
-      name_size = strlen(name);
-    }
     obj_ = grn_ctx_get(ctx_, name, name_size);
   }
 
