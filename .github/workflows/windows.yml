@@ -66,7 +66,12 @@ jobs:
       - name: Use JST
         run: |
           Set-TimeZone -Id "Tokyo Standard Time"
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+          # The default toolchain setup adds MSYS2's usr\bin to PATH.
+          # It changes perl used by mysql-test-run.pl.
+          windows-toolchain: none
       - name: Install patch
         run: |
           ridk exec pacman --needed --noconfirm --sync patch
