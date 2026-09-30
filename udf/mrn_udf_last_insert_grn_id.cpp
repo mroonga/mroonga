@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2; indent-tabs-mode: nil -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -28,43 +28,39 @@
 
 MRN_BEGIN_DECLS
 
-static
-mrn_bool init_general(UDF_INIT *init,
-                     UDF_ARGS *args,
-                     char *message,
-                     const char *context)
+static mrn_bool
+init_general(UDF_INIT* init, UDF_ARGS* args, char* message, const char* context)
 {
-  if (!mrn_initialized)
-  {
+  if (!mrn_initialized) {
     snprintf(message,
              MYSQL_ERRMSG_SIZE,
-             "%s(): Mroonga isn't initialized", context);
+             "%s(): Mroonga isn't initialized",
+             context);
     return 1;
   }
 
   if (args->arg_count != 0) {
-    snprintf(message, MYSQL_ERRMSG_SIZE,
-             "%s must not have arguments", context);
+    snprintf(message, MYSQL_ERRMSG_SIZE, "%s must not have arguments", context);
     return 1;
   }
   init->maybe_null = 0;
   return 0;
 }
 
-MRN_API mrn_bool mroonga_last_insert_grn_id_init(UDF_INIT *init,
-                                                UDF_ARGS *args,
-                                                char *message)
+MRN_API mrn_bool mroonga_last_insert_grn_id_init(UDF_INIT* init,
+                                                 UDF_ARGS* args,
+                                                 char* message)
 {
   return init_general(init, args, message, "mroonga_last_insert_grn_id");
 }
 
-MRN_API longlong mroonga_last_insert_grn_id(UDF_INIT *init,
-                                            UDF_ARGS *args,
-                                            uchar *is_null,
-                                            uchar *error)
+MRN_API longlong mroonga_last_insert_grn_id(UDF_INIT* init,
+                                            UDF_ARGS* args,
+                                            uchar* is_null,
+                                            uchar* error)
 {
-  THD *thd = current_thd;
-  mrn::SlotData *slot_data = mrn_get_slot_data(thd, false);
+  THD* thd = current_thd;
+  mrn::SlotData* slot_data = mrn_get_slot_data(thd, false);
   if (slot_data == NULL) {
     return 0;
   }
@@ -72,28 +68,26 @@ MRN_API longlong mroonga_last_insert_grn_id(UDF_INIT *init,
   return last_insert_record_id;
 }
 
-MRN_API void mroonga_last_insert_grn_id_deinit(UDF_INIT *init)
-{
-}
+MRN_API void mroonga_last_insert_grn_id_deinit(UDF_INIT* init) {}
 
 /* Deprecated. Use mroonga_last_insert_grn_id instead. */
 
-MRN_API mrn_bool last_insert_grn_id_init(UDF_INIT *init,
-                                        UDF_ARGS *args,
-                                        char *message)
+MRN_API mrn_bool last_insert_grn_id_init(UDF_INIT* init,
+                                         UDF_ARGS* args,
+                                         char* message)
 {
   return init_general(init, args, message, "last_insert_grn_id");
 }
 
-MRN_API longlong last_insert_grn_id(UDF_INIT *init,
-                                    UDF_ARGS *args,
-                                    uchar *is_null,
-                                    uchar *error)
+MRN_API longlong last_insert_grn_id(UDF_INIT* init,
+                                    UDF_ARGS* args,
+                                    uchar* is_null,
+                                    uchar* error)
 {
   return mroonga_last_insert_grn_id(init, args, is_null, error);
 }
 
-MRN_API void last_insert_grn_id_deinit(UDF_INIT *init)
+MRN_API void last_insert_grn_id_deinit(UDF_INIT* init)
 {
   mroonga_last_insert_grn_id_deinit(init);
 }
