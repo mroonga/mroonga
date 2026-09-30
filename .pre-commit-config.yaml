@@ -63,6 +63,7 @@ repos:
           ?udf/mrn_udf_command\.cpp|
           ?udf/mrn_udf_escape\.cpp|
           ?udf/mrn_udf_highlight_html\.cpp|
+          ?udf/mrn_udf_last_insert_grn_id\.cpp|
           ?udf/mrn_udf_normalize\.cpp|
           ?udf/mrn_udf_query_expand\.cpp|
           ?udf/mrn_udf_snippet\.cpp|
