@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2014-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2014-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,16 +23,17 @@
 
 namespace mrn {
   class SmartGrnObj {
-    grn_ctx *ctx_;
-    grn_obj *obj_;
+    grn_ctx* ctx_;
+    grn_obj* obj_;
+
   public:
-    SmartGrnObj(grn_ctx *ctx, grn_obj *obj);
-    SmartGrnObj(grn_ctx *ctx, const char *name, int name_size=-1);
-    SmartGrnObj(grn_ctx *ctx, grn_id id);
+    SmartGrnObj(grn_ctx* ctx, grn_obj* obj);
+    SmartGrnObj(grn_ctx* ctx, const char* name, int name_size = -1);
+    SmartGrnObj(grn_ctx* ctx, grn_id id);
     ~SmartGrnObj();
 
-    void reset(grn_obj *obj);
-    grn_obj *get();
-    grn_obj *release();
+    void reset(grn_obj* obj);
+    grn_obj* get();
+    grn_obj* release();
   };
-}
+} // namespace mrn

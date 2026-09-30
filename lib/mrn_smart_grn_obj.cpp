@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2014-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2014-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,45 +22,45 @@
 #include "mrn_smart_grn_obj.hpp"
 
 namespace mrn {
-  SmartGrnObj::SmartGrnObj(grn_ctx *ctx, grn_obj *obj)
-    : ctx_(ctx),
-      obj_(obj) {
-  }
+  SmartGrnObj::SmartGrnObj(grn_ctx* ctx, grn_obj* obj) : ctx_(ctx), obj_(obj) {}
 
-  SmartGrnObj::SmartGrnObj(grn_ctx *ctx, const char *name, int name_size)
-    : ctx_(ctx),
-      obj_(NULL) {
+  SmartGrnObj::SmartGrnObj(grn_ctx* ctx, const char* name, int name_size)
+      : ctx_(ctx),
+        obj_(NULL)
+  {
     if (name_size < 0) {
       name_size = strlen(name);
     }
     obj_ = grn_ctx_get(ctx_, name, name_size);
   }
 
-  SmartGrnObj::SmartGrnObj(grn_ctx *ctx, grn_id id)
-    : ctx_(ctx),
-      obj_(grn_ctx_at(ctx_, id)) {
+  SmartGrnObj::SmartGrnObj(grn_ctx* ctx, grn_id id)
+      : ctx_(ctx),
+        obj_(grn_ctx_at(ctx_, id))
+  {
   }
 
-  SmartGrnObj::~SmartGrnObj() {
+  SmartGrnObj::~SmartGrnObj()
+  {
     if (obj_) {
       grn_obj_unlink(ctx_, obj_);
     }
   }
 
-  void SmartGrnObj::reset(grn_obj *obj) {
+  void SmartGrnObj::reset(grn_obj* obj)
+  {
     if (obj_) {
       grn_obj_unlink(ctx_, obj_);
     }
     obj_ = obj;
   }
 
-  grn_obj *SmartGrnObj::get() {
-    return obj_;
-  }
+  grn_obj* SmartGrnObj::get() { return obj_; }
 
-  grn_obj *SmartGrnObj::release() {
-    grn_obj *obj = obj_;
+  grn_obj* SmartGrnObj::release()
+  {
+    grn_obj* obj = obj_;
     obj_ = NULL;
     return obj;
   }
-}
+} // namespace mrn
