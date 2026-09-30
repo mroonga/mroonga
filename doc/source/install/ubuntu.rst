@@ -21,7 +21,6 @@ Here are Ubuntu versions that supports MySQL:
 
 Here are Ubuntu versions that supports MariaDB:
 
-* 22.04 Jammy Jellyfish
 * 24.04 Noble Numbat
 
 Groonga APT Repository

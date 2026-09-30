@@ -124,8 +124,6 @@ jobs:
       matrix:
         # Keep in sync with packages/*/Rakefile:ubuntu_targets_default
         include:
-          - package: mariadb-10.6-mroonga
-            code-name: jammy
           - package: mariadb-10.11-mroonga
             code-name: noble
           - package: mysql-8.0-mroonga

@@ -24,8 +24,6 @@ jobs:
         include:
           # AlmaLinux 8
           - image: "images:almalinux/8"
-            package: mariadb-10.6
-          - image: "images:almalinux/8"
             package: mariadb-10.11
           - image: "images:almalinux/8"
             package: mariadb-11.4
@@ -37,8 +35,6 @@ jobs:
             package: percona-server-8.0
 
           # AlmaLinux 9
-          - image: "images:almalinux/9"
-            package: mariadb-10.6
           - image: "images:almalinux/9"
             package: mariadb-10.11
           - image: "images:almalinux/9"
@@ -69,8 +65,6 @@ jobs:
             package: mariadb
 
           # Ubuntu 22.04
-          - image: "images:ubuntu/22.04"
-            package: mariadb
           - image: "images:ubuntu/22.04"
             package: mysql
 
