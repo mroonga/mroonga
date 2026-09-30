@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,12 +24,13 @@
 
 namespace mrn {
   class MatchEscalationThresholdScope {
-    grn_ctx *ctx_;
+    grn_ctx* ctx_;
     long long int original_threshold_;
+
   public:
-    MatchEscalationThresholdScope(grn_ctx *ctx, long long int threshold);
+    MatchEscalationThresholdScope(grn_ctx* ctx, long long int threshold);
     ~MatchEscalationThresholdScope();
   };
-}
+} // namespace mrn
 
 #endif // MRN_MATCH_ESCALATION_THRESHOLD_SCOPE_HPP_
