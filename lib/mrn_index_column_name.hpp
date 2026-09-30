@@ -43,9 +43,9 @@ namespace mrn {
     size_t length_;
 
     void init();
-    uint encode(uchar* encoded_start,
-                uchar* encoded_end,
-                const uchar* mysql_string_start,
-                const uchar* mysql_string_end);
+    size_t encode(uchar* encoded_start,
+                  uchar* encoded_end,
+                  const uchar* mysql_string_start,
+                  const uchar* mysql_string_end);
   };
 } // namespace mrn
