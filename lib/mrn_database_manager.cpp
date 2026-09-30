@@ -135,12 +135,7 @@ namespace mrn {
         }
       }
       *db = new Database(ctx_, grn_db);
-      grn_hash_add(ctx_,
-                   cache_,
-                   mapper.db_name(),
-                   strlen(mapper.db_name()),
-                   &db_address,
-                   NULL);
+      mrn::grn::hash_add(ctx_, cache_, mapper.db_name(), &db_address, nullptr);
       grn_memcpy(db_address, db, sizeof(Database*));
       error = ensure_normalizers_registered((*db)->get());
       if (!error) {

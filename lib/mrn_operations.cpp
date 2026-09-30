@@ -202,12 +202,12 @@ namespace mrn {
       GRN_BULK_REWIND(&text_buffer_);
       grn_obj_get_value(ctx_, columns_.table_, id, &text_buffer_);
       if (GRN_TEXT_LEN(&text_buffer_) > 0) {
-        grn_hash_add(ctx_,
-                     table_names,
-                     GRN_TEXT_VALUE(&text_buffer_),
-                     GRN_TEXT_LEN(&text_buffer_),
-                     NULL,
-                     NULL);
+        mrn::grn::hash_add(ctx_,
+                           table_names,
+                           std::string_view(GRN_TEXT_VALUE(&text_buffer_),
+                                            GRN_TEXT_LEN(&text_buffer_)),
+                           nullptr,
+                           nullptr);
       }
     }
     grn_table_cursor_close(ctx_, cursor);
