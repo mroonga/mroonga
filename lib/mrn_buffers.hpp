@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2018-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,16 +24,16 @@
 namespace mrn {
   class Buffers {
   public:
-    Buffers(grn_ctx *ctx);
+    Buffers(grn_ctx* ctx);
     ~Buffers();
     void resize(size_t n);
-    grn_obj *operator[](size_t i) const;
+    grn_obj* operator[](size_t i) const;
 
   private:
-    grn_ctx *ctx_;
+    grn_ctx* ctx_;
     size_t n_;
     grn_obj buffers_;
 
     void free_buffers();
   };
-}
+} // namespace mrn

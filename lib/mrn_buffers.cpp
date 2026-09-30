@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2018-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,39 +20,41 @@
 #include "mrn_buffers.hpp"
 
 namespace mrn {
-  Buffers::Buffers(grn_ctx *ctx)
-    : ctx_(ctx),
-      n_(0) {
+  Buffers::Buffers(grn_ctx* ctx) : ctx_(ctx), n_(0)
+  {
     GRN_TEXT_INIT(&buffers_, 0);
   }
 
-  Buffers::~Buffers() {
+  Buffers::~Buffers()
+  {
     for (size_t i = 0; i < n_; ++i) {
-      grn_obj *buffer = (*this)[i];
+      grn_obj* buffer = (*this)[i];
       GRN_OBJ_FIN(ctx_, buffer);
     }
     GRN_OBJ_FIN(ctx_, &buffers_);
   }
 
-  void Buffers::resize(size_t n) {
+  void Buffers::resize(size_t n)
+  {
     if (n_ != n) {
       for (size_t i = 0; i < n_; ++i) {
-        grn_obj *buffer = (*this)[i];
+        grn_obj* buffer = (*this)[i];
         GRN_OBJ_FIN(ctx_, buffer);
       }
       grn_bulk_reserve(ctx_, &buffers_, sizeof(grn_obj) * n);
       n_ = n;
       for (size_t i = 0; i < n_; ++i) {
-        grn_obj *buffer = (*this)[i];
+        grn_obj* buffer = (*this)[i];
         GRN_TEXT_INIT(buffer, 0);
       }
     }
   }
 
-  grn_obj *Buffers::operator[](size_t i) const {
+  grn_obj* Buffers::operator[](size_t i) const
+  {
     if (i >= n_) {
       return NULL;
     }
-    return(&(reinterpret_cast<grn_obj *>(GRN_BULK_HEAD(&buffers_))[i]));
+    return (&(reinterpret_cast<grn_obj*>(GRN_BULK_HEAD(&buffers_))[i]));
   }
-}
+} // namespace mrn
