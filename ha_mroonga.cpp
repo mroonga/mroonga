@@ -464,7 +464,6 @@ static int mrn_change_encoding(grn_ctx* ctx, const CHARSET_INFO* charset)
   return mrn::encoding::set(ctx, charset);
 }
 
-#if !defined(DBUG_OFF) && !defined(_lint)
 static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
 {
   const char* inspected = "<unknown>";
@@ -478,16 +477,16 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_NOT_USED:
     inspected = "HA_EXTRA_NOT_USED";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_CACHE
+#ifdef MRN_HAVE_HA_EXTRA_CACHE
   case HA_EXTRA_CACHE:
     inspected = "HA_EXTRA_CACHE";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_NO_CACHE
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_CACHE
   case HA_EXTRA_NO_CACHE:
     inspected = "HA_EXTRA_NO_CACHE";
     break;
-#  endif
+#endif
   case HA_EXTRA_NO_READCHECK:
     inspected = "HA_EXTRA_NO_READCHECK";
     break;
@@ -503,32 +502,32 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_NO_USER_CHANGE:
     inspected = "HA_EXTRA_NO_USER_CHANGE";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_KEY_CACHE
+#ifdef MRN_HAVE_HA_EXTRA_KEY_CACHE
   case HA_EXTRA_KEY_CACHE:
     inspected = "HA_EXTRA_KEY_CACHE";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_NO_KEY_CACHE
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_KEY_CACHE
   case HA_EXTRA_NO_KEY_CACHE:
     inspected = "HA_EXTRA_NO_KEY_CACHE";
     break;
-#  endif
+#endif
   case HA_EXTRA_WAIT_LOCK:
     inspected = "HA_EXTRA_WAIT_LOCK";
     break;
   case HA_EXTRA_NO_WAIT_LOCK:
     inspected = "HA_EXTRA_NO_WAIT_LOCK";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_WRITE_CACHE
+#ifdef MRN_HAVE_HA_EXTRA_WRITE_CACHE
   case HA_EXTRA_WRITE_CACHE:
     inspected = "HA_EXTRA_WRITE_CACHE";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_FLUSH_CACHE
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_FLUSH_CACHE
   case HA_EXTRA_FLUSH_CACHE:
     inspected = "HA_EXTRA_FLUSH_CACHE";
     break;
-#  endif
+#endif
   case HA_EXTRA_NO_KEYS:
     inspected = "HA_EXTRA_NO_KEYS";
     break;
@@ -541,11 +540,11 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_RESTORE_POS:
     inspected = "HA_EXTRA_RESTORE_POS";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_REINIT_CACHE
+#ifdef MRN_HAVE_HA_EXTRA_REINIT_CACHE
   case HA_EXTRA_REINIT_CACHE:
     inspected = "HA_EXTRA_REINIT_CACHE";
     break;
-#  endif
+#endif
   case HA_EXTRA_FORCE_REOPEN:
     inspected = "HA_EXTRA_FORCE_REOPEN";
     break;
@@ -582,11 +581,11 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_KEYREAD_PRESERVE_FIELDS:
     inspected = "HA_EXTRA_KEYREAD_PRESERVE_FIELDS";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_MMAP
+#ifdef MRN_HAVE_HA_EXTRA_MMAP
   case HA_EXTRA_MMAP:
     inspected = "HA_EXTRA_MMAP";
     break;
-#  endif
+#endif
   case HA_EXTRA_IGNORE_NO_KEY:
     inspected = "HA_EXTRA_IGNORE_NO_KEY";
     break;
@@ -626,76 +625,75 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
   case HA_EXTRA_DETACH_CHILDREN:
     inspected = "HA_EXTRA_DETACH_CHILDREN";
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_EXPORT
+#ifdef MRN_HAVE_HA_EXTRA_EXPORT
   case HA_EXTRA_EXPORT:
     inspected = "HA_EXTRA_EXPORT";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_SECONDARY_SORT_ROWID
   case HA_EXTRA_SECONDARY_SORT_ROWID:
     inspected = "HA_EXTRA_SECONDARY_SORT_ROWID";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_DETACH_CHILD
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_DETACH_CHILD
   case HA_EXTRA_DETACH_CHILD:
     inspected = "HA_EXTRA_DETACH_CHILD";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_FORCED_CLOSE
   case HA_EXTRA_PREPARE_FOR_FORCED_CLOSE:
     inspected = "HA_EXTRA_PREPARE_FOR_FORCED_CLOSE";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_READ_LOCKING
   case HA_EXTRA_NO_READ_LOCKING:
     inspected = "HA_EXTRA_NO_READ_LOCKING";
     break;
-#  endif
+#endif
   case MRN_HA_EXTRA_BEGIN_COPY:
     inspected = MRN_HA_EXTRA_BEGIN_COPY_NAME;
     break;
   case MRN_HA_EXTRA_END_COPY:
     inspected = MRN_HA_EXTRA_END_COPY_NAME;
     break;
-#  ifdef MRN_HAVE_HA_EXTRA_ABORT_ALTER_COPY
+#ifdef MRN_HAVE_HA_EXTRA_ABORT_ALTER_COPY
   case MRN_HA_EXTRA_ABORT_COPY:
     inspected = MRN_HA_EXTRA_ABORT_COPY_NAME;
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
   case HA_EXTRA_NO_AUTOINC_LOCKING:
     inspected = "HA_EXTRA_NO_AUTOINC_LOCKING";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_ALTER_TABLE
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_PREPARE_FOR_ALTER_TABLE
   case HA_EXTRA_PREPARE_FOR_ALTER_TABLE:
     inspected = "HA_EXTRA_PREPARE_FOR_ALTER_TABLE";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_STARTING_ORDERED_INDEX_SCAN
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_STARTING_ORDERED_INDEX_SCAN
   case HA_EXTRA_STARTING_ORDERED_INDEX_SCAN:
     inspected = "HA_EXTRA_STARTING_ORDERED_INDEX_SCAN";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER
   case HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER:
     inspected = "HA_EXTRA_ENABLE_UNIQUE_RECORD_FILTER";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER
   case HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER:
     inspected = "HA_EXTRA_DISABLE_UNIQUE_RECORD_FILTER";
     break;
-#  endif
-#  ifdef MRN_HAVE_HA_EXTRA_IGNORE_INSERT
+#endif
+#ifdef MRN_HAVE_HA_EXTRA_IGNORE_INSERT
   case HA_EXTRA_IGNORE_INSERT:
     inspected = "HA_EXTRA_IGNORE_INSERT";
     break;
-#  endif
+#endif
   }
   return inspected;
 }
-#endif
 
 /* status */
 static long mrn_count_skip = 0;
@@ -7016,10 +7014,11 @@ int ha_mroonga::extra(enum ha_extra_function operation)
 {
   int error = 0;
   MRN_DBUG_ENTER_METHOD();
-  DBUG_PRINT("info",
-             ("mroonga: this=%p; extra-operation=%s",
-              this,
-              mrn_inspect_extra_function(operation)));
+  GRN_LOG(ctx,
+          GRN_LOG_DEBUG,
+          "[mroonga][extra] this=%p operation=%s",
+          this,
+          mrn_inspect_extra_function(operation));
 #ifdef MRN_ENABLE_WRAPPER_MODE
   if (share->wrapper_mode) {
     if ((error = wrapper_extra(operation)))

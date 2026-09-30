@@ -1109,7 +1109,11 @@ static inline void mrn_store_field_datetime(Field* field,
 #  define MRN_SET_OPTION_STRUCT_TABLE(option_struct, table_share)
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 120300)
+#if (defined(MRN_MARIADB_P) &&                                                 \
+     ((MYSQL_VERSION_ID >= 101117 && MYSQL_VERSION_ID < 101200) ||             \
+      (MYSQL_VERSION_ID >= 110411 && MYSQL_VERSION_ID < 110500) ||             \
+      (MYSQL_VERSION_ID >= 110807 && MYSQL_VERSION_ID < 110900) ||             \
+      (MYSQL_VERSION_ID >= 120302)))
 #  define MRN_HA_EXTRA_BEGIN_COPY_NAME "HA_EXTRA_BEGIN_COPY"
 #  define MRN_HA_EXTRA_BEGIN_COPY      HA_EXTRA_BEGIN_COPY
 #  define MRN_HA_EXTRA_END_COPY_NAME   "HA_EXTRA_END_COPY"
