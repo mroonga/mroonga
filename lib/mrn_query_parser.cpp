@@ -70,7 +70,7 @@ namespace mrn {
     grn_rc rc = grn_expr_parse(ctx_,
                                expression_,
                                raw_query,
-                               raw_query_length,
+                               static_cast<unsigned int>(raw_query_length),
                                default_column,
                                GRN_OP_MATCH,
                                default_operator,
