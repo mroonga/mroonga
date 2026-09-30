@@ -79,10 +79,10 @@ namespace mrn {
     return std::string_view(name_, length_);
   }
 
-  uint IndexColumnName::encode(uchar* encoded_start,
-                               uchar* encoded_end,
-                               const uchar* mysql_string_start,
-                               const uchar* mysql_string_end)
+  size_t IndexColumnName::encode(uchar* encoded_start,
+                                 uchar* encoded_end,
+                                 const uchar* mysql_string_start,
+                                 const uchar* mysql_string_end)
   {
     MRN_DBUG_ENTER_METHOD();
     my_charset_conv_mb_wc mb_wc = system_charset_info->cset->mb_wc;
