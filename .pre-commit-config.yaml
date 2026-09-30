@@ -62,6 +62,7 @@ repos:
           ?mrn_mysql_compat\.h|
           ?mrn_table\.cpp|
           ?mrn_table\.hpp|
+          ?mrn_variables\.hpp|
           ?udf/mrn_udf_command\.cpp|
           ?udf/mrn_udf_escape\.cpp|
           ?udf/mrn_udf_highlight_html\.cpp|
