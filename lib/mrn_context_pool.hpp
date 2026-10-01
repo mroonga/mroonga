@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2017 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,18 +27,17 @@
 namespace mrn {
   class ContextPool {
   public:
-    ContextPool(mysql_mutex_t *mutex,
-                long *n_pooling_contexts);
+    ContextPool(mysql_mutex_t* mutex, long* n_pooling_contexts);
     ~ContextPool(void);
-    grn_ctx *pull(void);
-    void release(grn_ctx *context);
+    grn_ctx* pull(void);
+    void release(grn_ctx* context);
     void clear(void);
     void set_n_workers(int n_workers);
 
   private:
     class Impl;
-    Impl *impl_;
+    Impl* impl_;
   };
-}
+} // namespace mrn
 
 #endif /* MRN_CONTEXT_POOL_HPP_ */
