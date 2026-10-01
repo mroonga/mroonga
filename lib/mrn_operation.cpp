@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,15 +25,17 @@
 #define MRN_CLASS_NAME "mrn::Operation"
 
 namespace mrn {
-  Operation::Operation(mrn::Operations *operations,
-                       const char *type,
-                       const char *table_name,
+  Operation::Operation(mrn::Operations* operations,
+                       const char* type,
+                       const char* table_name,
                        size_t table_name_size)
-    : operations_(operations),
-      id_(operations_->start(type, table_name, table_name_size)) {
+      : operations_(operations),
+        id_(operations_->start(type, table_name, table_name_size))
+  {
   }
 
-  Operation::~Operation() {
+  Operation::~Operation()
+  {
     MRN_DBUG_ENTER_METHOD();
 
     operations_->finish(id_);
@@ -41,11 +43,12 @@ namespace mrn {
     DBUG_VOID_RETURN;
   }
 
-  void Operation::record_target(grn_id record_id) {
+  void Operation::record_target(grn_id record_id)
+  {
     MRN_DBUG_ENTER_METHOD();
 
     operations_->record_target(id_, record_id);
 
     DBUG_VOID_RETURN;
   }
-}
+} // namespace mrn

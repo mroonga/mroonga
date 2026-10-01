@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,18 +25,18 @@
 namespace mrn {
   class Operation {
   public:
-    Operation(mrn::Operations *operations,
-              const char *type,
-              const char *table_name,
+    Operation(mrn::Operations* operations,
+              const char* type,
+              const char* table_name,
               size_t table_name_size);
     ~Operation();
 
     void record_target(grn_id record_id);
 
   private:
-    mrn::Operations *operations_;
+    mrn::Operations* operations_;
     grn_id id_;
   };
-}
+} // namespace mrn
 
 #endif /* MRN_OPERATION_HPP_ */
