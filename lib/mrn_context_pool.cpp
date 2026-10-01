@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2015-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2015-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -36,21 +36,20 @@ namespace mrn {
 
   class ContextPool::Impl {
   public:
-    Impl(mysql_mutex_t *mutex,
-         long *n_pooling_contexts)
-      : mutex_(mutex),
-        n_pooling_contexts_(n_pooling_contexts),
-        pool_(),
-        last_pull_time_(0) {
+    Impl(mysql_mutex_t* mutex, long* n_pooling_contexts)
+        : mutex_(mutex),
+          n_pooling_contexts_(n_pooling_contexts),
+          pool_(),
+          last_pull_time_(0)
+    {
     }
 
-    ~Impl(void) {
-      clear();
-    }
+    ~Impl(void) { clear(); }
 
-    grn_ctx *pull(void) {
+    grn_ctx* pull(void)
+    {
       MRN_DBUG_ENTER_METHOD();
-      grn_ctx *ctx = NULL;
+      grn_ctx* ctx = NULL;
 
       {
         time_t now;
@@ -76,7 +75,8 @@ namespace mrn {
       DBUG_RETURN(ctx);
     }
 
-    void release(grn_ctx *ctx) {
+    void release(grn_ctx* ctx)
+    {
       MRN_DBUG_ENTER_METHOD();
 
       {
@@ -90,7 +90,8 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    void clear(void) {
+    void clear(void)
+    {
       MRN_DBUG_ENTER_METHOD();
 
       {
@@ -101,7 +102,8 @@ namespace mrn {
       DBUG_VOID_RETURN;
     }
 
-    void set_n_workers(int n_workers) {
+    void set_n_workers(int n_workers)
+    {
       MRN_DBUG_ENTER_METHOD();
 
       for (auto ctx : pool_) {
@@ -114,12 +116,13 @@ namespace mrn {
   private:
     static const int CLEAR_THREATHOLD_IN_SECONDS = 60 * 5;
 
-    mysql_mutex_t *mutex_;
-    long *n_pooling_contexts_;
-    std::vector<grn_ctx *> pool_;
+    mysql_mutex_t* mutex_;
+    long* n_pooling_contexts_;
+    std::vector<grn_ctx*> pool_;
     time_t last_pull_time_;
 
-    void clear_without_lock(void) {
+    void clear_without_lock(void)
+    {
       MRN_DBUG_ENTER_METHOD();
       for (auto ctx : pool_) {
         grn_ctx_close(ctx);
@@ -134,36 +137,38 @@ namespace mrn {
 #undef MRN_CLASS_NAME
 #define MRN_CLASS_NAME "mrn::ContextPool"
 
-  ContextPool::ContextPool(mysql_mutex_t *mutex,
-                           long *n_pooling_contexts)
-    : impl_(new Impl(mutex, n_pooling_contexts)) {
+  ContextPool::ContextPool(mysql_mutex_t* mutex, long* n_pooling_contexts)
+      : impl_(new Impl(mutex, n_pooling_contexts))
+  {
   }
 
-  ContextPool::~ContextPool(void) {
-    delete impl_;
-  }
+  ContextPool::~ContextPool(void) { delete impl_; }
 
-  grn_ctx *ContextPool::pull(void) {
+  grn_ctx* ContextPool::pull(void)
+  {
     MRN_DBUG_ENTER_METHOD();
-    grn_ctx *ctx = impl_->pull();
+    grn_ctx* ctx = impl_->pull();
     DBUG_RETURN(ctx);
   }
 
-  void ContextPool::release(grn_ctx *ctx) {
+  void ContextPool::release(grn_ctx* ctx)
+  {
     MRN_DBUG_ENTER_METHOD();
     impl_->release(ctx);
     DBUG_VOID_RETURN;
   }
 
-  void ContextPool::clear(void) {
+  void ContextPool::clear(void)
+  {
     MRN_DBUG_ENTER_METHOD();
     impl_->clear();
     DBUG_VOID_RETURN;
   }
 
-  void ContextPool::set_n_workers(int n_workers) {
+  void ContextPool::set_n_workers(int n_workers)
+  {
     MRN_DBUG_ENTER_METHOD();
     impl_->set_n_workers(n_workers);
     DBUG_VOID_RETURN;
   }
-}
+} // namespace mrn
