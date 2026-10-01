@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,12 +25,13 @@
 namespace mrn {
   class SmartBitmap {
   public:
-    SmartBitmap(MY_BITMAP *bitmap);
+    SmartBitmap(MY_BITMAP* bitmap);
     ~SmartBitmap();
 
-    MY_BITMAP *get();
-    MY_BITMAP *release();
+    MY_BITMAP* get();
+    MY_BITMAP* release();
+
   private:
-    MY_BITMAP *bitmap_;
+    MY_BITMAP* bitmap_;
   };
-}
+} // namespace mrn
