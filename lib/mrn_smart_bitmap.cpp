@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017-2022  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,23 +21,21 @@
 #include "../mrn_mysql_compat.h"
 
 namespace mrn {
-  SmartBitmap::SmartBitmap(MY_BITMAP *bitmap)
-    : bitmap_(bitmap) {
-  }
+  SmartBitmap::SmartBitmap(MY_BITMAP* bitmap) : bitmap_(bitmap) {}
 
-  SmartBitmap::~SmartBitmap() {
+  SmartBitmap::~SmartBitmap()
+  {
     if (bitmap_) {
       mrn_bitmap_free(bitmap_);
     }
   }
 
-  MY_BITMAP *SmartBitmap::get() {
-    return bitmap_;
-  }
+  MY_BITMAP* SmartBitmap::get() { return bitmap_; }
 
-  MY_BITMAP *SmartBitmap::release() {
-    MY_BITMAP *bitmap = bitmap_;
+  MY_BITMAP* SmartBitmap::release()
+  {
+    MY_BITMAP* bitmap = bitmap_;
     bitmap_ = NULL;
     return bitmap;
   }
-}
+} // namespace mrn
