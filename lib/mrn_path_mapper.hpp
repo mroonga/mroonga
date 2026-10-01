@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2010 Tetsuro IKEDA
-  Copyright(C) 2010-2013 Kentoku SHIBA
-  Copyright(C) 2011-2015 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010  Tetsuro IKEDA
+  Copyright (C) 2010-2013  Kentoku SHIBA
+  Copyright (C) 2011-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,29 +27,30 @@
 namespace mrn {
   class PathMapper {
   public:
-    static char *default_path_prefix;
-    static char *default_mysql_data_home_path;
+    static char* default_path_prefix;
+    static char* default_mysql_data_home_path;
 
-    PathMapper(const char *original_mysql_path,
-               const char *path_prefix=default_path_prefix,
-               const char *mysql_data_home_path=default_mysql_data_home_path);
-    const char *db_path();
-    const char *db_name();
-    const char *table_name();
-    const char *mysql_table_name();
-    const char *mysql_path();
+    PathMapper(const char* original_mysql_path,
+               const char* path_prefix = default_path_prefix,
+               const char* mysql_data_home_path = default_mysql_data_home_path);
+    const char* db_path();
+    const char* db_name();
+    const char* table_name();
+    const char* mysql_table_name();
+    const char* mysql_path();
     bool is_internal_table_name();
     bool is_temporary_table_name();
+
   private:
-    const char *original_mysql_path_;
-    const char *path_prefix_;
-    const char *mysql_data_home_path_;
+    const char* original_mysql_path_;
+    const char* path_prefix_;
+    const char* mysql_data_home_path_;
     std::string db_path_;
     std::string db_name_;
     std::string table_name_;
     std::string mysql_table_name_;
     std::string mysql_path_;
   };
-}
+} // namespace mrn
 
 #endif /* MRN_PATH_MAPPER_HPP_ */
