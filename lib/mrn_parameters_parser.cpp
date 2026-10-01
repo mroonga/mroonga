@@ -148,7 +148,8 @@ namespace mrn {
         if (current + 1 == end) {
           break;
         }
-        switch (current[1]) {
+        ++current;
+        switch (current[0]) {
         case 'b':
           value[value_length] = '\b';
           break;
@@ -162,7 +163,7 @@ namespace mrn {
           value[value_length] = '\t';
           break;
         default:
-          value[value_length] = current[1];
+          value[value_length] = current[0];
           break;
         }
         break;
