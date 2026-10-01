@@ -331,11 +331,6 @@ typedef uchar* mrn_write_row_buf_t;
 
 #ifdef MRN_PERCONA_P
 #  define MRN_HANDLER_HAVE_HAS_GAP_LOCKS
-#  if MYSQL_VERSION_ID >= 80018
-#    define MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT noexcept
-#  else
-#    define MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT
-#  endif
 #endif
 
 #if MYSQL_VERSION_ID < 80013 || defined(MRN_MARIADB_P)
@@ -833,7 +828,7 @@ public:
   int start_stmt(THD* thd, thr_lock_type lock_type) override;
 
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
-  bool has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT override;
+  bool has_gap_locks() const noexcept override;
 #endif
 
 protected:
@@ -1995,9 +1990,9 @@ private:
   int storage_start_stmt(THD* thd, thr_lock_type lock_type);
 #ifdef MRN_HANDLER_HAVE_HAS_GAP_LOCKS
 #  ifdef MRN_ENABLE_WRAPPER_MODE
-  bool wrapper_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
+  bool wrapper_has_gap_locks() const noexcept;
 #  endif
-  bool storage_has_gap_locks() const MRN_HANDLER_HAS_GAP_LOCKS_NOEXCEPT;
+  bool storage_has_gap_locks() const noexcept;
 #endif
 #ifdef MRN_HANDLER_HAVE_PRIMARY_KEY_IS_CLUSTERED
 #  ifdef MRN_ENABLE_WRAPPER_MODE

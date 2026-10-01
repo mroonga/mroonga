@@ -46,12 +46,6 @@ msgstr "トークナイザーとして `MeCab <https://taku910.github.io/mecab/>
 msgid "Install groonga-tokenizer-mecab package:"
 msgstr "groonga-tokenizer-mecabをインストール:"
 
-msgid "AlmaLinux 8 (with Percona Server 8.0 package)"
-msgstr "AlmaLinux 8（Percona Server 8.0パッケージを利用）"
-
-msgid "You can use Percona Server packages version 8.0 on AlmaLinux 8 since Mroonga 11.10 release."
-msgstr "AlmaLinux 8では、Mroonga 11.10からPercona Server 8.0パッケージを利用できます。"
-
 msgid "AlmaLinux 8 (with MariaDB 10.11 package)"
 msgstr "AlmaLinux 8（MariaDB 10.11のパッケージを利用）"
 
@@ -78,12 +72,6 @@ msgstr "AlmaLinux 9（OracleのMySQL 8.4パッケージを利用）"
 
 msgid "You can use Oracle's MySQL packages version 8.4 on AlmaLinux 9 since Mroonga 14.04 release."
 msgstr "AlmaLinux 9では、Mroonga 14.04からOracleのMySQL 8.4パッケージを利用できます。"
-
-msgid "AlmaLinux 9 (with Percona Server 8.0 package)"
-msgstr "AlmaLinux 9（Percona Server 8.0パッケージを利用）"
-
-msgid "You can use Percona Server packages version 8.0 on AlmaLinux 9 since Mroonga 12.12 release."
-msgstr "AlmaLinux 9では、Mroonga 12.12からPercona Server 8.0パッケージを利用できます。"
 
 msgid "AlmaLinux 9 (with Percona Server 8.4 package)"
 msgstr "AlmaLinux 9（Percona Server 8.4パッケージを利用）"
