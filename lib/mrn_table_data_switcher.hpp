@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2017-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,13 +25,12 @@
 namespace mrn {
   class TableDataSwitcher {
   public:
-    TableDataSwitcher(TABLE *from_table,
-                      TABLE *to_table);
+    TableDataSwitcher(TABLE* from_table, TABLE* to_table);
     ~TableDataSwitcher();
+
   private:
-    TABLE *from_table_;
-    TABLE *to_table_;
+    TABLE* from_table_;
+    TABLE* to_table_;
     my_ptrdiff_t diff_;
   };
-}
-
+} // namespace mrn
