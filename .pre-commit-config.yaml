@@ -63,6 +63,8 @@ repos:
           ?lib/mrn_parameters_parser\.hpp|
           ?lib/mrn_smart_grn_obj\.cpp|
           ?lib/mrn_smart_grn_obj\.hpp|
+          ?lib/mrn_table_data_switcher\.cpp|
+          ?lib/mrn_table_data_switcher\.hpp|
           ?mrn_mysql_compat\.h|
           ?mrn_table\.cpp|
           ?mrn_table\.hpp|
