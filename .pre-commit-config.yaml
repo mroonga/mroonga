@@ -51,6 +51,8 @@ repos:
           ?lib/mrn_debug_column_access\.hpp|
           ?lib/mrn_external_lock\.cpp|
           ?lib/mrn_external_lock\.hpp|
+          ?lib/mrn_field_normalizer\.cpp|
+          ?lib/mrn_field_normalizer\.hpp|
           ?lib/mrn_grn\.hpp|
           ?lib/mrn_index_column_name\.cpp|
           ?lib/mrn_index_column_name\.hpp|

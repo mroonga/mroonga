@@ -1,6 +1,6 @@
 /* -*- c-basic-offset: 2 -*- */
 /*
-  Copyright(C) 2013-2018 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2013-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,19 +27,19 @@
 namespace mrn {
   class FieldNormalizer {
   public:
-    FieldNormalizer(grn_ctx *ctx, THD *thread, Field *field);
+    FieldNormalizer(grn_ctx* ctx, THD* thread, Field* field);
     ~FieldNormalizer();
 
     bool should_normalize();
-    grn_obj *normalize(const char *string, unsigned int string_length);
-    void find_grn_normalizer(grn_obj *normalizer);
+    grn_obj* normalize(const char* string, unsigned int string_length);
+    void find_grn_normalizer(grn_obj* normalizer);
 
   private:
-    grn_ctx *ctx_;
-    THD *thread_;
-    Field *field_;
-    grn_obj *lexicon_;
+    grn_ctx* ctx_;
+    THD* thread_;
+    Field* field_;
+    grn_obj* lexicon_;
 
     bool is_text_type();
   };
-}
+} // namespace mrn
