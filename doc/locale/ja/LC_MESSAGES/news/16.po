@@ -17,14 +17,62 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.11 - 2026-09-02"
-msgstr "16.11リリース - 2026-09-02"
+msgid "Release 16.12 - 2026-10-02"
+msgstr "16.12リリース - 2026-10-02"
 
 msgid "In this release, we do not provide Mroonga packages for Debian trixie for MySQL 8.4 and 9.7. Currently, the Mroonga packages for Debian trixie cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "MariaDB 12.3 is now supported in this release"
+msgstr "このリリースからMariaDB 12.3をサポートしました"
+
+msgid "Dropped support for the following RDBMSs"
+msgstr "以下のRDBMSのサポートをやめました"
+
+msgid "There are reached EOL."
+msgstr "これらはEOLになったためです。"
+
+msgid "MariaDB 10.6 for AlmaLinux 8,9"
+msgstr ""
+
+msgid "MariaDB 10.6 for Ubuntu 22.04"
+msgstr ""
+
+msgid "Percona Server 8.0 for AlmaLinux 8,9"
+msgstr ""
+
+msgid "Building Mroonga from source with MariaDB now requires a C++17-compatible compiler"
+msgstr "MroongaとMariaDBの組み合わせでソースからビルドする際に、C++17をサポートするコンパイラーが必要になりました"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a buffer overflow with long mroonga_database_path_prefix"
+msgstr "長いmroonga_database_path_prefixを使うとバッファーオーバーフローする問題を修正しました"
+
+msgid "[[MDEV-41287]( https://jira.mariadb.org/browse/MDEV-41287 )][Reported by Yuelin Wang]"
+msgstr "[[MDEV-41287]( https://jira.mariadb.org/browse/MDEV-41287 )][Yuelin Wangさんの報告]"
+
+msgid "Setting a path that was too long in mroonga_database_path_prefix could couased a buffer overflow."
+msgstr "mroonga_database_path_prefixに長いパスを設定すると、バッファーオーバーフローしていました。"
+
+msgid "Fixed auto databse directory creation for absolute mroonga_database_path_prefix"
+msgstr "mroonga_database_path_prefixに絶対パスを指定すると、データベースディレクトリーが自動で作成されない問題を修正しました"
+
+msgid "The database directory could not be created automatically when an absolute path, such as \"/var/lib/mroonga/\", was set for mroonga_database_path_prefix."
+msgstr "\"/var/lib/mroonga/\"のような絶対パスをmroonga_database_path_prefixに指定するとデータベースディレクトリーが自動で作成されていませんでした。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Yuelin Wang"
+msgstr "Yuelin Wangさん"
+
+msgid "Release 16.11 - 2026-09-02"
+msgstr "16.11リリース - 2026-09-02"
 
 msgid "Added support for the latest versions of the following RDBMSs"
 msgstr "以下のRDBMSの最新版をサポート"
@@ -71,9 +119,6 @@ msgstr ""
 msgid "Ubuntu 22.04(Jammy Jellyfish)"
 msgstr ""
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "Fixed a bug that could cause Mroonga to crash on any error when opening an index"
 msgstr "インデックス参照時に任意のエラーが発生したときMroongaがクラッシュすることがある問題を修正"
 
@@ -85,9 +130,6 @@ msgstr "[GH-1139]( https://github.com/mroonga/mroonga/pull/1139 )[Jérome Perrin
 
 msgid "If any error occured when opening a index, Mroonga could crash while handring the error."
 msgstr "インデックス参照時に任意のエラーが発生すると、エラー処理中にMroongaがクラッシュすることがあったため、これを修正しました。"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Jérome Perrin"
 msgstr "Jérome Perrinさん"
