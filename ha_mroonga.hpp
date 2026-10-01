@@ -35,10 +35,6 @@ extern "C" {
 #include <mrn_database.hpp>
 #include <mrn_buffers.hpp>
 
-#if !(defined(MRN_MARIADB_P) && MYSQL_VERSION_ID < 100600)
-#  define MRN_HANDLER_HAVE_TABLE_TYPE
-#endif
-
 #ifdef MRN_MARIADB_P
 #  define MRN_HANDLER_HAVE_INDEX_TYPE
 #endif
@@ -105,8 +101,7 @@ extern "C" {
 #endif
 
 #if (defined(MRN_MARIADB_P) &&                                                 \
-     ((MYSQL_VERSION_ID >= 100600 && MYSQL_VERSION_ID < 100616) ||             \
-      (MYSQL_VERSION_ID >= 101100 && MYSQL_VERSION_ID < 101106)))
+     (MYSQL_VERSION_ID >= 101100 && MYSQL_VERSION_ID < 101106))
 #  define MRN_HAVE_HA_EXTRA_IGNORE_INSERT
 #endif
 
@@ -387,8 +382,7 @@ typedef uchar* mrn_write_row_buf_t;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100618 && MYSQL_VERSION_ID < 100700) ||                \
-   (MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200) ||                \
+  ((MYSQL_VERSION_ID >= 101108 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110402))
 #  define MRN_HANDLER_ENABLE_INDEXES_PARAMETERS       key_map map, bool persist
 #  define MRN_HANDLER_DISABLE_INDEXES_PARAMETERS      key_map map, bool persist
@@ -444,8 +438,7 @@ using mrn_io_and_cpu_cost = double;
 #endif
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100620 && MYSQL_VERSION_ID < 100700) ||                \
-   (MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||                \
+  ((MYSQL_VERSION_ID >= 101110 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110400))
 using mrn_handler_referenced_by_foreign_key_bool = bool;
 #  define MRN_HANDLER_REFERENCED_BY_FOREIGN_KEY_CONST_NOEXCEPT const noexcept
@@ -608,9 +601,7 @@ public:
 
   THD* current_thread();
 
-#ifdef MRN_HANDLER_HAVE_TABLE_TYPE
   const char* table_type() const override;
-#endif
 #ifdef MRN_HANDLER_HAVE_INDEX_TYPE
   const char* index_type(uint inx) override;
 #endif

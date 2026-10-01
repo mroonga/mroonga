@@ -168,11 +168,7 @@ static mysql_mutex_t* mrn_LOCK_open;
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100200
-#    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
-#  else
-#    define MRN_ORDER_IS_ASC(order) ((order)->asc)
-#  endif
+#  define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER::ORDER_ASC)
 #else
 #  if MYSQL_VERSION_ID >= 80011
 #    define MRN_ORDER_IS_ASC(order) ((order)->direction == ORDER_ASC)
@@ -200,7 +196,7 @@ static mysql_mutex_t* mrn_LOCK_open;
 #  define MRN_PLUGIN_LAST_VALUES   NULL, 0
 #endif
 
-#if MYSQL_VERSION_ID >= 100007 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_THD_GET_AUTOINC(thd, off, inc) thd_get_autoinc(thd, off, inc)
 #else
 #  define MRN_THD_GET_AUTOINC(thd, off, inc)                                   \
@@ -3258,13 +3254,11 @@ THD* ha_mroonga::current_thread()
   DBUG_RETURN(thread);
 }
 
-#ifdef MRN_HANDLER_HAVE_TABLE_TYPE
 const char* ha_mroonga::table_type() const
 {
   MRN_DBUG_ENTER_METHOD();
   DBUG_RETURN(MRN_PLUGIN_NAME_STRING);
 }
-#endif
 
 #ifdef MRN_HANDLER_HAVE_INDEX_TYPE
 const char* ha_mroonga::index_type(uint key_nr)

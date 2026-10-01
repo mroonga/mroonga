@@ -37,7 +37,6 @@ let $version_major_minor =
 let $version_8_0           = `SELECT $version_major_minor = 8.00`;
 
 let $version_8_0_or_later   = `SELECT $version_major_minor >= 8.00`;
-let $version_10_11_or_later  = `SELECT $version_major_minor >= 10.11`;
 let $version_11_5_or_later  = `SELECT $version_major_minor >= 11.05`;
 let $version_13_0_or_later  = `SELECT $version_major_minor >= 13.00`;
 --enable_query_log

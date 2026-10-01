@@ -362,7 +362,7 @@ typedef uint mrn_srid;
 
 #if MYSQL_VERSION_ID >= 80022 && !defined(MRN_MARIADB_P)
 #  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block) (query_block->has_limit())
-#elif MYSQL_VERSION_ID >= 100603
+#elif defined(MRN_MARIADB_P)
 #  define MRN_QUERY_BLOCK_HAS_LIMIT(query_block)                               \
     (query_block->limit_params.explicit_limit)
 #else
@@ -381,7 +381,7 @@ typedef uint mrn_srid;
     ((query_block)->join_list)
 #endif
 
-#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_QUERY_BLOCK_SELECT_LIMIT(query_block)                            \
     (query_block->limit_params.select_limit)
 #  define MRN_QUERY_BLOCK_OFFSET_LIMIT(query_block)                            \
@@ -967,15 +967,9 @@ static inline void mrn_store_field_datetime(Field* field,
 #endif
 
 #ifdef MRN_MARIADB_P
-#  if MYSQL_VERSION_ID >= 100700
-#    define mrn_bitmap_init(map, buf, n_bits)                                  \
-      my_bitmap_init((map), (buf), (n_bits))
-#    define mrn_bitmap_free(map) my_bitmap_free((map))
-#  else
-#    define mrn_bitmap_init(map, buf, n_bits)                                  \
-      my_bitmap_init((map), (buf), (n_bits), false)
-#    define mrn_bitmap_free(map) my_bitmap_free((map))
-#  endif
+#  define mrn_bitmap_init(map, buf, n_bits)                                    \
+    my_bitmap_init((map), (buf), (n_bits))
+#  define mrn_bitmap_free(map) my_bitmap_free((map))
 #else
 #  define mrn_bitmap_init(map, buf, n_bits) bitmap_init((map), (buf), (n_bits))
 #  define mrn_bitmap_free(map)              bitmap_free((map))
@@ -985,18 +979,18 @@ static inline void mrn_store_field_datetime(Field* field,
 #  define MRN_DBUG_TMP_USE_BITMAP_PP
 #endif
 
-#if defined(MRN_MARIADB_P) && (MYSQL_VERSION_ID >= 100603)
+#ifdef MRN_MARIADB_P
 #  define MRN_CHARSET_CSNAME(charset) ((charset)->cs_name.str)
 #  define MRN_CHARSET_NAME(charset)   ((charset)->coll_name.str)
 #elif MYSQL_VERSION_ID >= 80029 && !defined(MRN_MARIADB_P)
 #  define MRN_CHARSET_CSNAME(charset) ((charset)->csname)
 #  define MRN_CHARSET_NAME(charset)   ((charset)->m_coll_name)
-#else // Less than MySQL 8.0.29 or less than MariaDB 10.6.3
+#else // Less than MySQL 8.0.29
 #  define MRN_CHARSET_CSNAME(charset) ((charset)->csname)
 #  define MRN_CHARSET_NAME(charset)   ((charset)->name)
 #endif
 
-#if MYSQL_VERSION_ID >= 100603 && defined(MRN_MARIADB_P)
+#ifdef MRN_MARIADB_P
 #  define MRN_MATCH_ITEM_FLAGS(match_item) ((match_item)->match_flags)
 #else
 #  define MRN_MATCH_ITEM_FLAGS(match_item) ((match_item)->flags)
@@ -1029,8 +1023,7 @@ static inline void mrn_store_field_datetime(Field* field,
   } while (false)
 
 #if defined(MRN_MARIADB_P) &&                                                  \
-  ((MYSQL_VERSION_ID >= 100619 && MYSQL_VERSION_ID < 100700) ||                \
-   (MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200) ||                \
+  ((MYSQL_VERSION_ID >= 101109 && MYSQL_VERSION_ID < 101200) ||                \
    (MYSQL_VERSION_ID >= 110403))
 #  define MRN_GET_TABLE_NAME(query_tables) (query_tables->get_table_name().str)
 #  define MRN_GET_TABLE_NAME_LENGTH(query_tables)                              \
