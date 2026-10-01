@@ -1,5 +1,5 @@
 /*
-  Copyright(C) 2012 Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2026  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,9 +19,9 @@
 #ifndef MRN_MACRO_HPP_
 #define MRN_MACRO_HPP_
 
-#ifdef  __cplusplus
-#  define MRN_BEGIN_DECLS  extern "C" {
-#  define MRN_END_DECLS    }
+#ifdef __cplusplus
+#  define MRN_BEGIN_DECLS extern "C" {
+#  define MRN_END_DECLS   }
 #else
 #  define MRN_BEGIN_DECLS
 #  define MRN_END_DECLS
