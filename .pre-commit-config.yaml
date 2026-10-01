@@ -39,6 +39,7 @@ repos:
           ?lib/mrn_column_name\.cpp|
           ?lib/mrn_column_name\.hpp|
           ?lib/mrn_condition_converter\.cpp|
+          ?lib/mrn_condition_converter\.hpp|
           ?lib/mrn_context_pool\.cpp|
           ?lib/mrn_context_pool\.hpp|
           ?lib/mrn_current_thread\.hpp|
