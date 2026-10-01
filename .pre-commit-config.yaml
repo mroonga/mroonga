@@ -57,6 +57,8 @@ repos:
           ?lib/mrn_match_escalation_threshold_scope\.cpp|
           ?lib/mrn_match_escalation_threshold_scope\.hpp|
           ?lib/mrn_multiple_column_key_codec\.cpp|
+          ?lib/mrn_operation\.cpp|
+          ?lib/mrn_operation\.hpp|
           ?lib/mrn_operations\.cpp|
           ?lib/mrn_operations\.hpp|
           ?lib/mrn_parameters_parser\.cpp|
