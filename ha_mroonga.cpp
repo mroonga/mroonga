@@ -692,6 +692,11 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = "HA_EXTRA_IGNORE_INSERT";
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_FULL_SCAN
+  case HA_EXTRA_FULL_SCAN:
+    inspected = "HA_EXTRA_FULL_SCAN";
+    break;
+#endif
   }
   return inspected;
 }
