@@ -48,6 +48,12 @@ project(
     LANGUAGES C CXX
 )
 
+if(MRN_BUNDLED AND WIN32)
+    # MariaDB's MSI packaging rejects the Unspecified component. We
+    # don't change other platforms to keep their package contents.
+    set(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME Server)
+endif()
+
 include(TestBigEndian)
 test_big_endian(BIG_ENDIAN)
 if(BIG_ENDIAN)
@@ -781,7 +787,8 @@ install(
         "${PROJECT_SOURCE_DIR}/data/rpm/preun.sh"
     DESTINATION "${MRN_DATA_DIR}/rpm/"
 )
-if(MSVC)
+# mysql_add_plugin() installs PDB for bundled build.
+if(MSVC AND NOT MRN_BUNDLED)
     install(
         FILES $<TARGET_PDB_FILE:mroonga>
         DESTINATION "${MYSQL_PLUGIN_DIR}"
