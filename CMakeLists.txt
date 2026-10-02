@@ -239,9 +239,6 @@ if(MRN_GROONGA_BUNDLED)
                 # MeCab defines NOMINMAX that is also defined by
                 # MariaDB. It's C4005 (macro redefinition).
                 set(GRN_WITH_MECAB "no")
-                # mruby defines WIN32_LEAN_AND_MEAN that is also
-                # defined by MariaDB. It's C4005 (macro redefinition).
-                set(GRN_WITH_MRUBY OFF)
             endif()
         endif()
         add_subdirectory("${MRN_BUNDLED_GROONGA_RELATIVE_DIR}" groonga)
