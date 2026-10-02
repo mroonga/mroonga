@@ -657,6 +657,11 @@ static const char* mrn_inspect_extra_function(enum ha_extra_function operation)
     inspected = MRN_HA_EXTRA_ABORT_COPY_NAME;
     break;
 #endif
+#ifdef MRN_HAVE_HA_EXTRA_BEGIN_ALTER_IGNORE_COPY
+  case HA_EXTRA_BEGIN_ALTER_IGNORE_COPY:
+    inspected = "HA_EXTRA_BEGIN_ALTER_IGNORE_COPY";
+    break;
+#endif
 #ifdef MRN_HAVE_HA_EXTRA_NO_AUTOINC_LOCKING
   case HA_EXTRA_NO_AUTOINC_LOCKING:
     inspected = "HA_EXTRA_NO_AUTOINC_LOCKING";
