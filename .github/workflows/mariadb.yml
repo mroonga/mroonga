@@ -51,7 +51,7 @@ jobs:
               - -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
               - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
               - -DCONC_WITH_UNITTEST=OFF
-              - -DMYSQL_MAINTAINER_MODE=OFF
+              - -DMYSQL_MAINTAINER_MODE=ERR
               - -DPLUGIN_ARCHIVE=NO
               - -DPLUGIN_AUDIT_NULL=NO
               - -DPLUGIN_AUTH_0X0100=NO
