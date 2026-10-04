@@ -145,6 +145,12 @@ sudo apt install -V -y ${package}
 
 sudo mysql -e "SHOW ENGINES" | grep Mroonga
 
+# mroonga_command() isn't registered by default.
+mroonga_command_count_sql="SELECT COUNT(*) FROM mysql.func WHERE name = 'mroonga_command'"
+test "$(sudo mysql -N -e "${mroonga_command_count_sql}")" = "0"
+sudo mysql < /usr/share/mroonga/install_mroonga_command.sql
+test "$(sudo mysql -N -e "${mroonga_command_count_sql}")" = "1"
+
 echo "::endgroup::"
 
 

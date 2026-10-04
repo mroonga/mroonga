@@ -13,6 +13,25 @@ faster than MySQL query.
 ``mroonga_command()`` is an UDF for advanced users. Normally, you
 don't need to use this UDF.
 
+.. warning::
+
+   ``mroonga_command()`` sends the given command to Groonga
+   directly. It bypasses the privilege control of MySQL/MariaDB. Don't
+   register this UDF on a multi-user system that relies on privilege
+   separation of accounts.
+
+Install
+-------
+
+.. versionchanged:: 16.13
+
+   ``install.sql`` doesn't register ``mroonga_command()``.
+
+If you need ``mroonga_command()``, use ``install_mroonga_command.sql``
+in the same directory as ``install.sql``::
+
+  $ mysql -u root < /usr/share/mroonga/install_mroonga_command.sql
+
 Syntax
 ------
 

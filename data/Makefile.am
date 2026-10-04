@@ -4,6 +4,7 @@ SUBDIRS =					\
 
 sqldir = $(pkgdatadir)
 dist_sql_DATA =					\
+	install_mroonga_command.sql		\
 	uninstall.sql				\
 	update.sql
 EXTRA_DIST =					\

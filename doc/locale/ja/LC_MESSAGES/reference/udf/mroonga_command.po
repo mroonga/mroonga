@@ -28,6 +28,18 @@ msgstr "``mroonga_command()`` UDFは与えられた文字列をGroongaコマン�
 msgid "``mroonga_command()`` is an UDF for advanced users. Normally, you don't need to use this UDF."
 msgstr "``mroonga_command()`` は上級者向けのUDFです。通常このUDFを使う必要はありません。"
 
+msgid "``mroonga_command()`` sends the given command to Groonga directly. It bypasses the privilege control of MySQL/MariaDB. Don't register this UDF on a multi-user system that relies on privilege separation of accounts."
+msgstr "``mroonga_command()`` は与えられたコマンドを直接Groongaに送ります。MySQL/MariaDBの権限管理は適用されません。アカウントごとの権限分離に依存している複数ユーザーのシステムではこのUDFを登録しないでください。"
+
+msgid "Install"
+msgstr "インストール"
+
+msgid "``install.sql`` doesn't register ``mroonga_command()``."
+msgstr "``install.sql`` は ``mroonga_command()`` を登録しません。"
+
+msgid "If you need ``mroonga_command()``, use ``install_mroonga_command.sql`` in the same directory as ``install.sql``::"
+msgstr "``mroonga_command()`` が必要な場合は ``install.sql`` と同じディレクトリーにある ``install_mroonga_command.sql`` を使ってください。::"
+
 msgid "Syntax"
 msgstr "構文"
 
