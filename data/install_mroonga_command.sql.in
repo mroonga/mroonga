@@ -1,0 +1,3 @@
+DROP FUNCTION IF EXISTS mroonga_command;
+CREATE FUNCTION mroonga_command RETURNS STRING
+  SONAME 'ha_mroonga@MRN_PLUGIN_SUFFIX@';

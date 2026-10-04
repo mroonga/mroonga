@@ -116,6 +116,7 @@ echo "::endgroup::"
 echo "::group::Install"
 
 function mroonga_is_registered() {
+  local check_mroonga_command="${1:-no}"
   sudo systemctl start ${service_name}
   mysql="${mysql_command} -u root"
   if [ "${have_auto_generated_password}" = "yes" ]; then
@@ -125,6 +126,14 @@ function mroonga_is_registered() {
   fi
 
   sudo ${mysql} -e "SHOW ENGINES" | grep Mroonga
+
+  if [ "${check_mroonga_command}" = "yes" ]; then
+    # mroonga_command() isn't registered by default.
+    local count_sql="SELECT COUNT(*) FROM mysql.func WHERE name = 'mroonga_command'"
+    test "$(sudo ${mysql} -N -e "${count_sql}")" = "0"
+    sudo ${mysql} < /usr/share/mroonga/install_mroonga_command.sql
+    test "$(sudo ${mysql} -N -e "${count_sql}")" = "1"
+  fi
 
   if [ "${have_auto_generated_password}" = "yes" ] ; then
     sudo ${mysql} -e "ALTER USER root@localhost PASSWORD EXPIRE"
@@ -208,7 +217,7 @@ case ${package} in
     exit
     ;;
   *)
-    mroonga_is_registered
+    mroonga_is_registered yes
     ;;
 esac
 
