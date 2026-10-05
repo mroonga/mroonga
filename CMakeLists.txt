@@ -219,6 +219,12 @@ if(MRN_GROONGA_BUNDLED)
     endif()
 
     function(mrn_build_groonga)
+        if(MRN_BUNDLED)
+            # MariaDB doesn't need them. OpenZL's "compress" target
+            # conflicts with ColumnStore's one.
+            set(GRN_WITH_LLAMA_CPP "no")
+            set(GRN_WITH_OPENZL "no")
+        endif()
         if(MSVC)
             # Disable warning as errors defined in MariaDB
             string(
@@ -232,10 +238,6 @@ if(MRN_GROONGA_BUNDLED)
             # MariaDB treats warnings as errors with
             # MYSQL_MAINTAINER_MODE=ERR.
             if(MYSQL_MAINTAINER_MODE MATCHES "ERR")
-                # llama.cpp has some warnings with MSVC such as C4018
-                # (signed/unsigned mismatch) and D9002 (ignoring
-                # unknown option '-fno-lto').
-                set(GRN_WITH_LLAMA_CPP "no")
                 # MeCab defines NOMINMAX that is also defined by
                 # MariaDB. It's C4005 (macro redefinition).
                 set(GRN_WITH_MECAB "no")
