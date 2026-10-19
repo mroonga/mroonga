@@ -140,6 +140,7 @@ if [ ! -d "${mroonga_wrapper_innodb_test_suite_dir}" ]; then
   cp -rp "${source_test_include_dir}"/innodb[-_]*.inc \
      "${mroonga_wrapper_innodb_include_dir}"
   ruby -i'' \
+       --encoding=ASCII-8BIT \
        -pe "\$_.gsub!(/\\bengine\\s*=\\s*innodb\\b([^;\\n]*)/i,
                        \"ENGINE=mroonga\\\1 COMMENT='ENGINE \\\"InnoDB\\\"'\")
              \$_.gsub!(/\\b(storage_engine\\s*=\\s*)innodb\\b([^;\\n]*)/i,
