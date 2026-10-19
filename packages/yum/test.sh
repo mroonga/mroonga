@@ -90,6 +90,11 @@ REPO
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
     sudo ${DNF} install -y \
          https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
+    # mysql-8.4-lts-community is disabled in mysql8.4-community-release
+    # So, we need to enable it manually
+    if [ "${mysql_version}" = "8.4" ]; then
+      sudo ${DNF} config-manager --set-enable mysql-8.4-lts-community,mysql-tools-8.4-lts-community
+    fi
     ;;
   percona-*)
     service_name=mysqld
