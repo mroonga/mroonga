@@ -6959,6 +6959,56 @@ void ha_mroonga::position(const uchar* record)
   DBUG_VOID_RETURN;
 }
 
+#ifdef MRN_ENABLE_WRAPPER_MODE
+int ha_mroonga::wrapper_cmp_ref(const uchar* ref1,
+                                const uchar* ref2) MRN_HANDLER_CMP_REF_CONST
+{
+  MRN_DBUG_ENTER_METHOD();
+  MRN_SET_WRAP_SHARE_KEY(share, table->s);
+  MRN_SET_WRAP_TABLE_KEY(this, table);
+  int result = wrap_handler->cmp_ref(ref1, ref2);
+  MRN_SET_BASE_SHARE_KEY(share, table->s);
+  MRN_SET_BASE_TABLE_KEY(this, table);
+  DBUG_RETURN(result);
+}
+#endif
+
+int ha_mroonga::storage_cmp_ref(const uchar* ref1,
+                                const uchar* ref2) MRN_HANDLER_CMP_REF_CONST
+{
+  MRN_DBUG_ENTER_METHOD();
+  // The default implementation uses memcmp() but it doesn't work for
+  // grn_id on little-endian.
+  grn_id record_id1;
+  grn_id record_id2;
+  memcpy(&record_id1, ref1, sizeof(grn_id));
+  memcpy(&record_id2, ref2, sizeof(grn_id));
+  if (record_id1 < record_id2) {
+    DBUG_RETURN(-1);
+  } else if (record_id1 > record_id2) {
+    DBUG_RETURN(1);
+  } else {
+    DBUG_RETURN(0);
+  }
+}
+
+int ha_mroonga::cmp_ref(const uchar* ref1,
+                        const uchar* ref2) MRN_HANDLER_CMP_REF_CONST
+{
+  MRN_DBUG_ENTER_METHOD();
+  int result;
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  if (share->wrapper_mode) {
+    result = wrapper_cmp_ref(ref1, ref2);
+  } else {
+#endif
+    result = storage_cmp_ref(ref1, ref2);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  }
+#endif
+  DBUG_RETURN(result);
+}
+
 int ha_mroonga::generic_extra(enum ha_extra_function operation)
 {
   MRN_DBUG_ENTER_METHOD();

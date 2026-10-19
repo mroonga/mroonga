@@ -367,6 +367,12 @@ typedef uchar* mrn_write_row_buf_t;
 #  define MRN_HANDLER_PRIMARY_KEY_IS_CLUSTERED_CONST const
 #endif
 
+#ifdef MRN_MARIADB_P
+#  define MRN_HANDLER_CMP_REF_CONST
+#else
+#  define MRN_HANDLER_CMP_REF_CONST const
+#endif
+
 #if MYSQL_VERSION_ID < 80019 || defined(MRN_MARIADB_P)
 #  define MRN_HANDLER_HAVE_FOREIGN_KEY_INFO
 #endif
@@ -643,6 +649,8 @@ public:
   int rnd_init(bool scan) override; // required
   int rnd_end() override;
   void position(const uchar* record) override; // required
+  int cmp_ref(const uchar* ref1,
+              const uchar* ref2) MRN_HANDLER_CMP_REF_CONST override;
   int extra_opt(enum ha_extra_function operation, ulong cache_size) override;
 
   int delete_table(const char* name
@@ -1448,6 +1456,12 @@ private:
   void wrapper_position(const uchar* record);
 #endif
   void storage_position(const uchar* record);
+#ifdef MRN_ENABLE_WRAPPER_MODE
+  int wrapper_cmp_ref(const uchar* ref1,
+                      const uchar* ref2) MRN_HANDLER_CMP_REF_CONST;
+#endif
+  int storage_cmp_ref(const uchar* ref1,
+                      const uchar* ref2) MRN_HANDLER_CMP_REF_CONST;
 #ifdef MRN_ENABLE_WRAPPER_MODE
 #  ifdef MRN_HANDLER_RECORDS_IN_RANGE_HAVE_PAGE_RANGE
   ha_rows wrapper_records_in_range(uint key_nr,
