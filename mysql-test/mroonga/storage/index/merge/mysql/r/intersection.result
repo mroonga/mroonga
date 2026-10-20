@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS items;
+CREATE TABLE items (
+id INT PRIMARY KEY,
+category CHAR(1),
+state CHAR(1),
+KEY category (category),
+KEY state (state)
+) DEFAULT CHARSET=utf8mb4;
+INSERT INTO items
+WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM seq WHERE n < 254)
+SELECT n, '1', '0' FROM seq;
+INSERT INTO items VALUES (255, '3', '1');
+INSERT INTO items VALUES (256, '3', '0');
+EXPLAIN
+SELECT /*+ INDEX_MERGE(items category, state) */ *
+FROM items
+WHERE category = '3' AND state = '0';
+id	select_type	table	partitions	type	possible_keys	key	key_len	ref	rows	filtered	Extra
+1	SIMPLE	items	NULL	index_merge	category,state	category,state	5,5	NULL	#	#	Using intersect(category,state); Using where
+SELECT /*+ INDEX_MERGE(items category, state) */ *
+FROM items
+WHERE category = '3' AND state = '0';
+id	category	state
+256	3	0
+DROP TABLE items;

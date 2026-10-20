@@ -1,0 +1,54 @@
+# Copyright (C) 2026  Sutou Kouhei <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+--source ../../../../../include/mroonga/have_mysql.inc
+--source ../../../../../include/mroonga/have_mroonga.inc
+
+--disable_warnings
+DROP TABLE IF EXISTS items;
+--enable_warnings
+
+CREATE TABLE items (
+  id INT PRIMARY KEY,
+  category CHAR(1),
+  state CHAR(1),
+  KEY category (category),
+  KEY state (state)
+) DEFAULT CHARSET=utf8mb4;
+
+# Record IDs 255 and 256 are candidates. "255 < 256" isn't true with
+# memcmp() on little-endian.
+INSERT INTO items
+  WITH RECURSIVE seq(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM seq WHERE n < 254)
+  SELECT n, '1', '0' FROM seq;
+INSERT INTO items VALUES (255, '3', '1');
+INSERT INTO items VALUES (256, '3', '0');
+
+--disable_warnings
+--replace_column 10 # 11 #
+EXPLAIN
+SELECT /*+ INDEX_MERGE(items category, state) */ *
+  FROM items
+ WHERE category = '3' AND state = '0';
+--enable_warnings
+
+SELECT /*+ INDEX_MERGE(items category, state) */ *
+  FROM items
+ WHERE category = '3' AND state = '0';
+
+DROP TABLE items;
+
+--source ../../../../../include/mroonga/have_mroonga_deinit.inc
