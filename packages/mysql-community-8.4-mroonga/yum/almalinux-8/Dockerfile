@@ -17,13 +17,11 @@ RUN \
     https://repo.mysql.com/mysql84-community-release-el8.rpm && \
   dnf config-manager \
     --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community && \
-  dnf builddep \
-    --disablerepo='mysql-9.7-lts-community*','mysql-tools-9.7-lts-community*' \
-    --enablerepo=powertools,mysql-8.4-lts-community-source -y ${quiet} \
+  dnf config-manager \
+    --set-disabled 'mysql-9.7-lts-community*','mysql-tools-9.7-lts-community*' && \
+  dnf builddep --enablerepo=powertools,mysql-8.4-lts-community-source -y ${quiet} \
     mysql-community && \
-  dnf download \
-    --disablerepo='mysql-9.7-lts-community*','mysql-tools-9.7-lts-community*' -y ${quiet} \
-    --source mysql-community && \
+  dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
     ${SCL} \
     ${SCL}-annobin-plugin-gcc \
@@ -39,8 +37,7 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf install --disablerepo=appstream,'mysql-9.7-lts-community*' -y ${quiet} \
-    mysql-community-devel && \
+  dnf -y ${quiet} mysql-community-devel && \
   dnf clean ${quiet} all
 
 # Workaround: We can remove this once redhat-rpm-config uses "annobin"
