@@ -17,14 +17,71 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.12 - 2026-10-02"
-msgstr "16.12リリース - 2026-10-02"
+msgid "Release 16.14 - 2026-10-21"
+msgstr "16.14リリース - 2026-10-21"
 
 msgid "In this release, we do not provide Mroonga packages for Debian trixie for MySQL 8.4 and 9.7. Currently, the Mroonga packages for Debian trixie cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
 
 msgid "Improvements"
 msgstr "改良"
+
+msgid "Added support for the latest versions of the following RDBMSs"
+msgstr "以下のRDBMSの最新版をサポート"
+
+msgid "MySQL Community Server 8.4 LTS (8.4.13)"
+msgstr ""
+
+msgid "MySQL Community Server minimal 8.4 LTS (8.4.13)"
+msgstr ""
+
+msgid "MySQL Community Server 9.7 LTS (9.7.4)"
+msgstr ""
+
+msgid "MySQL Community Server minimal 9.7 LTS (9.7.4)"
+msgstr ""
+
+msgid "Don't register `mroonga_command()` by default"
+msgstr "デフォルトで`mroonga_command()`を登録しないようにしました"
+
+msgid "[[MDEV-41376]( https://jira.mariadb.org/browse/MDEV-41376 )][Reported by Roel Van de Paar]"
+msgstr "[[MDEV-41376]( https://jira.mariadb.org/browse/MDEV-41376 )][Roel Van de Paarさんの報告]"
+
+msgid "`mroonga_command()` bypasses the privilege control of MySQL/MariaDB. So it should not be registered on a multi-user system that relies on privilege separation of accounts."
+msgstr "`mroonga_command()`はMySQL/MariaDBの権限制御をバイパスします。アカウントの権限分離に依存している、マルチユーザーのシステムは`mroonga_command()`を登録すべきではありません。"
+
+msgid "But `install.sql` and `update.sql` always registered it. Packages run them on install and upgrade, so a dropped `mroonga_command()` came back on upgrade."
+msgstr "しかし、Mroongaパッケージのインストールやアップグレード時に常に`mroonga_command()`が登録されていました。そのため、`mroonga_command()`を削除していても、アップグレードによって再び`mroonga_command()`が登録されていました。"
+
+msgid "This moves `mroonga_command()` registration to the new `install_mroonga_command.sql`. Users who need it can use the file manually."
+msgstr "`mroonga_command()`の登録を`install_mroonga_command.sql`に移動しました。`mroonga_command()`が必要なユーザーはこのファイルを手動で実行する必要があります。"
+
+msgid "However, we don't drop existing `mroonga_command()` on upgrade because users may use it."
+msgstr "ただ、すでに`mroonga_command()`が存在していても、アップグレード時に削除することはしません。使用しているユーザーがいるかもしれないためです。"
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed returning wrong result with index_merge intersection"
+msgstr "index_merge intersection使用時に誤った結果を返す問題を修正しました"
+
+msgid "[[GH-1264]( https://github.com/mroonga/mroonga/issues/1264 )][Reported by kotaokubo-nd]"
+msgstr "[[GH-1264]( https://github.com/mroonga/mroonga/issues/1264 )][kotaokubo-ndさんの報告]"
+
+msgid "Mroonga returned wrong result with index_merge intersection as below:"
+msgstr "以下のようにindex_merge intersectionを使用していると、Mroongaが誤った結果を返していました:"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "Roel Van de Paar"
+msgstr "Roel Van de Paarさん"
+
+msgid "kotaokubo-nd"
+msgstr "kotaokubo-ndさん"
+
+msgid "Release 16.12 - 2026-10-02"
+msgstr "16.12リリース - 2026-10-02"
 
 msgid "MariaDB 12.3 is now supported in this release"
 msgstr "このリリースからMariaDB 12.3をサポートしました"
@@ -46,9 +103,6 @@ msgstr ""
 
 msgid "Building Mroonga from source with MariaDB now requires a C++17-compatible compiler"
 msgstr "MroongaとMariaDBの組み合わせでソースからビルドする際に、C++17をサポートするコンパイラーが必要になりました"
-
-msgid "Fixes"
-msgstr "修正"
 
 msgid "Fixed a buffer overflow with long mroonga_database_path_prefix"
 msgstr "長いmroonga_database_path_prefixを使うとバッファーオーバーフローする問題を修正しました"
@@ -92,9 +146,6 @@ msgstr "\"x\\ny\" は \"x\", 改行, \"ny\"にパースされていました"
 msgid "\"TokenNgram(\\\"loose_symbol\\\", true)\" was parsed as \"TokenNgram(\" because the escaped \". Parameters after it were also ignored."
 msgstr "\"TokenNgram(\\\"loose_symbol\\\", true)\" は \"TokenNgram(\" にパースされており、\"以降のパラメーターは無視されていました"
 
-msgid "Thanks"
-msgstr "感謝"
-
 msgid "Alice Sherepa"
 msgstr "Alice Sherepaさん"
 
@@ -103,9 +154,6 @@ msgstr "Yuelin Wangさん"
 
 msgid "Release 16.11 - 2026-09-02"
 msgstr "16.11リリース - 2026-09-02"
-
-msgid "Added support for the latest versions of the following RDBMSs"
-msgstr "以下のRDBMSの最新版をサポート"
 
 msgid "MariaDB 10.11 (10.11.19)"
 msgstr ""
@@ -286,6 +334,3 @@ msgstr "以下のように`NULL`または、空の文字列を設定すると、
 
 msgid "Hadeer Ramadan"
 msgstr "Hadeer Ramadanさん"
-
-msgid "Roel Van de Paar"
-msgstr "Roel Van de Paarさん"
