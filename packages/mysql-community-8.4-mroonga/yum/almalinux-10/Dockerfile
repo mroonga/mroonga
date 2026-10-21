@@ -13,11 +13,10 @@ RUN \
     https://repo.mysql.com/mysql84-community-release-el$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1).rpm \
     https://packages.apache.org/artifactory/arrow/almalinux/$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1)/apache-arrow-release-latest.rpm && \
   dnf config-manager \
-    --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community && \
+    --set-enabled 'mysql-8.4-lts-community*','mysql-tools-8.4-lts-community*' && \
   dnf config-manager \
     --set-disabled 'mysql-9.7-lts-community*','mysql-tools-9.7-lts-community*' && \
-  dnf builddep --enablerepo=crb,mysql-8.4-lts-community-source -y ${quiet} \
-    mysql-community && \
+  dnf builddep --enablerepo=crb -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=crb -y ${quiet} \
     ccache \
