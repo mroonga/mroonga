@@ -37,7 +37,7 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf -y ${quiet} mysql-community-devel && \
+  dnf install -y ${quiet} mysql-community-devel && \
   dnf clean ${quiet} all
 
 # Workaround: We can remove this once redhat-rpm-config uses "annobin"
