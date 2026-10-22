@@ -88,12 +88,16 @@ REPO
     test_package_name=mysql-community-test
     have_auto_generated_password=yes
     mysql_package_version=$(echo ${mysql_version} | sed -e 's/\.//g')
-    sudo ${DNF} install -y \
-         https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
-    # mysql-8.4-lts-community is disabled in mysql8.4-community-release
-    # So, we need to enable it manually
     if [ "${mysql_version}" = "8.4" ]; then
-      sudo ${DNF} config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community
+      release_no=2
+      if [ "${major_version}" = "9" ]; then
+        release_no=3
+      fi
+      sudo ${DNF} install -y
+        https://repo.mysql.com/yum/mysql-8.4-community/el/${major_version}/x86_64/mysql84-community-release-el${major_version}-${release_no}.noarch.rpm
+    else
+      sudo ${DNF} install -y \
+        https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     fi
     ;;
   percona-*)
