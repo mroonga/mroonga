@@ -32,5 +32,6 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf install -y ${quiet} mysql-community-devel && \
+  dnf install --disablerepo=appstream -y ${quiet} \
+    mysql-community-devel && \
   dnf clean ${quiet} all
