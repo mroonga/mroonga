@@ -10,7 +10,8 @@ RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
   os_version=$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1) && \
   dnf update -y ${quiet} && \
-  dnf module -y disable mariadb,mysql && \
+  dnf module -y disable mariadb && \
+  dnf module -y disable mysql && \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
