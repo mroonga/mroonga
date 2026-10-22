@@ -8,17 +8,14 @@ ENV \
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
+  os_version=$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1) && \
   dnf update -y ${quiet} && \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
-    https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm \
-    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/mysql84-community-release-el8.rpm && \
-  dnf config-manager \
-    --set-enabled 'mysql-8.4-lts-community*','mysql-tools-8.4-lts-community*' && \
-  dnf config-manager \
-    --set-disabled 'mysql-9.7-lts-community*','mysql-tools-9.7-lts-community*' && \
+    https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm \
+    https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm \
+    https://repo.mysql.com/yum/mysql-8.4-community/el/${os_version}/x86_64/mysql84-community-release-el${os_version}-2.noarch.rpm && \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
