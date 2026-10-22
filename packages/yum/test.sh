@@ -93,7 +93,7 @@ REPO
       if [ "${major_version}" = "9" ]; then
         release_no=3
       fi
-      sudo ${DNF} install -y
+      sudo ${DNF} install -y \
         https://repo.mysql.com/yum/mysql-8.4-community/el/${major_version}/x86_64/mysql84-community-release-el${major_version}-${release_no}.noarch.rpm
     else
       sudo ${DNF} install -y \
