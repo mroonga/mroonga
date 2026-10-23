@@ -35,10 +35,10 @@ RUN \
     ccache \
     groonga-devel \
     groonga-normalizer-mysql-devel \
-    systemd-devel \
     ninja-build \
     pkgconfig \
     rpm-build \
+    systemd-devel \
     wget \
     which && \
   dnf clean ${quiet} all
