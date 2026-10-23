@@ -38,6 +38,7 @@ RUN \
     ninja-build \
     pkgconfig \
     rpm-build \
+    systemd-devel \
     wget \
     which && \
   dnf clean ${quiet} all
