@@ -35,6 +35,7 @@ RUN \
     ccache \
     groonga-devel \
     groonga-normalizer-mysql-devel \
+    libgudev-devel \
     ninja-build \
     pkgconfig \
     rpm-build \
