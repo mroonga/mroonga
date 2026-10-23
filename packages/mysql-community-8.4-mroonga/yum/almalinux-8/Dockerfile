@@ -8,13 +8,17 @@ ENV \
 
 RUN \
   quiet=$([ "${DEBUG}" = "yes" ] || echo "--quiet") && \
+  os_version=$(cut -d: -f5 /etc/system-release-cpe | cut -d. -f1) && \
   dnf update -y ${quiet} && \
+  dnf module -y disable mariadb && \
+  dnf module -y disable mysql && \
   dnf install --enablerepo=powertools -y ${quiet} \
     'dnf-command(builddep)' \
     'dnf-command(download)' \
-    https://packages.apache.org/artifactory/arrow/almalinux/8/apache-arrow-release-latest.rpm \
-    https://packages.groonga.org/almalinux/8/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/mysql84-community-release-el8.rpm && \
+    https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm \
+    https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm \
+    https://repo.mysql.com/mysql84-community-release-el${os_version}.rpm && \
+  dnf config-manager --set-disabled 'mysql*' && \
   dnf config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community && \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
@@ -33,8 +37,7 @@ RUN \
     rpm-build \
     wget \
     which && \
-  dnf install --disablerepo=appstream -y ${quiet} \
-    mysql-community-devel && \
+  dnf install -y ${quiet} mysql-community-devel && \
   dnf clean ${quiet} all
 
 # Workaround: We can remove this once redhat-rpm-config uses "annobin"
