@@ -13,6 +13,8 @@ RUN \
     https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm \
     https://repo.mysql.com/mysql84-community-release-el${os_version}.rpm \
     https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm && \
+  dnf config-manager --set-disabled 'mysql*' && \
+  dnf config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community &&\
   dnf builddep --enablerepo=crb -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=crb -y ${quiet} \
