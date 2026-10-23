@@ -91,8 +91,8 @@ REPO
     sudo ${DNF} install -y \
       https://repo.mysql.com/mysql${mysql_package_version}-community-release-el${major_version}.rpm
     if [ "${mysql_version}" = "8.4" ]; then
-      dnf config-manager --set-disabled 'mysql*'
-      dnf config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community
+      sudo ${DNF} config-manager --set-disabled 'mysql*'
+      sudo ${DNF} config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community
     fi
     ;;
   percona-*)
