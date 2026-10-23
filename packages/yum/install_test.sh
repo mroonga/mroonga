@@ -75,6 +75,7 @@ REPO
     # mysql-8.4-lts-community is disabled in mysql8.4-community-release
     # So, we need to enable it manually
     if [ "${mysql_version}" = "8.4" ]; then
+      sudo dnf config-manager --set-disabled 'mysql*'
       sudo dnf config-manager --set-enabled mysql-8.4-lts-community,mysql-tools-8.4-lts-community
     fi
     ;;

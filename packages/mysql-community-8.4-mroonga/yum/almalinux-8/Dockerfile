@@ -17,7 +17,7 @@ RUN \
     'dnf-command(download)' \
     https://packages.apache.org/artifactory/arrow/almalinux/${os_version}/apache-arrow-release-latest.rpm \
     https://packages.groonga.org/almalinux/${os_version}/groonga-release-latest.noarch.rpm \
-    https://repo.mysql.com/yum/mysql-8.4-community/el/${os_version}/x86_64/mysql84-community-release-el${os_version}-2.noarch.rpm && \
+    https://repo.mysql.com/mysql84-community-release-el${os_version}.rpm && \
   dnf builddep --enablerepo=powertools -y ${quiet} mysql-community && \
   dnf download -y ${quiet} --source mysql-community && \
   dnf install --enablerepo=powertools -y ${quiet} \
