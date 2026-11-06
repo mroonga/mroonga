@@ -5336,7 +5336,6 @@ int ha_mroonga::wrapper_open(const char* name,
   MRN_SET_BASE_SHARE_KEY(share, table->s);
   MRN_SET_BASE_TABLE_KEY(this, table);
   init();
-  wrapper_overwrite_index_bits();
   wrapper_set_keys_in_use();
 
   pk_keypart_map = make_prev_keypart_map(
@@ -6288,7 +6287,7 @@ void ha_mroonga::wrapper_set_keys_in_use()
       }
     }
   }
-  table_share->keys_for_keyread.set_prefix(table_share->keys);
+  wrapper_overwrite_index_bits();
   table_share->keys_for_keyread.intersect(table_share->keys_in_use);
   DBUG_VOID_RETURN;
 }
