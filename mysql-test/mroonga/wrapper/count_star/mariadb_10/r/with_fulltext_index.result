@@ -1,0 +1,15 @@
+CREATE TABLE diaries (
+id INT PRIMARY KEY AUTO_INCREMENT,
+body TEXT,
+FULLTEXT INDEX (body)
+) COMMENT = 'ENGINE "InnoDB"' DEFAULT CHARSET UTF8MB4;
+INSERT INTO diaries (body) VALUES ("will start groonga!");
+INSERT INTO diaries (body) VALUES ("starting groonga...");
+INSERT INTO diaries (body) VALUES ("started groonga.");
+EXPLAIN SELECT COUNT(*) FROM diaries;
+id	select_type	table	type	possible_keys	key	key_len	ref	rows	Extra
+1	SIMPLE	diaries	index	NULL	PRIMARY	4	NULL	#	Using index
+SELECT COUNT(*) FROM diaries;
+COUNT(*)
+3
+DROP TABLE diaries;
