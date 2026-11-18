@@ -1,0 +1,34 @@
+require_relative "../mroonga-package-task"
+
+class MySQL84MroongaPackageTask < MroongaPackageTask
+  def initialize
+    super("mysql-8.4-mroonga")
+  end
+
+  def apt_targets_default
+    []
+  end
+
+  def ubuntu_targets_default
+    [
+      ["resolute", "26.04"],
+    ]
+  end
+
+  def enable_yum?
+    false
+  end
+
+  private
+  # On resolute, "mysql-server" is the only binary package name and
+  # there is no versioned "mysql-server-8.4" package. So the
+  # versionless control entry must always be kept. Detecting the
+  # version of the versionless "mysql" package also fails because
+  # there is no "mysql" binary package on resolute.
+  def debian_remove_versionless_control_entry?(distribution, code_name)
+    false
+  end
+end
+
+task = MySQL84MroongaPackageTask.new
+task.define

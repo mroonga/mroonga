@@ -23,6 +23,7 @@ packages = [
   "mariadb-11.8-mroonga",
   "mariadb-12.3-mroonga",
   "mysql-8.0-mroonga",
+  "mysql-8.4-mroonga",
   "mysql-community-8.4-mroonga",
   "mysql-community-9.7-mroonga",
   "mysql-community-minimal-8.4-mroonga",
