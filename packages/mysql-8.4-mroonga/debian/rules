@@ -38,7 +38,7 @@ override_dh_auto_configure:
 	dpkg-source --extract $${dsc} &&				\
 	(cd $${source_base} &&						\
 	  debian/rules override_dh_auto_configure) &&			\
-	(cd $${build_dir}/utilities && $(MAKE) -j$$(nproc) GenError);	\
+	(cd $${build_dir}/utilities && $(MAKE) -j$$(nproc) GenError) &&	\
 	dh_auto_configure						\
 	  --buildsystem=cmake+ninja					\
 	  --								\
