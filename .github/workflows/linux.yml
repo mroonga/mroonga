@@ -36,7 +36,7 @@ jobs:
   source:
     name: Source
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -123,6 +123,9 @@ jobs:
           - os: debian-trixie
             package: mariadb-11.8
             test-image: "images:debian/13"
+          - os: ubuntu-resolute
+            package: mariadb-11.8
+            test-image: "images:ubuntu/26.04"
 
           # MariaDB 12.3
           - os: almalinux-8
@@ -142,6 +145,11 @@ jobs:
           - os: ubuntu-noble
             package: mysql-8.0
             test-image: "images:ubuntu/24.04"
+
+          # MySQL 8.4
+          - os: ubuntu-resolute
+            package: mysql-8.4
+            test-image: "images:ubuntu/26.04"
 
           # MySQL community 8.4
           - os: almalinux-8
@@ -166,6 +174,9 @@ jobs:
           - os: ubuntu-noble
             package: mysql-community-8.4
             test-image: "images:ubuntu/24.04"
+          - os: ubuntu-resolute
+            package: mysql-community-8.4
+            test-image: "images:ubuntu/26.04"
 
           # MySQL community 9.7
           - os: almalinux-8
@@ -190,6 +201,9 @@ jobs:
           - os: ubuntu-noble
             package: mysql-community-9.7
             test-image: "images:ubuntu/24.04"
+          - os: ubuntu-resolute
+            package: mysql-community-9.7
+            test-image: "images:ubuntu/26.04"
 
           # MySQL community minimal 8.4
           - os: almalinux-9

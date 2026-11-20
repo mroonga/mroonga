@@ -1,0 +1,56 @@
+#!/usr/bin/make -f
+# -*- makefile-gmake -*-
+#
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+export MYSQL_VERSION_FULL := $(shell apt-cache show mysql-server | grep Version | head -n 1 | awk '{print $$2}')
+export MYSQL_VERSION := $(shell apt-cache show mysql-server | grep Version | head -n 1 | awk '{print $$2}' | awk -F '-' '{print $$1}')
+
+%:
+	dh $@ --without autoreconf
+
+override_dh_auto_configure:
+	source_base=mysql-8.4-$(MYSQL_VERSION);				\
+	build_dir=$${source_base}/builddir;				\
+	archive=mysql-8.4_$(MYSQL_VERSION).orig.tar.gz;			\
+	debian=mysql-8.4_$(MYSQL_VERSION_FULL).debian.tar.xz;		\
+	dsc=mysql-8.4_$(MYSQL_VERSION_FULL).dsc;			\
+	path=main/m/mysql-8.4;						\
+	if [ "$$(lsb_release --id --short)" = "Ubuntu" ]; then		\
+	  base_url=http://archive.ubuntu.com/ubuntu/pool;		\
+	  security_base_url=http://security.ubuntu.com/ubuntu/pool;	\
+	else								\
+	  base_url=http://ftp.debian.org/debian/pool;			\
+	  security_base_url=http://security.debian.org/pool/updates;	\
+	fi;								\
+	wget="wget --no-verbose";					\
+	$${wget} $${security_base_url}/$${path}/$${archive} ||		\
+	  $${wget} $${base_url}/$${path}/$${archive} &&			\
+	$${wget} $${security_base_url}/$${path}/$${archive}.asc ||	\
+	  $${wget} $${base_url}/$${path}/$${archive}.asc &&		\
+	$${wget} $${security_base_url}/$${path}/$${debian} ||		\
+	  $${wget} $${base_url}/$${path}/$${debian} &&			\
+	$${wget}  $${security_base_url}/$${path}/$${dsc} ||		\
+	  $${wget}  $${base_url}/$${path}/$${dsc} &&			\
+	dpkg-source --extract $${dsc} &&				\
+	(cd $${source_base} &&						\
+	  debian/rules override_dh_auto_configure) &&			\
+	(cd $${build_dir}/utilities && $(MAKE) -j$$(nproc) GenError) &&	\
+	dh_auto_configure						\
+	  --buildsystem=cmake+ninja					\
+	  --								\
+	  -DMRN_WITH_DOC=ON						\
+	  -DMYSQL_BUILD_DIR=$$(pwd)/$${build_dir}			\
+	  -DMYSQL_CONFIG=/usr/bin/mysql_config				\
+	  -DMYSQL_SOURCE_DIR=$$(pwd)/$${source_base}
+
+# disable 'make check'.
+override_dh_auto_test:
+
+override_dh_install:
+	mv debian/tmp/usr/share/doc/mroonga/ \
+	  debian/tmp/usr/share/doc/mysql-8.4-mroonga-doc/
+	dh_install
