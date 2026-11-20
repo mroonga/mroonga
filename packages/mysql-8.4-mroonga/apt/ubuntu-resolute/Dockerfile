@@ -24,6 +24,7 @@ RUN \
   apt update && \
   apt install -y -V ${quiet} \
     autoconf-archive \
+    bison \
     build-essential \
     ccache \
     chrpath \
@@ -31,17 +32,21 @@ RUN \
     debhelper \
     devscripts \
     dh-apparmor \
+    gettext \
     groonga-normalizer-mysql \
     libaio-dev \
     libcurl4-openssl-dev \
     libedit-dev \
     libevent-dev \
+    libfido2-dev \
+    libgoogle-perftools-dev \
     libgroonga-dev \
     libicu-dev \
     liblz4-dev \
     libmecab-dev \
     libmysqlclient-dev \
     libncurses-dev \
+    libnuma-dev \
     libpcre2-dev \
     libprotobuf-dev \
     libprotoc-dev \
@@ -49,6 +54,7 @@ RUN \
     libssl-dev \
     libtirpc-dev \
     libxml2-dev \
+    libzstd-dev \
     libre2-dev \
     libwrap0-dev \
     lsb-release \
@@ -56,5 +62,11 @@ RUN \
     ninja-build \
     pkg-config \
     protobuf-compiler \
+    python3-myst-parser \
+    python3-pydata-sphinx-theme \
+    python3-sphinx \
+    ruby \
+    ruby-gettext \
     unixodbc-dev \
-    wget
+    wget \
+    zlib1g-dev
