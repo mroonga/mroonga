@@ -65,8 +65,8 @@ msgstr ""
 msgid "Fixes"
 msgstr "修正"
 
-msgid "Fixed a bug that SELECT COUNT(*) could crash the server with a FULLTEXT index"
-msgstr "FULLTEXTインデックスがあるときに SELECT COUNT(*) でサーバーがクラッシュするバグを修正しました "
+msgid "Fixed a bug that `SELECT COUNT(*)` could crash the server with a FULLTEXT index"
+msgstr "FULLTEXTインデックスがあるときに `SELECT COUNT(*)` でサーバーがクラッシュするバグを修正しました "
 
 msgid "[[GH-1274]( https://github.com/mroonga/mroonga/issues/1274 )][Reported by tmatenebris]"
 msgstr "[[GH-1274]( https://github.com/mroonga/mroonga/issues/1274 )][tmatenebrisさんの報告]"
