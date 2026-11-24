@@ -17,8 +17,8 @@ msgstr ""
 msgid "News - 16 series"
 msgstr "お知らせ - 16系"
 
-msgid "Release 16.15 - 2026-10-23"
-msgstr "16.15リリース - 2026-10-23"
+msgid "Release 16.16 - 2026-11-24"
+msgstr "16.16リリース - 2026-11-24"
 
 msgid "In this release, we do not provide Mroonga packages for Debian trixie for MySQL 8.4 and 9.7. Currently, the Mroonga packages for Debian trixie cannot be installed with MySQL 8.4 and 9.7 due to a dependency issue. For details, refer to https://bugs.mysql.com/bug.php?id=120697. We will provide them again when this issue is resolved upstream."
 msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixieパッケージを提供しません。現在、これらのパッケージは、依存関係の問題でインストールに失敗します。詳細は https://bugs.mysql.com/bug.php?id=120697 を参照してください。アップストリームでこの問題が解決されたら、再度パッケージを提供します。"
@@ -26,8 +26,62 @@ msgstr "このリリースでは、MySQL 8.4と9.7向けMroongaのDebian trixie�
 msgid "Improvements"
 msgstr "改良"
 
+msgid "Added support for Ubuntu 26.04 (Resolute Raccoon)"
+msgstr "Ubuntu 26.04 (Resolute Raccoon) に対応"
+
+msgid "We now provide Mroonga packages for the following RDBMSs on Ubuntu 26.04 (Resolute Raccoon)."
+msgstr "Ubuntu 26.04 (Resolute Raccoon) で以下の RDBMS の Mroonga パッケージを提供しました。"
+
+msgid "MariaDB 11.8 (11.8.6-5ubuntu0.1) distributed by Ubuntu 26.04"
+msgstr "Ubuntu 26.04 が配布している MariaDB 11.8 (11.8.6-5ubuntu0.1)"
+
+msgid "MySQL 8.4 LTS (8.4.11-0ubuntu0.26.04.1) distributed by Ubuntu 26.04"
+msgstr "Ubuntu 26.04 が配布している MySQL 8.4 LTS (8.4.11-0ubuntu0.26.04.1)"
+
+msgid "MySQL Community Server 8.4 LTS"
+msgstr ""
+
+msgid "MySQL Community Server 9.7 LTS"
+msgstr ""
+
 msgid "Added support for the latest versions of the following RDBMSs"
 msgstr "以下のRDBMSの最新版をサポート"
+
+msgid "They are the latest maintenance releases of each LTS series. They were released on 2026-11-17."
+msgstr "いずれも各 LTS シリーズの最新のメンテナンスリリースで、2026-11-17 にリリースされました。"
+
+msgid "MariaDB 10.11 (10.11.20)"
+msgstr ""
+
+msgid "MariaDB 11.4 (11.4.14)"
+msgstr ""
+
+msgid "MariaDB 11.8 (11.8.10)"
+msgstr ""
+
+msgid "MariaDB 12.3 (12.3.4)"
+msgstr ""
+
+msgid "Fixes"
+msgstr "修正"
+
+msgid "Fixed a bug that `SELECT COUNT(*)` could crash the server with a FULLTEXT index"
+msgstr "FULLTEXTインデックスがあるときに `SELECT COUNT(*)` でサーバーがクラッシュするバグを修正しました "
+
+msgid "[[GH-1274]( https://github.com/mroonga/mroonga/issues/1274 )][Reported by tmatenebris]"
+msgstr "[[GH-1274]( https://github.com/mroonga/mroonga/issues/1274 )][tmatenebrisさんの報告]"
+
+msgid "In wrapper mode, Mroonga included FULLTEXT keys in the keys that can be used for key read, such as `SELECT COUNT(*)`. In this case, Mroonga passed an invalid key number to the wrapped handler. It could cause an out-of-bounds read and crash the server."
+msgstr "ラッパーモードで、Mroongaは SELECT COUNT(*) などのキー読み込みに使用できるキーにFULLTEXTキーを含めていました。この場合、Mroongaは不正なキー番号をラップ先のハンドラに渡していました。その結果、範囲外読み取りが発生し、サーバーがクラッシュすることがありました。"
+
+msgid "Thanks"
+msgstr "感謝"
+
+msgid "tmatenebris"
+msgstr "tmatenebrisさん"
+
+msgid "Release 16.15 - 2026-10-23"
+msgstr "16.15リリース - 2026-10-23"
 
 msgid "MySQL Community Server 8.4 LTS (8.4.13)"
 msgstr ""
@@ -59,9 +113,6 @@ msgstr "`mroonga_command()`の登録を`install_mroonga_command.sql`に移動し
 msgid "However, we don't drop existing `mroonga_command()` on upgrade because users may use it."
 msgstr "ただ、すでに`mroonga_command()`が存在していても、アップグレード時に削除することはしません。使用しているユーザーがいるかもしれないためです。"
 
-msgid "Fixes"
-msgstr "修正"
-
 msgid "Fixed returning wrong result with index_merge intersection"
 msgstr "index_merge intersection使用時に誤った結果を返す問題を修正しました"
 
@@ -70,9 +121,6 @@ msgstr "[[GH-1264]( https://github.com/mroonga/mroonga/issues/1264 )][kotaokubo-
 
 msgid "Mroonga returned wrong result with index_merge intersection as below:"
 msgstr "以下のようにindex_merge intersectionを使用していると、Mroongaが誤った結果を返していました:"
-
-msgid "Thanks"
-msgstr "感謝"
 
 msgid "Roel Van de Paar"
 msgstr "Roel Van de Paarさん"
