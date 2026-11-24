@@ -8,11 +8,14 @@ class MariaDB118MroongaPackageTask < MroongaPackageTask
   def apt_targets_default
     [
       "debian-trixie",
+      "ubuntu-resolute",
     ]
   end
 
-  def enable_ubuntu?
-    false
+  def ubuntu_targets_default
+    [
+      ["resolute", "26.04"],
+    ]
   end
 
   def yum_targets_default
