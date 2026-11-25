@@ -39,12 +39,13 @@ SELECT * FROM diaries WHERE MATCH(body) AGAINST("+starting" IN BOOLEAN MODE);
 
 FLUSH TABLES;
 
-# Error ER_CANT_OPEN_FILE system call error: No such file or directory: [io][open] failed to open path: <repair_test.mrn.0000110.c>
---replace_result "[io][open] " ""
+# Groonga <= 16.1.5: Error ER_CANT_OPEN_FILE system call error: No such file or directory: [io][open] failed to open path: <repair_test.mrn.0000110.c>
+# Groonga >= 16.1.6: Error ER_CANT_OPEN_FILE [io][open] path doesn't exist: <repair_test.mrn.0000110.c>
+--replace_regex /system call error: No such file or directory: \[io\]\[open\] failed to open path/[io][open] path doesn't exist/
 --error ER_CANT_OPEN_FILE
 SELECT * FROM diaries WHERE MATCH(body) AGAINST("+starting" IN BOOLEAN MODE);
 
---replace_result "[io][open] " ""
+--replace_regex /system call error: No such file or directory: \[io\]\[open\] failed to open path/[io][open] path doesn't exist/
 REPAIR TABLE diaries;
 
 SELECT * FROM diaries;
