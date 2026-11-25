@@ -14,7 +14,6 @@ export MARIADB_VERSION := $(shell apt-cache show mariadb-server | grep Version |
 
 override_dh_auto_configure:
 	archive_base=mariadb_$(MARIADB_VERSION);			\
-	archive=$${archive_base}.orig.tar.gz;				\
 	debian=mariadb_$(MARIADB_VERSION_FULL).debian.tar.xz;		\
 	source_base=mariadb-$(MARIADB_VERSION);				\
 	build_dir=$${source_base}/builddir;				\
@@ -26,11 +25,19 @@ override_dh_auto_configure:
 	  base_url=http://ftp.debian.org/debian/pool;			\
 	  security_base_url=http://security.debian.org/pool/updates;	\
 	fi;								\
-	wget --no-verbose $${security_base_url}/$${path}/$${archive} ||	\
-	  wget --no-verbose $${base_url}/$${path}/$${archive};		\
+	for extension in gz xz; do					\
+	  archive=$${archive_base}.orig.tar.$${extension};		\
+	  wget --no-verbose						\
+	    $${security_base_url}/$${path}/$${archive} ||		\
+	    wget --no-verbose $${base_url}/$${path}/$${archive};	\
+	  if [ -f $${archive} ]; then					\
+	    break;							\
+	  fi;								\
+	done;								\
 	wget --no-verbose $${security_base_url}/$${path}/$${debian} ||	\
 	  wget --no-verbose $${base_url}/$${path}/$${debian};		\
-	tar xf $${archive};						\
+	mkdir -p $${source_base};					\
+	tar xf $${archive} -C $${source_base} --strip-components=1;	\
 	(cd $${source_base} &&						\
 	  rm -rf debian/ &&						\
 	  tar xf ../$${debian});					\
