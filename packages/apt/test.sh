@@ -168,16 +168,21 @@ sudo mkdir -p plugin
 sudo cp -a /host/mysql-test/mroonga/ plugin/
 
 case ${package} in
+  mariadb-*)
+    apparmor_profile=mariadbd
+    ;;
   mysql-*)
-    ( \
-      echo "/usr/lib/mysql-test/var/ r,"; \
-      echo "/usr/lib/mysql-test/var/** rwk,"; \
-    ) | sudo tee --append /etc/apparmor.d/local/usr.sbin.mysqld
-    if [ -f /etc/apparmor.d/usr.sbin.mysqld ]; then
-      sudo apparmor_parser --replace --skip-cache /etc/apparmor.d/usr.sbin.mysqld
-    fi
+    apparmor_profile=usr.sbin.mysqld
     ;;
 esac
+# If AppArmor is enabled, configure it to allow writing.
+if [ -f "/etc/apparmor.d/${apparmor_profile}" ]; then
+  ( \
+    echo "${mysql_test_dir}/var/ r,"; \
+    echo "${mysql_test_dir}/var/** rwk,"; \
+  ) | sudo tee --append "/etc/apparmor.d/local/${apparmor_profile}"
+  sudo apparmor_parser --replace --skip-cache "/etc/apparmor.d/${apparmor_profile}"
+fi
 
 parallel=$(nproc)
 case ${package} in
