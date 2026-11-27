@@ -121,8 +121,8 @@ msgstr ""
 msgid "You can use MariaDB instead of MySQL."
 msgstr "MySQLの代わりにMariaDBを使うことができます。"
 
-msgid "Note that you need to remove `storage/mroonga/` (Mroonga bundled in MariaDB) before you build MariaDB."
-msgstr "MariaDBをビルドする前に`storage/mroonga/`（MariDBにバンドルされているMroonga）を削除しなければいけないことに注意してください。"
+msgid "Note that you need to pass `-DPLUGIN_MROONGA=NO` to disable Mroonga bundled in MariaDB. If you don't disable it, it's used instead of Mroonga built by you."
+msgstr "`-DPLUGIN_MROONGA=NO`を指定してMariaDBにバンドルされているMroongaを無効にしなければいけないことに注意してください。無効にしないと、自分でビルドしたMroongaではなくバンドルされているMroongaが使われます。"
 
 msgid "Build from source"
 msgstr "ソースからビルド"

@@ -33,8 +33,9 @@ $ cmake --build mysql-8.4.2.build
 
 If you want to use MariaDB instead of MySQL, you can use `-DWITH_DEBUG=ON` too.
 
-Note that you need to remove `storage/mroonga/` (Mroonga bundled in
-MariaDB) before you build MariaDB.
+Note that you need to pass `-DPLUGIN_MROONGA=NO` to disable Mroonga
+bundled in MariaDB. If you don't disable it, it's used instead of
+Mroonga built by you.
 
 The procedure from download to build is the following:
 
@@ -49,13 +50,13 @@ $ version=$(curl -s https://downloads.mariadb.org/rest-api/mariadb/$release_id \
     | head -n1)
 $ wget https://downloads.mariadb.org/rest-api/mariadb/$version/mariadb-$version.tar.gz
 $ tar xf mariadb-$version.tar.gz
-$ rm -rf mariadb-$version/storage/mroonga
 $ cmake \
     -Smariadb-$version \
     -Bmariadb-$version.build \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_INSTALL_PREFIX=/tmp/local \
+    -DPLUGIN_MROONGA=NO \
     -DWITH_DEBUG=ON
 $ cmake --build mariadb-$version.build
 ```

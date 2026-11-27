@@ -90,21 +90,21 @@ run some SQL statements to register Mroonga.
 
 You can use MariaDB instead of MySQL.
 
-Note that you need to remove `storage/mroonga/` (Mroonga bundled in MariaDB) before you build MariaDB.
+Note that you need to pass `-DPLUGIN_MROONGA=NO` to disable Mroonga bundled in MariaDB. If you don't disable it, it's used instead of Mroonga built by you.
 
 ```console
 $ mkdir -p ${HOME}/local/src
 $ cd ${HOME}/local/src
 $ wget https://downloads.mariadb.org/rest-api/mariadb/11.4.3/mariadb-11.4.3.tar.gz
 $ tar xf mariadb-11.4.3.tar.gz
-$ rm -rf mariadb-11.4.3/storage/mroonga
 $ cd -
 $ cmake \
     -S ${HOME}/local/src/mariadb-11.4.3 \
     -B ${HOME}/local/build/mariadb-11.4.3 \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=${HOME}/local
+    -DCMAKE_INSTALL_PREFIX=${HOME}/local \
+    -DPLUGIN_MROONGA=NO
 $ cmake --build ${HOME}/local/build/mariadb-11.4.3
 $ cmake --install ${HOME}/local/build/mariadb-11.4.3
 ```
