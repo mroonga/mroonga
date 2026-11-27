@@ -166,14 +166,11 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
 
   MYSQL_MAJOR_MINOR_VERSION=["$(echo $MYSQL_VERSION | sed -e 's/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*[a-z]*\)[.0-9a-z-]*$/\1.\2/')"]
 
-  case "$MYSQL_MAJOR_MINOR_VERSION" in
-  10.*)
+  if test -d "$ac_mysql_source_dir/storage/maria"; then
     MYSQL_VARIANT=mariadb
-    ;;
-  *)
+  else
     MYSQL_VARIANT=mysql
-    ;;
-  esac
+  fi
 
   MYSQL_CFLAGS="$MYSQL_CFLAGS $($ac_mysql_config --cflags)"
   AC_SUBST(MYSQL_CFLAGS)
@@ -242,26 +239,23 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_SUBST(MYSQL_INCLUDES)
 
   MYSQL_CXXFLAGS="-felide-constructors"
-  case "$MYSQL_MAJOR_MINOR_VERSION" in
-  5.7)
-    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
-             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
-             [CHECK_CXXFLAG([-std=gnu++11])])
-    ;;
-  8.*)
-    m4_ifdef([AX_CXX_COMPILE_STDCXX_17],
-             [AX_CXX_COMPILE_STDCXX_17([ext], [mandatory])],
+  # Keep this in sync with MRN_MINIMUM_CXX_STANDARD in CMakeLists.txt.
+  mrn_cxx_standard=17
+  if test "${MYSQL_VARIANT}" = "mysql"; then
+    AS_VERSION_COMPARE([$MYSQL_MAJOR_MINOR_VERSION], [8.4],
+                       [],
+                       [mrn_cxx_standard=20],
+                       [mrn_cxx_standard=20])
+  fi
+  if test "${mrn_cxx_standard}" = "20"; then
+    m4_ifdef([AX_CXX_COMPILE_STDCXX],
+             [AX_CXX_COMPILE_STDCXX([20], [ext], [mandatory])],
+             [CHECK_CXXFLAG([-std=gnu++20])])
+  else
+    m4_ifdef([AX_CXX_COMPILE_STDCXX],
+             [AX_CXX_COMPILE_STDCXX([17], [ext], [mandatory])],
              [CHECK_CXXFLAG([-std=gnu++17])])
-    ;;
-  10.*)
-    m4_ifdef([AX_CXX_COMPILE_STDCXX_11],
-             [AX_CXX_COMPILE_STDCXX_11([ext], [mandatory])],
-             [CHECK_CXXFLAG([-std=gnu++11])])
-    ;;
-  *)
-    :
-    ;;
-  esac
+  fi
 
   AC_MSG_CHECKING([for libmysqlservices.a directory])
   pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
@@ -283,32 +277,24 @@ AC_DEFUN([CONFIG_OPTION_MYSQL],[
   AC_MSG_RESULT([$mysql_services_lib_dir])
   MYSQL_LIBS="$MYSQL_LIBS \"$mysql_services_lib_dir/libmysqlservices.a\""
 
-  case "$MYSQL_MAJOR_MINOR_VERSION" in
-  10.4)
-    :
-    ;;
-  10.*)
+  if test "${MYSQL_VARIANT}" = "mariadb"; then
     AC_MSG_CHECKING([for libperfschema.a directory])
-    pkglibdir="$($ac_mysql_config --variable=pkglibdir)"
     mysql_build_perfschema_dir="${MYSQL_BUILD_DIR}/storage/perfschema"
+    perfschema_lib_dir=
     if test -f "${mysql_build_perfschema_dir}/libperfschema.a"; then
       perfschema_lib_dir="${mysql_build_perfschema_dir}"
-    else
-      if test -f "${pkglibdir}/libperfschema.a"; then
-	perfschema_lib_dir="${pkglibdir}"
-      elif test -f "${pkglibdir}/mysql/libperfschema.a"; then
-	mysql_services_lib_dir="${pkglibdir}/mysql"
-      else
-	AC_MSG_ERROR([libperfschema.a is not found in <${pkglibdir}/> and <${pkglibdir}/mysql/>])
-      fi
+    elif test -f "${pkglibdir}/libperfschema.a"; then
+      perfschema_lib_dir="${pkglibdir}"
+    elif test -f "${pkglibdir}/mysql/libperfschema.a"; then
+      perfschema_lib_dir="${pkglibdir}/mysql"
     fi
-    AC_MSG_RESULT([$perfschema_lib_dir])
-    MYSQL_LIBS="$MYSQL_LIBS \"$perfschema_lib_dir/libperfschema.a\""
-    ;;
-  *)
-    :
-    ;;
-  esac
+    if test -n "${perfschema_lib_dir}"; then
+      AC_MSG_RESULT([$perfschema_lib_dir])
+      MYSQL_LIBS="$MYSQL_LIBS \"$perfschema_lib_dir/libperfschema.a\""
+    else
+      AC_MSG_RESULT([no])
+    fi
+  fi
 
   AC_SUBST(MYSQL_LIBS)
 ])
