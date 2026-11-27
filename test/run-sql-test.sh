@@ -80,6 +80,15 @@ if [ ! -d "${build_test_suites_dir}" ]; then
 fi
 if [ "${mariadb}" = "yes" ]; then
   if [ "${MRN_BUNDLED}" != "TRUE" ]; then
+    # mysql-test-run.pl prefers storage/*/*.so to plugin/*/*.so. So
+    # Mroonga bundled in MariaDB is used instead of this Mroonga if
+    # it's built.
+    mariadb_bundled_mroonga="${MYSQL_BUILD_DIR}/storage/mroonga/ha_mroonga.so"
+    if [ -e "${mariadb_bundled_mroonga}" ]; then
+      echo "Mroonga bundled in MariaDB exists: ${mariadb_bundled_mroonga}" 1>&2
+      echo "Build MariaDB with -DPLUGIN_MROONGA=NO" 1>&2
+      exit 1
+    fi
     mariadb_mroonga_plugin_dir="${MYSQL_BUILD_DIR}/plugin/mroonga"
     if [ ! -e "${mariadb_mroonga_plugin_dir}" ]; then
       if [ -d "${top_build_dir}/.libs" ]; then
